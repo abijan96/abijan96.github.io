@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(hugo version:*)",
+      "Bash(hugo new:*)",
+      "Bash(git submodule add:*)",
+      "Bash(mkdir:*)",
+      "Bash(hugo:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

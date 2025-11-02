@@ -1,0 +1,102 @@
+site:
+  title: "Abhigyan Ghosh"
+  email: "g.abhigyan@gmail.com"
+  phone: "+1 (574) 340-7240"
+  links:
+    linkedin: "https://www.linkedin.com/in/abhigyan-ghosh"
+    github: "https://github.com/Cigas2377"
+
+about:
+  summary: >
+    Business analytics and BI professional experienced in research administration, logistics,
+    retail/sports merchandising, enterprise tech, and real estate/customer experience.
+    Focused on SQL-driven pipelines, dashboarding (Tableau/Power BI), and time series
+    forecasting (ARIMA, Prophet) that improve decision-making and operational efficiency.
+
+education:
+  - school: "University of Notre Dame, Mendoza College of Business"
+    location: "Notre Dame, IN"
+    degree: "Master of Science in Business Analytics (Cum Laude)"
+    dates: "Aug 2024 – May 2025"
+  - school: "Manipal University, Manipal Institute of Technology"
+    location: "Manipal, India"
+    degree: "Bachelor of Technology – Civil Engineering"
+    minor: "Business Administration"
+    gpa: "3.3"
+    dates: "May 2014 – 2018"
+
+experience:
+  - company: "Notre Dame Research"
+    title: "Business Intelligence Analyst"
+    location: "Notre Dame, IN, USA"
+    dates: "Nov 2024 – Present"
+    bullets:
+      - "Managed a cross-functional project to analyze employee attrition trends, coordinating data gathering and time series forecasting to deliver strategic recommendations that informed retention initiatives."
+      - "Led development of executive dashboards for research administration, integrating SQL-driven data pipelines and Tableau visualizations to reduce reporting time by 30% and enhance leadership oversight of grant and operational metrics."
+  - company: "Pikndel Logistics"
+    title: "Manager & Head of Analytics"
+    location: "New Delhi, India"
+    dates: "Mar 2023 – July 2024"
+    bullets:
+      - "Led a team of 6 area managers to design a tailored scoring matrix for field executives using advanced statistical methodologies, resulting in a 40% reduction in delivery pendency."
+      - "Improved First Attempt Delivery Rate (FADR) by 20% and reduced transportation cost by 25% by integrating with a 3P route optimization API for AI-powered planning, real-time tracking, and end-to-end visibility."
+      - "Designed and implemented BI dashboards for delivery orchestration and capacity management, improving operational visibility and enabling proactive decisions based on real-time data."
+  - company: "SanMig Sports"
+    title: "Analytics Consultant"
+    location: "New Delhi, India"
+    dates: "Mar 2022 – Feb 2023"
+    bullets:
+      - "Led the product strategy and implementation of POS systems for e-invoicing, cataloging, and SKU classification, reducing checkout times by 20%; increased sales by 12% by introducing an online sales channel."
+      - "Designed a digital marketing strategy leveraging Meta Ads Manager with targeted omni-channel campaigns to deliver personalized recommendations; achieved a 40% increase in engagement and 20% uplift in conversion rates."
+      - "Implemented a digital transformation roadmap and defined KPIs for growth and customer satisfaction, leading to 25% higher operational efficiency and 10% improvement in customer retention."
+  - company: "Dell Technologies (Dell Global Analytics)"
+    title: "Sr. Business Intelligence Analyst"
+    location: "Bangalore, India"
+    dates: "Feb 2019 – Dec 2021"
+    bullets:
+      - "Conceptualized a unified platform to estimate future sales pipeline by analyzing historical pipeline and adjusting parameters for COVID-19 disruptions for the $25B North America Client business."
+      - "Deployed ARIMA and Prophet forecasting in Python to improve inventory planning for unplanned demand, reducing stagnant deals by 18% and increasing lead-to-opportunity conversion rates by 10%."
+  - company: "Dell Technologies"
+    title: "Business Intelligence Analyst"
+    location: "Bangalore, India"
+    bullets:
+      - "Designed a Recommendation Engine using unsupervised machine learning to segment customers by buying power, enabling targeted sales outreach."
+      - "Optimized data flow with SQL, integrated marketing and finance data marts, and used SSIS for ETL/DFT automation; connected to Power BI dashboards to assess impact on 1100+ sales reps across 4 North American segments."
+  - company: "Total Environment Building System"
+    title: "Senior Executive, Customer Experience Manager"
+    location: "Bangalore, India"
+    dates: "May 2018 – Jan 2019"
+    bullets:
+      - "Led end-to-end rollout of a SaaS customer portal, reducing customer inquiries by 60% and increasing satisfaction (cNPS) by 30%."
+      - "Mapped customer journeys and analyzed feedback trends to identify process gaps, driving cross-team solutions that streamlined operations and increased referrals."
+
+skills:
+  core:
+    - Business Analytics
+    - Data Visualization
+    - Data Warehousing
+    - Data Migration
+    - Machine Learning
+    - Advanced Statistical Analysis
+    - Performance Analysis
+    - Time Series Analysis
+    - Unstructured Data Analysis
+  tools:
+    - Python
+    - SQL
+    - R
+    - Tableau
+    - Power BI
+    - MS Excel
+    - Office 365
+    - Jira
+    - Asana
+    - Trello
+    - SSIS
+
+navigation:
+  - { label: "Home", path: "/" }
+  - { label: "Experience", path: "/experience" }
+  - { label: "Skills", path: "/skills" }
+  - { label: "Education", path: "/education" }
+  - { label: "Contact", path: "/contact" }
