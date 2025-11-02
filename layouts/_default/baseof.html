@@ -54,7 +54,7 @@
                 white-space: nowrap;
             }
 
-            /* Shooting Stars Animation */
+            /* Shooting Stars Animation - Comet Trail Effect */
             .shooting-stars {
                 position: fixed;
                 top: 0;
@@ -68,39 +68,87 @@
 
             .star {
                 position: absolute;
-                width: 2px;
-                height: 2px;
-                background: linear-gradient(-45deg, rgba(147, 197, 253, 0), rgba(147, 197, 253, 1));
+                width: 4px;
+                height: 4px;
+                background: #fff;
                 border-radius: 50%;
-                filter: drop-shadow(0 0 6px rgba(147, 197, 253, 0.8));
-                animation: tail 3s ease-in-out infinite, shooting 3s ease-in-out infinite;
+                box-shadow:
+                    0 0 0 4px rgba(255, 255, 255, 0.1),
+                    0 0 0 8px rgba(255, 255, 255, 0.1),
+                    0 0 20px rgba(255, 255, 255, 1);
+                animation: shooting 3s linear infinite;
             }
 
             html.dark .star {
-                background: linear-gradient(-45deg, rgba(96, 165, 250, 0), rgba(96, 165, 250, 1));
-                filter: drop-shadow(0 0 6px rgba(96, 165, 250, 0.8));
+                background: #93c5fd;
+                box-shadow:
+                    0 0 0 4px rgba(147, 197, 253, 0.2),
+                    0 0 0 8px rgba(147, 197, 253, 0.2),
+                    0 0 20px rgba(147, 197, 253, 1);
             }
 
-            @keyframes tail {
-                0% {
-                    width: 0;
-                }
-                30% {
-                    width: 100px;
-                }
-                100% {
-                    width: 0;
-                }
+            .star::before,
+            .star::after {
+                content: '';
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: 4px;
+                height: 4px;
+                background: rgba(255, 255, 255, 0.7);
+                border-radius: 50%;
+                box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+                transform: translate(-50%, -50%);
+            }
+
+            html.dark .star::before,
+            html.dark .star::after {
+                background: rgba(147, 197, 253, 0.7);
+                box-shadow: 0 0 10px rgba(147, 197, 253, 0.8);
+            }
+
+            .star::before {
+                animation: trail 3s linear infinite;
+            }
+
+            .star::after {
+                animation: trail 3s linear infinite;
+                animation-delay: 0.15s;
             }
 
             @keyframes shooting {
                 0% {
-                    transform: translateX(0) translateY(0);
+                    transform: translateX(-100px) translateY(-100px) rotate(45deg);
+                    opacity: 0;
+                }
+                10% {
+                    opacity: 1;
+                }
+                90% {
                     opacity: 1;
                 }
                 100% {
-                    transform: translateX(300px) translateY(300px);
+                    transform: translateX(1000px) translateY(1000px) rotate(45deg);
                     opacity: 0;
+                }
+            }
+
+            @keyframes trail {
+                0%, 100% {
+                    width: 4px;
+                    height: 4px;
+                    opacity: 0;
+                }
+                10% {
+                    opacity: 0.7;
+                }
+                50% {
+                    width: 50px;
+                    height: 50px;
+                    opacity: 0.3;
+                }
+                90% {
+                    opacity: 0.7;
                 }
             }
 
@@ -108,70 +156,160 @@
                 top: 10%;
                 left: 20%;
                 animation-delay: 0s;
-                animation-duration: 3s;
+                animation-duration: 4s;
+            }
+
+            .star:nth-child(1)::before {
+                animation-duration: 4s;
+            }
+
+            .star:nth-child(1)::after {
+                animation-duration: 4s;
+                animation-delay: 0.15s;
             }
 
             .star:nth-child(2) {
                 top: 30%;
-                left: 40%;
-                animation-delay: 1.2s;
-                animation-duration: 2.5s;
+                left: 50%;
+                animation-delay: 2s;
+                animation-duration: 3.5s;
+            }
+
+            .star:nth-child(2)::before {
+                animation-duration: 3.5s;
+            }
+
+            .star:nth-child(2)::after {
+                animation-duration: 3.5s;
+                animation-delay: 0.15s;
             }
 
             .star:nth-child(3) {
                 top: 50%;
-                left: 60%;
-                animation-delay: 2.4s;
-                animation-duration: 3.2s;
+                left: 70%;
+                animation-delay: 4s;
+                animation-duration: 4.2s;
+            }
+
+            .star:nth-child(3)::before {
+                animation-duration: 4.2s;
+            }
+
+            .star:nth-child(3)::after {
+                animation-duration: 4.2s;
+                animation-delay: 0.15s;
             }
 
             .star:nth-child(4) {
                 top: 15%;
                 left: 80%;
-                animation-delay: 3.6s;
-                animation-duration: 2.8s;
+                animation-delay: 6s;
+                animation-duration: 3.8s;
+            }
+
+            .star:nth-child(4)::before {
+                animation-duration: 3.8s;
+            }
+
+            .star:nth-child(4)::after {
+                animation-duration: 3.8s;
+                animation-delay: 0.15s;
             }
 
             .star:nth-child(5) {
                 top: 70%;
                 left: 10%;
-                animation-delay: 4.8s;
-                animation-duration: 3.5s;
+                animation-delay: 8s;
+                animation-duration: 4.5s;
+            }
+
+            .star:nth-child(5)::before {
+                animation-duration: 4.5s;
+            }
+
+            .star:nth-child(5)::after {
+                animation-duration: 4.5s;
+                animation-delay: 0.15s;
             }
 
             .star:nth-child(6) {
                 top: 25%;
-                left: 50%;
-                animation-delay: 1.8s;
-                animation-duration: 2.7s;
+                left: 45%;
+                animation-delay: 3s;
+                animation-duration: 3.7s;
+            }
+
+            .star:nth-child(6)::before {
+                animation-duration: 3.7s;
+            }
+
+            .star:nth-child(6)::after {
+                animation-duration: 3.7s;
+                animation-delay: 0.15s;
             }
 
             .star:nth-child(7) {
                 top: 60%;
-                left: 70%;
-                animation-delay: 3.2s;
-                animation-duration: 3.1s;
+                left: 85%;
+                animation-delay: 5s;
+                animation-duration: 4.1s;
+            }
+
+            .star:nth-child(7)::before {
+                animation-duration: 4.1s;
+            }
+
+            .star:nth-child(7)::after {
+                animation-duration: 4.1s;
+                animation-delay: 0.15s;
             }
 
             .star:nth-child(8) {
                 top: 40%;
                 left: 30%;
-                animation-delay: 0.6s;
-                animation-duration: 2.9s;
+                animation-delay: 1s;
+                animation-duration: 3.9s;
+            }
+
+            .star:nth-child(8)::before {
+                animation-duration: 3.9s;
+            }
+
+            .star:nth-child(8)::after {
+                animation-duration: 3.9s;
+                animation-delay: 0.15s;
             }
 
             .star:nth-child(9) {
                 top: 80%;
-                left: 85%;
-                animation-delay: 2.8s;
-                animation-duration: 3.3s;
+                left: 60%;
+                animation-delay: 7s;
+                animation-duration: 4.3s;
+            }
+
+            .star:nth-child(9)::before {
+                animation-duration: 4.3s;
+            }
+
+            .star:nth-child(9)::after {
+                animation-duration: 4.3s;
+                animation-delay: 0.15s;
             }
 
             .star:nth-child(10) {
                 top: 5%;
-                left: 45%;
-                animation-delay: 4.2s;
-                animation-duration: 2.6s;
+                left: 40%;
+                animation-delay: 9s;
+                animation-duration: 3.6s;
+            }
+
+            .star:nth-child(10)::before {
+                animation-duration: 3.6s;
+            }
+
+            .star:nth-child(10)::after {
+                animation-duration: 3.6s;
+                animation-delay: 0.15s;
             }
 
             /* Ensure content is above the stars */
