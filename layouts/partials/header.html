@@ -104,14 +104,14 @@
     </div>
 
     <!-- Mobile Navigation Overlay -->
-    <div id="mobile-menu" class="fixed inset-0 bg-bg-secondary-light dark:bg-bg-secondary-dark z-50 hidden transition-all duration-300 backdrop-blur-2xl">
-        <div class="flex flex-col h-full">
+    <div id="mobile-menu" class="fixed inset-0 bg-transparent z-50 hidden transition-all duration-300">
+        <div class="flex flex-col h-full bg-black/80 backdrop-blur-md">
             <div class="flex justify-between items-center p-6">
-                <span class="text-xl font-bold text-text-primary-light dark:text-text-primary-dark">{{ T "menuTitle" }}</span>
+                <span class="text-xl font-bold text-text-primary-dark">{{ T "menuTitle" }}</span>
                 <div class="flex items-center gap-4">
                     <!-- Language Switcher - Mobile -->
                     <div class="language-switcher">
-                        <div class="language-switcher-btn text-text-secondary-light dark:text-text-secondary-dark hover:text-text-primary-light dark:hover:text-text-primary-dark transition-colors duration-300 flex items-center p-2 rounded-md">
+                        <div class="language-switcher-btn text-text-secondary-dark hover:text-text-primary-dark transition-colors duration-300 flex items-center p-2 rounded-md">
                             {{ .Language.Lang | upper }}
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="m6 9 6 6 6-6"/>
@@ -126,14 +126,14 @@
                                 {{ end }}
                                 {{ $isCurrentLang := eq .Lang $.Language.Lang }}
                                 <a href="{{ if $translation }}{{ $translation.Permalink }}{{ else }}{{ .Lang | absLangURL }}{{ end }}"
-                                   class="{{ if $isCurrentLang }}language-active{{ end }} text-text-secondary-light dark:text-text-secondary-dark hover:text-text-primary-light dark:hover:text-text-primary-dark transition-colors duration-300">
+                                   class="{{ if $isCurrentLang }}language-active{{ end }} text-text-secondary-dark hover:text-text-primary-dark transition-colors duration-300">
                                     {{ .LanguageName }}
                                 </a>
                             {{ end }}
                         </div>
                     </div>
                     <!-- Theme toggle removed - dark mode only -->
-                    <button id="mobile-menu-close" class="text-text-secondary-light dark:text-text-secondary-dark hover:text-text-primary-light dark:hover:text-text-primary-dark transition-colors duration-300 focus:outline-none">
+                    <button id="mobile-menu-close" class="text-text-secondary-dark hover:text-text-primary-dark transition-colors duration-300 focus:outline-none">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                         </svg>
@@ -142,13 +142,13 @@
             </div>
             <nav class="flex flex-col p-6 space-y-4">
                 {{ range .Site.Menus.main }}
-                <a href="{{ .URL | absURL }}" class="text-xl text-text-secondary-light dark:text-text-secondary-dark hover:text-text-primary-light dark:hover:text-text-primary-dark transition-colors duration-300 {{ if or ($.Page.IsMenuCurrent "main" .) ($.Page.HasMenuCurrent "main" .) }}text-accent-light dark:text-accent-dark font-semibold{{ end }}" data-menu-link>{{ .Name }}</a>
+                <a href="{{ .URL | absURL }}" class="text-xl text-text-secondary-dark hover:text-text-primary-dark transition-colors duration-300 {{ if or ($.Page.IsMenuCurrent "main" .) ($.Page.HasMenuCurrent "main" .) }}text-accent-dark font-semibold{{ end }}" data-menu-link>{{ .Name }}</a>
                 {{ end }}
             </nav>
             <div class="mt-auto p-6">
                 <div class="flex items-center justify-center">
-                    <span class="text-lg text-text-secondary-light dark:text-text-secondary-dark mr-2">{{ T "localTimeLabel" }}</span>
-                    <div id="mobile-local-time" class="text-lg text-text-secondary-light dark:text-text-secondary-dark"></div>
+                    <span class="text-lg text-text-secondary-dark mr-2">{{ T "localTimeLabel" }}</span>
+                    <div id="mobile-local-time" class="text-lg text-text-secondary-dark"></div>
                 </div>
             </div>
         </div>
