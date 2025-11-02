@@ -1,0 +1,62 @@
+{{ define "main" }}
+<div class="max-w-4xl mx-auto px-4 py-12">
+    <h1 class="text-5xl font-bold mb-8 text-text-primary-light dark:text-text-primary-dark">{{ .Title }}</h1>
+
+    <div class="space-y-8">
+        {{ $experience := site.Params.experience }}
+        {{ if $experience }}
+            {{ range $index, $exp := $experience }}
+            <div class="group relative pl-8 before:content-[''] before:absolute before:left-0 before:top-0 before:w-[2px] before:h-full before:bg-border-secondary-light dark:before:bg-border-secondary-dark before:rounded-full">
+                <div class="absolute -left-1.5 top-0 w-2 h-2 bg-border-secondary-light dark:bg-border-secondary-dark rounded-full"></div>
+                <div class="p-6 rounded-lg bg-bg-primary-light dark:bg-bg-secondary-dark transition-all duration-300 border border-border-primary-light dark:border-border-primary-dark hover:border-accent-light dark:hover:border-accent-dark">
+                    <div class="flex-grow">
+                        {{ if .company }}
+                            <div class="text-text-secondary-light dark:text-text-secondary-dark text-xl mb-1 font-medium">
+                                {{ .company }}
+                            </div>
+                        {{ end }}
+                        <div class="flex flex-col md:flex-row md:items-center gap-1 mb-2">
+                            <h3 class="text-2xl font-bold text-text-primary-light dark:text-text-primary-dark">{{ .role }}</h3>
+                        </div>
+                        <div class="period text-text-secondary-light dark:text-text-secondary-dark mb-1">
+                            {{ .period }}
+                        </div>
+                        {{ if .country }}
+                        <div class="country text-text-secondary-light dark:text-text-secondary-dark mb-4">
+                            📍 {{ .country }}
+                        </div>
+                        {{ end }}
+
+                        {{ if .description }}
+                        <p class="text-text-secondary-light dark:text-text-secondary-dark mt-3 mb-4">
+                            {{ .description }}
+                        </p>
+                        {{ end }}
+
+                        {{ if .responsibilities }}
+                        <div class="mt-4">
+                            <h4 class="text-lg font-semibold text-text-primary-light dark:text-text-primary-dark mb-3">Key Responsibilities:</h4>
+                            <ul class="space-y-2">
+                                {{ range .responsibilities }}
+                                <li class="text-text-secondary-light dark:text-text-secondary-dark flex items-start">
+                                    <svg class="w-5 h-5 mr-2 mt-0.5 flex-shrink-0 text-accent-light dark:text-accent-dark" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                    </svg>
+                                    <span>{{ . }}</span>
+                                </li>
+                                {{ end }}
+                            </ul>
+                        </div>
+                        {{ end }}
+                    </div>
+                </div>
+            </div>
+            {{ end }}
+        {{ else }}
+            <div class="text-text-secondary-light dark:text-text-secondary-dark p-8 bg-bg-primary-light dark:bg-bg-secondary-dark rounded-lg border border-border-primary-light dark:border-border-primary-dark text-center">
+                <p class="text-xl">No experience data found. Please add experience entries to your site configuration.</p>
+            </div>
+        {{ end }}
+    </div>
+</div>
+{{ end }}

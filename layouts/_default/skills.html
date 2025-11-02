@@ -1,0 +1,62 @@
+{{ define "main" }}
+<div class="max-w-4xl mx-auto px-4 py-12">
+    <h1 class="text-5xl font-bold mb-8 text-text-primary-light dark:text-text-primary-dark">{{ .Title }}</h1>
+
+    <div class="space-y-8">
+        <!-- Core Competencies -->
+        <div class="p-6 rounded-lg bg-bg-primary-light dark:bg-bg-secondary-dark border border-border-primary-light dark:border-border-primary-dark">
+            <h2 class="text-3xl font-bold mb-4 text-accent-light dark:text-accent-dark">Core Competencies</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                <div class="px-4 py-2 bg-bg-secondary-light dark:bg-bg-tertiary-dark rounded-md border border-border-secondary-light dark:border-border-secondary-dark text-text-primary-light dark:text-text-primary-dark">Business Analytics</div>
+                <div class="px-4 py-2 bg-bg-secondary-light dark:bg-bg-tertiary-dark rounded-md border border-border-secondary-light dark:border-border-secondary-dark text-text-primary-light dark:text-text-primary-dark">Data Visualization</div>
+                <div class="px-4 py-2 bg-bg-secondary-light dark:bg-bg-tertiary-dark rounded-md border border-border-secondary-light dark:border-border-secondary-dark text-text-primary-light dark:text-text-primary-dark">Data Warehousing</div>
+                <div class="px-4 py-2 bg-bg-secondary-light dark:bg-bg-tertiary-dark rounded-md border border-border-secondary-light dark:border-border-secondary-dark text-text-primary-light dark:text-text-primary-dark">Data Migration</div>
+                <div class="px-4 py-2 bg-bg-secondary-light dark:bg-bg-tertiary-dark rounded-md border border-border-secondary-light dark:border-border-secondary-dark text-text-primary-light dark:text-text-primary-dark">Machine Learning</div>
+                <div class="px-4 py-2 bg-bg-secondary-light dark:bg-bg-tertiary-dark rounded-md border border-border-secondary-light dark:border-border-secondary-dark text-text-primary-light dark:text-text-primary-dark">Statistical Analysis</div>
+                <div class="px-4 py-2 bg-bg-secondary-light dark:bg-bg-tertiary-dark rounded-md border border-border-secondary-light dark:border-border-secondary-dark text-text-primary-light dark:text-text-primary-dark">Performance Analysis</div>
+                <div class="px-4 py-2 bg-bg-secondary-light dark:bg-bg-tertiary-dark rounded-md border border-border-secondary-light dark:border-border-secondary-dark text-text-primary-light dark:text-text-primary-dark">Time Series Analysis</div>
+                <div class="px-4 py-2 bg-bg-secondary-light dark:bg-bg-tertiary-dark rounded-md border border-border-secondary-light dark:border-border-secondary-dark text-text-primary-light dark:text-text-primary-dark">Unstructured Data Analysis</div>
+            </div>
+        </div>
+
+        <!-- Programming Languages -->
+        <div class="p-6 rounded-lg bg-bg-primary-light dark:bg-bg-secondary-dark border border-border-primary-light dark:border-border-primary-dark">
+            <h2 class="text-3xl font-bold mb-4 text-accent-light dark:text-accent-dark">Programming Languages</h2>
+            <div class="flex flex-wrap gap-3">
+                <div class="px-6 py-3 bg-gradient-to-r from-blue-500/20 to-blue-600/20 rounded-lg border border-blue-500/50 text-text-primary-light dark:text-text-primary-dark font-semibold">Python</div>
+                <div class="px-6 py-3 bg-gradient-to-r from-orange-500/20 to-orange-600/20 rounded-lg border border-orange-500/50 text-text-primary-light dark:text-text-primary-dark font-semibold">SQL</div>
+                <div class="px-6 py-3 bg-gradient-to-r from-blue-400/20 to-blue-500/20 rounded-lg border border-blue-400/50 text-text-primary-light dark:text-text-primary-dark font-semibold">R</div>
+            </div>
+        </div>
+
+        <!-- BI & Visualization Tools -->
+        <div class="p-6 rounded-lg bg-bg-primary-light dark:bg-bg-secondary-dark border border-border-primary-light dark:border-border-primary-dark">
+            <h2 class="text-3xl font-bold mb-4 text-accent-light dark:text-accent-dark">BI & Visualization Tools</h2>
+            <div class="flex flex-wrap gap-3">
+                <div class="px-6 py-3 bg-gradient-to-r from-purple-500/20 to-purple-600/20 rounded-lg border border-purple-500/50 text-text-primary-light dark:text-text-primary-dark font-semibold">Tableau</div>
+                <div class="px-6 py-3 bg-gradient-to-r from-yellow-500/20 to-yellow-600/20 rounded-lg border border-yellow-500/50 text-text-primary-light dark:text-text-primary-dark font-semibold">Power BI</div>
+            </div>
+        </div>
+
+        <!-- Productivity & Collaboration -->
+        <div class="p-6 rounded-lg bg-bg-primary-light dark:bg-bg-secondary-dark border border-border-primary-light dark:border-border-primary-dark">
+            <h2 class="text-3xl font-bold mb-4 text-accent-light dark:text-accent-dark">Productivity & Collaboration</h2>
+            <div class="flex flex-wrap gap-3">
+                <div class="px-6 py-3 bg-gradient-to-r from-green-500/20 to-green-600/20 rounded-lg border border-green-500/50 text-text-primary-light dark:text-text-primary-dark font-semibold">MS Excel</div>
+                <div class="px-6 py-3 bg-gradient-to-r from-blue-500/20 to-blue-600/20 rounded-lg border border-blue-500/50 text-text-primary-light dark:text-text-primary-dark font-semibold">Office 365</div>
+                <div class="px-6 py-3 bg-gradient-to-r from-blue-600/20 to-blue-700/20 rounded-lg border border-blue-600/50 text-text-primary-light dark:text-text-primary-dark font-semibold">Jira</div>
+                <div class="px-6 py-3 bg-gradient-to-r from-indigo-500/20 to-indigo-600/20 rounded-lg border border-indigo-500/50 text-text-primary-light dark:text-text-primary-dark font-semibold">Asana</div>
+                <div class="px-6 py-3 bg-gradient-to-r from-sky-500/20 to-sky-600/20 rounded-lg border border-sky-500/50 text-text-primary-light dark:text-text-primary-dark font-semibold">Trello</div>
+            </div>
+        </div>
+
+        <!-- ETL & Data Integration -->
+        <div class="p-6 rounded-lg bg-bg-primary-light dark:bg-bg-secondary-dark border border-border-primary-light dark:border-border-primary-dark">
+            <h2 class="text-3xl font-bold mb-4 text-accent-light dark:text-accent-dark">ETL & Data Integration</h2>
+            <div class="flex flex-wrap gap-3">
+                <div class="px-6 py-3 bg-gradient-to-r from-red-500/20 to-red-600/20 rounded-lg border border-red-500/50 text-text-primary-light dark:text-text-primary-dark font-semibold">SSIS (SQL Server Integration Services)</div>
+            </div>
+        </div>
+    </div>
+</div>
+{{ end }}

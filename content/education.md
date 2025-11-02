@@ -2,7 +2,7 @@
 title: "Education"
 date: 2025-11-01
 draft: false
-layout: "single"
+layout: "education"
 ---
 
 ## University of Notre Dame, Mendoza College of Business

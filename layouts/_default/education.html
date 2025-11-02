@@ -1,0 +1,69 @@
+{{ define "main" }}
+<div class="max-w-4xl mx-auto px-4 py-12">
+    <h1 class="text-5xl font-bold mb-8 text-text-primary-light dark:text-text-primary-dark">{{ .Title }}</h1>
+
+    <div class="space-y-8">
+        <!-- Notre Dame -->
+        <div class="group relative pl-8 before:content-[''] before:absolute before:left-0 before:top-0 before:w-[2px] before:h-full before:bg-border-secondary-light dark:before:bg-border-secondary-dark before:rounded-full">
+            <div class="absolute -left-1.5 top-0 w-2 h-2 bg-border-secondary-light dark:bg-border-secondary-dark rounded-full"></div>
+            <div class="p-6 rounded-lg bg-bg-primary-light dark:bg-bg-secondary-dark transition-all duration-300 border border-border-primary-light dark:border-border-primary-dark hover:border-accent-light dark:hover:border-accent-dark">
+                <div class="flex flex-col md:flex-row gap-6">
+                    <!-- Logo -->
+                    <div class="flex-shrink-0">
+                        <img src="/images/notre-dame.jpg" alt="University of Notre Dame" class="w-24 h-24 object-contain rounded-lg bg-white p-2">
+                    </div>
+
+                    <!-- Content -->
+                    <div class="flex-1">
+                        <h2 class="text-2xl font-bold text-text-primary-light dark:text-text-primary-dark mb-1">University of Notre Dame</h2>
+                        <h3 class="text-xl text-text-secondary-light dark:text-text-secondary-dark mb-2">Mendoza College of Business</h3>
+                        <p class="text-lg font-semibold text-accent-light dark:text-accent-dark mb-2">Master of Science in Business Analytics (Cum Laude)</p>
+                        <p class="text-text-secondary-light dark:text-text-secondary-dark mb-1">Notre Dame, IN</p>
+                        <p class="text-text-secondary-light dark:text-text-secondary-dark mb-4">Aug 2024 – May 2025</p>
+
+                        <div class="mt-4">
+                            <p class="text-text-secondary-light dark:text-text-secondary-dark mb-3">A comprehensive program focusing on:</p>
+                            <ul class="list-disc list-inside space-y-2 text-text-secondary-light dark:text-text-secondary-dark ml-4">
+                                <li>Advanced analytics and machine learning</li>
+                                <li>Business intelligence and data visualization</li>
+                                <li>Strategic decision-making with data</li>
+                                <li>SQL and database management</li>
+                                <li>Statistical modeling and forecasting</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Manipal -->
+        <div class="group relative pl-8 before:content-[''] before:absolute before:left-0 before:top-0 before:w-[2px] before:h-full before:bg-border-secondary-light dark:before:bg-border-secondary-dark before:rounded-full">
+            <div class="absolute -left-1.5 top-0 w-2 h-2 bg-border-secondary-light dark:bg-border-secondary-dark rounded-full"></div>
+            <div class="p-6 rounded-lg bg-bg-primary-light dark:bg-bg-secondary-dark transition-all duration-300 border border-border-primary-light dark:border-border-primary-dark hover:border-accent-light dark:hover:border-accent-dark">
+                <div class="flex flex-col md:flex-row gap-6">
+                    <!-- Logo -->
+                    <div class="flex-shrink-0">
+                        <img src="/images/manipal.png" alt="Manipal University" class="w-24 h-24 object-contain rounded-lg bg-white p-2">
+                    </div>
+
+                    <!-- Content -->
+                    <div class="flex-1">
+                        <h2 class="text-2xl font-bold text-text-primary-light dark:text-text-primary-dark mb-1">Manipal University</h2>
+                        <h3 class="text-xl text-text-secondary-light dark:text-text-secondary-dark mb-2">Manipal Institute of Technology</h3>
+                        <p class="text-lg font-semibold text-accent-light dark:text-accent-dark mb-1">Bachelor of Technology – Civil Engineering</p>
+                        <p class="text-md text-text-secondary-light dark:text-text-secondary-dark italic mb-2">Minor: Business Administration</p>
+                        <p class="text-text-secondary-light dark:text-text-secondary-dark mb-1">Manipal, India</p>
+                        <p class="text-text-secondary-light dark:text-text-secondary-dark mb-4">May 2014 – 2018 | GPA: 3.3</p>
+
+                        <div class="mt-4">
+                            <p class="text-text-secondary-light dark:text-text-secondary-dark">
+                                Interdisciplinary education combining engineering principles with business fundamentals, providing a unique perspective on data-driven problem solving and project management.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{ end }}

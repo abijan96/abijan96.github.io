@@ -2,7 +2,7 @@
 title: "Skills"
 date: 2025-11-01
 draft: false
-layout: "single"
+layout: "skills"
 ---
 
 ## Core Competencies
