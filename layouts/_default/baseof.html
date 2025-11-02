@@ -14,12 +14,7 @@
         <link rel="preload" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" as="style">
         <style>
             html, body {
-                background: linear-gradient(to bottom, #0f172a 0%, #1e3a8a 50%, #3b82f6 100%);
-                color: #1f2937;
-                min-height: 100vh;
-            }
-            html.dark, html.dark body {
-                background: linear-gradient(to bottom, #0a0e1a 0%, #1e293b 50%, #334155 100%);
+                background: linear-gradient(to bottom, #0a0e1a 0%, #0f1729 25%, #1a1f3a 50%, #1e293b 75%, #1e293b 100%);
                 color: #f3f4f6;
                 min-height: 100vh;
             }
@@ -72,21 +67,13 @@
                 position: absolute;
                 width: 4px;
                 height: 4px;
-                background: #fff;
-                border-radius: 50%;
-                box-shadow:
-                    0 0 0 4px rgba(255, 255, 255, 0.1),
-                    0 0 0 8px rgba(255, 255, 255, 0.1),
-                    0 0 20px rgba(255, 255, 255, 1);
-                animation: shooting 3s linear infinite;
-            }
-
-            html.dark .star {
                 background: #93c5fd;
+                border-radius: 50%;
                 box-shadow:
                     0 0 0 4px rgba(147, 197, 253, 0.2),
                     0 0 0 8px rgba(147, 197, 253, 0.2),
                     0 0 20px rgba(147, 197, 253, 1);
+                animation: shooting 3s linear infinite;
             }
 
             .star::before,
@@ -97,16 +84,10 @@
                 left: 50%;
                 width: 4px;
                 height: 4px;
-                background: rgba(255, 255, 255, 0.7);
-                border-radius: 50%;
-                box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
-                transform: translate(-50%, -50%);
-            }
-
-            html.dark .star::before,
-            html.dark .star::after {
                 background: rgba(147, 197, 253, 0.7);
+                border-radius: 50%;
                 box-shadow: 0 0 10px rgba(147, 197, 253, 0.8);
+                transform: translate(-50%, -50%);
             }
 
             .star::before {
@@ -329,15 +310,10 @@
                 position: absolute;
                 width: 2px;
                 height: 2px;
-                background: white;
-                border-radius: 50%;
-                box-shadow: 0 0 3px rgba(255, 255, 255, 0.8);
-                animation: twinkle 3s ease-in-out infinite;
-            }
-
-            html.dark .twinkle-star {
                 background: #e0e7ff;
+                border-radius: 50%;
                 box-shadow: 0 0 3px rgba(224, 231, 255, 0.8);
+                animation: twinkle 3s ease-in-out infinite;
             }
 
             @keyframes twinkle {
@@ -403,11 +379,8 @@
         <script src="https://cdn.tailwindcss.com"></script>
         <link rel="stylesheet" type='text/css' href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
         <script>
-            if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                document.documentElement.classList.add('dark');
-            } else {
-                document.documentElement.classList.remove('dark');
-            }
+            // Force dark mode always
+            document.documentElement.classList.add('dark');
         </script>
         <style>
             :root {
