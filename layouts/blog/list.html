@@ -1,0 +1,57 @@
+{{ define "main" }}
+<div class="max-w-4xl mx-auto px-4 py-12">
+    <h1 class="text-5xl font-bold mb-8 text-text-primary-light dark:text-text-primary-dark">{{ .Title }}</h1>
+
+    <div class="space-y-8">
+        {{ range .Pages }}
+        <article class="group p-6 rounded-lg bg-bg-primary-light dark:bg-bg-secondary-dark border border-border-primary-light dark:border-border-primary-dark hover:border-accent-light dark:hover:border-accent-dark transition-all duration-300">
+            <div class="flex flex-col gap-3">
+                <!-- Date and Reading Time -->
+                <div class="flex items-center gap-4 text-text-secondary-light dark:text-text-secondary-dark text-sm">
+                    <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time>
+                    <span>•</span>
+                    <span>{{ .ReadingTime }} min read</span>
+                </div>
+
+                <!-- Title -->
+                <h2 class="text-3xl font-bold text-text-primary-light dark:text-text-primary-dark group-hover:text-accent-light dark:group-hover:text-accent-dark transition-colors">
+                    <a href="{{ .Permalink }}">{{ .Title }}</a>
+                </h2>
+
+                <!-- Description -->
+                {{ with .Params.description }}
+                <p class="text-text-secondary-light dark:text-text-secondary-dark text-lg">
+                    {{ . }}
+                </p>
+                {{ end }}
+
+                <!-- Tags -->
+                {{ with .Params.tags }}
+                <div class="flex flex-wrap gap-2">
+                    {{ range . }}
+                    <span class="px-3 py-1 text-sm bg-bg-tertiary-light dark:bg-bg-tertiary-dark text-text-secondary-light dark:text-text-secondary-dark rounded-full border border-border-secondary-light dark:border-border-secondary-dark">
+                        {{ . }}
+                    </span>
+                    {{ end }}
+                </div>
+                {{ end }}
+
+                <!-- Read More -->
+                <a href="{{ .Permalink }}" class="inline-flex items-center gap-2 text-accent-light dark:text-accent-dark hover:underline font-medium">
+                    Read more
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </a>
+            </div>
+        </article>
+        {{ end }}
+    </div>
+
+    {{ if eq (len .Pages) 0 }}
+    <div class="text-center p-12 bg-bg-primary-light dark:bg-bg-secondary-dark rounded-lg border border-border-primary-light dark:border-border-primary-dark">
+        <p class="text-text-secondary-light dark:text-text-secondary-dark text-xl">No blog posts yet. Check back soon!</p>
+    </div>
+    {{ end }}
+</div>
+{{ end }}

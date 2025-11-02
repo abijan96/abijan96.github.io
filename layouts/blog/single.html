@@ -1,0 +1,241 @@
+{{ define "main" }}
+<div class="max-w-4xl mx-auto px-4 py-12">
+    <article class="bg-bg-primary-light dark:bg-bg-secondary-dark rounded-lg border border-border-primary-light dark:border-border-primary-dark p-8">
+        <!-- Header -->
+        <header class="mb-8 pb-8 border-b border-border-secondary-light dark:border-border-secondary-dark">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4 text-text-primary-light dark:text-text-primary-dark">
+                {{ .Title }}
+            </h1>
+
+            <!-- Meta Information -->
+            <div class="flex flex-wrap items-center gap-4 text-text-secondary-light dark:text-text-secondary-dark text-sm mb-4">
+                {{ with .Params.author }}
+                <div class="flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                    <span>{{ . }}</span>
+                </div>
+                {{ end }}
+                <span>•</span>
+                <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time>
+                <span>•</span>
+                <span>{{ .ReadingTime }} min read</span>
+            </div>
+
+            <!-- Description -->
+            {{ with .Params.description }}
+            <p class="text-lg text-text-secondary-light dark:text-text-secondary-dark italic mb-4">
+                {{ . }}
+            </p>
+            {{ end }}
+
+            <!-- Tags -->
+            {{ with .Params.tags }}
+            <div class="flex flex-wrap gap-2">
+                {{ range . }}
+                <span class="px-3 py-1 text-sm bg-bg-tertiary-light dark:bg-bg-tertiary-dark text-text-secondary-light dark:text-text-secondary-dark rounded-full border border-border-secondary-light dark:border-border-secondary-dark">
+                    {{ . }}
+                </span>
+                {{ end }}
+            </div>
+            {{ end }}
+
+            <!-- Keywords (for SEO, not displayed but in meta) -->
+            {{ with .Params.keywords }}
+            <meta name="keywords" content="{{ delimit . ", " }}">
+            {{ end }}
+        </header>
+
+        <!-- Content -->
+        <div class="prose prose-invert prose-lg max-w-none">
+            {{ .Content }}
+        </div>
+
+        <!-- Footer with Categories -->
+        {{ with .Params.categories }}
+        <footer class="mt-12 pt-8 border-t border-border-secondary-light dark:border-border-secondary-dark">
+            <div class="flex items-center gap-2 text-text-secondary-light dark:text-text-secondary-dark">
+                <span class="font-semibold">Categories:</span>
+                {{ range . }}
+                <span class="px-3 py-1 text-sm bg-accent-light/10 dark:bg-accent-dark/10 text-accent-light dark:text-accent-dark rounded-md">
+                    {{ . }}
+                </span>
+                {{ end }}
+            </div>
+        </footer>
+        {{ end }}
+    </article>
+
+    <!-- Back to Blog Link -->
+    <div class="mt-8">
+        <a href="/blog/" class="inline-flex items-center gap-2 text-accent-light dark:text-accent-dark hover:underline">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+            Back to all posts
+        </a>
+    </div>
+</div>
+
+<style>
+    .prose {
+        color: #4b5563;
+        font-size: 1.125rem;
+    }
+    html.dark .prose {
+        color: #9ca3af;
+    }
+    .prose p {
+        color: #4b5563;
+        margin-bottom: 1.5rem;
+        line-height: 1.9;
+    }
+    html.dark .prose p {
+        color: #9ca3af;
+    }
+    .prose p + p {
+        margin-top: 1.5rem;
+    }
+    .prose h2 {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-top: 3rem;
+        margin-bottom: 1.5rem;
+        color: #1f2937;
+    }
+    html.dark .prose h2 {
+        color: #f3f4f6;
+    }
+    .prose h3 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+        color: #1f2937;
+    }
+    html.dark .prose h3 {
+        color: #f3f4f6;
+    }
+    .prose h4 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-top: 1.5rem;
+        margin-bottom: 0.75rem;
+        color: #1f2937;
+    }
+    html.dark .prose h4 {
+        color: #f3f4f6;
+    }
+    .prose ul, .prose ol {
+        padding-left: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    .prose ul {
+        list-style-type: disc;
+    }
+    .prose ol {
+        list-style-type: decimal;
+    }
+    .prose li {
+        margin-bottom: 0.5rem;
+        color: #4b5563;
+    }
+    html.dark .prose li {
+        color: #9ca3af;
+    }
+    .prose strong {
+        color: #1f2937;
+        font-weight: 600;
+    }
+    html.dark .prose strong {
+        color: #f3f4f6;
+    }
+    .prose em {
+        font-style: italic;
+        color: #6b7280;
+    }
+    html.dark .prose em {
+        color: #9ca3af;
+    }
+    .prose code {
+        background-color: #f3f4f6;
+        color: #ef4444;
+        padding: 0.2rem 0.4rem;
+        border-radius: 0.25rem;
+        font-size: 0.875em;
+    }
+    html.dark .prose code {
+        background-color: #374151;
+        color: #f87171;
+    }
+    .prose pre {
+        background-color: #1f2937;
+        color: #f3f4f6;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        overflow-x: auto;
+        margin: 1.5rem 0;
+    }
+    .prose pre code {
+        background-color: transparent;
+        color: inherit;
+        padding: 0;
+    }
+    .prose blockquote {
+        border-left: 4px solid #3b82f6;
+        padding-left: 1.5rem;
+        margin: 2rem 0;
+        font-style: italic;
+        color: #4b5563;
+    }
+    html.dark .prose blockquote {
+        border-left-color: #60a5fa;
+        color: #9ca3af;
+    }
+    .prose a {
+        color: #3b82f6;
+        text-decoration: underline;
+    }
+    html.dark .prose a {
+        color: #60a5fa;
+    }
+    .prose a:hover {
+        color: #2563eb;
+    }
+    html.dark .prose a:hover {
+        color: #3b82f6;
+    }
+    .prose img {
+        border-radius: 0.5rem;
+        margin: 2rem 0;
+    }
+    .prose hr {
+        border-color: #e5e7eb;
+        margin: 3rem 0;
+    }
+    html.dark .prose hr {
+        border-color: #374151;
+    }
+    .prose table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 2rem 0;
+    }
+    .prose th, .prose td {
+        border: 1px solid #e5e7eb;
+        padding: 0.75rem;
+        text-align: left;
+    }
+    html.dark .prose th, html.dark .prose td {
+        border-color: #374151;
+    }
+    .prose th {
+        background-color: #f3f4f6;
+        font-weight: 600;
+    }
+    html.dark .prose th {
+        background-color: #1f2937;
+    }
+</style>
+{{ end }}
