@@ -59,25 +59,21 @@
 </div>
 
 <style>
-    .prose {
-        color: #1f2937; /* text-primary-light */
+    .prose, .prose p, .prose strong, .prose a, .prose * {
+        color: #1f2937 !important; /* text-primary-light */
     }
-    html.dark .prose {
-        color: #f3f4f6; /* text-primary-dark */
+    html.dark .prose, html.dark .prose p, html.dark .prose strong, html.dark .prose a, html.dark .prose * {
+        color: #f3f4f6 !important; /* text-primary-dark - white */
     }
     .prose p {
-        color: #1f2937; /* text-primary-light */
         margin-bottom: 1.5rem; /* mb-6 */
         line-height: 1.9;
     }
-    html.dark .prose p {
-        color: #f3f4f6; /* text-primary-dark */
+    .prose a {
+        text-decoration: underline;
     }
-    .prose strong {
-        color: #1f2937; /* text-primary-light */
-    }
-    html.dark .prose strong {
-        color: #f3f4f6; /* text-primary-dark */
+    .prose a:hover {
+        color: #0ea5e9 !important; /* accent color on hover */
     }
     
     .contact-link {
