@@ -1,0 +1,17 @@
+{{ define "main" }}
+<div class="max-w-4xl mx-auto px-4 py-12 text-center">
+    <h1 class="text-6xl font-bold mb-4 text-text-primary-dark">404</h1>
+    <h2 class="text-3xl font-semibold mb-6 text-text-secondary-dark">Page Not Found</h2>
+    <p class="text-xl mb-8 text-text-secondary-dark">The page you're looking for doesn't exist or has been moved.</p>
+    <a href="{{ .Site.BaseURL }}" class="inline-block px-6 py-3 bg-accent-dark hover:bg-blue-600 text-white rounded-lg transition-colors duration-300">
+        Go Back Home
+    </a>
+</div>
+
+<script>
+    // Redirect to home page after 3 seconds
+    setTimeout(function() {
+        window.location.href = '{{ .Site.BaseURL }}';
+    }, 3000);
+</script>
+{{ end }}
