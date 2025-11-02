@@ -1,0 +1,24 @@
+row1:
+  - icon: "devicon-python-plain"
+    name: "Python"
+  - icon: "devicon-r-plain"
+    name: "R"
+  - icon: "devicon-mysql-plain"
+    name: "SQL"
+  - icon: "devicon-postgresql-plain"
+    name: "PostgreSQL"
+  - icon: "devicon-microsoftsqlserver-plain"
+    name: "SQL Server"
+
+row2:
+  - icon: "devicon-tableau-plain"
+    name: "Tableau"
+  - icon: "devicon-powerbi-plain"
+    name: "Power BI"
+  - icon: "devicon-jira-plain"
+    name: "Jira"
+  - icon: "devicon-trello-plain"
+    name: "Trello"
+  - icon: "devicon-git-plain"
+    name: "Git"
+
