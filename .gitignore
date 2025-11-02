@@ -1,0 +1,18 @@
+# Hugo default output directory
+/public/
+
+# Hugo cache directory
+/resources/_gen/
+
+# Temporary lock file
+/.hugo_build.lock
+
+# OS files
+.DS_Store
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~

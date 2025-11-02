@@ -1,0 +1,142 @@
+baseURL = "https://abijan96.github.io/"
+languageCode = 'en-us'
+title = 'Abhigyan Ghosh'
+theme = 'hugo-noir'
+
+# URL handling
+relativeURLs = true
+canonifyURLs = true
+
+# Taxonomy configuration
+[taxonomies]
+  category = "categories"
+  tag = "tags"
+
+[params]
+name = "Abhigyan Ghosh"
+location = "Notre Dame, IN, USA"
+description = "Business analytics and BI professional experienced in research administration, logistics, retail/sports merchandising, enterprise tech, and real estate/customer experience. Focused on SQL-driven pipelines, dashboarding (Tableau/Power BI), and time series forecasting (ARIMA, Prophet) that improve decision-making and operational efficiency."
+profile_image = "/images/profile.jpg"
+github = "https://github.com/Cigas2377"
+github_username = "Cigas2377"
+email = "g.abhigyan@gmail.com"
+linkedin = "https://www.linkedin.com/in/abhigyan-ghosh"
+linkedin_username = "abhigyan-ghosh"
+
+[params.tech]
+  row1 = [
+    { icon = "devicon-python-plain", name = "Python" },
+    { icon = "devicon-r-plain", name = "R" },
+    { icon = "devicon-mysql-plain", name = "SQL" },
+    { icon = "devicon-postgresql-plain", name = "PostgreSQL" },
+    { icon = "devicon-microsoftsqlserver-plain", name = "SQL Server" }
+  ]
+  row2 = [
+    { icon = "devicon-tableau-plain", name = "Tableau" },
+    { icon = "devicon-powerbi-plain", name = "Power BI" },
+    { icon = "devicon-jira-plain", name = "Jira" },
+    { icon = "devicon-trello-plain", name = "Trello" },
+    { icon = "devicon-git-plain", name = "Git" }
+  ]
+
+# Education
+[[params.honors]]
+institution = "University of Notre Dame, Mendoza College of Business"
+title = "Master of Science in Business Analytics (Cum Laude)"
+date = "Aug 2024 – May 2025"
+
+[[params.honors]]
+institution = "Manipal University, Manipal Institute of Technology"
+title = "Bachelor of Technology – Civil Engineering (Minor: Business Administration)"
+date = "May 2014 – 2018"
+
+# Experience
+[[params.experience]]
+company = "Notre Dame Research"
+role = "Business Intelligence Analyst"
+period = "Nov 2024 – Present"
+country = "Notre Dame, IN, USA"
+description = "Business Intelligence Analyst at Notre Dame Research focusing on data analytics and visualization."
+responsibilities = [
+    "Managed a cross-functional project to analyze employee attrition trends, coordinating data gathering and time series forecasting to deliver strategic recommendations that informed retention initiatives.",
+    "Led development of executive dashboards for research administration, integrating SQL-driven data pipelines and Tableau visualizations to reduce reporting time by 30% and enhance leadership oversight of grant and operational metrics."
+]
+
+[[params.experience]]
+company = "Pikndel Logistics"
+role = "Manager & Head of Analytics"
+period = "Mar 2023 – July 2024"
+country = "New Delhi, India"
+description = "Led analytics team and improved operational efficiency through data-driven strategies."
+responsibilities = [
+    "Led a team of 6 area managers to design a tailored scoring matrix for field executives using advanced statistical methodologies, resulting in a 40% reduction in delivery pendency.",
+    "Improved First Attempt Delivery Rate (FADR) by 20% and reduced transportation cost by 25% by integrating with a 3P route optimization API for AI-powered planning, real-time tracking, and end-to-end visibility.",
+    "Designed and implemented BI dashboards for delivery orchestration and capacity management, improving operational visibility and enabling proactive decisions based on real-time data."
+]
+
+[[params.experience]]
+company = "SanMig Sports"
+role = "Analytics Consultant"
+period = "Mar 2022 – Feb 2023"
+country = "New Delhi, India"
+description = "Analytics consultant specializing in product strategy and digital transformation."
+responsibilities = [
+    "Led the product strategy and implementation of POS systems for e-invoicing, cataloging, and SKU classification, reducing checkout times by 20%; increased sales by 12% by introducing an online sales channel.",
+    "Designed a digital marketing strategy leveraging Meta Ads Manager with targeted omni-channel campaigns to deliver personalized recommendations; achieved a 40% increase in engagement and 20% uplift in conversion rates.",
+    "Implemented a digital transformation roadmap and defined KPIs for growth and customer satisfaction, leading to 25% higher operational efficiency and 10% improvement in customer retention."
+]
+
+[[params.experience]]
+company = "Dell Technologies (Dell Global Analytics)"
+role = "Sr. Business Intelligence Analyst"
+period = "Feb 2019 – Dec 2021"
+country = "Bangalore, India"
+description = "Senior Business Intelligence Analyst at Dell Global Analytics, focused on forecasting and data analytics."
+responsibilities = [
+    "Conceptualized a unified platform to estimate future sales pipeline by analyzing historical pipeline and adjusting parameters for COVID-19 disruptions for the $25B North America Client business.",
+    "Deployed ARIMA and Prophet forecasting in Python to improve inventory planning for unplanned demand, reducing stagnant deals by 18% and increasing lead-to-opportunity conversion rates by 10%."
+]
+
+[[params.experience]]
+company = "Dell Technologies"
+role = "Business Intelligence Analyst"
+period = "Feb 2019 – Dec 2021"
+country = "Bangalore, India"
+description = "Business Intelligence Analyst focusing on ML-driven customer segmentation and data integration."
+responsibilities = [
+    "Designed a Recommendation Engine using unsupervised machine learning to segment customers by buying power, enabling targeted sales outreach.",
+    "Optimized data flow with SQL, integrated marketing and finance data marts, and used SSIS for ETL/DFT automation; connected to Power BI dashboards to assess impact on 1100+ sales reps across 4 North American segments."
+]
+
+[[params.experience]]
+company = "Total Environment Building System"
+role = "Senior Executive, Customer Experience Manager"
+period = "May 2018 – Jan 2019"
+country = "Bangalore, India"
+description = "Customer Experience Manager focused on improving customer satisfaction through technology."
+responsibilities = [
+    "Led end-to-end rollout of a SaaS customer portal, reducing customer inquiries by 60% and increasing satisfaction (cNPS) by 30%.",
+    "Mapped customer journeys and analyzed feedback trends to identify process gaps, driving cross-team solutions that streamlined operations and increased referrals."
+]
+
+[menu]
+  [[menu.main]]
+    name = "About"
+    url = "/about/"
+    weight = 1
+  [[menu.main]]
+    name = "Experience"
+    url = "/experience/"
+    weight = 2
+  [[menu.main]]
+    name = "Skills"
+    url = "/skills/"
+    weight = 3
+  [[menu.main]]
+    name = "Education"
+    url = "/education/"
+    weight = 4
+  [[menu.main]]
+    name = "Contact"
+    url = "/contact/"
+    weight = 5
