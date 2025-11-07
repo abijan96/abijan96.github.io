@@ -1,0 +1,111 @@
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                        QUICK START GUIDE                                  ║
+║              Deploy Your Dashboard in 5 Minutes!                          ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+📍 You are here: C:\Users\USER\Downloads\faculty-survey-dashboard\
+
+🎯 Goal: Deploy to https://abijan96.github.io/faculty-survey-dashboard/
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+METHOD 1: GitHub Web Upload (Recommended - Takes 5 minutes)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Step 1: Go to your GitHub
+  → Open: https://github.com/abijan96/abijan96.github.io
+  → Log in
+
+Step 2: Create new file to make folder
+  → Click "Add file" → "Create new file"
+  → Type: faculty-survey-dashboard/temp.txt
+  → Type anything in the file
+  → Click "Commit new file"
+
+Step 3: Upload your files
+  → Click on "faculty-survey-dashboard" folder
+  → Click "Add file" → "Upload files"
+  → Drag these files from your Downloads folder:
+    ✓ index.html
+    ✓ dashboard.js
+    ✓ faculty_survey_data.csv
+    ✓ README.md
+  → Commit message: "Add faculty survey dashboard"
+  → Click "Commit changes"
+
+Step 4: Delete temp file (optional)
+  → Click temp.txt → Click trash icon → Commit
+
+Step 5: Wait & Visit
+  → Wait 2-3 minutes
+  → Visit: https://abijan96.github.io/faculty-survey-dashboard/
+  → 🎉 Done!
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+METHOD 2: Automated Script (If Git is configured)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  → Double-click: deploy.bat
+  → Follow prompts
+  → Done!
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+WHAT YOU'LL SEE:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎓 Notre Dame Faculty Experience Survey Dashboard
+
+📊 6 Key Performance Indicators:
+   • Overall Satisfaction: 3.27/5.0
+   • eNPS: +17
+   • Retention Risk: 25.7%
+   • Belonging: 3.53/5.0
+   • Psychological Safety: 2.76/5.0 ⚠️
+   • Response Rate: 40.6%
+
+📈 8 Interactive Charts:
+   1. Satisfaction by College
+   2. Employee Net Promoter Score
+   3. Equity Analysis by Gender
+   4. Retention Risk Drivers
+   5. Workload by Discipline
+   6. Tenure Clarity vs Fairness
+   7. Intersectional Belonging
+   8. Key Metrics Radar
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TROUBLESHOOTING:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+❌ Blank page?
+   → Wait 3 minutes, refresh
+   → Check all 4 files uploaded
+   → Clear cache (Ctrl + Shift + R)
+
+❌ 404 Error?
+   → Check URL: /faculty-survey-dashboard/ (with dash)
+   → Verify files in correct folder on GitHub
+
+❌ No charts?
+   → Check internet connection (needs CDN)
+   → Open console (F12) to see errors
+   → Verify faculty_survey_data.csv is present
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+NEED MORE HELP?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📖 Read: DEPLOYMENT_GUIDE.txt (detailed step-by-step)
+📖 Read: README.md (full documentation)
+📖 Read: DEPLOYMENT_SUMMARY.txt (overview)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ After successful deployment, share this link:
+   🔗 https://abijan96.github.io/faculty-survey-dashboard/
+
+Good luck! 🚀
