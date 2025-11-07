@@ -556,13 +556,13 @@ function updateChart3() {
         .domain(metrics.map(m => m.label))
         .range(['#3B82F6', '#10B981', '#F59E0B', '#EC4899']);
 
-    const groups = svg.selectAll('.group')
+    const groupElements = svg.selectAll('.group')
         .data(data)
         .enter()
         .append('g')
         .attr('transform', d => `translate(${x0(d.group)},0)`);
 
-    groups.selectAll('rect')
+    groupElements.selectAll('rect')
         .data(d => metrics.map(m => ({ metric: m.label, value: d[m.label], group: d.group })))
         .enter()
         .append('rect')
