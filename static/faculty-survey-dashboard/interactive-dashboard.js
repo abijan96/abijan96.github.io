@@ -407,7 +407,25 @@ function updateChart2() {
         .domain([0, d3.max(data, d => d.count)])
         .range([5, 30]);
 
-    // Add quadrant lines
+    // Add gridlines
+    svg.append('g')
+        .attr('class', 'grid')
+        .attr('opacity', 0.1)
+        .call(d3.axisLeft(y)
+            .tickSize(-width)
+            .tickFormat('')
+        );
+
+    svg.append('g')
+        .attr('class', 'grid')
+        .attr('transform', `translate(0,${height})`)
+        .attr('opacity', 0.1)
+        .call(d3.axisBottom(x)
+            .tickSize(-height)
+            .tickFormat('')
+        );
+
+    // Add quadrant lines (more prominent than grid)
     svg.append('line')
         .attr('x1', x(3.5))
         .attr('x2', x(3.5))
@@ -415,7 +433,7 @@ function updateChart2() {
         .attr('y2', height)
         .attr('stroke', '#999')
         .attr('stroke-dasharray', '5,5')
-        .attr('stroke-width', 1);
+        .attr('stroke-width', 1.5);
 
     svg.append('line')
         .attr('x1', 0)
@@ -424,7 +442,7 @@ function updateChart2() {
         .attr('y2', y(25))
         .attr('stroke', '#999')
         .attr('stroke-dasharray', '5,5')
-        .attr('stroke-width', 1);
+        .attr('stroke-width', 1.5);
 
     // Bubbles
     svg.selectAll('.bubble')
@@ -901,6 +919,25 @@ function updateChart6() {
     const y = d3.scaleLinear()
         .domain([0, 5])
         .range([height, 0]);
+
+    // Add gridlines
+    svg.append('g')
+        .attr('class', 'grid')
+        .attr('opacity', 0.1)
+        .call(d3.axisLeft(y)
+            .tickSize(-width)
+            .tickFormat('')
+        );
+
+    svg.append('g')
+        .attr('class', 'grid')
+        .attr('transform', `translate(0,${height})`)
+        .attr('opacity', 0.1)
+        .call(d3.axisBottom(x)
+            .ticks(data.length)
+            .tickSize(-height)
+            .tickFormat('')
+        );
 
     // Draw lines for each metric
     metrics.forEach(metric => {
