@@ -12,7 +12,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Load CSV data
 function loadData() {
-    Papa.parse('faculty_survey_data.csv', {
+    // Use absolute path from site root for GitHub Pages deployment
+    const csvPath = '/faculty-survey-dashboard/faculty_survey_data.csv';
+
+    Papa.parse(csvPath, {
         download: true,
         header: true,
         dynamicTyping: true,
@@ -25,7 +28,8 @@ function loadData() {
         },
         error: function(error) {
             console.error('Error loading data:', error);
-            alert('Error loading survey data. Please ensure faculty_survey_data.csv is in the same directory.');
+            console.error('Attempted to load from:', csvPath);
+            alert('Error loading survey data. Please check the browser console for details.');
         }
     });
 }
