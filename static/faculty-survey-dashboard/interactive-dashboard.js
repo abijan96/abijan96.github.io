@@ -13,7 +13,8 @@ document.addEventListener('DOMContentLoaded', function() {
 // Load CSV data
 function loadData() {
     // Use absolute path from site root for GitHub Pages deployment
-    const csvPath = '/faculty-survey-dashboard/faculty_survey_data.csv';
+    // Add timestamp to prevent caching issues
+    const csvPath = '/faculty-survey-dashboard/faculty_survey_data.csv?v=' + Date.now();
 
     Papa.parse(csvPath, {
         download: true,
