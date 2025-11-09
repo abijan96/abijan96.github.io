@@ -290,23 +290,49 @@
             min-height: 350px;
         }
 
+        :root {
+            /* Categorical (Okabe-Ito inspired, muted) */
+            --c-satisfaction: #1F77B4;
+            --c-belonging: #2CA02C;
+            --c-psych: #9467BD;
+            --c-worklife: #FF7F0E;
+
+            /* Neutral + accents */
+            --c-grid: #D9DDE5;
+            --c-text: #0C1B2A;
+            --c-bg: #FFFFFF;
+            --c-panel: #F7F8FB;
+            --c-refline: #6B7280;
+
+            /* Sequential heatmap */
+            --h0: #EFF6FF;
+            --h1: #DBEAFF;
+            --h2: #C6DBFF;
+            --h3: #9FC2FF;
+            --h4: #6EA3FF;
+            --h5: #3D7FE6;
+            --h6: #2F5FB8;
+        }
+
         .insight-box {
-            background: #F3F4F6;
-            border-left: 4px solid #0C2340;
-            padding: 15px;
+            background: var(--c-panel);
+            border-left: 4px solid var(--c-satisfaction);
+            padding: 14px 16px;
             margin-top: 15px;
-            border-radius: 5px;
+            border-radius: 8px;
         }
 
         .insight-box h4 {
-            color: #0C2340;
-            margin-bottom: 8px;
+            color: var(--c-text);
+            margin: 0 0 6px;
+            font-weight: 600;
         }
 
         .insight-box p {
-            color: #666;
+            color: var(--c-text);
             line-height: 1.6;
             font-size: 0.95em;
+            margin: 0;
         }
 
         /* D3 Styles */

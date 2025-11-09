@@ -3,6 +3,20 @@ let surveyData = [];
 let filteredData = [];
 let tooltip;
 
+// Color palette
+const PALETTE = {
+  satisfaction: '#1F77B4',
+  belonging:    '#2CA02C',
+  psych:        '#9467BD',
+  worklife:     '#FF7F0E',
+  grid:         '#D9DDE5',
+  text:         '#0C1B2A',
+  bg:           '#FFFFFF',
+  panel:        '#F7F8FB',
+  refline:      '#6B7280',
+  heatmap: ['#EFF6FF','#DBEAFF','#C6DBFF','#9FC2FF','#6EA3FF','#3D7FE6','#2F5FB8']
+};
+
 // Load data on page load
 document.addEventListener('DOMContentLoaded', function() {
     tooltip = d3.select('#tooltip');
@@ -515,10 +529,10 @@ function updateChart3() {
     d3.select('#chart3').selectAll('*').remove();
 
     const metrics = [
-        { key: 'Q8_OverallSatisfaction', label: 'Satisfaction' },
-        { key: 'Q27_Belonging', label: 'Belonging' },
-        { key: 'Q26_PsychologicalSafety', label: 'Psych Safety' },
-        { key: 'Q13_WorkLifeBalance', label: 'Work-Life' }
+        { key: 'Q8_OverallSatisfaction', label: 'Satisfaction', color: PALETTE.satisfaction },
+        { key: 'Q27_Belonging', label: 'Belonging', color: PALETTE.belonging },
+        { key: 'Q26_PsychologicalSafety', label: 'Psych Safety', color: PALETTE.psych },
+        { key: 'Q13_WorkLifeBalance', label: 'Work-Life', color: PALETTE.worklife }
     ];
 
     let groups, groupField;
@@ -573,7 +587,7 @@ function updateChart3() {
 
     const color = d3.scaleOrdinal()
         .domain(metrics.map(m => m.label))
-        .range(['#3B82F6', '#10B981', '#F59E0B', '#EC4899']);
+        .range(metrics.map(m => m.color));
 
     const groupElements = svg.selectAll('.group')
         .data(data)
@@ -797,9 +811,9 @@ function updateChart5() {
         .range([0, cellSize * variables.length])
         .padding(0.05);
 
-    const color = d3.scaleSequential()
-        .domain([-1, 1])
-        .interpolator(d3.interpolateRdBu);
+    const colorScale = d3.scaleLinear()
+        .domain([0, 0.2, 0.4, 0.6, 0.8, 1.0])
+        .range(PALETTE.heatmap);
 
     svg.selectAll('rect')
         .data(correlations)
@@ -809,7 +823,7 @@ function updateChart5() {
         .attr('y', d => y(d.y))
         .attr('width', x.bandwidth())
         .attr('height', y.bandwidth())
-        .attr('fill', d => color(-d.value))
+        .attr('fill', d => colorScale(Math.abs(d.value)))
         .attr('stroke', '#fff')
         .attr('stroke-width', 2)
         .on('mouseover', function(event, d) {
