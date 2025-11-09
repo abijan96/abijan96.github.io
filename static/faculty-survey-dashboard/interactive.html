@@ -31,34 +31,28 @@
 
         header {
             background: white;
-            padding: 30px;
+            padding: 20px 30px;
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            margin-bottom: 30px;
+            margin-bottom: 16px;
             text-align: center;
         }
 
         header h1 {
             color: #0C2340;
             font-size: 2.5em;
-            margin-bottom: 10px;
+            margin: 8px 0 4px;
+            line-height: 1.2;
         }
 
-        .badge {
-            display: inline-block;
-            background: linear-gradient(135deg, #10B981, #059669);
-            color: white;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.9em;
-            font-weight: 600;
-            margin-left: 10px;
+        .subtitle {
+            margin: 0;
         }
 
         /* Control Panel */
         .control-panel {
             background: white;
-            padding: 25px;
+            padding: 16px 20px;
             border-radius: 12px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
             margin-bottom: 30px;
@@ -66,29 +60,32 @@
 
         .control-panel h3 {
             color: #0C2340;
-            margin-bottom: 20px;
-            font-size: 1.3em;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            margin: 0 0 12px;
+            font-size: 1.125rem;
+            font-weight: 600;
         }
 
         .controls-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
+            display: flex;
+            flex-wrap: nowrap;
+            align-items: flex-start;
+            gap: 12px;
         }
 
         .control-group {
+            flex: 1 1 0;
+            min-width: 180px;
+            margin: 0;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 4px;
         }
 
         .control-label {
             font-weight: 600;
             color: #374151;
             font-size: 0.9em;
+            margin: 0;
         }
 
         .control-group select, .control-group input {
@@ -414,6 +411,16 @@
             color: #666;
         }
 
+        /* Responsive: wrap to 2 lines on medium screens, stack on mobile */
+        @media (max-width: 1279px) {
+            .controls-grid {
+                flex-wrap: wrap;
+            }
+            .control-group {
+                flex: 1 1 300px;
+            }
+        }
+
         @media (max-width: 768px) {
             .chart-grid {
                 grid-template-columns: 1fr;
@@ -424,7 +431,11 @@
             }
 
             .controls-grid {
-                grid-template-columns: 1fr;
+                flex-wrap: wrap;
+            }
+
+            .control-group {
+                flex: 1 1 100%;
             }
         }
     </style>
@@ -437,14 +448,14 @@
 
     <div class="container">
         <header>
-            <h1>🎓 Notre Dame Faculty Experience Survey <span class="badge">INTERACTIVE</span></h1>
+            <h1>Notre Dame Faculty Experience Survey</h1>
             <p class="subtitle">Fall 2025 Results Dashboard | Institutional Research, Innovation & Strategy</p>
             <p style="margin-top: 10px; color: #999; font-size: 0.9em;">Use the controls below to filter and explore the data</p>
         </header>
 
         <!-- Interactive Control Panel -->
         <div class="control-panel">
-            <h3>🎛️ Interactive Filters & Controls</h3>
+            <h3>Filters & Controls</h3>
             <div class="controls-grid">
                 <!-- College Filter -->
                 <div class="control-group">
@@ -523,13 +534,13 @@
             </div>
 
             <div class="button-group">
-                <button class="btn btn-primary" id="applyFilters">🔍 Apply Filters</button>
-                <button class="btn btn-secondary" id="resetFilters">🔄 Reset All</button>
-                <button class="btn btn-secondary" id="exportData">📥 Export Filtered Data (CSV)</button>
+                <button class="btn btn-primary" id="applyFilters">Apply Filters</button>
+                <button class="btn btn-secondary" id="resetFilters">Reset All</button>
+                <button class="btn btn-secondary" id="exportData">Export Filtered Data (CSV)</button>
             </div>
 
             <div style="margin-top: 15px; padding: 10px; background: #FEF3C7; border-left: 4px solid #F59E0B; border-radius: 5px;">
-                <strong>💡 Tip:</strong> Hold Ctrl (or Cmd on Mac) to select multiple options in each filter
+                <strong>Tip:</strong> Hold Ctrl (or Cmd on Mac) to select multiple options in each filter
             </div>
         </div>
 
@@ -543,7 +554,7 @@
             <!-- Chart 1: Satisfaction by College -->
             <div class="chart-card">
                 <div class="chart-title">
-                    <span>📊 Satisfaction by College</span>
+                    <span>Satisfaction by College</span>
                     <select id="satisfactionMetric" style="padding: 5px; border-radius: 5px;">
                         <option value="Q8_OverallSatisfaction">Overall Satisfaction</option>
                         <option value="Q13_WorkLifeBalance">Work-Life Balance</option>
@@ -559,7 +570,7 @@
             <!-- Chart 2: Scatter Plot - Satisfaction vs Retention -->
             <div class="chart-card">
                 <div class="chart-title">
-                    <span>📈 Satisfaction vs Retention Risk</span>
+                    <span>Satisfaction vs Retention Risk</span>
                 </div>
                 <div class="chart-subtitle">Bubble size = number of faculty | Click to see details</div>
                 <div class="chart-container" id="chart2"></div>
@@ -569,7 +580,7 @@
             <!-- Chart 3: Demographic Comparison -->
             <div class="chart-card full-width">
                 <div class="chart-title">
-                    <span>👥 Demographic Comparison</span>
+                    <span>Demographic Comparison</span>
                     <select id="demoMetric" style="padding: 5px; border-radius: 5px;">
                         <option value="gender">By Gender</option>
                         <option value="race">By Race/Ethnicity</option>
@@ -585,7 +596,7 @@
             <!-- Chart 4: Workload Distribution -->
             <div class="chart-card">
                 <div class="chart-title">
-                    <span>⏰ Workload Distribution</span>
+                    <span>Workload Distribution</span>
                 </div>
                 <div class="chart-subtitle">Weekly hours worked by discipline</div>
                 <div class="chart-container" id="chart4"></div>
@@ -595,7 +606,7 @@
             <!-- Chart 5: Correlation Heatmap -->
             <div class="chart-card">
                 <div class="chart-title">
-                    <span>🔗 Metric Correlations</span>
+                    <span>Metric Correlations</span>
                 </div>
                 <div class="chart-subtitle">Hover to see correlation strength</div>
                 <div class="chart-container" id="chart5"></div>
@@ -605,7 +616,7 @@
             <!-- Chart 6: Time Series (simulated tenure years) -->
             <div class="chart-card full-width">
                 <div class="chart-title">
-                    <span>📅 Satisfaction by Years at Institution</span>
+                    <span>Satisfaction by Years at Institution</span>
                 </div>
                 <div class="chart-subtitle">How does satisfaction change over time?</div>
                 <div class="chart-container" id="chart6"></div>
