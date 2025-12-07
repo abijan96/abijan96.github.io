@@ -1,0 +1,2288 @@
+{
+  "metadata": {
+    "title": "Staff Development Day 2025 Survey Results",
+    "total_responses": 112,
+    "survey_start": "2025-11-12 15:47:54.629000",
+    "survey_end": "2025-11-18 15:43:23.760000",
+    "departments": {
+      "ND Research": 39,
+      "College of Science": 25,
+      "Mendoza College of Business": 17,
+      "College of Arts & Letters": 16,
+      "Keough School of Global Affairs": 15
+    }
+  },
+  "overall_metrics": {
+    "nps": {
+      "overall_score": 8.29,
+      "nps_value": 37.5,
+      "promoters": 49.1,
+      "passives": 39.3,
+      "detractors": 11.6,
+      "top2_box": 75.9
+    },
+    "venue_score": 9.38,
+    "organization_score": 8.12,
+    "duration_score": 7.9
+  },
+  "session_performance": [
+    {
+      "name": "Morning Keynote",
+      "speaker": "Katie DeWulf",
+      "score": 7.44,
+      "nps": 12.5,
+      "promoters": 42.0,
+      "passives": 28.6,
+      "detractors": 29.5,
+      "top2_box": 56.2,
+      "details": {
+        "engaging": 6.92,
+        "time": 6.27,
+        "relevant": 6.9
+      }
+    },
+    {
+      "name": "Fireside Chat (AI)",
+      "speaker": "AI Panel",
+      "score": 7.87,
+      "nps": 29.5,
+      "promoters": 50.9,
+      "passives": 27.7,
+      "detractors": 21.4,
+      "top2_box": 68.8,
+      "details": {
+        "engaging": 7.01,
+        "time": 6.99,
+        "relevant": 6.99
+      }
+    },
+    {
+      "name": "Afternoon Keynote",
+      "speaker": "Stuart MacDonald",
+      "score": 8.25,
+      "nps": 35.7,
+      "promoters": 52.7,
+      "passives": 30.4,
+      "detractors": 17.0,
+      "top2_box": 72.3,
+      "details": {
+        "engaging": 7.23,
+        "time": 6.96,
+        "relevant": 6.54
+      }
+    },
+    {
+      "name": "Morning Breakout",
+      "speaker": "Various",
+      "score": 8.53,
+      "nps": 50.0,
+      "promoters": 60.7,
+      "passives": 28.6,
+      "detractors": 10.7,
+      "top2_box": 74.1,
+      "details": {
+        "engaging": 7.37,
+        "time": 6.5,
+        "relevant": 7.25
+      }
+    },
+    {
+      "name": "Afternoon Breakout",
+      "speaker": "Various",
+      "score": 8.21,
+      "nps": 37.5,
+      "promoters": 55.4,
+      "passives": 26.8,
+      "detractors": 17.9,
+      "top2_box": 75.9,
+      "details": {
+        "engaging": 7.14,
+        "time": 6.45,
+        "relevant": 7.03
+      }
+    }
+  ],
+  "department_comparison": [
+    {
+      "department": "College of Arts & Letters",
+      "score": 8.69,
+      "nps": 56.3,
+      "promoters": 62.5,
+      "passives": 31.2,
+      "detractors": 6.2,
+      "respondents": 16
+    },
+    {
+      "department": "College of Science",
+      "score": 8.68,
+      "nps": 52.0,
+      "promoters": 60.0,
+      "passives": 32.0,
+      "detractors": 8.0,
+      "respondents": 25
+    },
+    {
+      "department": "ND Research",
+      "score": 8.51,
+      "nps": 46.2,
+      "promoters": 51.3,
+      "passives": 43.6,
+      "detractors": 5.1,
+      "respondents": 39
+    },
+    {
+      "department": "Mendoza College of Business",
+      "score": 7.53,
+      "nps": 11.799999999999995,
+      "promoters": 35.3,
+      "passives": 41.2,
+      "detractors": 23.5,
+      "respondents": 17
+    },
+    {
+      "department": "Keough School of Global Affairs",
+      "score": 7.47,
+      "nps": 0.0,
+      "promoters": 26.7,
+      "passives": 46.7,
+      "detractors": 26.7,
+      "respondents": 15
+    }
+  ],
+  "themes": {
+    "overall": [
+      {
+        "theme": "Session Timing & Duration",
+        "prevalence_pct": 52.7,
+        "mentions": 59,
+        "pos_pct": 50.8,
+        "neu_pct": 42.4,
+        "neg_pct": 6.8,
+        "sample_quote": "The morning transition times were a little long and then the breakouts had to rush some to get all the content in"
+      },
+      {
+        "theme": "Breakouts",
+        "prevalence_pct": 42.0,
+        "mentions": 47,
+        "pos_pct": 53.2,
+        "neu_pct": 34.0,
+        "neg_pct": 12.8,
+        "sample_quote": "The morning transition times were a little long and then the breakouts had to rush some to get all the content in"
+      },
+      {
+        "theme": "Suggestions/Requests",
+        "prevalence_pct": 38.4,
+        "mentions": 43,
+        "pos_pct": 51.2,
+        "neu_pct": 37.2,
+        "neg_pct": 11.6,
+        "sample_quote": "The morning transition times were a little long and then the breakouts had to rush some to get all the content in"
+      },
+      {
+        "theme": "Content Relevance & Applicability",
+        "prevalence_pct": 33.9,
+        "mentions": 38,
+        "pos_pct": 55.3,
+        "neu_pct": 39.5,
+        "neg_pct": 5.3,
+        "sample_quote": "The morning transition times were a little long and then the breakouts had to rush some to get all the content in"
+      },
+      {
+        "theme": "Lunch/Fireside",
+        "prevalence_pct": 33.0,
+        "mentions": 37,
+        "pos_pct": 51.4,
+        "neu_pct": 37.8,
+        "neg_pct": 10.8,
+        "sample_quote": "Anything relating to IT seems to need a little longer in training"
+      },
+      {
+        "theme": "Speaker/Facilitator Quality",
+        "prevalence_pct": 24.1,
+        "mentions": 27,
+        "pos_pct": 33.3,
+        "neu_pct": 51.9,
+        "neg_pct": 14.8,
+        "sample_quote": "The schedule had far too much down time"
+      },
+      {
+        "theme": "Networking/Peer Interaction",
+        "prevalence_pct": 21.4,
+        "mentions": 24,
+        "pos_pct": 66.7,
+        "neu_pct": 33.3,
+        "neg_pct": 0.0,
+        "sample_quote": "The schedule had far too much down time"
+      },
+      {
+        "theme": "Keynotes",
+        "prevalence_pct": 21.4,
+        "mentions": 24,
+        "pos_pct": 50.0,
+        "neu_pct": 41.7,
+        "neg_pct": 8.3,
+        "sample_quote": "The schedule had far too much down time"
+      },
+      {
+        "theme": "Venue & Logistics",
+        "prevalence_pct": 15.2,
+        "mentions": 17,
+        "pos_pct": 52.9,
+        "neu_pct": 35.3,
+        "neg_pct": 11.8,
+        "sample_quote": "The breakouts didn\u2019t have enough time or maybe I enjoyed them too much I wanted them to go on"
+      },
+      {
+        "theme": "Organization & Flow",
+        "prevalence_pct": 4.5,
+        "mentions": 5,
+        "pos_pct": 80.0,
+        "neu_pct": 20.0,
+        "neg_pct": 0.0,
+        "sample_quote": "The morning transition times were a little long and then the breakouts had to rush some to get all the content in"
+      },
+      {
+        "theme": "Other",
+        "prevalence_pct": 2.7,
+        "mentions": 3,
+        "pos_pct": 0.0,
+        "neu_pct": 100.0,
+        "neg_pct": 0.0,
+        "sample_quote": "Leadership, preparing to be people managers, how to utilize and respect your Human Resources"
+      }
+    ],
+    "by_department": [
+      {
+        "department": "Keough School of Global Affairs",
+        "theme": "Session Timing & Duration",
+        "prevalence_pct": 46.7,
+        "mentions": 7,
+        "pos_pct": 85.7,
+        "neu_pct": 0.0,
+        "neg_pct": 14.3
+      },
+      {
+        "department": "Keough School of Global Affairs",
+        "theme": "Speaker/Facilitator Quality",
+        "prevalence_pct": 40.0,
+        "mentions": 6,
+        "pos_pct": 66.7,
+        "neu_pct": 16.7,
+        "neg_pct": 16.7
+      },
+      {
+        "department": "Keough School of Global Affairs",
+        "theme": "Content Relevance & Applicability",
+        "prevalence_pct": 66.7,
+        "mentions": 10,
+        "pos_pct": 80.0,
+        "neu_pct": 10.0,
+        "neg_pct": 10.0
+      },
+      {
+        "department": "Keough School of Global Affairs",
+        "theme": "Networking/Peer Interaction",
+        "prevalence_pct": 26.7,
+        "mentions": 4,
+        "pos_pct": 75.0,
+        "neu_pct": 25.0,
+        "neg_pct": 0.0
+      },
+      {
+        "department": "Keough School of Global Affairs",
+        "theme": "Venue & Logistics",
+        "prevalence_pct": 26.7,
+        "mentions": 4,
+        "pos_pct": 100.0,
+        "neu_pct": 0.0,
+        "neg_pct": 0.0
+      },
+      {
+        "department": "Keough School of Global Affairs",
+        "theme": "Organization & Flow",
+        "prevalence_pct": 13.3,
+        "mentions": 2,
+        "pos_pct": 100.0,
+        "neu_pct": 0.0,
+        "neg_pct": 0.0
+      },
+      {
+        "department": "Keough School of Global Affairs",
+        "theme": "Keynotes",
+        "prevalence_pct": 33.3,
+        "mentions": 5,
+        "pos_pct": 80.0,
+        "neu_pct": 0.0,
+        "neg_pct": 20.0
+      },
+      {
+        "department": "Keough School of Global Affairs",
+        "theme": "Breakouts",
+        "prevalence_pct": 46.7,
+        "mentions": 7,
+        "pos_pct": 85.7,
+        "neu_pct": 0.0,
+        "neg_pct": 14.3
+      },
+      {
+        "department": "Keough School of Global Affairs",
+        "theme": "Lunch/Fireside",
+        "prevalence_pct": 33.3,
+        "mentions": 5,
+        "pos_pct": 80.0,
+        "neu_pct": 0.0,
+        "neg_pct": 20.0
+      },
+      {
+        "department": "Keough School of Global Affairs",
+        "theme": "Suggestions/Requests",
+        "prevalence_pct": 60.0,
+        "mentions": 9,
+        "pos_pct": 77.8,
+        "neu_pct": 11.1,
+        "neg_pct": 11.1
+      },
+      {
+        "department": "Keough School of Global Affairs",
+        "theme": "Other",
+        "prevalence_pct": 6.7,
+        "mentions": 1,
+        "pos_pct": 0.0,
+        "neu_pct": 100.0,
+        "neg_pct": 0.0
+      },
+      {
+        "department": "Mendoza College of Business",
+        "theme": "Session Timing & Duration",
+        "prevalence_pct": 47.1,
+        "mentions": 8,
+        "pos_pct": 37.5,
+        "neu_pct": 37.5,
+        "neg_pct": 25.0
+      },
+      {
+        "department": "Mendoza College of Business",
+        "theme": "Speaker/Facilitator Quality",
+        "prevalence_pct": 23.5,
+        "mentions": 4,
+        "pos_pct": 25.0,
+        "neu_pct": 25.0,
+        "neg_pct": 50.0
+      },
+      {
+        "department": "Mendoza College of Business",
+        "theme": "Content Relevance & Applicability",
+        "prevalence_pct": 29.4,
+        "mentions": 5,
+        "pos_pct": 40.0,
+        "neu_pct": 40.0,
+        "neg_pct": 20.0
+      },
+      {
+        "department": "Mendoza College of Business",
+        "theme": "Networking/Peer Interaction",
+        "prevalence_pct": 5.9,
+        "mentions": 1,
+        "pos_pct": 100.0,
+        "neu_pct": 0.0,
+        "neg_pct": 0.0
+      },
+      {
+        "department": "Mendoza College of Business",
+        "theme": "Venue & Logistics",
+        "prevalence_pct": 11.8,
+        "mentions": 2,
+        "pos_pct": 0.0,
+        "neu_pct": 100.0,
+        "neg_pct": 0.0
+      },
+      {
+        "department": "Mendoza College of Business",
+        "theme": "Keynotes",
+        "prevalence_pct": 11.8,
+        "mentions": 2,
+        "pos_pct": 50.0,
+        "neu_pct": 50.0,
+        "neg_pct": 0.0
+      },
+      {
+        "department": "Mendoza College of Business",
+        "theme": "Breakouts",
+        "prevalence_pct": 47.1,
+        "mentions": 8,
+        "pos_pct": 37.5,
+        "neu_pct": 25.0,
+        "neg_pct": 37.5
+      },
+      {
+        "department": "Mendoza College of Business",
+        "theme": "Lunch/Fireside",
+        "prevalence_pct": 35.3,
+        "mentions": 6,
+        "pos_pct": 50.0,
+        "neu_pct": 33.3,
+        "neg_pct": 16.7
+      },
+      {
+        "department": "Mendoza College of Business",
+        "theme": "Suggestions/Requests",
+        "prevalence_pct": 41.2,
+        "mentions": 7,
+        "pos_pct": 42.9,
+        "neu_pct": 14.3,
+        "neg_pct": 42.9
+      },
+      {
+        "department": "ND Research",
+        "theme": "Session Timing & Duration",
+        "prevalence_pct": 41.0,
+        "mentions": 16,
+        "pos_pct": 37.5,
+        "neu_pct": 62.5,
+        "neg_pct": 0.0
+      },
+      {
+        "department": "ND Research",
+        "theme": "Speaker/Facilitator Quality",
+        "prevalence_pct": 12.8,
+        "mentions": 5,
+        "pos_pct": 20.0,
+        "neu_pct": 80.0,
+        "neg_pct": 0.0
+      },
+      {
+        "department": "ND Research",
+        "theme": "Content Relevance & Applicability",
+        "prevalence_pct": 25.6,
+        "mentions": 10,
+        "pos_pct": 50.0,
+        "neu_pct": 50.0,
+        "neg_pct": 0.0
+      },
+      {
+        "department": "ND Research",
+        "theme": "Networking/Peer Interaction",
+        "prevalence_pct": 20.5,
+        "mentions": 8,
+        "pos_pct": 62.5,
+        "neu_pct": 37.5,
+        "neg_pct": 0.0
+      },
+      {
+        "department": "ND Research",
+        "theme": "Venue & Logistics",
+        "prevalence_pct": 15.4,
+        "mentions": 6,
+        "pos_pct": 66.7,
+        "neu_pct": 16.7,
+        "neg_pct": 16.7
+      },
+      {
+        "department": "ND Research",
+        "theme": "Keynotes",
+        "prevalence_pct": 12.8,
+        "mentions": 5,
+        "pos_pct": 40.0,
+        "neu_pct": 40.0,
+        "neg_pct": 20.0
+      },
+      {
+        "department": "ND Research",
+        "theme": "Breakouts",
+        "prevalence_pct": 30.8,
+        "mentions": 12,
+        "pos_pct": 33.3,
+        "neu_pct": 58.3,
+        "neg_pct": 8.3
+      },
+      {
+        "department": "ND Research",
+        "theme": "Lunch/Fireside",
+        "prevalence_pct": 28.2,
+        "mentions": 11,
+        "pos_pct": 45.5,
+        "neu_pct": 45.5,
+        "neg_pct": 9.1
+      },
+      {
+        "department": "ND Research",
+        "theme": "Suggestions/Requests",
+        "prevalence_pct": 30.8,
+        "mentions": 12,
+        "pos_pct": 41.7,
+        "neu_pct": 58.3,
+        "neg_pct": 0.0
+      },
+      {
+        "department": "ND Research",
+        "theme": "Other",
+        "prevalence_pct": 5.1,
+        "mentions": 2,
+        "pos_pct": 0.0,
+        "neu_pct": 100.0,
+        "neg_pct": 0.0
+      },
+      {
+        "department": "College of Science",
+        "theme": "Session Timing & Duration",
+        "prevalence_pct": 60.0,
+        "mentions": 15,
+        "pos_pct": 53.3,
+        "neu_pct": 40.0,
+        "neg_pct": 6.7
+      },
+      {
+        "department": "College of Science",
+        "theme": "Speaker/Facilitator Quality",
+        "prevalence_pct": 24.0,
+        "mentions": 6,
+        "pos_pct": 33.3,
+        "neu_pct": 50.0,
+        "neg_pct": 16.7
+      },
+      {
+        "department": "College of Science",
+        "theme": "Content Relevance & Applicability",
+        "prevalence_pct": 24.0,
+        "mentions": 6,
+        "pos_pct": 50.0,
+        "neu_pct": 50.0,
+        "neg_pct": 0.0
+      },
+      {
+        "department": "College of Science",
+        "theme": "Networking/Peer Interaction",
+        "prevalence_pct": 20.0,
+        "mentions": 5,
+        "pos_pct": 80.0,
+        "neu_pct": 20.0,
+        "neg_pct": 0.0
+      },
+      {
+        "department": "College of Science",
+        "theme": "Venue & Logistics",
+        "prevalence_pct": 12.0,
+        "mentions": 3,
+        "pos_pct": 33.3,
+        "neu_pct": 33.3,
+        "neg_pct": 33.3
+      },
+      {
+        "department": "College of Science",
+        "theme": "Organization & Flow",
+        "prevalence_pct": 4.0,
+        "mentions": 1,
+        "pos_pct": 0.0,
+        "neu_pct": 100.0,
+        "neg_pct": 0.0
+      },
+      {
+        "department": "College of Science",
+        "theme": "Keynotes",
+        "prevalence_pct": 28.0,
+        "mentions": 7,
+        "pos_pct": 57.1,
+        "neu_pct": 42.9,
+        "neg_pct": 0.0
+      },
+      {
+        "department": "College of Science",
+        "theme": "Breakouts",
+        "prevalence_pct": 48.0,
+        "mentions": 12,
+        "pos_pct": 58.3,
+        "neu_pct": 33.3,
+        "neg_pct": 8.3
+      },
+      {
+        "department": "College of Science",
+        "theme": "Lunch/Fireside",
+        "prevalence_pct": 28.0,
+        "mentions": 7,
+        "pos_pct": 57.1,
+        "neu_pct": 28.6,
+        "neg_pct": 14.3
+      },
+      {
+        "department": "College of Science",
+        "theme": "Suggestions/Requests",
+        "prevalence_pct": 24.0,
+        "mentions": 6,
+        "pos_pct": 16.7,
+        "neu_pct": 66.7,
+        "neg_pct": 16.7
+      },
+      {
+        "department": "College of Arts & Letters",
+        "theme": "Session Timing & Duration",
+        "prevalence_pct": 81.2,
+        "mentions": 13,
+        "pos_pct": 53.8,
+        "neu_pct": 46.2,
+        "neg_pct": 0.0
+      },
+      {
+        "department": "College of Arts & Letters",
+        "theme": "Speaker/Facilitator Quality",
+        "prevalence_pct": 37.5,
+        "mentions": 6,
+        "pos_pct": 16.7,
+        "neu_pct": 83.3,
+        "neg_pct": 0.0
+      },
+      {
+        "department": "College of Arts & Letters",
+        "theme": "Content Relevance & Applicability",
+        "prevalence_pct": 43.8,
+        "mentions": 7,
+        "pos_pct": 42.9,
+        "neu_pct": 57.1,
+        "neg_pct": 0.0
+      },
+      {
+        "department": "College of Arts & Letters",
+        "theme": "Networking/Peer Interaction",
+        "prevalence_pct": 37.5,
+        "mentions": 6,
+        "pos_pct": 50.0,
+        "neu_pct": 50.0,
+        "neg_pct": 0.0
+      },
+      {
+        "department": "College of Arts & Letters",
+        "theme": "Venue & Logistics",
+        "prevalence_pct": 12.5,
+        "mentions": 2,
+        "pos_pct": 0.0,
+        "neu_pct": 100.0,
+        "neg_pct": 0.0
+      },
+      {
+        "department": "College of Arts & Letters",
+        "theme": "Organization & Flow",
+        "prevalence_pct": 12.5,
+        "mentions": 2,
+        "pos_pct": 100.0,
+        "neu_pct": 0.0,
+        "neg_pct": 0.0
+      },
+      {
+        "department": "College of Arts & Letters",
+        "theme": "Keynotes",
+        "prevalence_pct": 31.2,
+        "mentions": 5,
+        "pos_pct": 20.0,
+        "neu_pct": 80.0,
+        "neg_pct": 0.0
+      },
+      {
+        "department": "College of Arts & Letters",
+        "theme": "Breakouts",
+        "prevalence_pct": 50.0,
+        "mentions": 8,
+        "pos_pct": 62.5,
+        "neu_pct": 37.5,
+        "neg_pct": 0.0
+      },
+      {
+        "department": "College of Arts & Letters",
+        "theme": "Lunch/Fireside",
+        "prevalence_pct": 50.0,
+        "mentions": 8,
+        "pos_pct": 37.5,
+        "neu_pct": 62.5,
+        "neg_pct": 0.0
+      },
+      {
+        "department": "College of Arts & Letters",
+        "theme": "Suggestions/Requests",
+        "prevalence_pct": 56.2,
+        "mentions": 9,
+        "pos_pct": 66.7,
+        "neu_pct": 33.3,
+        "neg_pct": 0.0
+      }
+    ]
+  },
+  "kpi_by_department": [
+    {
+      "department": "Keough School of Global Affairs",
+      "metric": "Overall_NPS",
+      "mean_0_10": 7.47,
+      "top2_box_pct": 60.0,
+      "n_responses": 15,
+      "detractor_pct": 26.7,
+      "passive_pct": 46.7,
+      "promoter_pct": 26.7,
+      "nps_score": 0.0
+    },
+    {
+      "department": "Keough School of Global Affairs",
+      "metric": "Morning_Keynote_NPS",
+      "mean_0_10": 5.8,
+      "top2_box_pct": 33.3,
+      "n_responses": 15,
+      "detractor_pct": 66.7,
+      "passive_pct": 0.0,
+      "promoter_pct": 33.3,
+      "nps_score": -33.400000000000006
+    },
+    {
+      "department": "Keough School of Global Affairs",
+      "metric": "Fireside_NPS",
+      "mean_0_10": 6.27,
+      "top2_box_pct": 40.0,
+      "n_responses": 15,
+      "detractor_pct": 40.0,
+      "passive_pct": 40.0,
+      "promoter_pct": 20.0,
+      "nps_score": -20.0
+    },
+    {
+      "department": "Keough School of Global Affairs",
+      "metric": "Afternoon_Keynote_NPS",
+      "mean_0_10": 7.4,
+      "top2_box_pct": 66.7,
+      "n_responses": 15,
+      "detractor_pct": 26.7,
+      "passive_pct": 26.7,
+      "promoter_pct": 46.7,
+      "nps_score": 20.000000000000004
+    },
+    {
+      "department": "Keough School of Global Affairs",
+      "metric": "Morning_Breakout_NPS",
+      "mean_0_10": 7.87,
+      "top2_box_pct": 53.3,
+      "n_responses": 15,
+      "detractor_pct": 6.7,
+      "passive_pct": 66.7,
+      "promoter_pct": 26.7,
+      "nps_score": 20.0
+    },
+    {
+      "department": "Keough School of Global Affairs",
+      "metric": "Afternoon_Breakout_NPS",
+      "mean_0_10": 7.73,
+      "top2_box_pct": 73.3,
+      "n_responses": 15,
+      "detractor_pct": 20.0,
+      "passive_pct": 20.0,
+      "promoter_pct": 60.0,
+      "nps_score": 40.0
+    },
+    {
+      "department": "Keough School of Global Affairs",
+      "metric": "Organization_Flow",
+      "mean_0_10": 7.5,
+      "top2_box_pct": 6.7,
+      "n_responses": 15,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "Keough School of Global Affairs",
+      "metric": "Venue",
+      "mean_0_10": 9.17,
+      "top2_box_pct": 66.7,
+      "n_responses": 15,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "Keough School of Global Affairs",
+      "metric": "Duration",
+      "mean_0_10": 7.17,
+      "top2_box_pct": 26.7,
+      "n_responses": 15,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "Keough School of Global Affairs",
+      "metric": "Morning_Keynote_Engaging",
+      "mean_0_10": 6.33,
+      "top2_box_pct": 0.0,
+      "n_responses": 15,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "Keough School of Global Affairs",
+      "metric": "Morning_Keynote_Time",
+      "mean_0_10": 5.83,
+      "top2_box_pct": 0.0,
+      "n_responses": 15,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "Keough School of Global Affairs",
+      "metric": "Morning_Keynote_Relevant",
+      "mean_0_10": 6.17,
+      "top2_box_pct": 0.0,
+      "n_responses": 15,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "Keough School of Global Affairs",
+      "metric": "Fireside_Engaging",
+      "mean_0_10": 7.0,
+      "top2_box_pct": 0.0,
+      "n_responses": 15,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "Keough School of Global Affairs",
+      "metric": "Fireside_Time",
+      "mean_0_10": 6.5,
+      "top2_box_pct": 0.0,
+      "n_responses": 15,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "Keough School of Global Affairs",
+      "metric": "Fireside_Relevant",
+      "mean_0_10": 6.5,
+      "top2_box_pct": 0.0,
+      "n_responses": 15,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "Keough School of Global Affairs",
+      "metric": "Afternoon_Keynote_Engaging",
+      "mean_0_10": 7.0,
+      "top2_box_pct": 0.0,
+      "n_responses": 15,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "Keough School of Global Affairs",
+      "metric": "Afternoon_Keynote_Time",
+      "mean_0_10": 6.17,
+      "top2_box_pct": 0.0,
+      "n_responses": 15,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "Keough School of Global Affairs",
+      "metric": "Afternoon_Keynote_Relevant",
+      "mean_0_10": 6.0,
+      "top2_box_pct": 0.0,
+      "n_responses": 15,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "Keough School of Global Affairs",
+      "metric": "Morning_Breakout_Engaging",
+      "mean_0_10": 7.5,
+      "top2_box_pct": 0.0,
+      "n_responses": 15,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "Keough School of Global Affairs",
+      "metric": "Morning_Breakout_Time",
+      "mean_0_10": 6.5,
+      "top2_box_pct": 0.0,
+      "n_responses": 15,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "Keough School of Global Affairs",
+      "metric": "Morning_Breakout_Relevant",
+      "mean_0_10": 7.5,
+      "top2_box_pct": 0.0,
+      "n_responses": 15,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "Keough School of Global Affairs",
+      "metric": "Afternoon_Breakout_Engaging",
+      "mean_0_10": 7.0,
+      "top2_box_pct": 0.0,
+      "n_responses": 15,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "Keough School of Global Affairs",
+      "metric": "Afternoon_Breakout_Time",
+      "mean_0_10": 5.83,
+      "top2_box_pct": 0.0,
+      "n_responses": 15,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "Keough School of Global Affairs",
+      "metric": "Afternoon_Breakout_Relevant",
+      "mean_0_10": 6.67,
+      "top2_box_pct": 0.0,
+      "n_responses": 15,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "Mendoza College of Business",
+      "metric": "Overall_NPS",
+      "mean_0_10": 7.53,
+      "top2_box_pct": 64.7,
+      "n_responses": 17,
+      "detractor_pct": 23.5,
+      "passive_pct": 41.2,
+      "promoter_pct": 35.3,
+      "nps_score": 11.799999999999995
+    },
+    {
+      "department": "Mendoza College of Business",
+      "metric": "Morning_Keynote_NPS",
+      "mean_0_10": 8.29,
+      "top2_box_pct": 76.5,
+      "n_responses": 17,
+      "detractor_pct": 11.8,
+      "passive_pct": 29.4,
+      "promoter_pct": 58.8,
+      "nps_score": 47.0
+    },
+    {
+      "department": "Mendoza College of Business",
+      "metric": "Fireside_NPS",
+      "mean_0_10": 8.0,
+      "top2_box_pct": 58.8,
+      "n_responses": 17,
+      "detractor_pct": 17.6,
+      "passive_pct": 35.3,
+      "promoter_pct": 47.1,
+      "nps_score": 29.5
+    },
+    {
+      "department": "Mendoza College of Business",
+      "metric": "Afternoon_Keynote_NPS",
+      "mean_0_10": 8.35,
+      "top2_box_pct": 70.6,
+      "n_responses": 17,
+      "detractor_pct": 17.6,
+      "passive_pct": 29.4,
+      "promoter_pct": 52.9,
+      "nps_score": 35.3
+    },
+    {
+      "department": "Mendoza College of Business",
+      "metric": "Morning_Breakout_NPS",
+      "mean_0_10": 8.24,
+      "top2_box_pct": 76.5,
+      "n_responses": 17,
+      "detractor_pct": 11.8,
+      "passive_pct": 41.2,
+      "promoter_pct": 47.1,
+      "nps_score": 35.3
+    },
+    {
+      "department": "Mendoza College of Business",
+      "metric": "Afternoon_Breakout_NPS",
+      "mean_0_10": 8.53,
+      "top2_box_pct": 76.5,
+      "n_responses": 17,
+      "detractor_pct": 17.6,
+      "passive_pct": 17.6,
+      "promoter_pct": 64.7,
+      "nps_score": 47.1
+    },
+    {
+      "department": "Mendoza College of Business",
+      "metric": "Organization_Flow",
+      "mean_0_10": 8.09,
+      "top2_box_pct": 64.7,
+      "n_responses": 17,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "Mendoza College of Business",
+      "metric": "Venue",
+      "mean_0_10": 9.56,
+      "top2_box_pct": 82.4,
+      "n_responses": 17,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "Mendoza College of Business",
+      "metric": "Duration",
+      "mean_0_10": 7.79,
+      "top2_box_pct": 35.3,
+      "n_responses": 17,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "Mendoza College of Business",
+      "metric": "Morning_Keynote_Engaging",
+      "mean_0_10": 7.21,
+      "top2_box_pct": 0.0,
+      "n_responses": 17,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "Mendoza College of Business",
+      "metric": "Morning_Keynote_Time",
+      "mean_0_10": 6.18,
+      "top2_box_pct": 0.0,
+      "n_responses": 17,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "Mendoza College of Business",
+      "metric": "Morning_Keynote_Relevant",
+      "mean_0_10": 7.21,
+      "top2_box_pct": 0.0,
+      "n_responses": 17,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "Mendoza College of Business",
+      "metric": "Fireside_Engaging",
+      "mean_0_10": 7.06,
+      "top2_box_pct": 0.0,
+      "n_responses": 17,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "Mendoza College of Business",
+      "metric": "Fireside_Time",
+      "mean_0_10": 7.35,
+      "top2_box_pct": 0.0,
+      "n_responses": 17,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "Mendoza College of Business",
+      "metric": "Fireside_Relevant",
+      "mean_0_10": 7.06,
+      "top2_box_pct": 0.0,
+      "n_responses": 17,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "Mendoza College of Business",
+      "metric": "Afternoon_Keynote_Engaging",
+      "mean_0_10": 7.35,
+      "top2_box_pct": 0.0,
+      "n_responses": 17,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "Mendoza College of Business",
+      "metric": "Afternoon_Keynote_Time",
+      "mean_0_10": 6.91,
+      "top2_box_pct": 0.0,
+      "n_responses": 17,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "Mendoza College of Business",
+      "metric": "Afternoon_Keynote_Relevant",
+      "mean_0_10": 6.47,
+      "top2_box_pct": 0.0,
+      "n_responses": 17,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "Mendoza College of Business",
+      "metric": "Morning_Breakout_Engaging",
+      "mean_0_10": 7.21,
+      "top2_box_pct": 0.0,
+      "n_responses": 17,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "Mendoza College of Business",
+      "metric": "Morning_Breakout_Time",
+      "mean_0_10": 6.47,
+      "top2_box_pct": 0.0,
+      "n_responses": 17,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "Mendoza College of Business",
+      "metric": "Morning_Breakout_Relevant",
+      "mean_0_10": 7.06,
+      "top2_box_pct": 0.0,
+      "n_responses": 17,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "Mendoza College of Business",
+      "metric": "Afternoon_Breakout_Engaging",
+      "mean_0_10": 7.35,
+      "top2_box_pct": 0.0,
+      "n_responses": 17,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "Mendoza College of Business",
+      "metric": "Afternoon_Breakout_Time",
+      "mean_0_10": 6.91,
+      "top2_box_pct": 0.0,
+      "n_responses": 17,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "Mendoza College of Business",
+      "metric": "Afternoon_Breakout_Relevant",
+      "mean_0_10": 7.06,
+      "top2_box_pct": 0.0,
+      "n_responses": 17,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "ND Research",
+      "metric": "Overall_NPS",
+      "mean_0_10": 8.51,
+      "top2_box_pct": 74.4,
+      "n_responses": 39,
+      "detractor_pct": 5.1,
+      "passive_pct": 43.6,
+      "promoter_pct": 51.3,
+      "nps_score": 46.2
+    },
+    {
+      "department": "ND Research",
+      "metric": "Morning_Keynote_NPS",
+      "mean_0_10": 7.64,
+      "top2_box_pct": 53.8,
+      "n_responses": 39,
+      "detractor_pct": 20.5,
+      "passive_pct": 43.6,
+      "promoter_pct": 35.9,
+      "nps_score": 15.4
+    },
+    {
+      "department": "ND Research",
+      "metric": "Fireside_NPS",
+      "mean_0_10": 8.36,
+      "top2_box_pct": 76.9,
+      "n_responses": 39,
+      "detractor_pct": 20.5,
+      "passive_pct": 17.9,
+      "promoter_pct": 61.5,
+      "nps_score": 41.0
+    },
+    {
+      "department": "ND Research",
+      "metric": "Afternoon_Keynote_NPS",
+      "mean_0_10": 8.26,
+      "top2_box_pct": 69.2,
+      "n_responses": 39,
+      "detractor_pct": 23.1,
+      "passive_pct": 23.1,
+      "promoter_pct": 53.8,
+      "nps_score": 30.7
+    },
+    {
+      "department": "ND Research",
+      "metric": "Morning_Breakout_NPS",
+      "mean_0_10": 8.38,
+      "top2_box_pct": 69.2,
+      "n_responses": 39,
+      "detractor_pct": 12.8,
+      "passive_pct": 23.1,
+      "promoter_pct": 64.1,
+      "nps_score": 51.3
+    },
+    {
+      "department": "ND Research",
+      "metric": "Afternoon_Breakout_NPS",
+      "mean_0_10": 7.87,
+      "top2_box_pct": 71.8,
+      "n_responses": 39,
+      "detractor_pct": 20.5,
+      "passive_pct": 35.9,
+      "promoter_pct": 43.6,
+      "nps_score": 23.1
+    },
+    {
+      "department": "ND Research",
+      "metric": "Organization_Flow",
+      "mean_0_10": 8.33,
+      "top2_box_pct": 38.5,
+      "n_responses": 39,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "ND Research",
+      "metric": "Venue",
+      "mean_0_10": 9.36,
+      "top2_box_pct": 79.5,
+      "n_responses": 39,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "ND Research",
+      "metric": "Duration",
+      "mean_0_10": 8.14,
+      "top2_box_pct": 41.0,
+      "n_responses": 39,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "ND Research",
+      "metric": "Morning_Keynote_Engaging",
+      "mean_0_10": 7.18,
+      "top2_box_pct": 0.0,
+      "n_responses": 39,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "ND Research",
+      "metric": "Morning_Keynote_Time",
+      "mean_0_10": 6.6,
+      "top2_box_pct": 0.0,
+      "n_responses": 39,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "ND Research",
+      "metric": "Morning_Keynote_Relevant",
+      "mean_0_10": 6.92,
+      "top2_box_pct": 0.0,
+      "n_responses": 39,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "ND Research",
+      "metric": "Fireside_Engaging",
+      "mean_0_10": 7.05,
+      "top2_box_pct": 0.0,
+      "n_responses": 39,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "ND Research",
+      "metric": "Fireside_Time",
+      "mean_0_10": 7.12,
+      "top2_box_pct": 0.0,
+      "n_responses": 39,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "ND Research",
+      "metric": "Fireside_Relevant",
+      "mean_0_10": 6.99,
+      "top2_box_pct": 0.0,
+      "n_responses": 39,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "ND Research",
+      "metric": "Afternoon_Keynote_Engaging",
+      "mean_0_10": 7.12,
+      "top2_box_pct": 0.0,
+      "n_responses": 39,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "ND Research",
+      "metric": "Afternoon_Keynote_Time",
+      "mean_0_10": 7.18,
+      "top2_box_pct": 0.0,
+      "n_responses": 39,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "ND Research",
+      "metric": "Afternoon_Keynote_Relevant",
+      "mean_0_10": 6.86,
+      "top2_box_pct": 0.0,
+      "n_responses": 39,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "ND Research",
+      "metric": "Morning_Breakout_Engaging",
+      "mean_0_10": 7.31,
+      "top2_box_pct": 0.0,
+      "n_responses": 39,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "ND Research",
+      "metric": "Morning_Breakout_Time",
+      "mean_0_10": 6.28,
+      "top2_box_pct": 0.0,
+      "n_responses": 39,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "ND Research",
+      "metric": "Morning_Breakout_Relevant",
+      "mean_0_10": 7.18,
+      "top2_box_pct": 0.0,
+      "n_responses": 39,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "ND Research",
+      "metric": "Afternoon_Breakout_Engaging",
+      "mean_0_10": 7.05,
+      "top2_box_pct": 0.0,
+      "n_responses": 39,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "ND Research",
+      "metric": "Afternoon_Breakout_Time",
+      "mean_0_10": 6.47,
+      "top2_box_pct": 0.0,
+      "n_responses": 39,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "ND Research",
+      "metric": "Afternoon_Breakout_Relevant",
+      "mean_0_10": 6.99,
+      "top2_box_pct": 0.0,
+      "n_responses": 39,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "College of Science",
+      "metric": "Overall_NPS",
+      "mean_0_10": 8.68,
+      "top2_box_pct": 88.0,
+      "n_responses": 25,
+      "detractor_pct": 8.0,
+      "passive_pct": 32.0,
+      "promoter_pct": 60.0,
+      "nps_score": 52.0
+    },
+    {
+      "department": "College of Science",
+      "metric": "Morning_Keynote_NPS",
+      "mean_0_10": 7.68,
+      "top2_box_pct": 56.0,
+      "n_responses": 25,
+      "detractor_pct": 32.0,
+      "passive_pct": 24.0,
+      "promoter_pct": 44.0,
+      "nps_score": 12.0
+    },
+    {
+      "department": "College of Science",
+      "metric": "Fireside_NPS",
+      "mean_0_10": 8.08,
+      "top2_box_pct": 72.0,
+      "n_responses": 25,
+      "detractor_pct": 16.0,
+      "passive_pct": 32.0,
+      "promoter_pct": 52.0,
+      "nps_score": 36.0
+    },
+    {
+      "department": "College of Science",
+      "metric": "Afternoon_Keynote_NPS",
+      "mean_0_10": 8.36,
+      "top2_box_pct": 80.0,
+      "n_responses": 25,
+      "detractor_pct": 12.0,
+      "passive_pct": 36.0,
+      "promoter_pct": 52.0,
+      "nps_score": 40.0
+    },
+    {
+      "department": "College of Science",
+      "metric": "Morning_Breakout_NPS",
+      "mean_0_10": 8.96,
+      "top2_box_pct": 84.0,
+      "n_responses": 25,
+      "detractor_pct": 12.0,
+      "passive_pct": 12.0,
+      "promoter_pct": 76.0,
+      "nps_score": 64.0
+    },
+    {
+      "department": "College of Science",
+      "metric": "Afternoon_Breakout_NPS",
+      "mean_0_10": 8.64,
+      "top2_box_pct": 80.0,
+      "n_responses": 25,
+      "detractor_pct": 16.0,
+      "passive_pct": 20.0,
+      "promoter_pct": 64.0,
+      "nps_score": 48.0
+    },
+    {
+      "department": "College of Science",
+      "metric": "Organization_Flow",
+      "mean_0_10": 8.4,
+      "top2_box_pct": 52.0,
+      "n_responses": 25,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "College of Science",
+      "metric": "Venue",
+      "mean_0_10": 9.4,
+      "top2_box_pct": 80.0,
+      "n_responses": 25,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "College of Science",
+      "metric": "Duration",
+      "mean_0_10": 8.4,
+      "top2_box_pct": 40.0,
+      "n_responses": 25,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "College of Science",
+      "metric": "Morning_Keynote_Engaging",
+      "mean_0_10": 7.2,
+      "top2_box_pct": 0.0,
+      "n_responses": 25,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "College of Science",
+      "metric": "Morning_Keynote_Time",
+      "mean_0_10": 6.5,
+      "top2_box_pct": 0.0,
+      "n_responses": 25,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "College of Science",
+      "metric": "Morning_Keynote_Relevant",
+      "mean_0_10": 7.2,
+      "top2_box_pct": 0.0,
+      "n_responses": 25,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "College of Science",
+      "metric": "Fireside_Engaging",
+      "mean_0_10": 7.2,
+      "top2_box_pct": 0.0,
+      "n_responses": 25,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "College of Science",
+      "metric": "Fireside_Time",
+      "mean_0_10": 7.2,
+      "top2_box_pct": 0.0,
+      "n_responses": 25,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "College of Science",
+      "metric": "Fireside_Relevant",
+      "mean_0_10": 7.4,
+      "top2_box_pct": 0.0,
+      "n_responses": 25,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "College of Science",
+      "metric": "Afternoon_Keynote_Engaging",
+      "mean_0_10": 7.3,
+      "top2_box_pct": 0.0,
+      "n_responses": 25,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "College of Science",
+      "metric": "Afternoon_Keynote_Time",
+      "mean_0_10": 7.2,
+      "top2_box_pct": 0.0,
+      "n_responses": 25,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "College of Science",
+      "metric": "Afternoon_Keynote_Relevant",
+      "mean_0_10": 6.4,
+      "top2_box_pct": 0.0,
+      "n_responses": 25,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "College of Science",
+      "metric": "Morning_Breakout_Engaging",
+      "mean_0_10": 7.4,
+      "top2_box_pct": 0.0,
+      "n_responses": 25,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "College of Science",
+      "metric": "Morning_Breakout_Time",
+      "mean_0_10": 6.8,
+      "top2_box_pct": 0.0,
+      "n_responses": 25,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "College of Science",
+      "metric": "Morning_Breakout_Relevant",
+      "mean_0_10": 7.2,
+      "top2_box_pct": 0.0,
+      "n_responses": 25,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "College of Science",
+      "metric": "Afternoon_Breakout_Engaging",
+      "mean_0_10": 7.2,
+      "top2_box_pct": 0.0,
+      "n_responses": 25,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "College of Science",
+      "metric": "Afternoon_Breakout_Time",
+      "mean_0_10": 6.7,
+      "top2_box_pct": 0.0,
+      "n_responses": 25,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "College of Science",
+      "metric": "Afternoon_Breakout_Relevant",
+      "mean_0_10": 7.2,
+      "top2_box_pct": 0.0,
+      "n_responses": 25,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "College of Arts & Letters",
+      "metric": "Overall_NPS",
+      "mean_0_10": 8.69,
+      "top2_box_pct": 87.5,
+      "n_responses": 16,
+      "detractor_pct": 6.2,
+      "passive_pct": 31.2,
+      "promoter_pct": 62.5,
+      "nps_score": 56.3
+    },
+    {
+      "department": "College of Arts & Letters",
+      "metric": "Morning_Keynote_NPS",
+      "mean_0_10": 7.19,
+      "top2_box_pct": 62.5,
+      "n_responses": 16,
+      "detractor_pct": 31.2,
+      "passive_pct": 25.0,
+      "promoter_pct": 43.8,
+      "nps_score": 12.599999999999998
+    },
+    {
+      "department": "College of Arts & Letters",
+      "metric": "Fireside_NPS",
+      "mean_0_10": 7.69,
+      "top2_box_pct": 81.2,
+      "n_responses": 16,
+      "detractor_pct": 18.8,
+      "passive_pct": 25.0,
+      "promoter_pct": 56.2,
+      "nps_score": 37.400000000000006
+    },
+    {
+      "department": "College of Arts & Letters",
+      "metric": "Afternoon_Keynote_NPS",
+      "mean_0_10": 8.75,
+      "top2_box_pct": 75.0,
+      "n_responses": 16,
+      "detractor_pct": 0.0,
+      "passive_pct": 43.8,
+      "promoter_pct": 56.2,
+      "nps_score": 56.2
+    },
+    {
+      "department": "College of Arts & Letters",
+      "metric": "Morning_Breakout_NPS",
+      "mean_0_10": 9.12,
+      "top2_box_pct": 87.5,
+      "n_responses": 16,
+      "detractor_pct": 6.2,
+      "passive_pct": 18.8,
+      "promoter_pct": 75.0,
+      "nps_score": 68.8
+    },
+    {
+      "department": "College of Arts & Letters",
+      "metric": "Afternoon_Breakout_NPS",
+      "mean_0_10": 8.44,
+      "top2_box_pct": 81.2,
+      "n_responses": 16,
+      "detractor_pct": 12.5,
+      "passive_pct": 31.2,
+      "promoter_pct": 56.2,
+      "nps_score": 43.7
+    },
+    {
+      "department": "College of Arts & Letters",
+      "metric": "Organization_Flow",
+      "mean_0_10": 7.81,
+      "top2_box_pct": 31.2,
+      "n_responses": 16,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "College of Arts & Letters",
+      "metric": "Venue",
+      "mean_0_10": 9.38,
+      "top2_box_pct": 81.2,
+      "n_responses": 16,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "College of Arts & Letters",
+      "metric": "Duration",
+      "mean_0_10": 7.34,
+      "top2_box_pct": 25.0,
+      "n_responses": 16,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "College of Arts & Letters",
+      "metric": "Morning_Keynote_Engaging",
+      "mean_0_10": 6.09,
+      "top2_box_pct": 0.0,
+      "n_responses": 16,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "College of Arts & Letters",
+      "metric": "Morning_Keynote_Time",
+      "mean_0_10": 5.62,
+      "top2_box_pct": 0.0,
+      "n_responses": 16,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "College of Arts & Letters",
+      "metric": "Morning_Keynote_Relevant",
+      "mean_0_10": 6.72,
+      "top2_box_pct": 0.0,
+      "n_responses": 16,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "College of Arts & Letters",
+      "metric": "Fireside_Engaging",
+      "mean_0_10": 6.56,
+      "top2_box_pct": 0.0,
+      "n_responses": 16,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "College of Arts & Letters",
+      "metric": "Fireside_Time",
+      "mean_0_10": 6.41,
+      "top2_box_pct": 0.0,
+      "n_responses": 16,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "College of Arts & Letters",
+      "metric": "Fireside_Relevant",
+      "mean_0_10": 6.72,
+      "top2_box_pct": 0.0,
+      "n_responses": 16,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "College of Arts & Letters",
+      "metric": "Afternoon_Keynote_Engaging",
+      "mean_0_10": 7.5,
+      "top2_box_pct": 0.0,
+      "n_responses": 16,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "College of Arts & Letters",
+      "metric": "Afternoon_Keynote_Time",
+      "mean_0_10": 6.88,
+      "top2_box_pct": 0.0,
+      "n_responses": 16,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "College of Arts & Letters",
+      "metric": "Afternoon_Keynote_Relevant",
+      "mean_0_10": 6.56,
+      "top2_box_pct": 0.0,
+      "n_responses": 16,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "College of Arts & Letters",
+      "metric": "Morning_Breakout_Engaging",
+      "mean_0_10": 7.5,
+      "top2_box_pct": 0.0,
+      "n_responses": 16,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "College of Arts & Letters",
+      "metric": "Morning_Breakout_Time",
+      "mean_0_10": 6.56,
+      "top2_box_pct": 0.0,
+      "n_responses": 16,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "College of Arts & Letters",
+      "metric": "Morning_Breakout_Relevant",
+      "mean_0_10": 7.5,
+      "top2_box_pct": 0.0,
+      "n_responses": 16,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "College of Arts & Letters",
+      "metric": "Afternoon_Breakout_Engaging",
+      "mean_0_10": 7.19,
+      "top2_box_pct": 0.0,
+      "n_responses": 16,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "College of Arts & Letters",
+      "metric": "Afternoon_Breakout_Time",
+      "mean_0_10": 6.09,
+      "top2_box_pct": 0.0,
+      "n_responses": 16,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "department": "College of Arts & Letters",
+      "metric": "Afternoon_Breakout_Relevant",
+      "mean_0_10": 7.19,
+      "top2_box_pct": 0.0,
+      "n_responses": 16,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    }
+  ],
+  "breakout_sessions": {
+    "morning": {
+      "Own Your Role: How to Grow Where You Are and Get Ready for What's Next - Claudia Hawkins and Anna Pryor (Room 215/216)": 60,
+      "Intro to EQ-i: The Power Behind People Skills - Amy Lehman (Room 205/206.207)": 29,
+      "Google Sheets 101: Work Smarter, Not Harder - Maureen Hogue (Room B02)": 23
+    },
+    "afternoon": {
+      "Optimize & Organize: The Power of Work Management Systems - Scott Russell, Chris Fruehwirth, and Hang Gettinger (Room 215/216)": 50,
+      "Turning Friction into Focus - A Guide to Difficult Dialogues - Ashley Zingo (Room 205/206/207)": 46,
+      "\"This Could've Been an Email\" -- How to Lead Purposeful, Efficient Meetings - Josh Hartsell, Matt Metzger, Leadership Tap (Room B02)": 16
+    }
+  },
+  "all_metrics": [
+    {
+      "metric": "Overall_NPS",
+      "mean_0_10": 8.29,
+      "top2_box_pct": 75.9,
+      "n_responses": 112,
+      "detractor_pct": 11.6,
+      "passive_pct": 39.3,
+      "promoter_pct": 49.1,
+      "nps_score": 37.5
+    },
+    {
+      "metric": "Morning_Keynote_NPS",
+      "mean_0_10": 7.44,
+      "top2_box_pct": 56.2,
+      "n_responses": 112,
+      "detractor_pct": 29.5,
+      "passive_pct": 28.6,
+      "promoter_pct": 42.0,
+      "nps_score": 12.5
+    },
+    {
+      "metric": "Fireside_NPS",
+      "mean_0_10": 7.87,
+      "top2_box_pct": 68.8,
+      "n_responses": 112,
+      "detractor_pct": 21.4,
+      "passive_pct": 27.7,
+      "promoter_pct": 50.9,
+      "nps_score": 29.5
+    },
+    {
+      "metric": "Afternoon_Keynote_NPS",
+      "mean_0_10": 8.25,
+      "top2_box_pct": 72.3,
+      "n_responses": 112,
+      "detractor_pct": 17.0,
+      "passive_pct": 30.4,
+      "promoter_pct": 52.7,
+      "nps_score": 35.7
+    },
+    {
+      "metric": "Morning_Breakout_NPS",
+      "mean_0_10": 8.53,
+      "top2_box_pct": 74.1,
+      "n_responses": 112,
+      "detractor_pct": 10.7,
+      "passive_pct": 28.6,
+      "promoter_pct": 60.7,
+      "nps_score": 50.0
+    },
+    {
+      "metric": "Afternoon_Breakout_NPS",
+      "mean_0_10": 8.21,
+      "top2_box_pct": 75.9,
+      "n_responses": 112,
+      "detractor_pct": 17.9,
+      "passive_pct": 26.8,
+      "promoter_pct": 55.4,
+      "nps_score": 37.5
+    },
+    {
+      "metric": "Organization_Flow",
+      "mean_0_10": 8.12,
+      "top2_box_pct": 40.2,
+      "n_responses": 112,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "metric": "Venue",
+      "mean_0_10": 9.38,
+      "top2_box_pct": 78.6,
+      "n_responses": 112,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "metric": "Duration",
+      "mean_0_10": 7.9,
+      "top2_box_pct": 35.7,
+      "n_responses": 112,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "metric": "Morning_Keynote_Engaging",
+      "mean_0_10": 6.92,
+      "top2_box_pct": 0.0,
+      "n_responses": 112,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "metric": "Morning_Keynote_Time",
+      "mean_0_10": 6.27,
+      "top2_box_pct": 0.0,
+      "n_responses": 112,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "metric": "Morning_Keynote_Relevant",
+      "mean_0_10": 6.9,
+      "top2_box_pct": 0.0,
+      "n_responses": 112,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "metric": "Fireside_Engaging",
+      "mean_0_10": 7.01,
+      "top2_box_pct": 0.0,
+      "n_responses": 112,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "metric": "Fireside_Time",
+      "mean_0_10": 6.99,
+      "top2_box_pct": 0.0,
+      "n_responses": 112,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "metric": "Fireside_Relevant",
+      "mean_0_10": 6.99,
+      "top2_box_pct": 0.0,
+      "n_responses": 112,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "metric": "Afternoon_Keynote_Engaging",
+      "mean_0_10": 7.23,
+      "top2_box_pct": 0.0,
+      "n_responses": 112,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "metric": "Afternoon_Keynote_Time",
+      "mean_0_10": 6.96,
+      "top2_box_pct": 0.0,
+      "n_responses": 112,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "metric": "Afternoon_Keynote_Relevant",
+      "mean_0_10": 6.54,
+      "top2_box_pct": 0.0,
+      "n_responses": 112,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "metric": "Morning_Breakout_Engaging",
+      "mean_0_10": 7.37,
+      "top2_box_pct": 0.0,
+      "n_responses": 112,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "metric": "Morning_Breakout_Time",
+      "mean_0_10": 6.5,
+      "top2_box_pct": 0.0,
+      "n_responses": 112,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "metric": "Morning_Breakout_Relevant",
+      "mean_0_10": 7.25,
+      "top2_box_pct": 0.0,
+      "n_responses": 112,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "metric": "Afternoon_Breakout_Engaging",
+      "mean_0_10": 7.14,
+      "top2_box_pct": 0.0,
+      "n_responses": 112,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "metric": "Afternoon_Breakout_Time",
+      "mean_0_10": 6.45,
+      "top2_box_pct": 0.0,
+      "n_responses": 112,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    },
+    {
+      "metric": "Afternoon_Breakout_Relevant",
+      "mean_0_10": 7.03,
+      "top2_box_pct": 0.0,
+      "n_responses": 112,
+      "detractor_pct": null,
+      "passive_pct": null,
+      "promoter_pct": null,
+      "nps_score": null
+    }
+  ],
+  "sentiment_distribution": {
+    "positive": 36,
+    "neutral": 70,
+    "negative": 6
+  }
+}

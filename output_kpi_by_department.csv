@@ -1,0 +1,121 @@
+department,metric,mean_0_10,top2_box_pct,n_responses,detractor_pct,passive_pct,promoter_pct,nps_score
+Keough School of Global Affairs,Overall_NPS,7.47,60.0,15,26.7,46.7,26.7,0.0
+Keough School of Global Affairs,Morning_Keynote_NPS,5.8,33.3,15,66.7,0.0,33.3,-33.400000000000006
+Keough School of Global Affairs,Fireside_NPS,6.27,40.0,15,40.0,40.0,20.0,-20.0
+Keough School of Global Affairs,Afternoon_Keynote_NPS,7.4,66.7,15,26.7,26.7,46.7,20.000000000000004
+Keough School of Global Affairs,Morning_Breakout_NPS,7.87,53.3,15,6.7,66.7,26.7,20.0
+Keough School of Global Affairs,Afternoon_Breakout_NPS,7.73,73.3,15,20.0,20.0,60.0,40.0
+Keough School of Global Affairs,Organization_Flow,7.5,6.7,15,,,,
+Keough School of Global Affairs,Venue,9.17,66.7,15,,,,
+Keough School of Global Affairs,Duration,7.17,26.7,15,,,,
+Keough School of Global Affairs,Morning_Keynote_Engaging,6.33,0.0,15,,,,
+Keough School of Global Affairs,Morning_Keynote_Time,5.83,0.0,15,,,,
+Keough School of Global Affairs,Morning_Keynote_Relevant,6.17,0.0,15,,,,
+Keough School of Global Affairs,Fireside_Engaging,7.0,0.0,15,,,,
+Keough School of Global Affairs,Fireside_Time,6.5,0.0,15,,,,
+Keough School of Global Affairs,Fireside_Relevant,6.5,0.0,15,,,,
+Keough School of Global Affairs,Afternoon_Keynote_Engaging,7.0,0.0,15,,,,
+Keough School of Global Affairs,Afternoon_Keynote_Time,6.17,0.0,15,,,,
+Keough School of Global Affairs,Afternoon_Keynote_Relevant,6.0,0.0,15,,,,
+Keough School of Global Affairs,Morning_Breakout_Engaging,7.5,0.0,15,,,,
+Keough School of Global Affairs,Morning_Breakout_Time,6.5,0.0,15,,,,
+Keough School of Global Affairs,Morning_Breakout_Relevant,7.5,0.0,15,,,,
+Keough School of Global Affairs,Afternoon_Breakout_Engaging,7.0,0.0,15,,,,
+Keough School of Global Affairs,Afternoon_Breakout_Time,5.83,0.0,15,,,,
+Keough School of Global Affairs,Afternoon_Breakout_Relevant,6.67,0.0,15,,,,
+Mendoza College of Business,Overall_NPS,7.53,64.7,17,23.5,41.2,35.3,11.799999999999997
+Mendoza College of Business,Morning_Keynote_NPS,8.29,76.5,17,11.8,29.4,58.8,47.0
+Mendoza College of Business,Fireside_NPS,8.0,58.8,17,17.6,35.3,47.1,29.5
+Mendoza College of Business,Afternoon_Keynote_NPS,8.35,70.6,17,17.6,29.4,52.9,35.3
+Mendoza College of Business,Morning_Breakout_NPS,8.24,76.5,17,11.8,41.2,47.1,35.3
+Mendoza College of Business,Afternoon_Breakout_NPS,8.53,76.5,17,17.6,17.6,64.7,47.1
+Mendoza College of Business,Organization_Flow,8.09,64.7,17,,,,
+Mendoza College of Business,Venue,9.56,82.4,17,,,,
+Mendoza College of Business,Duration,7.79,35.3,17,,,,
+Mendoza College of Business,Morning_Keynote_Engaging,7.21,0.0,17,,,,
+Mendoza College of Business,Morning_Keynote_Time,6.18,0.0,17,,,,
+Mendoza College of Business,Morning_Keynote_Relevant,7.21,0.0,17,,,,
+Mendoza College of Business,Fireside_Engaging,7.06,0.0,17,,,,
+Mendoza College of Business,Fireside_Time,7.35,0.0,17,,,,
+Mendoza College of Business,Fireside_Relevant,7.06,0.0,17,,,,
+Mendoza College of Business,Afternoon_Keynote_Engaging,7.35,0.0,17,,,,
+Mendoza College of Business,Afternoon_Keynote_Time,6.91,0.0,17,,,,
+Mendoza College of Business,Afternoon_Keynote_Relevant,6.47,0.0,17,,,,
+Mendoza College of Business,Morning_Breakout_Engaging,7.21,0.0,17,,,,
+Mendoza College of Business,Morning_Breakout_Time,6.47,0.0,17,,,,
+Mendoza College of Business,Morning_Breakout_Relevant,7.06,0.0,17,,,,
+Mendoza College of Business,Afternoon_Breakout_Engaging,7.35,0.0,17,,,,
+Mendoza College of Business,Afternoon_Breakout_Time,6.91,0.0,17,,,,
+Mendoza College of Business,Afternoon_Breakout_Relevant,7.06,0.0,17,,,,
+ND Research,Overall_NPS,8.51,74.4,39,5.1,43.6,51.3,46.199999999999996
+ND Research,Morning_Keynote_NPS,7.64,53.8,39,20.5,43.6,35.9,15.399999999999999
+ND Research,Fireside_NPS,8.36,76.9,39,20.5,17.9,61.5,41.0
+ND Research,Afternoon_Keynote_NPS,8.26,69.2,39,23.1,23.1,53.8,30.699999999999996
+ND Research,Morning_Breakout_NPS,8.38,69.2,39,12.8,23.1,64.1,51.3
+ND Research,Afternoon_Breakout_NPS,7.87,71.8,39,20.5,35.9,43.6,23.1
+ND Research,Organization_Flow,8.33,38.5,39,,,,
+ND Research,Venue,9.36,79.5,39,,,,
+ND Research,Duration,8.14,41.0,39,,,,
+ND Research,Morning_Keynote_Engaging,7.18,0.0,39,,,,
+ND Research,Morning_Keynote_Time,6.6,0.0,39,,,,
+ND Research,Morning_Keynote_Relevant,6.92,0.0,39,,,,
+ND Research,Fireside_Engaging,7.05,0.0,39,,,,
+ND Research,Fireside_Time,7.12,0.0,39,,,,
+ND Research,Fireside_Relevant,6.99,0.0,39,,,,
+ND Research,Afternoon_Keynote_Engaging,7.12,0.0,39,,,,
+ND Research,Afternoon_Keynote_Time,7.18,0.0,39,,,,
+ND Research,Afternoon_Keynote_Relevant,6.86,0.0,39,,,,
+ND Research,Morning_Breakout_Engaging,7.31,0.0,39,,,,
+ND Research,Morning_Breakout_Time,6.28,0.0,39,,,,
+ND Research,Morning_Breakout_Relevant,7.18,0.0,39,,,,
+ND Research,Afternoon_Breakout_Engaging,7.05,0.0,39,,,,
+ND Research,Afternoon_Breakout_Time,6.47,0.0,39,,,,
+ND Research,Afternoon_Breakout_Relevant,6.99,0.0,39,,,,
+College of Science,Overall_NPS,8.68,88.0,25,8.0,32.0,60.0,52.0
+College of Science,Morning_Keynote_NPS,7.68,56.0,25,32.0,24.0,44.0,12.0
+College of Science,Fireside_NPS,8.08,72.0,25,16.0,32.0,52.0,36.0
+College of Science,Afternoon_Keynote_NPS,8.36,80.0,25,12.0,36.0,52.0,40.0
+College of Science,Morning_Breakout_NPS,8.96,84.0,25,12.0,12.0,76.0,64.0
+College of Science,Afternoon_Breakout_NPS,8.64,80.0,25,16.0,20.0,64.0,48.0
+College of Science,Organization_Flow,8.4,52.0,25,,,,
+College of Science,Venue,9.4,80.0,25,,,,
+College of Science,Duration,8.4,40.0,25,,,,
+College of Science,Morning_Keynote_Engaging,7.2,0.0,25,,,,
+College of Science,Morning_Keynote_Time,6.5,0.0,25,,,,
+College of Science,Morning_Keynote_Relevant,7.2,0.0,25,,,,
+College of Science,Fireside_Engaging,7.2,0.0,25,,,,
+College of Science,Fireside_Time,7.2,0.0,25,,,,
+College of Science,Fireside_Relevant,7.4,0.0,25,,,,
+College of Science,Afternoon_Keynote_Engaging,7.3,0.0,25,,,,
+College of Science,Afternoon_Keynote_Time,7.2,0.0,25,,,,
+College of Science,Afternoon_Keynote_Relevant,6.4,0.0,25,,,,
+College of Science,Morning_Breakout_Engaging,7.4,0.0,25,,,,
+College of Science,Morning_Breakout_Time,6.8,0.0,25,,,,
+College of Science,Morning_Breakout_Relevant,7.2,0.0,25,,,,
+College of Science,Afternoon_Breakout_Engaging,7.2,0.0,25,,,,
+College of Science,Afternoon_Breakout_Time,6.7,0.0,25,,,,
+College of Science,Afternoon_Breakout_Relevant,7.2,0.0,25,,,,
+College of Arts & Letters,Overall_NPS,8.69,87.5,16,6.2,31.2,62.5,56.3
+College of Arts & Letters,Morning_Keynote_NPS,7.19,62.5,16,31.2,25.0,43.8,12.599999999999998
+College of Arts & Letters,Fireside_NPS,7.69,81.2,16,18.8,25.0,56.2,37.400000000000006
+College of Arts & Letters,Afternoon_Keynote_NPS,8.75,75.0,16,0.0,43.8,56.2,56.2
+College of Arts & Letters,Morning_Breakout_NPS,9.12,87.5,16,6.2,18.8,75.0,68.8
+College of Arts & Letters,Afternoon_Breakout_NPS,8.44,81.2,16,12.5,31.2,56.2,43.7
+College of Arts & Letters,Organization_Flow,7.81,31.2,16,,,,
+College of Arts & Letters,Venue,9.38,81.2,16,,,,
+College of Arts & Letters,Duration,7.34,25.0,16,,,,
+College of Arts & Letters,Morning_Keynote_Engaging,6.09,0.0,16,,,,
+College of Arts & Letters,Morning_Keynote_Time,5.62,0.0,16,,,,
+College of Arts & Letters,Morning_Keynote_Relevant,6.72,0.0,16,,,,
+College of Arts & Letters,Fireside_Engaging,6.56,0.0,16,,,,
+College of Arts & Letters,Fireside_Time,6.41,0.0,16,,,,
+College of Arts & Letters,Fireside_Relevant,6.72,0.0,16,,,,
+College of Arts & Letters,Afternoon_Keynote_Engaging,7.5,0.0,16,,,,
+College of Arts & Letters,Afternoon_Keynote_Time,6.88,0.0,16,,,,
+College of Arts & Letters,Afternoon_Keynote_Relevant,6.56,0.0,16,,,,
+College of Arts & Letters,Morning_Breakout_Engaging,7.5,0.0,16,,,,
+College of Arts & Letters,Morning_Breakout_Time,6.56,0.0,16,,,,
+College of Arts & Letters,Morning_Breakout_Relevant,7.5,0.0,16,,,,
+College of Arts & Letters,Afternoon_Breakout_Engaging,7.19,0.0,16,,,,
+College of Arts & Letters,Afternoon_Breakout_Time,6.09,0.0,16,,,,
+College of Arts & Letters,Afternoon_Breakout_Relevant,7.19,0.0,16,,,,

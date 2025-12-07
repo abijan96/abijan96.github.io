@@ -1,0 +1,51 @@
+department,theme,prevalence_pct,mentions,pos_pct,neu_pct,neg_pct
+Keough School of Global Affairs,Session Timing & Duration,46.7,7,85.7,0.0,14.3
+Keough School of Global Affairs,Speaker/Facilitator Quality,40.0,6,66.7,16.7,16.7
+Keough School of Global Affairs,Content Relevance & Applicability,66.7,10,80.0,10.0,10.0
+Keough School of Global Affairs,Networking/Peer Interaction,26.7,4,75.0,25.0,0.0
+Keough School of Global Affairs,Venue & Logistics,26.7,4,100.0,0.0,0.0
+Keough School of Global Affairs,Organization & Flow,13.3,2,100.0,0.0,0.0
+Keough School of Global Affairs,Keynotes,33.3,5,80.0,0.0,20.0
+Keough School of Global Affairs,Breakouts,46.7,7,85.7,0.0,14.3
+Keough School of Global Affairs,Lunch/Fireside,33.3,5,80.0,0.0,20.0
+Keough School of Global Affairs,Suggestions/Requests,60.0,9,77.8,11.1,11.1
+Keough School of Global Affairs,Other,6.7,1,0.0,100.0,0.0
+Mendoza College of Business,Session Timing & Duration,47.1,8,37.5,37.5,25.0
+Mendoza College of Business,Speaker/Facilitator Quality,23.5,4,25.0,25.0,50.0
+Mendoza College of Business,Content Relevance & Applicability,29.4,5,40.0,40.0,20.0
+Mendoza College of Business,Networking/Peer Interaction,5.9,1,100.0,0.0,0.0
+Mendoza College of Business,Venue & Logistics,11.8,2,0.0,100.0,0.0
+Mendoza College of Business,Keynotes,11.8,2,50.0,50.0,0.0
+Mendoza College of Business,Breakouts,47.1,8,37.5,25.0,37.5
+Mendoza College of Business,Lunch/Fireside,35.3,6,50.0,33.3,16.7
+Mendoza College of Business,Suggestions/Requests,41.2,7,42.9,14.3,42.9
+ND Research,Session Timing & Duration,41.0,16,37.5,62.5,0.0
+ND Research,Speaker/Facilitator Quality,12.8,5,20.0,80.0,0.0
+ND Research,Content Relevance & Applicability,25.6,10,50.0,50.0,0.0
+ND Research,Networking/Peer Interaction,20.5,8,62.5,37.5,0.0
+ND Research,Venue & Logistics,15.4,6,66.7,16.7,16.7
+ND Research,Keynotes,12.8,5,40.0,40.0,20.0
+ND Research,Breakouts,30.8,12,33.3,58.3,8.3
+ND Research,Lunch/Fireside,28.2,11,45.5,45.5,9.1
+ND Research,Suggestions/Requests,30.8,12,41.7,58.3,0.0
+ND Research,Other,5.1,2,0.0,100.0,0.0
+College of Science,Session Timing & Duration,60.0,15,53.3,40.0,6.7
+College of Science,Speaker/Facilitator Quality,24.0,6,33.3,50.0,16.7
+College of Science,Content Relevance & Applicability,24.0,6,50.0,50.0,0.0
+College of Science,Networking/Peer Interaction,20.0,5,80.0,20.0,0.0
+College of Science,Venue & Logistics,12.0,3,33.3,33.3,33.3
+College of Science,Organization & Flow,4.0,1,0.0,100.0,0.0
+College of Science,Keynotes,28.0,7,57.1,42.9,0.0
+College of Science,Breakouts,48.0,12,58.3,33.3,8.3
+College of Science,Lunch/Fireside,28.0,7,57.1,28.6,14.3
+College of Science,Suggestions/Requests,24.0,6,16.7,66.7,16.7
+College of Arts & Letters,Session Timing & Duration,81.2,13,53.8,46.2,0.0
+College of Arts & Letters,Speaker/Facilitator Quality,37.5,6,16.7,83.3,0.0
+College of Arts & Letters,Content Relevance & Applicability,43.8,7,42.9,57.1,0.0
+College of Arts & Letters,Networking/Peer Interaction,37.5,6,50.0,50.0,0.0
+College of Arts & Letters,Venue & Logistics,12.5,2,0.0,100.0,0.0
+College of Arts & Letters,Organization & Flow,12.5,2,100.0,0.0,0.0
+College of Arts & Letters,Keynotes,31.2,5,20.0,80.0,0.0
+College of Arts & Letters,Breakouts,50.0,8,62.5,37.5,0.0
+College of Arts & Letters,Lunch/Fireside,50.0,8,37.5,62.5,0.0
+College of Arts & Letters,Suggestions/Requests,56.2,9,66.7,33.3,0.0

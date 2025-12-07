@@ -1,0 +1,203 @@
+================================================================================
+90-DAY ONBOARDING SURVEY ANALYSIS
+================================================================================
+
+Total Completed Responses: 49
+Date Range: 2023-11-02 to 2025-09-16
+Time Span: 683 days (~1.9 years)
+
+Responses by Year:
+  2023: 6 responses
+  2024: 20 responses
+  2025: 23 responses
+
+================================================================================
+QUANTITATIVE INSIGHTS - LIKERT SCALE ANALYSIS
+================================================================================
+
+TOP STRENGTHS (Highest Satisfaction):
+--------------------------------------------------------------------------------
+
+6. My manager communicates effectively
+  Positive Response Rate: 95.9%
+  Average Score: 4.70/5.00
+  Distribution: {'Strongly agree': 33, 'Agree': 14, 'Strong disagree': 2}
+
+3. I am happy with the decision to work at NDR
+  Positive Response Rate: 93.9%
+  Average Score: 4.53/5.00
+  Distribution: {'Strongly agree': 34, 'Agree': 12, 'Strongly disagree': 2, 'Disagree': 1}
+
+2. I know where to go or whom to ask if I have a question
+  Positive Response Rate: 93.9%
+  Average Score: 4.37/5.00
+  Distribution: {'Strongly agree': 26, 'Agree': 20, 'Strongly disagree': 2, 'Disagree': 1}
+
+5. My manager helped me establish my goals
+  Positive Response Rate: 93.9%
+  Average Score: 4.76/5.00
+  Distribution: {'Yes': 46, 'No': 3}
+
+4. I feel like I am a part of NDR
+  Positive Response Rate: 93.9%
+  Average Score: 4.33/5.00
+  Distribution: {'Strongly agree': 24, 'Agree': 22, 'Strongly disagree': 2, 'Disagree': 1}
+
+
+AREAS FOR IMPROVEMENT (Lower Satisfaction):
+--------------------------------------------------------------------------------
+
+9. I feel part of my team
+  Positive Response Rate: 91.8%
+  Average Score: 4.35/5.00
+  Distribution: {'Strongly agree': 27, 'Agree': 18, 'Strongly disagree': 2, 'Disagree': 2}
+
+11. My manager talked to me about my progress
+  Positive Response Rate: 89.8%
+  Average Score: 4.16/5.00
+  Distribution: {'Agree': 23, 'Strongly agree': 21, 'Strongly disagree': 3, 'Disagree': 2}
+
+10. There are roadblocks preventing me from performing
+  Positive Response Rate: 83.7%
+  Average Score: 2.06/5.00
+  Distribution: {'Disagree': 26, 'Strongly disagree': 15, 'Agree': 6, 'Strongly agree': 2}
+
+================================================================================
+QUALITATIVE INSIGHTS - OPEN-ENDED FEEDBACK ANALYSIS
+================================================================================
+
+
+WHAT EMPLOYEES LIKED (n=43):
+--------------------------------------------------------------------------------
+  TEAM/COLLEAGUES: 11 mentions (25.6%)
+  MEETINGS/INTRODUCTIONS: 10 mentions (23.3%)
+  MANAGER/LEADERSHIP: 7 mentions (16.3%)
+  STRUCTURE/ORGANIZATION: 5 mentions (11.6%)
+  CHECK-INS/TOUCHPOINTS: 5 mentions (11.6%)
+  TRAINING/LEARNING: 5 mentions (11.6%)
+  WELCOMING/HOSPITALITY: 4 mentions (9.3%)
+  INTENTIONAL/THOUGHTFUL: 4 mentions (9.3%)
+  LUNCH WITH LEADERSHIP: 3 mentions (7.0%)
+  AUTOMATION/CHECKLIST: 2 mentions (4.7%)
+
+
+SAMPLE POSITIVE QUOTES:
+--------------------------------------------------------------------------------
+1. "it's cool"
+3. "nb/a"
+4. "The hospitality and warmth"
+5. "was good"
+6. "onboarding training meeting and social events"
+7. "I liked that the admin team, peers and manager was always checking in"
+8. "I felt welcome from the first day."
+
+
+WHAT EMPLOYEES WANT IMPROVED (n=39):
+--------------------------------------------------------------------------------
+  NOTHING/NO SUGGESTIONS: 14 mentions (35.9%)
+  TIMELINE/WAIT TIME: 8 mentions (20.5%)
+  TIME MANAGEMENT: 7 mentions (17.9%)
+  CONNECTION WITH NEW HIRES: 6 mentions (15.4%)
+  BENEFITS/HR ORIENTATION: 4 mentions (10.3%)
+  AUTOMATION/TASK ISSUES: 4 mentions (10.3%)
+  OVERVIEW OF NDR TEAMS: 2 mentions (5.1%)
+  INTEGRATION/ONBOARDING SOURCES: 2 mentions (5.1%)
+  TRAINING CONSISTENCY: 1 mentions (2.6%)
+  MEETING EFFICIENCY: 1 mentions (2.6%)
+
+
+SAMPLE IMPROVEMENT SUGGESTIONS:
+--------------------------------------------------------------------------------
+1. "it's cool"
+2. "perfect"
+3. "bn.a"
+4. "efficiency, there were a few meetings that seemed unnecessary, that a survey like this would serve in a more effective manner!"
+5. "Explaining who is NDR and how it serves the college."
+6. "Nothing comes to mind."
+7. "consistency in training, training manual"
+8. "I was surprised ND does not have realtor services for relocation, but the relocation package was nice. In "Industry" relocation packages can include realtor services, these services reduce stress and financial hardship."
+
+================================================================================
+TIME-BASED TRENDS
+================================================================================
+
+
+Satisfaction Over Time (Average Scores by Quarter):
+--------------------------------------------------------------------------------
+
+3. I am happy with the decision to work at NDR:
+  2023Q4: 4.00/5.00
+  2024Q1: 3.90/5.00
+  2024Q2: 4.80/5.00
+  2024Q3: 5.00/5.00
+  2024Q4: 4.67/5.00
+  2025Q1: 5.00/5.00
+  2025Q2: 4.78/5.00
+  2025Q3: 4.71/5.00
+
+4. I feel like I am a part of NDR:
+  2023Q4: 4.17/5.00
+  2024Q1: 4.10/5.00
+  2024Q2: 4.00/5.00
+  2024Q3: 4.00/5.00
+  2024Q4: 4.33/5.00
+  2025Q1: 4.86/5.00
+  2025Q2: 4.44/5.00
+  2025Q3: 4.43/5.00
+
+6. My manager communicates effectively:
+  2023Q4: 4.60/5.00
+  2024Q1: 4.78/5.00
+  2024Q2: 4.80/5.00
+  2024Q3: 5.00/5.00
+  2024Q4: 5.00/5.00
+  2025Q1: 4.71/5.00
+  2025Q2: 4.56/5.00
+  2025Q3: 4.57/5.00
+
+8. I feel positively challenged and engaged:
+  2023Q4: 4.17/5.00
+  2024Q1: 4.00/5.00
+  2024Q2: 4.60/5.00
+  2024Q3: 5.00/5.00
+  2024Q4: 3.67/5.00
+  2025Q1: 4.86/5.00
+  2025Q2: 4.44/5.00
+  2025Q3: 4.43/5.00
+
+================================================================================
+KEY FINDINGS SUMMARY
+================================================================================
+
+1. OVERALL SATISFACTION:
+   - High satisfaction with onboarding process (most metrics >85% positive)
+   - Employees feel welcomed and supported
+   - Manager communication and support rated highly
+
+2. TOP STRENGTHS:
+   - My manager communicates effectively: 95.9% positive
+   - I am happy with the decision to work at NDR: 93.9% positive
+   - I know where to go or whom to ask if I have a question: 93.9% positive
+
+3. AREAS FOR IMPROVEMENT:
+   - I feel part of my team: 91.8% positive
+   - My manager talked to me about my progress: 89.8% positive
+   - There are roadblocks preventing me from performing: 83.7% positive
+
+4. COMMON THEMES FROM FEEDBACK:
+   LIKED:
+   - team/colleagues
+   - meetings/introductions
+   - manager/leadership
+   - structure/organization
+   - check-ins/touchpoints
+
+   IMPROVEMENT AREAS:
+   - timeline/wait time
+   - time management
+   - connection with new hires
+   - benefits/HR orientation
+
+================================================================================
+END OF ANALYSIS
+================================================================================
