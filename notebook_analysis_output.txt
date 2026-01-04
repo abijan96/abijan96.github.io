@@ -1,0 +1,75 @@
+================================================================================
+CAPITAL ONE DATA CHALLENGE - NOTEBOOK ANALYSIS
+================================================================================
+
+Total cells: 99
+Markdown cells: 42
+Code cells: 57
+
+================================================================================
+NOTEBOOK STRUCTURE (Headers)
+================================================================================
+Cell 0: # Airline Data Challenge - Capital One Data Challenge
+Cell 0: ### by **Abhigyan Ghosh**
+Cell 2: ## Context:
+Cell 3: ## TASK - ANALYZE DATA TO ANSWER BELOW QUESTIONS
+Cell 4: ## Data Analysis Workflow
+Cell 4: ### 1. Data Importation:
+Cell 4: ### 2. Data Validation:
+Cell 4: ### 3. Data Preparation:
+Cell 4: ### 4. Data Selection:
+Cell 4: ### 5. Feature Engineering:
+Cell 5: ## Approach to Coding
+Cell 7: # RESULABLE CODES
+Cell 9: ## LOADING DATASETS
+Cell 11: ## DATA QUALITY CHECKS FOR ALL THREE DATASETS
+Cell 12: ## Exploratory Data Analysis on AIRPORT_CODES data
+Cell 15: ### Filtering the dataset before performing data cleaning and EDA on columns
+Cell 19: ### Checking DataTypes of AIRPORT_CODES DATA
+Cell 21: ### Checking Duplicated rows
+Cell 24: ### Remarks
+Cell 25: ### Dropping Columns
+Cell 28: #### Remarks:
+Cell 29: ## Exploratory Data Analysis on FLIGHTS data
+Cell 32: ### Change Datatypes to correct format
+Cell 39: ### Checking Duplicated rows
+Cell 45: ### Observations
+Cell 47: ### VISUALIZATION OF COUNT OF MISSING VALUES
+Cell 50: ## Observations
+Cell 50: ### Selected Strategy: Median Imputation
+Cell 51: ### Handling OUTLIERS
+Cell 54: ## Exploratory Data Analysis on TICKETS data
+Cell 56: ### Convert Datatypes and Filter the data for only RoundTrips
+Cell 61: ### Checking Duplicated rows
+Cell 66: ### Observations
+Cell 69: ## Observations
+Cell 69: ### Data Quality Assessment:
+Cell 69: #### An imputation strategy was implemented to address missing values in:
+Cell 69: #### Outlier Treatment Decision:
+Cell 69: #### Imputation Strategy
+Cell 70: ### Handling OUTLIERS
+Cell 74: ## Overview of Data Cleaning and Data Quality checks
+Cell 74: ### **Airports Codes Dataset:**
+Cell 74: ### **Flights Dataset:**
+Cell 74: ### **Tickets Dataset:**
+Cell 75: ## MERGING DATASETS
+Cell 76: #### Aggregate Before Join
+Cell 76: #### Reduce Join Cardinality
+Cell 76: #### Step-wise Join
+Cell 76: ##### Cleanup: drop redundant IATA_CODE_origin/IATA_CODE_destination columns
+Cell 79: # ANALYSIS
+Cell 80: ## QUESTION 1 - The 10 busiest round trip routes in terms of number of round trip flights in the quarter.
+Cell 83: ## QUESTION 2 - The 10 most profitable round trip routes (without considering the upfront airplane cost) in the quarter. Along with the profit, show total revenue, total cost, summary values of other key components and total round trip flights in the quarter for the top 10 most profitable routes.
+Cell 88: ## QUESTION 3 -  The 5 round trip routes that you recommend to invest in based on any factors that you choose.
+Cell 91: ## Recommended Routes:
+Cell 91: #### Route Selection Criteria:
+Cell 91: #### Cost per Available Seat-Mile (CASM) : (This tells us how much it costs the airline to fly one seat one mile, even if that seat isn’t sold.)
+Cell 91: #### Revenue per Available Seat-Mile (RASM): (this tells us how much money the airline earns for each seat mile it offers.)
+Traceback (most recent call last):
+  File "C:\Users\USER\abijan96.github.io\analyze_notebook.py", line 25, in <module>
+    print(f"Cell {i}: {line.strip()}")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python313\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\u2212' in position 41: character maps to <undefined>

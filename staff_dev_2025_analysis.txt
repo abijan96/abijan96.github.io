@@ -1,0 +1,246 @@
+================================================================================
+STAFF DEVELOPMENT DAY 2025 - SURVEY ANALYSIS
+================================================================================
+
+Total Responses: 112
+Survey Period: 2025-11-12 15:47:54.629000 to 2025-11-18 15:43:23.760000
+
+================================================================================
+
+1. DEPARTMENT DISTRIBUTION
+--------------------------------------------------------------------------------
+
+Total departments represented: 5
+
+Breakdown:
+  ND Research: 39 (34.8%)
+  College of Science: 25 (22.3%)
+  Mendoza College of Business: 17 (15.2%)
+  College of Arts & Letters: 16 (14.3%)
+  Keough School of Global Affairs: 15 (13.4%)
+
+
+2. NET PROMOTER SCORE - OVERALL EVENT
+--------------------------------------------------------------------------------
+
+Average Score: 8.29/10
+Promoters (9-10): 55 (49.1%)
+Passives (7-8): 44 (39.3%)
+Detractors (0-6): 13 (11.6%)
+
+Net Promoter Score: 37.5
+
+
+3. EVENT LOGISTICS
+--------------------------------------------------------------------------------
+
+Organization & Flow:
+  Average: 3.65/5
+  Poor: 3 (2.7%)
+  Good: 53 (47.3%)
+  Fair: 11 (9.8%)
+  Excellent: 45 (40.2%)
+
+Venue:
+  Average: 4.54/5
+  Good: 20 (17.9%)
+  Fair: 4 (3.6%)
+  Excellent: 88 (78.6%)
+
+Duration:
+  Average: 3.52/5
+  Poor: 3 (2.7%)
+  Good: 53 (47.3%)
+  Fair: 16 (14.3%)
+  Excellent: 40 (35.7%)
+
+
+4. MORNING KEYNOTE - Katie DeWulf: 'Navigate the Shift'
+--------------------------------------------------------------------------------
+
+Informative/Engaging:
+  Average: 3.92/5
+  Tend to disagree: 7 (6.2%)
+  Tend to agree: 46 (41.1%)
+  Neither: 8 (7.1%)
+  Disagree: 2 (1.8%)
+  Agree: 49 (43.8%)
+
+Time Allotted:
+  Average: 3.77/5
+  Tend to disagree: 18 (16.1%)
+  Tend to agree: 34 (30.4%)
+  Neither: 7 (6.2%)
+  Disagree: 6 (5.4%)
+  Agree: 47 (42.0%)
+
+Relevance:
+  Average: 3.96/5
+  Tend to disagree: 9 (8.0%)
+  Tend to agree: 45 (40.2%)
+  Neither: 7 (6.2%)
+  Disagree: 1 (0.9%)
+  Agree: 50 (44.6%)
+
+Recommendation Score: 7.44/10
+
+
+5. LUNCH & FIRESIDE CHAT - 'Beyond the Buzz: Real Talk on AI'
+--------------------------------------------------------------------------------
+
+Informative/Engaging:
+  Average: 3.94/5
+  Tend to disagree: 4 (3.6%)
+  Tend to agree: 36 (32.1%)
+  Neither: 10 (8.9%)
+  Disagree: 2 (1.8%)
+  Agree: 60 (53.6%)
+
+Time Allotted:
+  Average: 3.94/5
+  Tend to disagree: 6 (5.4%)
+  Tend to agree: 36 (32.1%)
+  Neither: 7 (6.2%)
+  Disagree: 2 (1.8%)
+  Agree: 61 (54.5%)
+
+Relevance:
+  Average: 3.97/5
+  Tend to disagree: 4 (3.6%)
+  Tend to agree: 32 (28.6%)
+  Neither: 13 (11.6%)
+  Disagree: 1 (0.9%)
+  Agree: 62 (55.4%)
+
+Recommendation Score: 7.87/10
+
+
+6. AFTERNOON KEYNOTE - Stuart MacDonald: 'Continuous Improvement & Magic'
+--------------------------------------------------------------------------------
+
+Informative/Engaging:
+  Average: 4.00/5
+  Tend to disagree: 1 (0.9%)
+  Tend to agree: 25 (22.3%)
+  Neither: 10 (8.9%)
+  Agree: 76 (67.9%)
+
+Time Allotted:
+  Average: 3.94/5
+  Tend to disagree: 6 (5.4%)
+  Tend to agree: 27 (24.1%)
+  Neither: 8 (7.1%)
+  Disagree: 2 (1.8%)
+  Agree: 69 (61.6%)
+
+Relevance:
+  Average: 3.96/5
+  Tend to disagree: 12 (10.7%)
+  Tend to agree: 31 (27.7%)
+  Neither: 17 (15.2%)
+  Disagree: 1 (0.9%)
+  Agree: 51 (45.5%)
+
+Recommendation Score: 8.25/10
+
+
+7. MORNING BREAKOUT SESSIONS
+--------------------------------------------------------------------------------
+
+Attendance:
+  Own Your Role: How to Grow Where You Are and Get Ready for What's Next - Claudia Hawkins and Anna Pryor (Room 215/216): 60 (53.6%)
+  Intro to EQ-i: The Power Behind People Skills - Amy Lehman (Room 205/206.207): 29 (25.9%)
+  Google Sheets 101: Work Smarter, Not Harder - Maureen Hogue (Room B02): 23 (20.5%)
+
+Overall Ratings:
+  Informative/Engaging: 4.00/5
+  Time Allotted: 3.84/5
+  Relevance: 4.00/5
+  Recommendation Score: 8.53/10
+
+
+8. AFTERNOON BREAKOUT SESSIONS
+--------------------------------------------------------------------------------
+
+Attendance:
+  Optimize & Organize: The Power of Work Management Systems - Scott Russell, Chris Fruehwirth, and Hang Gettinger (Room 215/216): 50 (44.6%)
+  Turning Friction into Focus - A Guide to Difficult Dialogues - Ashley Zingo (Room 205/206/207): 46 (41.1%)
+  "This Could've Been an Email" -- How to Lead Purposeful, Efficient Meetings - Josh Hartsell, Matt Metzger, Leadership Tap (Room B02): 16 (14.3%)
+
+Overall Ratings:
+  Informative/Engaging: 3.97/5
+  Time Allotted: 3.86/5
+  Relevance: 3.90/5
+  Recommendation Score: 8.21/10
+
+
+9. QUALITATIVE FEEDBACK
+--------------------------------------------------------------------------------
+
+Total feedback comments: 75
+
+Sample feedback:
+
+1. The morning transition times were a little long and then the breakouts had to rush some to get all the content in. Perhaps rethinking the flow and timing. Although I do appreciate that it's not all sessions back to back because that is also a lot in a day. 
+
+2. This was a great experience. Honestly our own ND staff provided the best insight.
+
+3. Anything relating to IT seems to need a little longer in training. I also think there were too many breaks (or too long)
+
+4. The schedule had far too much down time. I recognize the importance of networking, but unfortunately, the extra time did not feel intentional or like it was intended for networking. 
+The morning keynote speaker was disjointed, hard to follow, and seemed aimed at corporations rather than our work lives. 
+The AI fireside chat completely ignored and refused to engage with the question surrounding the ethics of AI. While the speaker said he was interested in hosting those conversations and creating a space for those conversations, he actively shut down the question and refused to hold a space for that conversation.  
+
+5. The breakouts didn’t have enough time or maybe I enjoyed them too much I wanted them to go on. Content was fantastic.  This day flew by.  Great choices for breakouts
+
+6. I just attended the session, and honestly, I left feeling disappointed by the speaker’s approach. Empathy at work isn’t just a nice idea-it’s an essential part of creating a healthy, human workplace. I don’t want my workplace to feel like just a place to get things done; I want it to be a space where people can show up as who they really are, emotions and all. Lately, I’ve realized more than ever how important it is to bring empathy, authenticity, and understanding into what we do every day.
+
+7. Great to interact with colleagues inside and outside my division. Could have had more options for breakfast (aware of budget restraints at this time). Lunch was great. 
+A lot of content that were a snapshot to trainings or tools available 
+
+8. I appreciated having a practical class (spreadsheet 101) however I would love more advanced options in the future (201? 301?) with a longer time window. I also loved talking about project management but the session was an intro session for those exploring new tools. I’d love a session to dive deeper into a more advanced conversation on that topic. Advanced skill building in person would be such a gift. 
+
+9. N/a
+
+10. There was a lot of down time and the sessions felt rushed so I wish there would be more time for sessions and less down time
+
+
+Future content suggestions: 51
+
+Sample suggestions:
+
+1. Leadership, preparing to be people managers, how to utilize and respect your Human Resources 
+
+2. The leadershiptap presentation was great, more content from them 
+
+3. More practical work management advice and more self care ideas. 
+
+4. Morning ice breaker maybe
+
+5. Self care
+
+6. I would like to see more time given to the breakout sessions so we can get more than just a basic overview of things. I would also like to see more flexibility in the schedule, so if a speaker ends a half hour early, we aren’t all sitting around waiting for the next event. 
+
+7. how to work with faculty who have no management training but are elevated to a management position. Ask networking Groups on campus to have literature available like Thrive. Maybe tables during lunch to discuss
+
+8. N/a
+
+9. More practical conversation around AI implementation 
+
+10. I really appreciate hearing from panels of experts across campus on different topics! I mentioned slightly above, but I'd love to have a chance to get the "201" sessions of topics year to year (like different tracks) to build on what is covered the previous year. Overall, I love these days and am so grateful to all those who helped organize, plan, and present!
+
+
+================================================================================
+10. KEY INSIGHTS & SUMMARY
+================================================================================
+
+Overall Event Satisfaction: 8.29/10
+
+Session Performance (Recommendation Scores):
+  Morning Keynote (Katie DeWulf): 7.44/10
+  Fireside Chat (AI): 7.87/10
+  Afternoon Keynote (Stuart MacDonald): 8.25/10
+
+================================================================================
+Analysis complete!
+================================================================================

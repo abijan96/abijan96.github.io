@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe & Cake Pricing Calculator - India</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.95;
+            font-size: 1.1em;
+        }
+
+        .tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e0e0e0;
+            overflow-x: auto;
+        }
+
+        .tab {
+            padding: 15px 25px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 1em;
+            color: #666;
+            transition: all 0.3s;
+            white-space: nowrap;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab:hover {
+            background: #fff;
+            color: #667eea;
+        }
+
+        .tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+            background: white;
+            font-weight: 600;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 30px;
+            animation: fadeIn 0.3s;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section {
+            margin-bottom: 30px;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .section h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border 0.3s;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .ingredient-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr auto;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+        }
+
+        .ingredient-row input {
+            padding: 10px;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            font-size: 0.95em;
+        }
+
+        .ingredient-row .price {
+            color: #667eea;
+            font-weight: 600;
+            text-align: right;
+        }
+
+        .btn-add {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-top: 10px;
+            transition: background 0.3s;
+        }
+
+        .btn-add:hover {
+            background: #218838;
+        }
+
+        .btn-remove {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+
+        .btn-remove:hover {
+            background: #c82333;
+        }
+
+        .summary-box {
+            background: white;
+            color: #333;
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 30px;
+            border: 2px solid #667eea;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .summary-box h2 {
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            color: #667eea;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 1.1em;
+        }
+
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+
+        .summary-item.total {
+            font-size: 1.5em;
+            font-weight: 700;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid #667eea;
+        }
+
+        .profit-indicator {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-left: 10px;
+        }
+
+        .profit-good {
+            background: #28a745;
+        }
+
+        .profit-okay {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .profit-low {
+            background: #dc3545;
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            cursor: help;
+            color: #667eea;
+            margin-left: 5px;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 250px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 10px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -125px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.9em;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.1em;
+            margin: 10px 5px;
+            transition: transform 0.2s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .bulk-input-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .bulk-input-section textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 0.95em;
+            margin-bottom: 10px;
+        }
+
+        .bulk-input-section textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background 0.3s;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .ingredient-header {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr auto;
+            gap: 10px;
+            font-weight: 600;
+            color: #667eea;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 5px;
+        }
+
+        .save-load-section {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 2px solid #ffc107;
+        }
+
+        .save-load-section h4 {
+            margin-bottom: 10px;
+            color: #856404;
+        }
+
+        .recipe-name-input {
+            width: 100%;
+            max-width: 400px;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .help-text {
+            color: #666;
+            font-size: 0.9em;
+            margin-top: 5px;
+            font-style: italic;
+        }
+
+        .currency {
+            color: #333;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Recipe & Cake Pricing Calculator</h1>
+            <p>Professional pricing tool for home bakers in India</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="openTab('setup')">Business Setup</button>
+            <button class="tab" onclick="openTab('recipe')">Recipe Cost</button>
+            <button class="tab" onclick="openTab('additional')">Additional Costs</button>
+            <button class="tab" onclick="openTab('pricing')">Final Pricing</button>
+        </div>
+
+        <div id="setup" class="tab-content active">
+            <div class="section">
+                <h3>Business Information</h3>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Average Cakes Delivered Per Day
+                            <span class="tooltip">?
+                                <span class="tooltiptext">This helps calculate your fixed costs per cake</span>
+                            </span>
+                        </label>
+                        <input type="number" id="cakesPerDay" value="5" oninput="calculate()">
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>Monthly Expenses</h3>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Electricity Bill (₹)</label>
+                        <input type="number" id="electricityBill" value="20000" oninput="calculate()">
+                    </div>
+                    <div class="form-group">
+                        <label>% Used for Baking</label>
+                        <input type="number" id="electricityPercent" value="70" min="0" max="100" oninput="calculate()">
+                    </div>
+                    <div class="form-group">
+                        <label>Water Bill (₹)</label>
+                        <input type="number" id="waterBill" value="500" oninput="calculate()">
+                    </div>
+                    <div class="form-group">
+                        <label>% Used for Baking</label>
+                        <input type="number" id="waterPercent" value="20" min="0" max="100" oninput="calculate()">
+                    </div>
+                    <div class="form-group">
+                        <label>Rent (₹)</label>
+                        <input type="number" id="rent" value="60000" oninput="calculate()">
+                    </div>
+                    <div class="form-group">
+                        <label>% Used for Baking</label>
+                        <input type="number" id="rentPercent" value="60" min="0" max="100" oninput="calculate()">
+                    </div>
+                </div>
+                <p class="help-text">If you have a dedicated baking space, set percentage to 100%</p>
+            </div>
+
+            <div class="section">
+                <h3>Labor & Delivery</h3>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Your Labor Cost Per Cake (₹)</label>
+                        <input type="number" id="laborCost" value="200" oninput="calculate()">
+                    </div>
+                    <div class="form-group">
+                        <label>Delivery Charges (₹)</label>
+                        <input type="number" id="deliveryCharges" value="80" oninput="calculate()">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="recipe" class="tab-content">
+            <div class="save-load-section">
+                <h4>Save / Load Recipe</h4>
+                <input type="text" id="recipeName" class="recipe-name-input" placeholder="Recipe Name (e.g., Chocolate Truffle Cake)">
+                <div class="btn-group">
+                    <button class="btn-secondary" onclick="saveRecipe()">Save Recipe</button>
+                    <button class="btn-secondary" onclick="loadRecipe()">Load Recipe</button>
+                    <button class="btn-secondary" onclick="exportToCSV()">Export to CSV</button>
+                    <button class="btn-secondary" onclick="document.getElementById('csvImportInput').click()">Import from CSV</button>
+                    <input type="file" id="csvImportInput" accept=".csv" style="display: none;" onchange="importFromCSV(event)">
+                </div>
+            </div>
+
+            <div class="bulk-input-section">
+                <h4>Quick Bulk Input</h4>
+                <p class="help-text">Paste ingredients in format: Name, Quantity(gm), Cost per kg(₹) - One per line</p>
+                <textarea id="bulkInput" placeholder="Example:&#10;Flour, 85, 56&#10;Sugar, 150, 120&#10;Butter, 115, 470"></textarea>
+                <div class="btn-group">
+                    <button class="btn-add" onclick="parseBulkInput()">Add from Bulk Input</button>
+                    <button class="btn-secondary" onclick="document.getElementById('bulkInput').value = ''">Clear</button>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>Recipe Ingredients</h3>
+                <div class="ingredient-header">
+                    <div>Ingredient Name</div>
+                    <div>Qty (gm)</div>
+                    <div>Cost/kg (₹)</div>
+                    <div>Total (₹)</div>
+                    <div>Action</div>
+                </div>
+                <div id="ingredientsList"></div>
+                <button class="btn-add" onclick="addIngredient()">+ Add Ingredient Row</button>
+            </div>
+
+            <div class="section">
+                <h3>Wastage</h3>
+                <div class="form-group">
+                    <label>Wastage Percentage (%)
+                        <span class="tooltip">?
+                            <span class="tooltiptext">Typical wastage is 2-5% for experienced bakers</span>
+                        </span>
+                    </label>
+                    <input type="number" id="wastagePercent" value="2" step="0.5" oninput="calculate()">
+                </div>
+            </div>
+        </div>
+
+        <div id="additional" class="tab-content">
+            <div class="section">
+                <h3>Packaging & Extras</h3>
+                <div id="additionalCostsList"></div>
+                <button class="btn-add" onclick="addAdditionalCost()">+ Add Item</button>
+            </div>
+        </div>
+
+        <div id="pricing" class="tab-content">
+            <div class="section">
+                <h3>Pricing Strategy</h3>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Desired Profit Margin (%)
+                            <span class="tooltip">?
+                                <span class="tooltiptext">Recommended: 40-60% for home bakers</span>
+                            </span>
+                        </label>
+                        <input type="number" id="profitMargin" value="50" oninput="calculate()">
+                    </div>
+                    <div class="form-group">
+                        <label>Platform Commission (%)
+                            <span class="tooltip">?
+                                <span class="tooltiptext">Zomato/Swiggy typically charge 20-25%</span>
+                            </span>
+                        </label>
+                        <input type="number" id="platformFee" value="0" oninput="calculate()">
+                    </div>
+                    <div class="form-group">
+                        <label>Marketing Cost Per Cake (₹)</label>
+                        <input type="number" id="marketingCost" value="0" oninput="calculate()">
+                    </div>
+                </div>
+            </div>
+
+            <div class="summary-box">
+                <h2>Pricing Summary</h2>
+                <div class="summary-item">
+                    <span>Total Recipe Cost:</span>
+                    <span class="currency" id="totalRecipeCost">₹0</span>
+                </div>
+                <div class="summary-item">
+                    <span>Wastage Cost:</span>
+                    <span class="currency" id="wastageCost">₹0</span>
+                </div>
+                <div class="summary-item">
+                    <span>Additional Costs:</span>
+                    <span class="currency" id="totalAdditionalCost">₹0</span>
+                </div>
+                <div class="summary-item">
+                    <span>Fixed Costs (Per Cake):</span>
+                    <span class="currency" id="fixedCostPerCake">₹0</span>
+                </div>
+                <div class="summary-item">
+                    <span>Labor Cost:</span>
+                    <span class="currency" id="displayLaborCost">₹0</span>
+                </div>
+                <div class="summary-item">
+                    <span>Delivery Cost:</span>
+                    <span class="currency" id="displayDeliveryCost">₹0</span>
+                </div>
+                <div class="summary-item">
+                    <span>Marketing Cost:</span>
+                    <span class="currency" id="displayMarketingCost">₹0</span>
+                </div>
+                <div class="summary-item total" style="border-bottom: 2px solid rgba(255,255,255,0.5); padding-bottom: 15px;">
+                    <span>Total Cost:</span>
+                    <span class="currency" id="totalCost">₹0</span>
+                </div>
+                <div class="summary-item">
+                    <span>Profit Amount:</span>
+                    <span class="currency" id="profitAmount">₹0</span>
+                </div>
+                <div class="summary-item">
+                    <span>Platform Fee:</span>
+                    <span class="currency" id="platformFeeAmount">₹0</span>
+                </div>
+                <div class="summary-item total">
+                    <span>Selling Price:</span>
+                    <span class="currency" id="sellingPrice">₹0</span>
+                </div>
+                <div class="summary-item">
+                    <span>Your Profit Margin:</span>
+                    <span><span class="currency" id="actualProfitPercent">0%</span><span id="profitIndicator"></span></span>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <button class="btn-primary" onclick="exportToExcel()">Export Full Report to Excel</button>
+                <button class="btn-primary" onclick="printQuote()">Print Quote</button>
+                <button class="btn-primary" onclick="shareQuote()">Share Quote</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Default ingredients from the template
+        let ingredients = [
+            {name: 'Flour', qty: 85, costPerKg: 56},
+            {name: 'Baking Powder', qty: 0, costPerKg: 20},
+            {name: 'Baking Soda', qty: 4, costPerKg: 45},
+            {name: 'Cocoa Powder', qty: 25, costPerKg: 1400},
+            {name: 'Butter', qty: 115, costPerKg: 470},
+            {name: 'Eggs (1 Egg = 50g)', qty: 100, costPerKg: 100},
+            {name: 'Sugar', qty: 150, costPerKg: 120},
+            {name: 'Vanilla Extract', qty: 5, costPerKg: 9000},
+            {name: 'Milk', qty: 0, costPerKg: 65},
+            {name: 'Oil', qty: 0, costPerKg: 100},
+            {name: 'Chocolate', qty: 60, costPerKg: 1060},
+            {name: 'Cream', qty: 200, costPerKg: 197},
+            {name: 'Water', qty: 100, costPerKg: 60},
+            {name: 'Coffee Powder', qty: 5, costPerKg: 1500}
+        ];
+
+        let additionalCosts = [
+            {name: 'Cake Board', qty: 2, costPerUnit: 20},
+            {name: 'Cake Box', qty: 1, costPerUnit: 45},
+            {name: 'Knife', qty: 1, costPerUnit: 25},
+            {name: 'Candle', qty: 1, costPerUnit: 10},
+            {name: 'Piping Bags', qty: 2, costPerUnit: 2},
+            {name: 'Parchment Paper', qty: 2, costPerUnit: 2}
+        ];
+
+        function openTab(tabName) {
+            const tabs = document.querySelectorAll('.tab');
+            const contents = document.querySelectorAll('.tab-content');
+
+            tabs.forEach(t => t.classList.remove('active'));
+            contents.forEach(c => c.classList.remove('active'));
+
+            event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+        }
+
+        function renderIngredients() {
+            const container = document.getElementById('ingredientsList');
+            container.innerHTML = ingredients.map((ing, index) => `
+                <div class="ingredient-row" id="ing-row-${index}">
+                    <input type="text" value="${ing.name}" oninput="updateIngredient(${index}, 'name', this.value)">
+                    <input type="number" placeholder="Qty (gm)" value="${ing.qty}" oninput="updateIngredient(${index}, 'qty', this.value)" step="any">
+                    <input type="number" placeholder="₹/kg" value="${ing.costPerKg}" oninput="updateIngredient(${index}, 'costPerKg', this.value)" step="any">
+                    <div class="price" id="price-${index}">₹${((ing.qty * ing.costPerKg) / 1000).toFixed(2)}</div>
+                    <button class="btn-remove" onclick="removeIngredient(${index})">Remove</button>
+                </div>
+            `).join('');
+        }
+
+        function updateIngredient(index, field, value) {
+            if (field === 'name') {
+                ingredients[index].name = value;
+            } else {
+                ingredients[index][field] = parseFloat(value) || 0;
+                // Update only the price display for this row
+                const priceEl = document.getElementById(`price-${index}`);
+                if (priceEl) {
+                    const total = ((ingredients[index].qty * ingredients[index].costPerKg) / 1000).toFixed(2);
+                    priceEl.textContent = `₹${total}`;
+                }
+                calculate();
+            }
+        }
+
+        function renderAdditionalCosts() {
+            const container = document.getElementById('additionalCostsList');
+            container.innerHTML = additionalCosts.map((item, index) => `
+                <div class="ingredient-row" id="add-row-${index}">
+                    <input type="text" value="${item.name}" oninput="updateAdditionalCost(${index}, 'name', this.value)">
+                    <input type="number" placeholder="Quantity" value="${item.qty}" oninput="updateAdditionalCost(${index}, 'qty', this.value)" step="any">
+                    <input type="number" placeholder="₹/unit" value="${item.costPerUnit}" oninput="updateAdditionalCost(${index}, 'costPerUnit', this.value)" step="any">
+                    <div class="price" id="add-price-${index}">₹${(item.qty * item.costPerUnit).toFixed(2)}</div>
+                    <button class="btn-remove" onclick="removeAdditionalCost(${index})">Remove</button>
+                </div>
+            `).join('');
+        }
+
+        function updateAdditionalCost(index, field, value) {
+            if (field === 'name') {
+                additionalCosts[index].name = value;
+            } else {
+                additionalCosts[index][field] = parseFloat(value) || 0;
+                // Update only the price display for this row
+                const priceEl = document.getElementById(`add-price-${index}`);
+                if (priceEl) {
+                    const total = (additionalCosts[index].qty * additionalCosts[index].costPerUnit).toFixed(2);
+                    priceEl.textContent = `₹${total}`;
+                }
+                calculate();
+            }
+        }
+
+        function addIngredient() {
+            ingredients.push({name: '', qty: 0, costPerKg: 0});
+            renderIngredients();
+        }
+
+        function removeIngredient(index) {
+            ingredients.splice(index, 1);
+            renderIngredients();
+            calculate();
+        }
+
+        function addAdditionalCost() {
+            additionalCosts.push({name: '', qty: 0, costPerUnit: 0});
+            renderAdditionalCosts();
+        }
+
+        function removeAdditionalCost(index) {
+            additionalCosts.splice(index, 1);
+            renderAdditionalCosts();
+            calculate();
+        }
+
+        function formatINR(amount) {
+            return '₹' + amount.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        }
+
+        function calculate() {
+            // Recipe cost
+            const recipeCost = ingredients.reduce((sum, ing) => sum + (ing.qty * ing.costPerKg) / 1000, 0);
+
+            // Wastage
+            const wastagePercent = parseFloat(document.getElementById('wastagePercent').value) || 0;
+            const wastageCost = recipeCost * (wastagePercent / 100);
+
+            // Additional costs
+            const additionalCost = additionalCosts.reduce((sum, item) => sum + (item.qty * item.costPerUnit), 0);
+
+            // Fixed costs per cake
+            const cakesPerDay = parseFloat(document.getElementById('cakesPerDay').value) || 1;
+            const daysPerMonth = 30;
+            const cakesPerMonth = cakesPerDay * daysPerMonth;
+
+            const electricityBill = parseFloat(document.getElementById('electricityBill').value) || 0;
+            const electricityPercent = parseFloat(document.getElementById('electricityPercent').value) || 0;
+            const electricityCost = (electricityBill * electricityPercent / 100) / cakesPerMonth;
+
+            const waterBill = parseFloat(document.getElementById('waterBill').value) || 0;
+            const waterPercent = parseFloat(document.getElementById('waterPercent').value) || 0;
+            const waterCost = (waterBill * waterPercent / 100) / cakesPerMonth;
+
+            const rent = parseFloat(document.getElementById('rent').value) || 0;
+            const rentPercent = parseFloat(document.getElementById('rentPercent').value) || 0;
+            const rentCost = (rent * rentPercent / 100) / cakesPerMonth;
+
+            const fixedCostPerCake = electricityCost + waterCost + rentCost;
+
+            // Labor & delivery
+            const laborCost = parseFloat(document.getElementById('laborCost').value) || 0;
+            const deliveryCharges = parseFloat(document.getElementById('deliveryCharges').value) || 0;
+            const marketingCost = parseFloat(document.getElementById('marketingCost').value) || 0;
+
+            // Total cost
+            const totalCost = recipeCost + wastageCost + additionalCost + fixedCostPerCake + laborCost + deliveryCharges + marketingCost;
+
+            // Profit calculation
+            const profitMargin = parseFloat(document.getElementById('profitMargin').value) || 0;
+            const profitAmount = totalCost * (profitMargin / 100);
+
+            // Platform fee
+            const platformFeePercent = parseFloat(document.getElementById('platformFee').value) || 0;
+            const priceBeforePlatformFee = totalCost + profitAmount;
+            const platformFeeAmount = priceBeforePlatformFee * (platformFeePercent / 100);
+
+            // Final selling price
+            const sellingPrice = priceBeforePlatformFee + platformFeeAmount;
+
+            // Actual profit percentage
+            const actualProfitPercent = ((profitAmount / totalCost) * 100).toFixed(1);
+
+            // Update UI
+            document.getElementById('totalRecipeCost').textContent = formatINR(recipeCost);
+            document.getElementById('wastageCost').textContent = formatINR(wastageCost);
+            document.getElementById('totalAdditionalCost').textContent = formatINR(additionalCost);
+            document.getElementById('fixedCostPerCake').textContent = formatINR(fixedCostPerCake);
+            document.getElementById('displayLaborCost').textContent = formatINR(laborCost);
+            document.getElementById('displayDeliveryCost').textContent = formatINR(deliveryCharges);
+            document.getElementById('displayMarketingCost').textContent = formatINR(marketingCost);
+            document.getElementById('totalCost').textContent = formatINR(totalCost);
+            document.getElementById('profitAmount').textContent = formatINR(profitAmount);
+            document.getElementById('platformFeeAmount').textContent = formatINR(platformFeeAmount);
+            document.getElementById('sellingPrice').textContent = formatINR(sellingPrice);
+            document.getElementById('actualProfitPercent').textContent = actualProfitPercent + '%';
+
+            // Profit indicator
+            let indicator = '';
+            if (actualProfitPercent >= 40) {
+                indicator = '<span class="profit-indicator profit-good">Excellent</span>';
+            } else if (actualProfitPercent >= 25) {
+                indicator = '<span class="profit-indicator profit-okay">Good</span>';
+            } else if (actualProfitPercent > 0) {
+                indicator = '<span class="profit-indicator profit-low">Low Margin</span>';
+            }
+            document.getElementById('profitIndicator').innerHTML = indicator;
+        }
+
+        function printQuote() {
+            window.print();
+        }
+
+        function shareQuote() {
+            const sellingPrice = document.getElementById('sellingPrice').textContent;
+            const text = `Cake Pricing Quote\n\nSelling Price: ${sellingPrice}\n\nCalculated using Recipe Calculator`;
+
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Cake Price Quote',
+                    text: text
+                });
+            } else {
+                alert('Share functionality not available. You can screenshot the pricing summary instead.');
+            }
+        }
+
+        // Bulk input parsing
+        function parseBulkInput() {
+            const bulkText = document.getElementById('bulkInput').value;
+            if (!bulkText.trim()) {
+                alert('Please enter ingredients in the bulk input area');
+                return;
+            }
+
+            const lines = bulkText.split('\n');
+            let addedCount = 0;
+
+            lines.forEach(line => {
+                line = line.trim();
+                if (!line) return;
+
+                const parts = line.split(',').map(p => p.trim());
+                if (parts.length >= 3) {
+                    const name = parts[0];
+                    const qty = parseFloat(parts[1]) || 0;
+                    const costPerKg = parseFloat(parts[2]) || 0;
+
+                    ingredients.push({name, qty, costPerKg});
+                    addedCount++;
+                }
+            });
+
+            if (addedCount > 0) {
+                renderIngredients();
+                calculate();
+                document.getElementById('bulkInput').value = '';
+                alert(`Successfully added ${addedCount} ingredient(s)`);
+            } else {
+                alert('No valid ingredients found. Please check format:\nName, Quantity(gm), Cost per kg(₹)');
+            }
+        }
+
+        // Save recipe to localStorage
+        function saveRecipe() {
+            const recipeName = document.getElementById('recipeName').value.trim();
+            if (!recipeName) {
+                alert('Please enter a recipe name');
+                return;
+            }
+
+            const recipeData = {
+                name: recipeName,
+                ingredients: ingredients,
+                additionalCosts: additionalCosts,
+                settings: {
+                    cakesPerDay: document.getElementById('cakesPerDay').value,
+                    electricityBill: document.getElementById('electricityBill').value,
+                    electricityPercent: document.getElementById('electricityPercent').value,
+                    waterBill: document.getElementById('waterBill').value,
+                    waterPercent: document.getElementById('waterPercent').value,
+                    rent: document.getElementById('rent').value,
+                    rentPercent: document.getElementById('rentPercent').value,
+                    laborCost: document.getElementById('laborCost').value,
+                    deliveryCharges: document.getElementById('deliveryCharges').value,
+                    wastagePercent: document.getElementById('wastagePercent').value,
+                    profitMargin: document.getElementById('profitMargin').value,
+                    platformFee: document.getElementById('platformFee').value,
+                    marketingCost: document.getElementById('marketingCost').value
+                }
+            };
+
+            const savedRecipes = JSON.parse(localStorage.getItem('savedRecipes') || '{}');
+            savedRecipes[recipeName] = recipeData;
+            localStorage.setItem('savedRecipes', JSON.stringify(savedRecipes));
+
+            alert(`Recipe "${recipeName}" saved successfully!`);
+        }
+
+        // Load recipe from localStorage
+        function loadRecipe() {
+            const savedRecipes = JSON.parse(localStorage.getItem('savedRecipes') || '{}');
+            const recipeNames = Object.keys(savedRecipes);
+
+            if (recipeNames.length === 0) {
+                alert('No saved recipes found');
+                return;
+            }
+
+            const recipeName = prompt(`Enter recipe name to load:\n\nAvailable recipes:\n${recipeNames.join('\n')}`);
+            if (!recipeName) return;
+
+            const recipeData = savedRecipes[recipeName];
+            if (!recipeData) {
+                alert('Recipe not found');
+                return;
+            }
+
+            // Load ingredients and costs
+            ingredients = recipeData.ingredients || [];
+            additionalCosts = recipeData.additionalCosts || [];
+
+            // Load settings
+            if (recipeData.settings) {
+                const s = recipeData.settings;
+                document.getElementById('cakesPerDay').value = s.cakesPerDay || 5;
+                document.getElementById('electricityBill').value = s.electricityBill || 0;
+                document.getElementById('electricityPercent').value = s.electricityPercent || 0;
+                document.getElementById('waterBill').value = s.waterBill || 0;
+                document.getElementById('waterPercent').value = s.waterPercent || 0;
+                document.getElementById('rent').value = s.rent || 0;
+                document.getElementById('rentPercent').value = s.rentPercent || 0;
+                document.getElementById('laborCost').value = s.laborCost || 0;
+                document.getElementById('deliveryCharges').value = s.deliveryCharges || 0;
+                document.getElementById('wastagePercent').value = s.wastagePercent || 2;
+                document.getElementById('profitMargin').value = s.profitMargin || 50;
+                document.getElementById('platformFee').value = s.platformFee || 0;
+                document.getElementById('marketingCost').value = s.marketingCost || 0;
+            }
+
+            document.getElementById('recipeName').value = recipeName;
+            renderIngredients();
+            renderAdditionalCosts();
+            calculate();
+
+            alert(`Recipe "${recipeName}" loaded successfully!`);
+        }
+
+        // Export to CSV
+        function exportToCSV() {
+            let csv = 'Ingredient Name,Quantity (gm),Cost per kg (₹),Total Cost (₹)\n';
+            ingredients.forEach(ing => {
+                const total = ((ing.qty * ing.costPerKg) / 1000).toFixed(2);
+                csv += `"${ing.name}",${ing.qty},${ing.costPerKg},${total}\n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'recipe_ingredients.csv';
+            a.click();
+        }
+
+        // Import from CSV
+        function importFromCSV(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const text = e.target.result;
+                const lines = text.split('\n');
+
+                ingredients = [];
+
+                // Skip header row
+                for (let i = 1; i < lines.length; i++) {
+                    const line = lines[i].trim();
+                    if (!line) continue;
+
+                    const parts = line.split(',').map(p => p.replace(/"/g, '').trim());
+                    if (parts.length >= 3) {
+                        ingredients.push({
+                            name: parts[0],
+                            qty: parseFloat(parts[1]) || 0,
+                            costPerKg: parseFloat(parts[2]) || 0
+                        });
+                    }
+                }
+
+                renderIngredients();
+                calculate();
+                alert(`Imported ${ingredients.length} ingredients from CSV`);
+            };
+
+            reader.readAsText(file);
+            event.target.value = ''; // Reset file input
+        }
+
+        // Export comprehensive Excel data
+        function exportToExcel() {
+            // Calculate all values first
+            const recipeCost = ingredients.reduce((sum, ing) => sum + (ing.qty * ing.costPerKg) / 1000, 0);
+            const wastagePercent = parseFloat(document.getElementById('wastagePercent').value) || 0;
+            const wastageCost = recipeCost * (wastagePercent / 100);
+            const additionalCost = additionalCosts.reduce((sum, item) => sum + (item.qty * item.costPerUnit), 0);
+
+            const cakesPerDay = parseFloat(document.getElementById('cakesPerDay').value) || 1;
+            const daysPerMonth = 30;
+            const cakesPerMonth = cakesPerDay * daysPerMonth;
+
+            const electricityBill = parseFloat(document.getElementById('electricityBill').value) || 0;
+            const electricityPercent = parseFloat(document.getElementById('electricityPercent').value) || 0;
+            const electricityCost = (electricityBill * electricityPercent / 100) / cakesPerMonth;
+
+            const waterBill = parseFloat(document.getElementById('waterBill').value) || 0;
+            const waterPercent = parseFloat(document.getElementById('waterPercent').value) || 0;
+            const waterCost = (waterBill * waterPercent / 100) / cakesPerMonth;
+
+            const rent = parseFloat(document.getElementById('rent').value) || 0;
+            const rentPercent = parseFloat(document.getElementById('rentPercent').value) || 0;
+            const rentCost = (rent * rentPercent / 100) / cakesPerMonth;
+
+            const fixedCostPerCake = electricityCost + waterCost + rentCost;
+            const laborCost = parseFloat(document.getElementById('laborCost').value) || 0;
+            const deliveryCharges = parseFloat(document.getElementById('deliveryCharges').value) || 0;
+            const marketingCost = parseFloat(document.getElementById('marketingCost').value) || 0;
+            const totalCost = recipeCost + wastageCost + additionalCost + fixedCostPerCake + laborCost + deliveryCharges + marketingCost;
+            const profitMargin = parseFloat(document.getElementById('profitMargin').value) || 0;
+            const profitAmount = totalCost * (profitMargin / 100);
+            const platformFeePercent = parseFloat(document.getElementById('platformFee').value) || 0;
+            const priceBeforePlatformFee = totalCost + profitAmount;
+            const platformFeeAmount = priceBeforePlatformFee * (platformFeePercent / 100);
+            const sellingPrice = priceBeforePlatformFee + platformFeeAmount;
+
+            // Create comprehensive CSV in Excel-friendly format
+            let csv = 'RECIPE PRICING CALCULATOR - COMPREHENSIVE REPORT\n\n';
+
+            csv += 'BUSINESS SETUP\n';
+            csv += 'Setting,Value\n';
+            csv += `Average Cakes Per Day,${cakesPerDay}\n`;
+            csv += `Monthly Electricity Bill,₹${electricityBill}\n`;
+            csv += `Electricity % for Baking,${electricityPercent}%\n`;
+            csv += `Monthly Water Bill,₹${waterBill}\n`;
+            csv += `Water % for Baking,${waterPercent}%\n`;
+            csv += `Monthly Rent,₹${rent}\n`;
+            csv += `Rent % for Baking,${rentPercent}%\n`;
+            csv += `Labor Cost Per Cake,₹${laborCost}\n`;
+            csv += `Delivery Charges,₹${deliveryCharges}\n`;
+            csv += `Marketing Cost Per Cake,₹${marketingCost}\n\n`;
+
+            csv += 'RECIPE INGREDIENTS\n';
+            csv += 'Ingredient Name,Quantity (gm),Cost per kg (₹),Total Cost (₹)\n';
+            ingredients.forEach(ing => {
+                const total = ((ing.qty * ing.costPerKg) / 1000).toFixed(2);
+                csv += `"${ing.name}",${ing.qty},${ing.costPerKg},${total}\n`;
+            });
+            csv += `,,Total Recipe Cost,₹${recipeCost.toFixed(2)}\n\n`;
+
+            csv += 'WASTAGE\n';
+            csv += `Wastage Percentage,${wastagePercent}%\n`;
+            csv += `Wastage Cost,₹${wastageCost.toFixed(2)}\n\n`;
+
+            csv += 'ADDITIONAL COSTS (Packaging & Extras)\n';
+            csv += 'Item Name,Quantity,Cost per Unit (₹),Total Cost (₹)\n';
+            additionalCosts.forEach(item => {
+                const total = (item.qty * item.costPerUnit).toFixed(2);
+                csv += `"${item.name}",${item.qty},${item.costPerUnit},${total}\n`;
+            });
+            csv += `,,Total Additional Cost,₹${additionalCost.toFixed(2)}\n\n`;
+
+            csv += 'FIXED COSTS (Per Cake)\n';
+            csv += 'Cost Type,Amount (₹)\n';
+            csv += `Electricity Cost,₹${electricityCost.toFixed(2)}\n`;
+            csv += `Water Cost,₹${waterCost.toFixed(2)}\n`;
+            csv += `Rent Cost,₹${rentCost.toFixed(2)}\n`;
+            csv += `Total Fixed Cost,₹${fixedCostPerCake.toFixed(2)}\n\n`;
+
+            csv += 'PRICING SUMMARY\n';
+            csv += 'Item,Amount (₹)\n';
+            csv += `Total Recipe Cost,₹${recipeCost.toFixed(2)}\n`;
+            csv += `Wastage Cost,₹${wastageCost.toFixed(2)}\n`;
+            csv += `Additional Costs,₹${additionalCost.toFixed(2)}\n`;
+            csv += `Fixed Costs,₹${fixedCostPerCake.toFixed(2)}\n`;
+            csv += `Labor Cost,₹${laborCost.toFixed(2)}\n`;
+            csv += `Delivery Cost,₹${deliveryCharges.toFixed(2)}\n`;
+            csv += `Marketing Cost,₹${marketingCost.toFixed(2)}\n`;
+            csv += `TOTAL COST,₹${totalCost.toFixed(2)}\n`;
+            csv += `Profit Amount (${profitMargin}%),₹${profitAmount.toFixed(2)}\n`;
+            csv += `Platform Fee (${platformFeePercent}%),₹${platformFeeAmount.toFixed(2)}\n`;
+            csv += `FINAL SELLING PRICE,₹${sellingPrice.toFixed(2)}\n`;
+            csv += `Actual Profit Margin,${((profitAmount / totalCost) * 100).toFixed(2)}%\n\n`;
+
+            csv += `\nReport Generated: ${new Date().toLocaleString('en-IN')}\n`;
+
+            // Download CSV
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            const recipeName = document.getElementById('recipeName').value.trim() || 'recipe';
+            a.download = `${recipeName.replace(/\s+/g, '_')}_comprehensive_pricing_${Date.now()}.csv`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+
+            alert('Comprehensive pricing report exported! You can open this CSV file in Excel.');
+        }
+
+        // Initialize
+        renderIngredients();
+        renderAdditionalCosts();
+        calculate();
+    </script>
+</body>
+</html>
