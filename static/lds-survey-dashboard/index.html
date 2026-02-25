@@ -828,16 +828,17 @@
                 .attr('y1', d => y(d))
                 .attr('y2', d => y(d));
 
-            // Axes
+            // Axes - truncate long labels
             svg.append('g')
                 .attr('class', 'axis')
                 .attr('transform', `translate(0,${height})`)
-                .call(d3.axisBottom(x0))
+                .call(d3.axisBottom(x0).tickFormat(d => d.length > 35 ? d.substring(0, 35) + '...' : d))
                 .selectAll('text')
-                .attr('transform', 'rotate(-25)')
+                .attr('transform', 'rotate(-30)')
                 .style('text-anchor', 'end')
                 .attr('dx', '-0.5em')
-                .attr('dy', '0.5em');
+                .attr('dy', '0.5em')
+                .style('font-size', '11px');
 
             svg.append('g')
                 .attr('class', 'axis')
@@ -879,6 +880,16 @@
                 })
                 .on('mouseout', hideTooltip);
 
+            // Training score labels
+            sessionGroups.append('text')
+                .attr('x', x1('training') + x1.bandwidth() / 2)
+                .attr('y', d => y(d.trainingAvg) - 5)
+                .attr('text-anchor', 'middle')
+                .attr('font-size', '12px')
+                .attr('font-weight', 'bold')
+                .attr('fill', colors.blue)
+                .text(d => d.trainingAvg.toFixed(1));
+
             // Facilitator bars
             sessionGroups.append('rect')
                 .attr('class', 'bar')
@@ -897,6 +908,16 @@
                     `);
                 })
                 .on('mouseout', hideTooltip);
+
+            // Facilitator score labels
+            sessionGroups.append('text')
+                .attr('x', x1('facilitator') + x1.bandwidth() / 2)
+                .attr('y', d => y(d.facilitatorAvg) - 5)
+                .attr('text-anchor', 'middle')
+                .attr('font-size', '12px')
+                .attr('font-weight', 'bold')
+                .attr('fill', colors.purple)
+                .text(d => d.facilitatorAvg.toFixed(1));
 
             // Legend
             const legend = container.append('div')
