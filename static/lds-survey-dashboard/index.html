@@ -26,23 +26,30 @@
         }
 
         header {
-            background: linear-gradient(135deg, #0C2340 0%, #1a3a5c 100%);
+            background: linear-gradient(135deg, #0C2340 0%, #1a3a5c 50%, #0C2340 100%);
             color: white;
-            padding: 30px;
+            padding: 35px;
             border-radius: 12px;
             margin-bottom: 30px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 15px rgba(12, 35, 64, 0.3);
+            position: relative;
         }
 
         h1 {
             font-size: 2em;
-            margin-bottom: 10px;
-            font-weight: 600;
+            margin-bottom: 5px;
+            font-weight: 700;
         }
 
         .subtitle {
             font-size: 1.1em;
-            opacity: 0.9;
+            opacity: 0.85;
+        }
+
+        .header-meta {
+            font-size: 0.85em;
+            opacity: 0.65;
+            margin-top: 4px;
         }
 
         .header-actions {
@@ -132,7 +139,7 @@
             padding: 25px;
             border-radius: 10px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            border-left: 4px solid #0C2340;
+            border-top: 4px solid #0C2340;
             transition: transform 0.2s, box-shadow 0.2s;
         }
 
@@ -141,8 +148,12 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.12);
         }
 
+        .kpi-card.nps-excellent { border-top-color: #28a745; }
+        .kpi-card.nps-good { border-top-color: #C99700; }
+        .kpi-card.nps-poor { border-top-color: #dc3545; }
+
         .kpi-label {
-            font-size: 0.9em;
+            font-size: 0.85em;
             color: #7f8c8d;
             margin-bottom: 8px;
             text-transform: uppercase;
@@ -162,6 +173,64 @@
             margin-top: 5px;
         }
 
+        .kpi-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.75em;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+
+        .badge-excellent { background: #d4edda; color: #155724; }
+        .badge-good { background: #fff3cd; color: #856404; }
+        .badge-poor { background: #f8d7da; color: #721c24; }
+
+        /* Key Takeaways */
+        .takeaways-section {
+            background: white;
+            padding: 25px 30px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-left: 5px solid #0C2340;
+        }
+
+        .takeaways-title {
+            font-size: 1.3em;
+            color: #0C2340;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .takeaway-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 10px;
+            font-size: 0.95em;
+            color: #34495e;
+        }
+
+        .takeaway-icon {
+            flex-shrink: 0;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            color: white;
+            margin-top: 2px;
+        }
+
+        .icon-green { background: #28a745; }
+        .icon-gold { background: #C99700; }
+        .icon-blue { background: #0C2340; }
+        .icon-red { background: #dc3545; }
+
         .section {
             background: white;
             padding: 25px;
@@ -177,6 +246,21 @@
             padding-bottom: 10px;
             border-bottom: 2px solid #e8ecef;
             font-weight: 600;
+        }
+
+        .chart-insight {
+            margin-top: 15px;
+            padding: 12px 16px;
+            background: #f8f9fb;
+            border-left: 3px solid #C99700;
+            border-radius: 0 6px 6px 0;
+            font-size: 0.9em;
+            color: #4a5568;
+            line-height: 1.6;
+        }
+
+        .chart-insight strong {
+            color: #0C2340;
         }
 
         .filter-container {
@@ -303,8 +387,12 @@
             border-bottom: 1px solid #e8ecef;
         }
 
+        .comment-table tr:nth-child(even) {
+            background: #fafbfc;
+        }
+
         .comment-table tr:hover {
-            background: #f8f9fa;
+            background: #f0f4f8;
         }
 
         .comment-text {
@@ -349,8 +437,9 @@
 <body>
     <div class="dashboard-container">
         <header>
-            <h1>Leadership Development Series (LDS) Training Impact Dashboard</h1>
-            <div class="subtitle">Fall 2025 Training Evaluation Results</div>
+            <h1>LDS Training Impact Dashboard</h1>
+            <div class="subtitle">Leadership Development Series | Fall 2025 Evaluation Results</div>
+            <div class="header-meta" id="header-meta"></div>
             <div class="header-actions">
                 <button class="btn btn-primary" onclick="downloadExcel()">Download Excel Report</button>
                 <button class="btn btn-secondary" onclick="toggleUpload()">Upload Updated Data</button>
@@ -364,6 +453,12 @@
 
         <!-- KPI Cards -->
         <div class="kpi-container" id="kpi-container"></div>
+
+        <!-- Key Takeaways -->
+        <div class="takeaways-section" id="takeaways-section">
+            <div class="takeaways-title">Key Takeaways</div>
+            <div id="takeaways-content"></div>
+        </div>
 
         <!-- Filters -->
         <div class="section">
@@ -383,6 +478,7 @@
         <div class="section">
             <h2 class="section-title">Training Session Comparison</h2>
             <div class="chart-container" id="session-comparison"></div>
+            <div class="chart-insight" id="insight-session"></div>
         </div>
 
         <!-- Department and NPS Distribution -->
@@ -390,10 +486,12 @@
             <div class="section">
                 <h2 class="section-title">Department Participation</h2>
                 <div class="chart-container" id="department-chart"></div>
+                <div class="chart-insight" id="insight-department"></div>
             </div>
             <div class="section">
                 <h2 class="section-title" id="nps-title">NPS Score Distribution</h2>
                 <div class="chart-container" id="nps-distribution"></div>
+                <div class="chart-insight" id="insight-nps"></div>
             </div>
         </div>
 
@@ -401,6 +499,7 @@
         <div class="section">
             <h2 class="section-title">Satisfaction Metrics (Likert Scale Responses)</h2>
             <div class="chart-container" id="likert-chart"></div>
+            <div class="chart-insight" id="insight-likert"></div>
         </div>
 
         <!-- Comments Section -->
@@ -450,6 +549,13 @@
             window.location.href = 'LDS_Survey_Export_Editable.xlsx';
         }
 
+        // NPS classification helper
+        function npsLabel(nps) {
+            if (nps >= 50) return { text: 'Excellent', cls: 'excellent' };
+            if (nps >= 0) return { text: 'Good', cls: 'good' };
+            return { text: 'Needs Improvement', cls: 'poor' };
+        }
+
         // Handle file upload
         function handleFileUpload(event) {
             const file = event.target.files[0];
@@ -469,7 +575,6 @@
                     const data = new Uint8Array(e.target.result);
                     const workbook = XLSX.read(data, {type: 'array'});
 
-                    // Read the "Survey Data (Editable)" sheet
                     const sheetName = workbook.SheetNames.find(name =>
                         name.includes('Survey Data') || name.includes('Editable')
                     ) || workbook.SheetNames[0];
@@ -480,7 +585,6 @@
                         defval: null
                     });
 
-                    // Find header row (should contain column names)
                     let headerRowIndex = -1;
                     for (let i = 0; i < Math.min(10, jsonData.length); i++) {
                         const row = jsonData[i];
@@ -499,7 +603,6 @@
                     const headers = jsonData[headerRowIndex];
                     const dataRows = jsonData.slice(headerRowIndex + 1);
 
-                    // Map headers to column indices
                     const colMap = {};
                     headers.forEach((header, idx) => {
                         if (header) {
@@ -516,7 +619,6 @@
                         }
                     });
 
-                    // Parse data
                     const parsedData = dataRows
                         .filter(row => row && row.some(cell => cell !== null && cell !== ''))
                         .map(row => ({
@@ -536,34 +638,28 @@
                         throw new Error('No valid data found in uploaded file');
                     }
 
-                    // Update the dashboard
                     allData = parsedData;
                     filteredData = [...allData];
-
-                    // Re-populate filters
                     updateFilterOptions();
-
-                    // Re-render dashboard
                     renderDashboard();
 
-                    statusDiv.textContent = `✓ Successfully loaded ${parsedData.length} records!`;
+                    statusDiv.textContent = `Successfully loaded ${parsedData.length} records!`;
                     statusDiv.style.color = '#28a745';
 
-                    // Hide upload area after 3 seconds
                     setTimeout(() => {
                         toggleUpload();
                         statusDiv.textContent = '';
                     }, 3000);
 
                 } catch (error) {
-                    statusDiv.textContent = `✗ Error: ${error.message}`;
+                    statusDiv.textContent = `Error: ${error.message}`;
                     statusDiv.style.color = '#dc3545';
                     console.error('Upload error:', error);
                 }
             };
 
             reader.onerror = function() {
-                statusDiv.textContent = '✗ Error reading file';
+                statusDiv.textContent = 'Error reading file';
                 statusDiv.style.color = '#dc3545';
             };
 
@@ -602,7 +698,7 @@
                         updateFilterOptions();
                         renderDashboard();
 
-                        statusDiv.textContent = `✓ Successfully loaded ${parsedData.length} records!`;
+                        statusDiv.textContent = `Successfully loaded ${parsedData.length} records!`;
                         statusDiv.style.color = '#28a745';
 
                         setTimeout(() => {
@@ -610,7 +706,7 @@
                             statusDiv.textContent = '';
                         }, 3000);
                     } catch (error) {
-                        statusDiv.textContent = `✗ Error: ${error.message}`;
+                        statusDiv.textContent = `Error: ${error.message}`;
                         statusDiv.style.color = '#dc3545';
                     }
                 };
@@ -643,7 +739,6 @@
 
         // Load and process data
         d3.csv('lds_survey_clean.csv').then(data => {
-            // Parse data
             allData = data.map(d => ({
                 startDate: new Date(d.StartDate),
                 endDate: new Date(d.EndDate),
@@ -661,7 +756,6 @@
 
             filteredData = [...allData];
 
-            // Populate filter dropdowns
             const sessions = [...new Set(allData.map(d => d.session))].sort();
             const departments = [...new Set(allData.map(d => d.department))].sort();
 
@@ -675,11 +769,9 @@
                 deptFilter.append('option').attr('value', d).text(d);
             });
 
-            // Add filter listeners
             sessionFilter.on('change', updateFilters);
             deptFilter.on('change', updateFilters);
 
-            // Initial render
             renderDashboard();
         });
 
@@ -698,11 +790,18 @@
 
         function renderDashboard() {
             renderKPIs();
+            renderKeyTakeaways();
             renderSessionComparison();
             renderDepartmentChart();
             renderNPSDistribution();
             renderLikertChart();
             renderComments();
+
+            // Update header meta
+            const sessions = [...new Set(filteredData.map(d => d.session))];
+            d3.select('#header-meta').text(
+                `${filteredData.length} responses across ${sessions.length} session${sessions.length !== 1 ? 's' : ''} | Notre Dame Research`
+            );
         }
 
         function calculateNPS(scores) {
@@ -721,26 +820,39 @@
             const facilitatorScores = filteredData.map(d => d.facilitatorScore).filter(s => !isNaN(s));
             const commentsCount = filteredData.filter(d => d.comment && d.comment !== 'NaN').length;
 
+            const trainingNPS = calculateNPS(trainingScores);
+            const facilitatorNPS = calculateNPS(facilitatorScores);
+            const trainingLabel = npsLabel(trainingNPS);
+            const facilitatorLabel = npsLabel(facilitatorNPS);
+
             const kpis = [
                 {
                     label: 'Total Participants',
                     value: filteredData.length,
-                    subtitle: 'Responses collected'
+                    subtitle: 'Responses collected',
+                    cardClass: '',
+                    badge: null
                 },
                 {
                     label: 'Training NPS',
-                    value: calculateNPS(trainingScores).toFixed(1),
-                    subtitle: `Avg Score: ${(d3.mean(trainingScores) || 0).toFixed(2)}/10`
+                    value: trainingNPS.toFixed(1),
+                    subtitle: `Avg Score: ${(d3.mean(trainingScores) || 0).toFixed(1)}/10`,
+                    cardClass: `nps-${trainingLabel.cls}`,
+                    badge: trainingLabel
                 },
                 {
                     label: 'Facilitator NPS',
-                    value: calculateNPS(facilitatorScores).toFixed(1),
-                    subtitle: `Avg Score: ${(d3.mean(facilitatorScores) || 0).toFixed(2)}/10`
+                    value: facilitatorNPS.toFixed(1),
+                    subtitle: `Avg Score: ${(d3.mean(facilitatorScores) || 0).toFixed(1)}/10`,
+                    cardClass: `nps-${facilitatorLabel.cls}`,
+                    badge: facilitatorLabel
                 },
                 {
                     label: 'Comment Rate',
-                    value: `${((commentsCount / filteredData.length) * 100).toFixed(1)}%`,
-                    subtitle: `${commentsCount} of ${filteredData.length} responses`
+                    value: filteredData.length > 0 ? `${((commentsCount / filteredData.length) * 100).toFixed(0)}%` : '0%',
+                    subtitle: `${commentsCount} of ${filteredData.length} left feedback`,
+                    cardClass: '',
+                    badge: null
                 }
             ];
 
@@ -748,7 +860,7 @@
                 .data(kpis)
                 .enter()
                 .append('div')
-                .attr('class', 'kpi-card');
+                .attr('class', d => `kpi-card ${d.cardClass}`);
 
             cards.append('div')
                 .attr('class', 'kpi-label')
@@ -761,13 +873,98 @@
             cards.append('div')
                 .attr('class', 'kpi-subtitle')
                 .text(d => d.subtitle);
+
+            cards.filter(d => d.badge)
+                .append('div')
+                .attr('class', d => `kpi-badge badge-${d.badge.cls}`)
+                .text(d => d.badge.text);
+        }
+
+        function renderKeyTakeaways() {
+            const container = d3.select('#takeaways-content');
+            container.html('');
+
+            if (filteredData.length === 0) {
+                container.append('div').attr('class', 'takeaway-item')
+                    .html('<span style="color: #7f8c8d; font-style: italic;">No data available for selected filters.</span>');
+                return;
+            }
+
+            const trainingScores = filteredData.map(d => d.trainingScore).filter(s => !isNaN(s));
+            const facilitatorScores = filteredData.map(d => d.facilitatorScore).filter(s => !isNaN(s));
+            const trainingNPS = calculateNPS(trainingScores);
+            const facilitatorNPS = calculateNPS(facilitatorScores);
+            const avgTraining = d3.mean(trainingScores) || 0;
+            const avgFacilitator = d3.mean(facilitatorScores) || 0;
+
+            // Highest/lowest session
+            const sessionData = d3.group(filteredData, d => d.session);
+            const sessionAvgs = Array.from(sessionData.entries()).map(([session, records]) => ({
+                session,
+                avg: d3.mean(records.map(d => d.trainingScore).filter(s => !isNaN(s))) || 0
+            }));
+            sessionAvgs.sort((a, b) => b.avg - a.avg);
+
+            // Likert agreement
+            const agreeCount = filteredData.filter(d => d.contentRelevance === 'Agree').length;
+            const agreePct = filteredData.length > 0 ? ((agreeCount / filteredData.length) * 100).toFixed(0) : 0;
+
+            // Promoters/detractors
+            const promoters = trainingScores.filter(s => s >= 9).length;
+            const promoterPct = trainingScores.length > 0 ? ((promoters / trainingScores.length) * 100).toFixed(0) : 0;
+
+            const takeaways = [];
+
+            // Overall NPS
+            const tLabel = npsLabel(trainingNPS);
+            const iconCls = tLabel.cls === 'excellent' ? 'icon-green' : tLabel.cls === 'good' ? 'icon-gold' : 'icon-red';
+            takeaways.push({
+                icon: iconCls,
+                symbol: tLabel.cls === 'excellent' ? '+' : tLabel.cls === 'good' ? '~' : '!',
+                text: `Overall Training NPS is <strong>${trainingNPS.toFixed(0)}</strong> (${tLabel.text}) with an average score of <strong>${avgTraining.toFixed(1)}/10</strong>. ${promoterPct}% of participants are promoters (scored 9-10).`
+            });
+
+            // Best session
+            if (sessionAvgs.length > 1) {
+                const best = sessionAvgs[0];
+                const worst = sessionAvgs[sessionAvgs.length - 1];
+                const bestShort = best.session.length > 40 ? best.session.substring(0, 40) + '...' : best.session;
+                const worstShort = worst.session.length > 40 ? worst.session.substring(0, 40) + '...' : worst.session;
+                takeaways.push({
+                    icon: 'icon-blue',
+                    symbol: '#',
+                    text: `Highest rated session: <strong>${bestShort}</strong> (avg ${best.avg.toFixed(1)}). Lowest: <strong>${worstShort}</strong> (avg ${worst.avg.toFixed(1)}).`
+                });
+            }
+
+            // Likert
+            takeaways.push({
+                icon: 'icon-green',
+                symbol: '=',
+                text: `<strong>${agreePct}%</strong> of participants fully agreed that training content was relevant. Facilitator average score: <strong>${avgFacilitator.toFixed(1)}/10</strong>.`
+            });
+
+            // Comments
+            const commentsCount = filteredData.filter(d => d.comment && d.comment !== 'NaN').length;
+            if (commentsCount > 0) {
+                takeaways.push({
+                    icon: 'icon-gold',
+                    symbol: '"',
+                    text: `<strong>${commentsCount}</strong> participant${commentsCount !== 1 ? 's' : ''} left written feedback (${((commentsCount / filteredData.length) * 100).toFixed(0)}% comment rate). Review comments below for qualitative insights.`
+                });
+            }
+
+            takeaways.forEach(t => {
+                container.append('div')
+                    .attr('class', 'takeaway-item')
+                    .html(`<div class="takeaway-icon ${t.icon}">${t.symbol}</div><div>${t.text}</div>`);
+            });
         }
 
         function renderSessionComparison() {
             const container = d3.select('#session-comparison');
             container.html('');
 
-            // Group by session
             const sessionData = d3.group(filteredData, d => d.session);
             const sessions = Array.from(sessionData.keys()).sort();
 
@@ -786,8 +983,8 @@
                 };
             });
 
-            const longestLabel = Math.max(...sessions.map(s => s.length));
-            const bottomMargin = Math.min(200, Math.max(120, longestLabel * 4.5));
+            const longestLabel = sessions.length > 0 ? Math.max(...sessions.map(s => Math.min(s.length, 35))) : 20;
+            const bottomMargin = Math.min(180, Math.max(100, longestLabel * 4));
             const margin = {top: 40, right: 120, bottom: bottomMargin, left: 60};
             const width = 900 - margin.left - margin.right;
             const height = 400 - margin.top - margin.bottom;
@@ -799,7 +996,6 @@
                 .append('g')
                 .attr('transform', `translate(${margin.left},${margin.top})`);
 
-            // X scale
             const x0 = d3.scaleBand()
                 .domain(sessions)
                 .range([0, width])
@@ -810,12 +1006,10 @@
                 .range([0, x0.bandwidth()])
                 .padding(0.1);
 
-            // Y scale
             const y = d3.scaleLinear()
                 .domain([0, 10])
                 .range([height, 0]);
 
-            // Gridlines
             svg.append('g')
                 .attr('class', 'grid')
                 .selectAll('line')
@@ -828,7 +1022,6 @@
                 .attr('y1', d => y(d))
                 .attr('y2', d => y(d));
 
-            // Axes - truncate long labels
             svg.append('g')
                 .attr('class', 'axis')
                 .attr('transform', `translate(0,${height})`)
@@ -844,7 +1037,6 @@
                 .attr('class', 'axis')
                 .call(d3.axisLeft(y));
 
-            // Y-axis label
             svg.append('text')
                 .attr('transform', 'rotate(-90)')
                 .attr('y', -45)
@@ -854,14 +1046,12 @@
                 .style('fill', '#5a6c7d')
                 .text('Average Score (0-10)');
 
-            // Bars
             const sessionGroups = svg.selectAll('.session-group')
                 .data(data)
                 .enter()
                 .append('g')
                 .attr('transform', d => `translate(${x0(d.session)},0)`);
 
-            // Training bars
             sessionGroups.append('rect')
                 .attr('class', 'bar')
                 .attr('x', x1('training'))
@@ -872,7 +1062,7 @@
                 .on('mouseover', function(event, d) {
                     showTooltip(event, `
                         <strong>Training Recommendation</strong><br/>
-                        Session: ${d.session.substring(0, 30)}...<br/>
+                        Session: ${d.session}<br/>
                         Avg Score: ${d.trainingAvg.toFixed(2)}/10<br/>
                         NPS: ${d.trainingNPS.toFixed(1)}<br/>
                         Responses: ${d.count}
@@ -880,7 +1070,6 @@
                 })
                 .on('mouseout', hideTooltip);
 
-            // Training score labels
             sessionGroups.append('text')
                 .attr('x', x1('training') + x1.bandwidth() / 2)
                 .attr('y', d => y(d.trainingAvg) - 5)
@@ -890,7 +1079,6 @@
                 .attr('fill', colors.blue)
                 .text(d => d.trainingAvg.toFixed(1));
 
-            // Facilitator bars
             sessionGroups.append('rect')
                 .attr('class', 'bar')
                 .attr('x', x1('facilitator'))
@@ -901,7 +1089,7 @@
                 .on('mouseover', function(event, d) {
                     showTooltip(event, `
                         <strong>Facilitator Recommendation</strong><br/>
-                        Session: ${d.session.substring(0, 30)}...<br/>
+                        Session: ${d.session}<br/>
                         Avg Score: ${d.facilitatorAvg.toFixed(2)}/10<br/>
                         NPS: ${d.facilitatorNPS.toFixed(1)}<br/>
                         Responses: ${d.count}
@@ -909,7 +1097,6 @@
                 })
                 .on('mouseout', hideTooltip);
 
-            // Facilitator score labels
             sessionGroups.append('text')
                 .attr('x', x1('facilitator') + x1.bandwidth() / 2)
                 .attr('y', d => y(d.facilitatorAvg) - 5)
@@ -919,7 +1106,6 @@
                 .attr('fill', colors.purple)
                 .text(d => d.facilitatorAvg.toFixed(1));
 
-            // Legend
             const legend = container.append('div')
                 .attr('class', 'legend');
 
@@ -930,6 +1116,20 @@
             legend.append('div')
                 .attr('class', 'legend-item')
                 .html(`<div class="legend-color" style="background: ${colors.purple}"></div><span>Facilitator Recommendation</span>`);
+
+            // Insight
+            if (data.length > 0) {
+                data.sort((a, b) => b.trainingAvg - a.trainingAvg);
+                const best = data[0];
+                const worst = data[data.length - 1];
+                const bestShort = best.session.length > 45 ? best.session.substring(0, 45) + '...' : best.session;
+                let insightText = `<strong>Highest rated:</strong> ${bestShort} (${best.trainingAvg.toFixed(1)} avg training, ${best.facilitatorAvg.toFixed(1)} avg facilitator, n=${best.count}).`;
+                if (data.length > 1) {
+                    const worstShort = worst.session.length > 45 ? worst.session.substring(0, 45) + '...' : worst.session;
+                    insightText += ` <strong>Lowest rated:</strong> ${worstShort} (${worst.trainingAvg.toFixed(1)} avg training, n=${worst.count}).`;
+                }
+                d3.select('#insight-session').html(insightText);
+            }
         }
 
         function renderDepartmentChart() {
@@ -938,6 +1138,7 @@
 
             const deptCounts = d3.rollup(filteredData, v => v.length, d => d.department);
             const data = Array.from(deptCounts, ([dept, count]) => ({dept, count}));
+            data.sort((a, b) => b.count - a.count);
 
             const width = 400;
             const height = 300;
@@ -951,7 +1152,7 @@
 
             const color = d3.scaleOrdinal()
                 .domain(data.map(d => d.dept))
-                .range([colors.primary, colors.secondary]);
+                .range([colors.primary, colors.secondary, colors.blue, colors.purple, colors.teal]);
 
             const pie = d3.pie()
                 .value(d => d.count)
@@ -993,7 +1194,6 @@
                 .attr('font-size', '14px')
                 .text(d => `${d.data.dept}\n${d.data.count}`);
 
-            // Legend
             const legend = container.append('div')
                 .attr('class', 'legend')
                 .style('margin-top', '20px')
@@ -1004,16 +1204,27 @@
                     .attr('class', 'legend-item')
                     .html(`<div class="legend-color" style="background: ${color(d.dept)}"></div><span>${d.dept}: ${d.count} (${((d.count / filteredData.length) * 100).toFixed(1)}%)</span>`);
             });
+
+            // Insight
+            if (data.length > 0) {
+                const top = data[0];
+                const topPct = ((top.count / filteredData.length) * 100).toFixed(0);
+                let insightText = `<strong>${top.dept}</strong> had the most responses with ${top.count} (${topPct}%).`;
+                if (data.length > 1) {
+                    const bottom = data[data.length - 1];
+                    const bottomPct = ((bottom.count / filteredData.length) * 100).toFixed(0);
+                    insightText += ` <strong>${bottom.dept}</strong> had the fewest with ${bottom.count} (${bottomPct}%).`;
+                }
+                d3.select('#insight-department').html(insightText);
+            }
         }
 
         function renderNPSDistribution() {
             const container = d3.select('#nps-distribution');
             container.html('');
 
-            // Update title with count
             d3.select('#nps-title').text(`NPS Score Distribution (n=${filteredData.length})`);
 
-            // Prepare data for both scores
             const scores = [];
             for (let i = 0; i <= 10; i++) {
                 const trainingCount = filteredData.filter(d => Math.round(d.trainingScore) === i).length;
@@ -1035,14 +1246,13 @@
                 .append('g')
                 .attr('transform', `translate(${margin.left},${margin.top})`);
 
-            // Scales
             const x = d3.scaleBand()
                 .domain(scores.map(d => d.score))
                 .range([0, width])
                 .padding(0.2);
 
             const y = d3.scaleLinear()
-                .domain([0, d3.max(scores, d => Math.max(d.training, d.facilitator))])
+                .domain([0, d3.max(scores, d => Math.max(d.training, d.facilitator)) || 1])
                 .range([height, 0]);
 
             const x1 = d3.scaleBand()
@@ -1050,7 +1260,6 @@
                 .range([0, x.bandwidth()])
                 .padding(0.05);
 
-            // Gridlines
             svg.append('g')
                 .attr('class', 'grid')
                 .selectAll('line')
@@ -1063,7 +1272,6 @@
                 .attr('y1', d => y(d))
                 .attr('y2', d => y(d));
 
-            // Axes
             svg.append('g')
                 .attr('class', 'axis')
                 .attr('transform', `translate(0,${height})`)
@@ -1073,7 +1281,6 @@
                 .attr('class', 'axis')
                 .call(d3.axisLeft(y).ticks(5));
 
-            // Axis labels
             svg.append('text')
                 .attr('x', width / 2)
                 .attr('y', height + 40)
@@ -1091,7 +1298,6 @@
                 .style('fill', '#5a6c7d')
                 .text('Frequency');
 
-            // Draw bars
             const scoreGroups = svg.selectAll('.score-group')
                 .data(scores)
                 .enter()
@@ -1105,10 +1311,7 @@
                 .attr('height', d => height - y(d.training))
                 .attr('fill', colors.blue)
                 .on('mouseover', function(event, d) {
-                    showTooltip(event, `
-                        <strong>Training Score: ${d.score}</strong><br/>
-                        Count: ${d.training}
-                    `);
+                    showTooltip(event, `<strong>Training Score: ${d.score}</strong><br/>Count: ${d.training}`);
                 })
                 .on('mouseout', hideTooltip);
 
@@ -1119,14 +1322,10 @@
                 .attr('height', d => height - y(d.facilitator))
                 .attr('fill', colors.purple)
                 .on('mouseover', function(event, d) {
-                    showTooltip(event, `
-                        <strong>Facilitator Score: ${d.score}</strong><br/>
-                        Count: ${d.facilitator}
-                    `);
+                    showTooltip(event, `<strong>Facilitator Score: ${d.score}</strong><br/>Count: ${d.facilitator}`);
                 })
                 .on('mouseout', hideTooltip);
 
-            // Legend
             const legend = container.append('div')
                 .attr('class', 'legend');
 
@@ -1137,6 +1336,18 @@
             legend.append('div')
                 .attr('class', 'legend-item')
                 .html(`<div class="legend-color" style="background: ${colors.purple}"></div><span>Facilitator</span>`);
+
+            // Insight
+            const trainingScores = filteredData.map(d => d.trainingScore).filter(s => !isNaN(s));
+            const promoters = trainingScores.filter(s => s >= 9).length;
+            const passives = trainingScores.filter(s => s >= 7 && s <= 8).length;
+            const detractors = trainingScores.filter(s => s <= 6).length;
+            const total = trainingScores.length || 1;
+            d3.select('#insight-nps').html(
+                `<strong>Training scores:</strong> ${((promoters/total)*100).toFixed(0)}% Promoters (9-10), ` +
+                `${((passives/total)*100).toFixed(0)}% Passives (7-8), ` +
+                `${((detractors/total)*100).toFixed(0)}% Detractors (0-6).`
+            );
         }
 
         function renderLikertChart() {
@@ -1174,7 +1385,6 @@
                 .append('g')
                 .attr('transform', `translate(${margin.left},${margin.top})`);
 
-            // Scales
             const y = d3.scaleBand()
                 .domain(data.map(d => d.question))
                 .range([0, height])
@@ -1184,7 +1394,6 @@
                 .domain([0, 100])
                 .range([0, width]);
 
-            // Axes
             svg.append('g')
                 .attr('class', 'axis')
                 .call(d3.axisLeft(y));
@@ -1194,7 +1403,6 @@
                 .attr('transform', `translate(0,${height})`)
                 .call(d3.axisBottom(x).ticks(5).tickFormat(d => d + '%'));
 
-            // Stacked bars
             data.forEach(d => {
                 let xOffset = 0;
                 responses.forEach(response => {
@@ -1214,7 +1422,6 @@
                             })
                             .on('mouseout', hideTooltip);
 
-                        // Add percentage label if > 5%
                         if (pct > 8) {
                             svg.append('text')
                                 .attr('x', x(xOffset + pct / 2))
@@ -1232,7 +1439,6 @@
                 });
             });
 
-            // Legend
             const legend = container.append('div')
                 .attr('class', 'legend');
 
@@ -1241,6 +1447,15 @@
                     .attr('class', 'legend-item')
                     .html(`<div class="legend-color" style="background: ${colors.likert[r]}"></div><span>${r}</span>`);
             });
+
+            // Insight
+            const bestMetric = data.reduce((best, d) => (d.percentages['Agree'] || 0) > (best.percentages['Agree'] || 0) ? d : best, data[0]);
+            const worstMetric = data.reduce((worst, d) => (d.percentages['Agree'] || 0) < (worst.percentages['Agree'] || 0) ? d : worst, data[0]);
+            let insightText = `<strong>${bestMetric.question}</strong> had the highest full agreement at ${(bestMetric.percentages['Agree'] || 0).toFixed(0)}%.`;
+            if (bestMetric.question !== worstMetric.question) {
+                insightText += ` <strong>${worstMetric.question}</strong> had the lowest at ${(worstMetric.percentages['Agree'] || 0).toFixed(0)}%.`;
+            }
+            d3.select('#insight-likert').html(insightText);
         }
 
         function renderComments() {
