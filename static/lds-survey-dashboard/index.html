@@ -392,7 +392,7 @@
                 <div class="chart-container" id="department-chart"></div>
             </div>
             <div class="section">
-                <h2 class="section-title">NPS Score Distribution</h2>
+                <h2 class="section-title" id="nps-title">NPS Score Distribution</h2>
                 <div class="chart-container" id="nps-distribution"></div>
             </div>
         </div>
@@ -635,6 +635,10 @@
             departments.forEach(d => {
                 deptFilter.append('option').attr('value', d).text(d);
             });
+
+            // Re-attach filter listeners (needed after upload)
+            sessionFilter.on('change', updateFilters);
+            deptFilter.on('change', updateFilters);
         }
 
         // Load and process data
@@ -782,13 +786,16 @@
                 };
             });
 
-            const margin = {top: 40, right: 120, bottom: 120, left: 60};
+            const longestLabel = Math.max(...sessions.map(s => s.length));
+            const bottomMargin = Math.min(200, Math.max(120, longestLabel * 4.5));
+            const margin = {top: 40, right: 120, bottom: bottomMargin, left: 60};
             const width = 900 - margin.left - margin.right;
             const height = 400 - margin.top - margin.bottom;
 
             const svg = container.append('svg')
                 .attr('width', width + margin.left + margin.right)
                 .attr('height', height + margin.top + margin.bottom)
+                .style('overflow', 'visible')
                 .append('g')
                 .attr('transform', `translate(${margin.left},${margin.top})`);
 
@@ -982,11 +989,14 @@
             const container = d3.select('#nps-distribution');
             container.html('');
 
+            // Update title with count
+            d3.select('#nps-title').text(`NPS Score Distribution (n=${filteredData.length})`);
+
             // Prepare data for both scores
             const scores = [];
             for (let i = 0; i <= 10; i++) {
-                const trainingCount = filteredData.filter(d => d.trainingScore === i).length;
-                const facilitatorCount = filteredData.filter(d => d.facilitatorScore === i).length;
+                const trainingCount = filteredData.filter(d => Math.round(d.trainingScore) === i).length;
+                const facilitatorCount = filteredData.filter(d => Math.round(d.facilitatorScore) === i).length;
                 scores.push({
                     score: i,
                     training: trainingCount,

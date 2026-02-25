@@ -16,3 +16,8 @@
 *.swp
 *.swo
 *~
+
+# Generated outputs (analysis results, reports)
+outputs/
+*.pyc
+__pycache__/
