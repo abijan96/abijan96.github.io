@@ -747,8 +747,8 @@
                 contentRelevance: d.Q3_1,
                 durationAppropriate: d.Q3_2,
                 futureUsability: d.Q3_3,
-                trainingScore: +d.Q4_1_numeric,
-                facilitatorScore: +d.Q5_1_numeric,
+                trainingScore: d.Q4_1_numeric ? +d.Q4_1_numeric : NaN,
+                facilitatorScore: d.Q5_1_numeric ? +d.Q5_1_numeric : NaN,
                 trainingCategory: d.Q4_1_category,
                 facilitatorCategory: d.Q5_1_category,
                 comment: d.Q17
@@ -1223,7 +1223,8 @@
             const container = d3.select('#nps-distribution');
             container.html('');
 
-            d3.select('#nps-title').text(`NPS Score Distribution (n=${filteredData.length})`);
+            const validCount = filteredData.filter(d => !isNaN(d.trainingScore)).length;
+            d3.select('#nps-title').text(`NPS Score Distribution (n=${validCount})`);
 
             const scores = [];
             for (let i = 0; i <= 10; i++) {
