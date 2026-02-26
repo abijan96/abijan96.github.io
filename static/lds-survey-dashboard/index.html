@@ -961,10 +961,26 @@
             });
         }
 
+        // Short label map — preserves exact meaning, fits axis
+        function getShortLabel(fullName) {
+            const map = {
+                'Becoming A Strategic Responder - Leverage the Power of Emotional Intelligence - 10/1/25': 'Strategic Responder (EQ) — 10/1',
+                "P2P Lunch 'n Learn - HR Processes - 10/15/25": "P2P: HR Processes — 10/15",
+                'Culture of Candor - 11/4/25': 'Culture of Candor — 11/4',
+                'P2P - Learning for EQi and Culture of Candor. - 12/09/25 (virtual)': 'P2P: EQi & Candor (virtual) — 12/9',
+                'Developing Strategic Leadership Skills - 1/20 p.m. session': 'Strategic Leadership — 1/20 PM',
+                'Self-Leadership & Prioritization - 1/20 a.m. session': 'Self-Leadership & Prioritization — 1/20 AM',
+                'P2P - Developing Strategic Leadership Skills - 2/18 virtual session': 'P2P: Strategic Leadership (virtual) — 2/18',
+                'P2P - Self-Leadership and Prioritization - 2/11 virtual session': 'P2P: Self-Leadership (virtual) — 2/11'
+            };
+            return map[fullName] || (fullName.length > 35 ? fullName.substring(0, 32) + '...' : fullName);
+        }
+
         function renderSessionComparison() {
             const container = d3.select('#session-comparison');
             container.html('');
 
+            // --- data prep (unchanged values) ---
             const sessionData = d3.group(filteredData, d => d.session);
             const sessions = Array.from(sessionData.keys()).sort();
 
@@ -972,9 +988,9 @@
                 const records = sessionData.get(session);
                 const trainingScores = records.map(d => d.trainingScore).filter(s => !isNaN(s));
                 const facilitatorScores = records.map(d => d.facilitatorScore).filter(s => !isNaN(s));
-
                 return {
-                    session: session,
+                    session,
+                    shortLabel: getShortLabel(session),
                     trainingAvg: d3.mean(trainingScores) || 0,
                     facilitatorAvg: d3.mean(facilitatorScores) || 0,
                     trainingNPS: calculateNPS(trainingScores),
@@ -983,86 +999,141 @@
                 };
             });
 
-            const longestLabel = sessions.length > 0 ? Math.max(...sessions.map(s => Math.min(s.length, 35))) : 20;
-            const bottomMargin = Math.min(180, Math.max(100, longestLabel * 4));
-            const margin = {top: 40, right: 120, bottom: bottomMargin, left: 60};
+            // Sort by training avg descending for readability
+            data.sort((a, b) => b.trainingAvg - a.trainingAvg);
+
+            // Find min/max for smart labels
+            const trainingVals = data.map(d => d.trainingAvg);
+            const facilitatorVals = data.map(d => d.facilitatorAvg);
+            const tMax = Math.max(...trainingVals);
+            const tMin = Math.min(...trainingVals);
+            const fMax = Math.max(...facilitatorVals);
+            const fMin = Math.min(...facilitatorVals);
+
+            // --- Legend ABOVE chart ---
+            const legendAbove = container.append('div')
+                .attr('class', 'legend')
+                .style('margin-bottom', '12px')
+                .style('justify-content', 'flex-start');
+
+            legendAbove.append('div')
+                .attr('class', 'legend-item')
+                .html(`<div class="legend-color" style="background: ${colors.blue}"></div><span style="font-size:13px;font-weight:600;">Training rating (avg)</span>`);
+
+            legendAbove.append('div')
+                .attr('class', 'legend-item')
+                .html(`<div class="legend-color" style="background: ${colors.purple}"></div><span style="font-size:13px;font-weight:600;">Facilitator rating (avg)</span>`);
+
+            // --- Dimensions: HORIZONTAL bar chart ---
+            const barHeight = 18;
+            const groupPadding = 16;
+            const groupHeight = barHeight * 2 + 6; // two bars + inner gap
+            const chartHeight = data.length * (groupHeight + groupPadding);
+            const margin = { top: 10, right: 70, bottom: 50, left: 280 };
             const width = 900 - margin.left - margin.right;
-            const height = 400 - margin.top - margin.bottom;
+            const totalHeight = chartHeight + margin.top + margin.bottom;
 
             const svg = container.append('svg')
                 .attr('width', width + margin.left + margin.right)
-                .attr('height', height + margin.top + margin.bottom)
+                .attr('height', totalHeight)
                 .style('overflow', 'visible')
                 .append('g')
                 .attr('transform', `translate(${margin.left},${margin.top})`);
 
-            const x0 = d3.scaleBand()
-                .domain(sessions)
-                .range([0, width])
-                .padding(0.3);
-
-            const x1 = d3.scaleBand()
-                .domain(['training', 'facilitator'])
-                .range([0, x0.bandwidth()])
-                .padding(0.1);
-
-            const y = d3.scaleLinear()
+            // --- Scales ---
+            const x = d3.scaleLinear()
                 .domain([0, 10])
-                .range([height, 0]);
+                .range([0, width]);
 
+            const y0 = d3.scaleBand()
+                .domain(data.map(d => d.shortLabel))
+                .range([0, chartHeight])
+                .padding(0.25);
+
+            // --- Gridlines ---
+            const ticks = [0, 2, 4, 6, 8, 10];
             svg.append('g')
-                .attr('class', 'grid')
                 .selectAll('line')
-                .data(y.ticks(5))
+                .data(ticks)
                 .enter()
                 .append('line')
                 .attr('class', 'gridline')
-                .attr('x1', 0)
-                .attr('x2', width)
-                .attr('y1', d => y(d))
-                .attr('y2', d => y(d));
+                .attr('x1', d => x(d))
+                .attr('x2', d => x(d))
+                .attr('y1', 0)
+                .attr('y2', chartHeight);
 
+            // --- Y axis (session labels, left-aligned) ---
+            const yAxis = svg.append('g')
+                .attr('class', 'axis')
+                .call(d3.axisLeft(y0).tickSize(0).tickPadding(10));
+
+            yAxis.select('.domain').remove();
+
+            yAxis.selectAll('text')
+                .style('font-size', '13px')
+                .style('fill', '#2c3e50')
+                .style('font-weight', '500')
+                .each(function(d) {
+                    // append (n=XX) as lighter text
+                    const item = data.find(dd => dd.shortLabel === d);
+                    if (item) {
+                        d3.select(this).text('');
+                        d3.select(this).append('tspan').text(d);
+                        d3.select(this).append('tspan')
+                            .text(`  (n=${item.count})`)
+                            .style('fill', '#95a5a6')
+                            .style('font-weight', '400')
+                            .style('font-size', '11px');
+                    }
+                });
+
+            // --- X axis (score 0-10) ---
             svg.append('g')
                 .attr('class', 'axis')
-                .attr('transform', `translate(0,${height})`)
-                .call(d3.axisBottom(x0).tickFormat(d => d.length > 35 ? d.substring(0, 35) + '...' : d))
+                .attr('transform', `translate(0,${chartHeight})`)
+                .call(d3.axisBottom(x).tickValues(ticks).tickSize(-chartHeight))
                 .selectAll('text')
-                .attr('transform', 'rotate(-30)')
-                .style('text-anchor', 'end')
-                .attr('dx', '-0.5em')
-                .attr('dy', '0.5em')
-                .style('font-size', '11px');
+                .style('font-size', '13px');
 
-            svg.append('g')
-                .attr('class', 'axis')
-                .call(d3.axisLeft(y));
+            svg.selectAll('.axis .tick line')
+                .attr('stroke', '#e8ecef')
+                .attr('stroke-dasharray', '3,3');
 
+            svg.select('.axis .domain').attr('stroke', '#d0d7de');
+
+            // X-axis label
             svg.append('text')
-                .attr('transform', 'rotate(-90)')
-                .attr('y', -45)
-                .attr('x', -height / 2)
+                .attr('x', width / 2)
+                .attr('y', chartHeight + 40)
                 .attr('text-anchor', 'middle')
-                .style('font-size', '12px')
+                .style('font-size', '13px')
                 .style('fill', '#5a6c7d')
-                .text('Average Score (0-10)');
+                .style('font-weight', '600')
+                .text('Average Score (0 – 10)');
 
-            const sessionGroups = svg.selectAll('.session-group')
+            // --- Bars + labels ---
+            const groups = svg.selectAll('.session-group')
                 .data(data)
                 .enter()
                 .append('g')
-                .attr('transform', d => `translate(${x0(d.session)},0)`);
+                .attr('transform', d => `translate(0,${y0(d.shortLabel)})`);
 
-            sessionGroups.append('rect')
+            const halfBand = y0.bandwidth() / 2;
+
+            // Training bars
+            groups.append('rect')
                 .attr('class', 'bar')
-                .attr('x', x1('training'))
-                .attr('y', d => y(d.trainingAvg))
-                .attr('width', x1.bandwidth())
-                .attr('height', d => height - y(d.trainingAvg))
+                .attr('x', 0)
+                .attr('y', 0)
+                .attr('width', d => x(d.trainingAvg))
+                .attr('height', barHeight)
+                .attr('rx', 3)
                 .attr('fill', colors.blue)
                 .on('mouseover', function(event, d) {
                     showTooltip(event, `
-                        <strong>Training Recommendation</strong><br/>
-                        Session: ${d.session}<br/>
+                        <strong>Training Rating</strong><br/>
+                        ${d.session}<br/>
                         Avg Score: ${d.trainingAvg.toFixed(2)}/10<br/>
                         NPS: ${d.trainingNPS.toFixed(1)}<br/>
                         Responses: ${d.count}
@@ -1070,26 +1141,19 @@
                 })
                 .on('mouseout', hideTooltip);
 
-            sessionGroups.append('text')
-                .attr('x', x1('training') + x1.bandwidth() / 2)
-                .attr('y', d => y(d.trainingAvg) - 5)
-                .attr('text-anchor', 'middle')
-                .attr('font-size', '12px')
-                .attr('font-weight', 'bold')
-                .attr('fill', colors.blue)
-                .text(d => d.trainingAvg.toFixed(1));
-
-            sessionGroups.append('rect')
+            // Facilitator bars
+            groups.append('rect')
                 .attr('class', 'bar')
-                .attr('x', x1('facilitator'))
-                .attr('y', d => y(d.facilitatorAvg))
-                .attr('width', x1.bandwidth())
-                .attr('height', d => height - y(d.facilitatorAvg))
+                .attr('x', 0)
+                .attr('y', barHeight + 4)
+                .attr('width', d => x(d.facilitatorAvg))
+                .attr('height', barHeight)
+                .attr('rx', 3)
                 .attr('fill', colors.purple)
                 .on('mouseover', function(event, d) {
                     showTooltip(event, `
-                        <strong>Facilitator Recommendation</strong><br/>
-                        Session: ${d.session}<br/>
+                        <strong>Facilitator Rating</strong><br/>
+                        ${d.session}<br/>
                         Avg Score: ${d.facilitatorAvg.toFixed(2)}/10<br/>
                         NPS: ${d.facilitatorNPS.toFixed(1)}<br/>
                         Responses: ${d.count}
@@ -1097,36 +1161,32 @@
                 })
                 .on('mouseout', hideTooltip);
 
-            sessionGroups.append('text')
-                .attr('x', x1('facilitator') + x1.bandwidth() / 2)
-                .attr('y', d => y(d.facilitatorAvg) - 5)
-                .attr('text-anchor', 'middle')
+            // --- Smart value labels (1 decimal, dark text, outside bar end) ---
+            groups.append('text')
+                .attr('x', d => x(d.trainingAvg) + 6)
+                .attr('y', barHeight / 2)
+                .attr('dominant-baseline', 'middle')
                 .attr('font-size', '12px')
-                .attr('font-weight', 'bold')
-                .attr('fill', colors.purple)
+                .attr('font-weight', d => (d.trainingAvg === tMax || d.trainingAvg === tMin) ? '700' : '600')
+                .attr('fill', d => (d.trainingAvg === tMax) ? '#155724' : (d.trainingAvg === tMin) ? '#721c24' : '#2c3e50')
+                .text(d => d.trainingAvg.toFixed(1));
+
+            groups.append('text')
+                .attr('x', d => x(d.facilitatorAvg) + 6)
+                .attr('y', barHeight + 4 + barHeight / 2)
+                .attr('dominant-baseline', 'middle')
+                .attr('font-size', '12px')
+                .attr('font-weight', d => (d.facilitatorAvg === fMax || d.facilitatorAvg === fMin) ? '700' : '600')
+                .attr('fill', d => (d.facilitatorAvg === fMax) ? '#155724' : (d.facilitatorAvg === fMin) ? '#721c24' : '#2c3e50')
                 .text(d => d.facilitatorAvg.toFixed(1));
 
-            const legend = container.append('div')
-                .attr('class', 'legend');
-
-            legend.append('div')
-                .attr('class', 'legend-item')
-                .html(`<div class="legend-color" style="background: ${colors.blue}"></div><span>Training Recommendation</span>`);
-
-            legend.append('div')
-                .attr('class', 'legend-item')
-                .html(`<div class="legend-color" style="background: ${colors.purple}"></div><span>Facilitator Recommendation</span>`);
-
-            // Insight
+            // --- Insight ---
             if (data.length > 0) {
-                data.sort((a, b) => b.trainingAvg - a.trainingAvg);
-                const best = data[0];
+                const best = data[0]; // already sorted desc
                 const worst = data[data.length - 1];
-                const bestShort = best.session.length > 45 ? best.session.substring(0, 45) + '...' : best.session;
-                let insightText = `<strong>Highest rated:</strong> ${bestShort} (${best.trainingAvg.toFixed(1)} avg training, ${best.facilitatorAvg.toFixed(1)} avg facilitator, n=${best.count}).`;
+                let insightText = `<strong>Highest rated:</strong> ${best.shortLabel} (${best.trainingAvg.toFixed(1)} training, ${best.facilitatorAvg.toFixed(1)} facilitator, n=${best.count}).`;
                 if (data.length > 1) {
-                    const worstShort = worst.session.length > 45 ? worst.session.substring(0, 45) + '...' : worst.session;
-                    insightText += ` <strong>Lowest rated:</strong> ${worstShort} (${worst.trainingAvg.toFixed(1)} avg training, n=${worst.count}).`;
+                    insightText += ` <strong>Lowest rated:</strong> ${worst.shortLabel} (${worst.trainingAvg.toFixed(1)} training, n=${worst.count}).`;
                 }
                 d3.select('#insight-session').html(insightText);
             }
