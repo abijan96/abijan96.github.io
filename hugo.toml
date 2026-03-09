@@ -4,8 +4,8 @@ title = 'Abhigyan Ghosh'
 theme = 'hugo-noir'
 
 # URL handling
-relativeURLs = true
-canonifyURLs = true
+relativeURLs = false
+uglyURLs = false
 
 # Taxonomy configuration
 [taxonomies]
