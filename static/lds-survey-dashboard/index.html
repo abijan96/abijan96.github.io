@@ -502,6 +502,12 @@
             <div class="chart-insight" id="insight-likert"></div>
         </div>
 
+        <!-- Department Insights: MCoB vs NDR -->
+        <div class="section">
+            <h2 class="section-title">Department Comparison: MCoB vs NDR</h2>
+            <div id="dept-insights-container"></div>
+        </div>
+
         <!-- Comments Section -->
         <div class="section">
             <h2 class="section-title">Participant Comments</h2>
@@ -795,6 +801,7 @@
             renderDepartmentChart();
             renderNPSDistribution();
             renderLikertChart();
+            renderDeptInsights();
             renderComments();
 
             // Update header meta
@@ -918,10 +925,18 @@
             // Overall NPS
             const tLabel = npsLabel(trainingNPS);
             const iconCls = tLabel.cls === 'excellent' ? 'icon-green' : tLabel.cls === 'good' ? 'icon-gold' : 'icon-red';
+            const detractors = trainingScores.filter(s => s <= 6).length;
+            const detractorPct = trainingScores.length > 0 ? ((detractors / trainingScores.length) * 100).toFixed(1) : 0;
+            const promPctExact = trainingScores.length > 0 ? ((promoters / trainingScores.length) * 100).toFixed(1) : 0;
+            const excluded = filteredData.length - trainingScores.length;
             takeaways.push({
                 icon: iconCls,
                 symbol: tLabel.cls === 'excellent' ? '+' : tLabel.cls === 'good' ? '~' : '!',
-                text: `Overall Training NPS is <strong>${trainingNPS.toFixed(0)}</strong> (${tLabel.text}) with an average score of <strong>${avgTraining.toFixed(1)}/10</strong>. ${promoterPct}% of participants are promoters (scored 9-10).`
+                text: `Overall Training NPS is <strong>${trainingNPS.toFixed(1)}</strong> (${tLabel.text}) with an average score of <strong>${avgTraining.toFixed(1)}/10</strong>.` +
+                    `<br/><span style="color:#555;font-size:0.92em;">` +
+                    `<strong>How NPS is calculated:</strong> NPS = % Promoters (9-10) minus % Detractors (0-6). Ranges from -100 to +100. Above 50 = Excellent, 0-49 = Good, below 0 = Needs Improvement.<br/>` +
+                    `${trainingScores.length} valid scores` + (excluded > 0 ? ` (${excluded} empty "No Response" excluded)` : '') +
+                    ` | ${promoters} Promoters = ${promPctExact}% | ${detractors} Detractors = ${detractorPct}% | NPS = ${promPctExact}% - ${detractorPct}% = <strong>${trainingNPS.toFixed(1)}</strong></span>`
             });
 
             // Best session
@@ -951,6 +966,28 @@
                     icon: 'icon-gold',
                     symbol: '"',
                     text: `<strong>${commentsCount}</strong> participant${commentsCount !== 1 ? 's' : ''} left written feedback (${((commentsCount / filteredData.length) * 100).toFixed(0)}% comment rate). Review comments below for qualitative insights.`
+                });
+            }
+
+            // Department comparison
+            const depts = ['MCoB', 'NDR'];
+            const deptRecords = depts.map(dept => {
+                const records = filteredData.filter(d => d.department === dept);
+                const tScores = records.map(d => d.trainingScore).filter(s => !isNaN(s));
+                const fScores = records.map(d => d.facilitatorScore).filter(s => !isNaN(s));
+                return { dept, n: records.length, tNPS: calculateNPS(tScores), fNPS: calculateNPS(fScores) };
+            }).filter(d => d.n > 0);
+
+            if (deptRecords.length === 2) {
+                const mcob = deptRecords.find(d => d.dept === 'MCoB');
+                const ndr = deptRecords.find(d => d.dept === 'NDR');
+                const tHigher = ndr.tNPS > mcob.tNPS ? 'NDR' : 'MCoB';
+                const tLower = tHigher === 'NDR' ? 'MCoB' : 'NDR';
+                const fHigher = ndr.fNPS > mcob.fNPS ? 'NDR' : 'MCoB';
+                takeaways.push({
+                    icon: 'icon-blue',
+                    symbol: '%',
+                    text: `<strong>Department Comparison:</strong> Both NDR and MCoB view the program positively. ${tHigher} participants are more likely to recommend the training overall, while ${fHigher} gave facilitators especially high marks. See the Department Comparison section below for a full breakdown.`
                 });
             }
 
@@ -1404,6 +1441,7 @@
             const passives = trainingScores.filter(s => s >= 7 && s <= 8).length;
             const detractors = trainingScores.filter(s => s <= 6).length;
             const total = trainingScores.length || 1;
+            const nps = calculateNPS(trainingScores);
             d3.select('#insight-nps').html(
                 `<strong>Training scores:</strong> ${((promoters/total)*100).toFixed(0)}% Promoters (9-10), ` +
                 `${((passives/total)*100).toFixed(0)}% Passives (7-8), ` +
@@ -1517,6 +1555,136 @@
                 insightText += ` <strong>${worstMetric.question}</strong> had the lowest at ${(worstMetric.percentages['Agree'] || 0).toFixed(0)}%.`;
             }
             d3.select('#insight-likert').html(insightText);
+        }
+
+        function renderDeptInsights() {
+            const container = d3.select('#dept-insights-container');
+            container.html('');
+
+            const depts = ['MCoB', 'NDR'];
+            const deptData = depts.map(dept => {
+                const records = filteredData.filter(d => d.department === dept);
+                const tScores = records.map(d => d.trainingScore).filter(s => !isNaN(s));
+                const fScores = records.map(d => d.facilitatorScore).filter(s => !isNaN(s));
+                const comments = records.filter(d => d.comment && d.comment !== 'NaN').length;
+                const agreeCount = records.filter(d => d.contentRelevance === 'Agree').length;
+                return {
+                    dept,
+                    n: records.length,
+                    tAvg: tScores.length ? d3.mean(tScores) : 0,
+                    fAvg: fScores.length ? d3.mean(fScores) : 0,
+                    tNPS: calculateNPS(tScores),
+                    fNPS: calculateNPS(fScores),
+                    comments,
+                    commentRate: records.length > 0 ? (comments / records.length * 100) : 0,
+                    agreePct: records.length > 0 ? (agreeCount / records.length * 100) : 0,
+                    tPromoters: tScores.filter(s => s >= 9).length,
+                    tDetractors: tScores.filter(s => s <= 6).length,
+                    tTotal: tScores.length
+                };
+            });
+
+            if (deptData.every(d => d.n === 0)) {
+                container.append('p')
+                    .style('color', '#7f8c8d')
+                    .style('font-style', 'italic')
+                    .text('No department data available for the selected filters.');
+                return;
+            }
+
+            // Comparison table
+            const tableWrap = container.append('div')
+                .style('overflow-x', 'auto');
+
+            const table = tableWrap.append('table')
+                .attr('class', 'comment-table')
+                .style('margin-bottom', '20px');
+
+            const thead = table.append('thead');
+            thead.append('tr').selectAll('th')
+                .data(['Metric', ...depts.map(d => `${d} (n=${deptData.find(dd => dd.dept === d).n})`)])
+                .enter().append('th').text(d => d);
+
+            const tbody = table.append('tbody');
+            const metrics = [
+                { label: 'Training Avg Score', key: 'tAvg', fmt: v => v.toFixed(1) + '/10' },
+                { label: 'Facilitator Avg Score', key: 'fAvg', fmt: v => v.toFixed(1) + '/10' },
+                { label: 'Training NPS', key: 'tNPS', fmt: v => v.toFixed(1) },
+                { label: 'Facilitator NPS', key: 'fNPS', fmt: v => v.toFixed(1) },
+                { label: 'Content Relevance (Agree)', key: 'agreePct', fmt: v => v.toFixed(0) + '%' },
+                { label: 'Comment Rate', key: 'commentRate', fmt: v => v.toFixed(0) + '%' },
+            ];
+
+            metrics.forEach(m => {
+                const row = tbody.append('tr');
+                row.append('td').style('font-weight', '600').text(m.label);
+                deptData.forEach(d => {
+                    const val = d[m.key];
+                    const cell = row.append('td').text(m.fmt(val));
+                    // Highlight the higher value in green
+                    const otherVal = deptData.find(dd => dd.dept !== d.dept)[m.key];
+                    if (val > otherVal + 0.5) {
+                        cell.style('color', '#28a745').style('font-weight', '600');
+                    }
+                });
+            });
+
+            // Key insights
+            const insightsDiv = container.append('div')
+                .attr('class', 'chart-insight')
+                .style('margin-top', '10px');
+
+            const mcob = deptData.find(d => d.dept === 'MCoB');
+            const ndr = deptData.find(d => d.dept === 'NDR');
+
+            const insights = [];
+
+            if (mcob.n > 0 && ndr.n > 0) {
+                // Participation
+                const ndrPct = ((ndr.n / filteredData.length) * 100).toFixed(0);
+                const mcobPct = ((mcob.n / filteredData.length) * 100).toFixed(0);
+                insights.push(`<strong>Participation:</strong> NDR made up the majority of respondents (${ndrPct}%), while MCoB accounted for ${mcobPct}%. This difference in sample size is worth considering when comparing results between the two groups.`);
+
+                // Training satisfaction
+                const tHigher = ndr.tNPS > mcob.tNPS ? 'NDR' : 'MCoB';
+                const tLower = tHigher === 'NDR' ? 'MCoB' : 'NDR';
+                const tHigherData = deptData.find(d => d.dept === tHigher);
+                const tLowerData = deptData.find(d => d.dept === tLower);
+                if (Math.abs(ndr.tNPS - mcob.tNPS) > 3) {
+                    insights.push(`<strong>Training Satisfaction:</strong> ${tHigher} participants were more likely to recommend the training to colleagues than ${tLower} participants. Both groups rated training positively overall, but ${tLower} had a slightly higher share of participants who felt the training didn't fully meet their needs.`);
+                } else {
+                    insights.push(`<strong>Training Satisfaction:</strong> Both departments rated training similarly, indicating the sessions resonated well across the board.`);
+                }
+
+                // Facilitator experience
+                const fHigher = ndr.fNPS > mcob.fNPS ? 'NDR' : 'MCoB';
+                const fLower = fHigher === 'NDR' ? 'MCoB' : 'NDR';
+                if (Math.abs(ndr.fNPS - mcob.fNPS) > 3) {
+                    insights.push(`<strong>Facilitator Experience:</strong> ${fHigher} gave facilitators especially high marks -- a strong majority would recommend them. ${fLower} also rated facilitators well, but there is room to explore what made the experience stand out more for ${fHigher} participants.`);
+                } else {
+                    insights.push(`<strong>Facilitator Experience:</strong> Both departments gave facilitators strong ratings, suggesting the facilitation style works well for all participants.`);
+                }
+
+                // Content relevance
+                const agreeDiff = Math.abs(ndr.agreePct - mcob.agreePct);
+                if (agreeDiff > 5) {
+                    const aHigher = ndr.agreePct > mcob.agreePct ? 'NDR' : 'MCoB';
+                    const aLower = aHigher === 'NDR' ? 'MCoB' : 'NDR';
+                    insights.push(`<strong>Content Relevance:</strong> A higher proportion of ${aHigher} participants felt the training content was directly relevant to their work. This suggests an opportunity to tailor future sessions to better address ${aLower}-specific challenges and use cases.`);
+                } else {
+                    insights.push(`<strong>Content Relevance:</strong> Both departments found the training content relevant to their work at similar rates, indicating strong alignment between the curriculum and day-to-day needs across the organization.`);
+                }
+
+                // Overall takeaway
+                const ndrStronger = (ndr.tNPS > mcob.tNPS ? 1 : 0) + (ndr.fNPS > mcob.fNPS ? 1 : 0) + (ndr.agreePct > mcob.agreePct ? 1 : 0);
+                if (ndrStronger >= 2) {
+                    insights.push(`<strong>Bottom Line:</strong> Both departments view the LDS program positively. NDR edges ahead on most satisfaction measures, while MCoB stands out for particularly strong facilitator ratings. This indicates the program is effective across departments, with opportunities to fine-tune content for MCoB's specific context.`);
+                } else {
+                    insights.push(`<strong>Bottom Line:</strong> Both departments view the LDS program positively. MCoB edges ahead on most satisfaction measures. The strong facilitator ratings across both groups suggest the program's delivery is a clear strength.`);
+                }
+            }
+
+            insightsDiv.html(insights.map(i => `<div style="margin-bottom:8px;">${i}</div>`).join(''));
         }
 
         function renderComments() {
