@@ -398,8 +398,9 @@ const Q3_LABELS = {
 // ═══════════════════════════════════════════════════════════
 d3.csv('lds_final_survey.csv').then(raw => {
 
-    // All rows where Q1 is answered
-    const all = raw.filter(d => d.Q1 === 'NDR' || d.Q1 === 'MCoB');
+    // Exclude blank submissions — keep only rows where at least Q4_1 was answered
+    // (3 rows had Q1 answered but left every question blank; Progress 0–20%)
+    const all = raw.filter(d => (d.Q1 === 'NDR' || d.Q1 === 'MCoB') && d.Q4_1 && d.Q4_1.trim() !== '');
 
     // ── Q4 NPS — filter out empty strings (empty → +'' = 0 in JS, causing false detractors) ──
     const q4vals = all.filter(d => d.Q4_1 && d.Q4_1.trim() !== '').map(d => +d.Q4_1).filter(v => !isNaN(v) && v >= 0 && v <= 10);
@@ -808,7 +809,7 @@ function renderQ4Insight(promoters, detractors, total) {
 // ═══════════════════════════════════════════════════════════
 function renderDeptTakeaways(ndr, mcob) {
     document.getElementById('dept-takeaways').innerHTML = `
-        <div style="font-weight:700;color:#0C2340;margin-bottom:10px;font-size:0.95em;">&#128270; Key Takeaways</div>
+        <div style="font-weight:700;color:#0C2340;margin-bottom:10px;font-size:0.95em;">Key Takeaways</div>
         <div style="display:flex;gap:8px;margin-bottom:8px;align-items:flex-start">
             <span style="color:#1565C0;font-weight:700;font-size:1.1em;flex-shrink:0">1.</span>
             <span><strong>NDR participants showed stronger recommendation intent</strong> (NPS +${ndr.nps.toFixed(1)} vs +${mcob.nps.toFixed(1)}) and higher overall agreement across program outcome questions (${Math.round(ndr.posRate)}% vs ${Math.round(mcob.posRate)}%), suggesting the content and format resonated more strongly in the NDR context.</span>
