@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LDS Final Survey — March 2026</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f7fa;
+            color: #2c3e50;
+            line-height: 1.6;
+        }
+
+        .dashboard-container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+
+        /* ── Header ── */
+        header {
+            background: linear-gradient(135deg, #0C2340 0%, #1a3a5c 50%, #0C2340 100%);
+            color: white;
+            padding: 30px 35px 25px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 15px rgba(12,35,64,0.3);
+        }
+
+        .view-tabs {
+            display: inline-flex;
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+            padding: 4px;
+            margin-bottom: 18px;
+            gap: 4px;
+        }
+
+        .view-tab {
+            padding: 7px 18px;
+            border-radius: 6px;
+            font-size: 0.88em;
+            font-weight: 600;
+            text-decoration: none;
+            color: rgba(255,255,255,0.65);
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+            background: transparent;
+        }
+
+        .view-tab:hover { color: white; background: rgba(255,255,255,0.12); }
+        .view-tab.active { background: #C99700; color: white; }
+
+        header h1 { font-size: 1.9em; font-weight: 700; margin-bottom: 4px; }
+        header .subtitle { font-size: 1.05em; opacity: 0.85; }
+        header .header-meta { font-size: 0.82em; opacity: 0.6; margin-top: 3px; }
+
+        /* ── KPI Row ── */
+        .kpi-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .kpi-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px 18px 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+            border-top: 4px solid #0C2340;
+            position: relative;
+        }
+
+        .kpi-card.gold  { border-top-color: #C99700; }
+        .kpi-card.green { border-top-color: #2E7D32; }
+        .kpi-card.blue  { border-top-color: #1565C0; }
+
+        .kpi-value {
+            font-size: 2.6em;
+            font-weight: 800;
+            line-height: 1;
+            margin-bottom: 4px;
+            color: #0C2340;
+        }
+        .kpi-card.gold  .kpi-value { color: #C99700; }
+        .kpi-card.green .kpi-value { color: #2E7D32; }
+        .kpi-card.blue  .kpi-value { color: #1565C0; }
+
+        .kpi-label { font-size: 0.9em; font-weight: 600; color: #555; margin-bottom: 3px; }
+        .kpi-sub   { font-size: 0.78em; color: #888; }
+
+        /* ── Section cards ── */
+        .section-card {
+            background: white;
+            border-radius: 10px;
+            padding: 28px 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+        }
+
+        .section-header { margin-bottom: 22px; }
+        .section-header h2 { font-size: 1.2em; font-weight: 700; color: #0C2340; margin-bottom: 4px; }
+        .section-desc { font-size: 0.87em; color: #6B7A8D; }
+
+        .section-two-col {
+            display: grid;
+            grid-template-columns: 1fr 1.4fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        /* ── Charts ── */
+        .chart-wrap { overflow-x: auto; }
+
+        /* ── NPS display ── */
+        .nps-display {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 200px;
+        }
+
+        .nps-score {
+            font-size: 4.5em;
+            font-weight: 900;
+            color: #2E7D32;
+            line-height: 1;
+        }
+
+        .nps-label { font-size: 0.9em; color: #555; margin-top: 4px; margin-bottom: 20px; }
+
+        .nps-buckets {
+            display: flex;
+            gap: 20px;
+            text-align: center;
+        }
+
+        .nps-bucket .bucket-val {
+            font-size: 1.5em;
+            font-weight: 700;
+            display: block;
+        }
+
+        .nps-bucket .bucket-lbl {
+            font-size: 0.76em;
+            color: #777;
+        }
+
+        .bucket-promo { color: #2E7D32; }
+        .bucket-pass  { color: #E65100; }
+        .bucket-det   { color: #C62828; }
+
+        /* ── Legend ── */
+        .chart-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin-top: 14px;
+            font-size: 0.82em;
+        }
+
+        .legend-item { display: flex; align-items: center; gap: 6px; color: #444; }
+        .legend-swatch { width: 14px; height: 14px; border-radius: 3px; flex-shrink: 0; }
+
+        /* ── Dept comparison ── */
+        .dept-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .dept-card {
+            border-radius: 8px;
+            padding: 20px;
+            border: 1.5px solid #DDE3EA;
+        }
+
+        .dept-card-header {
+            font-size: 1.15em;
+            font-weight: 700;
+            margin-bottom: 14px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid;
+        }
+
+        .dept-card.ndr .dept-card-header { color: #1565C0; border-color: #1565C0; }
+        .dept-card.mcob .dept-card-header { color: #C99700; border-color: #C99700; }
+
+        .dept-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #F0F2F5;
+            font-size: 0.9em;
+        }
+
+        .dept-row:last-child { border-bottom: none; }
+        .dept-row-label { color: #555; }
+        .dept-row-value { font-weight: 700; font-size: 1.05em; color: #0C2340; }
+
+        /* ── Quotes ── */
+        .quote-tabs { display: flex; gap: 10px; margin-bottom: 18px; }
+
+        .quote-tab-btn {
+            padding: 7px 20px;
+            border-radius: 20px;
+            border: 2px solid #DDE3EA;
+            background: white;
+            font-size: 0.88em;
+            font-weight: 600;
+            cursor: pointer;
+            color: #555;
+            transition: all 0.2s;
+        }
+
+        .quote-tab-btn.active {
+            background: #0C2340;
+            color: white;
+            border-color: #0C2340;
+        }
+
+        .quotes-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .quote-card {
+            background: #F8F9FB;
+            border-radius: 8px;
+            padding: 16px 18px;
+            border-left: 4px solid #C99700;
+            position: relative;
+        }
+
+        .quote-mark {
+            font-size: 2.2em;
+            color: #C99700;
+            line-height: 0.8;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .quote-text {
+            font-size: 0.88em;
+            color: #2c3e50;
+            font-style: italic;
+            line-height: 1.55;
+            margin-bottom: 8px;
+        }
+
+        .quote-meta { font-size: 0.76em; color: #888; font-weight: 600; }
+
+        /* ── Footer ── */
+        footer {
+            text-align: center;
+            padding: 28px;
+            color: #aaa;
+            font-size: 0.8em;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 900px) {
+            .kpi-row { grid-template-columns: repeat(2, 1fr); }
+            .section-two-col { grid-template-columns: 1fr; }
+            .dept-grid { grid-template-columns: 1fr; }
+            .quotes-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+<div class="dashboard-container">
+
+    <!-- ── Header ── -->
+    <header>
+        <div class="view-tabs">
+            <a href="index.html" class="view-tab">Ongoing Survey</a>
+            <a href="final-survey.html" class="view-tab active">Final Survey</a>
+        </div>
+        <h1>LDS Final Survey</h1>
+        <p class="subtitle">Leadership Development Series — End-of-Program Evaluation · March 2026</p>
+        <p class="header-meta">Notre Dame Research &amp; Mendoza College of Business · Confidential</p>
+    </header>
+
+    <!-- ── KPI Row ── -->
+    <div class="kpi-row" id="kpi-row"></div>
+
+    <!-- ── Program Outcomes (Q2) ── -->
+    <div class="section-card">
+        <div class="section-header">
+            <h2>Program Outcomes</h2>
+            <p class="section-desc">How strongly participants agreed with key outcome statements at end of series</p>
+        </div>
+        <div class="chart-wrap" id="q2-chart"></div>
+        <div class="chart-legend" id="q2-legend"></div>
+    </div>
+
+    <!-- ── Session Impact (Q3) ── -->
+    <div class="section-card">
+        <div class="section-header">
+            <h2>Session Impact Ratings</h2>
+            <p class="section-desc">% who agreed or strongly agreed that each session strengthened their leadership effectiveness (of those who attended)</p>
+        </div>
+        <div class="chart-wrap" id="q3-chart"></div>
+    </div>
+
+    <!-- ── Recommendation Score + Distribution ── -->
+    <div class="section-two-col">
+        <div class="section-card" style="margin-bottom:0">
+            <div class="section-header">
+                <h2>Recommendation Score</h2>
+                <p class="section-desc">Likelihood to recommend the LDS to a colleague (0–10)</p>
+            </div>
+            <div class="nps-display" id="nps-display"></div>
+        </div>
+        <div class="section-card" style="margin-bottom:0">
+            <div class="section-header">
+                <h2>Score Distribution</h2>
+                <p class="section-desc">Green = Recommend (9–10) · Amber = Neutral (7–8) · Red = Would not (0–6)</p>
+            </div>
+            <div class="chart-wrap" id="q4-chart"></div>
+        </div>
+    </div>
+
+    <!-- ── spacer ── -->
+    <div style="height:20px"></div>
+
+    <!-- ── Dept Comparison ── -->
+    <div class="section-card">
+        <div class="section-header">
+            <h2>NDR vs. MCoB — Key Metrics</h2>
+            <p class="section-desc">Final survey results broken down by department</p>
+        </div>
+        <div class="dept-grid" id="dept-comparison"></div>
+    </div>
+
+    <!-- ── Quotes ── -->
+    <div class="section-card">
+        <div class="section-header">
+            <h2>What Participants Said</h2>
+            <p class="section-desc">Selected open-ended responses — verbatim</p>
+        </div>
+        <div class="quote-tabs">
+            <button class="quote-tab-btn active" onclick="showQuotes('applied')">Applied Learning</button>
+            <button class="quote-tab-btn" onclick="showQuotes('suggestions')">Suggested Improvements</button>
+            <button class="quote-tab-btn" onclick="showQuotes('other')">Other Feedback</button>
+        </div>
+        <div id="quotes-applied"  class="quotes-grid"></div>
+        <div id="quotes-suggestions" class="quotes-grid" style="display:none"></div>
+        <div id="quotes-other"    class="quotes-grid" style="display:none"></div>
+    </div>
+
+    <footer>Notre Dame Research &nbsp;·&nbsp; Leadership Development Series Final Survey &nbsp;·&nbsp; March 2026</footer>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// CONSTANTS
+// ═══════════════════════════════════════════════════════════
+const LIKERT_ORDER  = ['Strongly agree','Agree','Neither agree nor disagree','Disagree','Strongly disagree'];
+const LIKERT_COLORS = {
+    'Strongly agree':             '#2E7D32',
+    'Agree':                      '#66BB6A',
+    'Neither agree nor disagree': '#FFC107',
+    'Disagree':                   '#EF6C00',
+    'Strongly disagree':          '#C62828'
+};
+
+const Q2_FIELDS = ['Q2_1','Q2_2','Q2_3','Q2_4'];
+const Q2_LABELS = {
+    Q2_1: 'Cross-unit partnership was beneficial',
+    Q2_2: 'Confident applying tools to daily leadership',
+    Q2_3: 'Peer-to-Peer sessions were valuable',
+    Q2_4: 'Training provided new insights applicable to my work'
+};
+
+const Q3_FIELDS = ['Q3_1','Q3_2','Q3_3','Q3_4','Q3_5','Q3_6'];
+const Q3_LABELS = {
+    Q3_1: 'EQi — Becoming a Strategic Responder',
+    Q3_2: 'Creating a Culture of Candor',
+    Q3_3: 'Self-Leadership and Prioritization',
+    Q3_4: 'Shifting Gears: Strategic Leadership Skills',
+    Q3_5: 'HR Processes',
+    Q3_6: 'Peer-to-Peer Sessions'
+};
+
+// ═══════════════════════════════════════════════════════════
+// DATA LOAD
+// ═══════════════════════════════════════════════════════════
+d3.csv('lds_final_survey.csv').then(raw => {
+
+    // All rows where Q1 is answered
+    const all = raw.filter(d => d.Q1 === 'NDR' || d.Q1 === 'MCoB');
+
+    // ── Q4 NPS ──────────────────────────────────────────────
+    const q4vals = all.map(d => +d.Q4_1).filter(v => !isNaN(v) && v >= 0 && v <= 10);
+    const promoters  = q4vals.filter(v => v >= 9).length;
+    const passives   = q4vals.filter(v => v >= 7 && v <= 8).length;
+    const detractors = q4vals.filter(v => v <= 6).length;
+    const nps        = Math.round((promoters - detractors) / q4vals.length * 100 * 10) / 10;
+    const avgScore   = d3.mean(q4vals);
+
+    // ── Q2 stacked data ──────────────────────────────────────
+    const q2Data = Q2_FIELDS.map(f => {
+        const counts = {}; LIKERT_ORDER.forEach(r => counts[r] = 0);
+        const valid = all.filter(d => LIKERT_ORDER.includes(d[f]));
+        valid.forEach(d => counts[d[f]]++);
+        const n = valid.length;
+        const pcts = {}; LIKERT_ORDER.forEach(r => pcts[r] = n > 0 ? counts[r] / n * 100 : 0);
+        const posPct = ((counts['Strongly agree'] + counts['Agree']) / n * 100);
+        return {key: f, label: Q2_LABELS[f], counts, pcts, n, posPct};
+    });
+
+    // ── Q3 session impact ────────────────────────────────────
+    const q3Data = Q3_FIELDS.map(f => {
+        const attended = all.filter(d => LIKERT_ORDER.includes(d[f]));
+        const counts = {}; LIKERT_ORDER.forEach(r => counts[r] = 0);
+        attended.forEach(d => counts[d[f]]++);
+        const n = attended.length;
+        const pcts = {}; LIKERT_ORDER.forEach(r => pcts[r] = n > 0 ? counts[r] / n * 100 : 0);
+        const posPct = n > 0 ? (counts['Strongly agree'] + counts['Agree']) / n * 100 : 0;
+        const attendPct = all.length > 0 ? n / all.length * 100 : 0;
+        return {key: f, label: Q3_LABELS[f], n, total: all.length, posPct, attendPct, counts, pcts};
+    }).sort((a,b) => b.posPct - a.posPct);
+
+    // ── Dept metrics ─────────────────────────────────────────
+    function deptMetrics(dept) {
+        const d = all.filter(r => r.Q1 === dept);
+        const q4d = d.map(r => +r.Q4_1).filter(v => !isNaN(v) && v >= 0 && v <= 10);
+        const prom = q4d.filter(v => v >= 9).length;
+        const det  = q4d.filter(v => v <= 6).length;
+        const dNPS = q4d.length > 0 ? Math.round((prom - det) / q4d.length * 100 * 10) / 10 : 0;
+        const dAvg = q4d.length > 0 ? d3.mean(q4d) : 0;
+
+        // Overall positive rate across Q2 items
+        let posTotal = 0, posCount = 0;
+        Q2_FIELDS.forEach(f => {
+            d.filter(r => LIKERT_ORDER.includes(r[f])).forEach(r => {
+                posCount++;
+                if (r[f] === 'Strongly agree' || r[f] === 'Agree') posTotal++;
+            });
+        });
+        const posRate = posCount > 0 ? posTotal / posCount * 100 : 0;
+
+        // Top session (highest % positive)
+        let topSession = '', topPct = 0;
+        Q3_FIELDS.forEach(f => {
+            const att = d.filter(r => LIKERT_ORDER.includes(r[f]));
+            const pos = att.filter(r => r[f] === 'Strongly agree' || r[f] === 'Agree').length;
+            const pct = att.length > 0 ? pos / att.length * 100 : 0;
+            if (pct > topPct) { topPct = pct; topSession = Q3_LABELS[f]; }
+        });
+
+        return {n: d.length, nps: dNPS, avg: dAvg, posRate, topSession, topPct};
+    }
+    const ndrStats  = deptMetrics('NDR');
+    const mcobStats = deptMetrics('MCoB');
+
+    // ── RENDER ───────────────────────────────────────────────
+    renderKPIs(all.length, ndrStats, mcobStats, nps, avgScore, q4vals.length);
+    renderStackedBars('q2-chart', 'q2-legend', q2Data);
+    renderQ3Chart(q3Data);
+    renderNPS(nps, promoters, passives, detractors, q4vals.length, avgScore);
+    renderQ4Chart(q4vals);
+    renderDeptComparison(ndrStats, mcobStats);
+    renderQuotes(all);
+
+}).catch(err => {
+    document.body.innerHTML = `<div style="padding:40px;color:red;font-size:1.1em">
+        Error loading data: ${err.message}<br>
+        <small>Ensure lds_final_survey.csv is in the same folder as this file.</small>
+    </div>`;
+});
+
+// ═══════════════════════════════════════════════════════════
+// KPI CARDS
+// ═══════════════════════════════════════════════════════════
+function renderKPIs(total, ndr, mcob, nps, avg, q4n) {
+    const cards = [
+        {cls:'',      val: total,              label: 'Total Responses',            sub: `NDR: ${ndr.n} · MCoB: ${mcob.n}`},
+        {cls:'green', val: `+${nps.toFixed(1)}`, label: 'Recommendation Score (NPS)', sub: `Avg score: ${avg.toFixed(1)} / 10`},
+        {cls:'blue',  val: `${Math.round(ndr.posRate)}%`,  label: 'NDR — Overall Agreement',    sub: `${ndr.n} respondents · NPS ${ndr.nps > 0 ? '+' : ''}${ndr.nps.toFixed(1)}`},
+        {cls:'gold',  val: `${Math.round(mcob.posRate)}%`, label: 'MCoB — Overall Agreement',   sub: `${mcob.n} respondents · NPS ${mcob.nps > 0 ? '+' : ''}${mcob.nps.toFixed(1)}`},
+    ];
+    const row = document.getElementById('kpi-row');
+    row.innerHTML = cards.map(c => `
+        <div class="kpi-card ${c.cls}">
+            <div class="kpi-value">${c.val}</div>
+            <div class="kpi-label">${c.label}</div>
+            <div class="kpi-sub">${c.sub}</div>
+        </div>`).join('');
+}
+
+// ═══════════════════════════════════════════════════════════
+// Q2 STACKED HORIZONTAL BARS
+// ═══════════════════════════════════════════════════════════
+function renderStackedBars(chartId, legendId, items) {
+    const margin = {top: 12, right: 70, bottom: 20, left: 320};
+    const barH = 36, barPad = 14;
+    const containerW = document.getElementById(chartId).offsetWidth || 860;
+    const W = Math.max(containerW - margin.left - margin.right, 300);
+    const H = items.length * (barH + barPad);
+
+    const svg = d3.select(`#${chartId}`)
+        .append('svg')
+        .attr('width', W + margin.left + margin.right)
+        .attr('height', H + margin.top + margin.bottom)
+        .append('g')
+        .attr('transform', `translate(${margin.left},${margin.top})`);
+
+    const x = d3.scaleLinear().domain([0, 100]).range([0, W]);
+
+    items.forEach((item, i) => {
+        const y = i * (barH + barPad);
+        let cumX = 0;
+
+        // Y-axis label
+        svg.append('text')
+            .attr('x', -10).attr('y', y + barH / 2)
+            .attr('text-anchor', 'end').attr('dominant-baseline', 'middle')
+            .attr('font-size', '13px').attr('fill', '#1A2533')
+            .text(item.label);
+
+        // Stacked segments
+        LIKERT_ORDER.forEach(cat => {
+            const pct = item.pcts[cat] || 0;
+            if (pct === 0) return;
+            const bw = x(pct);
+            svg.append('rect')
+                .attr('x', x(cumX)).attr('y', y)
+                .attr('width', bw).attr('height', barH)
+                .attr('fill', LIKERT_COLORS[cat]).attr('rx', 2);
+            if (pct >= 9) {
+                svg.append('text')
+                    .attr('x', x(cumX) + bw / 2).attr('y', y + barH / 2)
+                    .attr('text-anchor', 'middle').attr('dominant-baseline', 'middle')
+                    .attr('fill', 'white').attr('font-size', '11px').attr('font-weight', 'bold')
+                    .text(`${Math.round(pct)}%`);
+            }
+            cumX += pct;
+        });
+
+        // % positive badge at right
+        svg.append('text')
+            .attr('x', W + 8).attr('y', y + barH / 2)
+            .attr('dominant-baseline', 'middle').attr('font-size', '12px')
+            .attr('fill', item.posPct >= 70 ? '#2E7D32' : '#E65100').attr('font-weight', 'bold')
+            .text(`${Math.round(item.posPct)}% ✓`);
+    });
+
+    // Legend
+    const legendEl = document.getElementById(legendId);
+    legendEl.innerHTML = LIKERT_ORDER.map(cat =>
+        `<div class="legend-item">
+            <div class="legend-swatch" style="background:${LIKERT_COLORS[cat]}"></div>
+            <span>${cat}</span>
+        </div>`
+    ).join('');
+}
+
+// ═══════════════════════════════════════════════════════════
+// Q3 SESSION IMPACT BARS
+// ═══════════════════════════════════════════════════════════
+function renderQ3Chart(items) {
+    const margin = {top: 12, right: 120, bottom: 20, left: 300};
+    const barH = 32, barPad = 16;
+    const containerW = document.getElementById('q3-chart').offsetWidth || 860;
+    const W = Math.max(containerW - margin.left - margin.right, 300);
+    const H = items.length * (barH + barPad);
+
+    const svg = d3.select('#q3-chart')
+        .append('svg')
+        .attr('width', W + margin.left + margin.right)
+        .attr('height', H + margin.top + margin.bottom)
+        .append('g')
+        .attr('transform', `translate(${margin.left},${margin.top})`);
+
+    const x = d3.scaleLinear().domain([0, 100]).range([0, W]);
+
+    items.forEach((item, i) => {
+        const y = i * (barH + barPad);
+        const clr = item.posPct >= 80 ? '#2E7D32' : item.posPct >= 60 ? '#C99700' : '#E65100';
+
+        // Background track
+        svg.append('rect')
+            .attr('x', 0).attr('y', y)
+            .attr('width', W).attr('height', barH)
+            .attr('fill', '#F5F7FA').attr('rx', 4);
+
+        // Positive bar
+        svg.append('rect')
+            .attr('x', 0).attr('y', y)
+            .attr('width', x(item.posPct)).attr('height', barH)
+            .attr('fill', clr).attr('rx', 4);
+
+        // % label inside bar
+        if (item.posPct > 15) {
+            svg.append('text')
+                .attr('x', x(item.posPct) / 2).attr('y', y + barH / 2)
+                .attr('text-anchor', 'middle').attr('dominant-baseline', 'middle')
+                .attr('fill', 'white').attr('font-size', '12px').attr('font-weight', 'bold')
+                .text(`${Math.round(item.posPct)}%`);
+        }
+
+        // Session label (left)
+        svg.append('text')
+            .attr('x', -10).attr('y', y + barH / 2)
+            .attr('text-anchor', 'end').attr('dominant-baseline', 'middle')
+            .attr('font-size', '12.5px').attr('fill', '#1A2533')
+            .text(item.label);
+
+        // Attendance note (right)
+        svg.append('text')
+            .attr('x', W + 8).attr('y', y + barH / 2)
+            .attr('dominant-baseline', 'middle').attr('font-size', '11px').attr('fill', '#888')
+            .text(`n=${item.n} of ${item.total}`);
+    });
+
+    // Legend note
+    svg.append('text')
+        .attr('x', 0).attr('y', H + 14)
+        .attr('font-size', '11px').attr('fill', '#888').attr('font-style', 'italic')
+        .text('Bars show % Agree + Strongly Agree · n = attendees / total respondents · sorted by agreement rate');
+}
+
+// ═══════════════════════════════════════════════════════════
+// NPS DISPLAY
+// ═══════════════════════════════════════════════════════════
+function renderNPS(nps, prom, pass, det, total, avg) {
+    const color = nps >= 50 ? '#2E7D32' : nps >= 20 ? '#C99700' : '#E65100';
+    document.getElementById('nps-display').innerHTML = `
+        <div class="nps-display">
+            <div class="nps-score" style="color:${color}">+${nps.toFixed(1)}</div>
+            <div class="nps-label">Net Recommendation Score &nbsp;·&nbsp; Avg: ${avg.toFixed(1)} / 10</div>
+            <div class="nps-buckets">
+                <div class="nps-bucket">
+                    <span class="bucket-val bucket-promo">${prom}</span>
+                    <span class="bucket-lbl">Recommend<br>(9–10)</span>
+                </div>
+                <div class="nps-bucket">
+                    <span class="bucket-val bucket-pass">${pass}</span>
+                    <span class="bucket-lbl">Neutral<br>(7–8)</span>
+                </div>
+                <div class="nps-bucket">
+                    <span class="bucket-val bucket-det">${det}</span>
+                    <span class="bucket-lbl">Would Not<br>(0–6)</span>
+                </div>
+            </div>
+        </div>`;
+}
+
+// ═══════════════════════════════════════════════════════════
+// Q4 SCORE DISTRIBUTION (vertical bars)
+// ═══════════════════════════════════════════════════════════
+function renderQ4Chart(vals) {
+    const counts = {};
+    for (let i = 0; i <= 10; i++) counts[i] = 0;
+    vals.forEach(v => counts[v]++);
+    const data = Object.entries(counts).map(([score, count]) => ({score: +score, count}));
+
+    const margin = {top: 20, right: 20, bottom: 30, left: 30};
+    const containerW = document.getElementById('q4-chart').offsetWidth || 500;
+    const W = Math.max(containerW - margin.left - margin.right, 250);
+    const H = 180;
+
+    const svg = d3.select('#q4-chart')
+        .append('svg')
+        .attr('width', W + margin.left + margin.right)
+        .attr('height', H + margin.top + margin.bottom)
+        .append('g')
+        .attr('transform', `translate(${margin.left},${margin.top})`);
+
+    const x = d3.scaleBand().domain(data.map(d => d.score)).range([0, W]).padding(0.2);
+    const y = d3.scaleLinear().domain([0, d3.max(data, d => d.count) + 1]).range([H, 0]);
+
+    const barColor = s => s >= 9 ? '#2E7D32' : s >= 7 ? '#C99700' : '#C62828';
+
+    svg.selectAll('rect')
+        .data(data)
+        .join('rect')
+        .attr('x', d => x(d.score))
+        .attr('y', d => y(d.count))
+        .attr('width', x.bandwidth())
+        .attr('height', d => H - y(d.count))
+        .attr('fill', d => barColor(d.score))
+        .attr('rx', 3);
+
+    // Count labels on top
+    svg.selectAll('.count-label')
+        .data(data.filter(d => d.count > 0))
+        .join('text')
+        .attr('class', 'count-label')
+        .attr('x', d => x(d.score) + x.bandwidth() / 2)
+        .attr('y', d => y(d.count) - 4)
+        .attr('text-anchor', 'middle')
+        .attr('font-size', '11px').attr('font-weight', 'bold').attr('fill', '#333')
+        .text(d => d.count);
+
+    // X axis
+    svg.append('g').attr('transform', `translate(0,${H})`).call(d3.axisBottom(x).tickSize(0))
+        .selectAll('text').attr('font-size', '11px').attr('fill', '#555');
+    svg.select('.domain').remove();
+}
+
+// ═══════════════════════════════════════════════════════════
+// DEPT COMPARISON
+// ═══════════════════════════════════════════════════════════
+function renderDeptComparison(ndr, mcob) {
+    function cardHTML(cls, dept, stats) {
+        const rows = [
+            ['Respondents', stats.n],
+            ['Avg Recommendation Score', `${stats.avg.toFixed(1)} / 10`],
+            ['Net Recommendation Score (NPS)', `${stats.nps > 0 ? '+' : ''}${stats.nps.toFixed(1)}`],
+            ['Overall Agreement Rate (Q2 items)', `${Math.round(stats.posRate)}%`],
+            ['Highest-Rated Session', `${Math.round(stats.topPct)}% positive`],
+        ];
+        return `
+        <div class="dept-card ${cls}">
+            <div class="dept-card-header">${dept}</div>
+            ${rows.map(([lbl, val]) => `
+                <div class="dept-row">
+                    <span class="dept-row-label">${lbl}</span>
+                    <span class="dept-row-value">${val}</span>
+                </div>`).join('')}
+            <div class="dept-row" style="margin-top:6px;font-size:0.82em;color:#888;border:none">
+                Top session: ${stats.topSession}
+            </div>
+        </div>`;
+    }
+    document.getElementById('dept-comparison').innerHTML =
+        cardHTML('ndr', 'Notre Dame Research (NDR)', ndr) +
+        cardHTML('mcob', 'Mendoza College of Business (MCoB)', mcob);
+}
+
+// ═══════════════════════════════════════════════════════════
+// QUOTES
+// ═══════════════════════════════════════════════════════════
+function renderQuotes(all) {
+    // Pre-selected quotes (verbatim)
+    const appliedQuotes = [
+        {text: "I really think the powerful questions Sarah shared were most useful. Drawing out staff, getting them to share what they think, etc. is so helpful and these were a practical tool that could be applied right away.", dept: "NDR"},
+        {text: "I read the book Radical Candor as a result of the training to help me better understand the concepts as this is an important challenge in my leadership of my current team.", dept: "MCoB"},
+        {text: "I plan to use the Radical Candor Prep Sheet to help me focus on the IOUS when preparing for my difficult conversations.", dept: "MCoB"},
+        {text: "Going one step further with my prioritized action list by scheduling those items on my calendar.", dept: "NDR"},
+        {text: "For me, adding more conversations (both difficult and easy) is my main takeaway from the series. It was very helpful in that regard.", dept: "NDR"},
+        {text: "I completed the time study activity from the self-prioritization session and have used the materials from candid conversations to prepare for employee conversations.", dept: "NDR"},
+        {text: "The EQ session really helped me to recognize areas for improvement (I keep a list at my desk!).", dept: "MCoB"},
+        {text: "The portions of the candor workshop helped me prepare for a meeting where I needed to provide feedback to a staff member.", dept: "MCoB"},
+    ];
+    const suggestionQuotes = [
+        {text: "More small group work without making the sessions longer.", dept: "NDR"},
+        {text: "Perhaps separate sessions for in person and online. Technology capabilities and equity of participation seemed uneven for the different groups.", dept: "NDR"},
+        {text: "Reduce time blocks to 2 hours, 2x per week, or provide a better understanding of the mod week so more student-facing teams can attend.", dept: "MCoB"},
+        {text: "I think the one on prioritization was a little too simplistic for the challenges we face. This one needed a deeper understanding of our workloads.", dept: "NDR"},
+        {text: "The lunch hour peer to peer sessions felt rushed and hard to get value out of when trying to eat, jump to break out rooms and get a high value.", dept: "MCoB"},
+        {text: "The session on candor was not helpful. The session focused on why candor is important, which the audience already agreed with, whereas we needed support practicing candor.", dept: "MCoB"},
+    ];
+    const otherQuotes = [
+        {text: "Thank you for organizing this. I think it's really helpful that it's on the calendar so far out — that allows us to plan ahead and ensure we are there. I also liked having it partnered with MCOB, so we're not just talking to ourselves.", dept: "NDR"},
+        {text: "no immediate feedback, I thought the timing, flexibility and instructors were thoughtful — administrative efforts to encourage engagement was noticed!", dept: "MCoB"},
+        {text: "I liked how the pods were set up so that integration across teams and departments could happen.", dept: "MCoB"},
+        {text: "Thank you for hosting it!", dept: "NDR"},
+    ];
+
+    function quoteCard(q) {
+        return `<div class="quote-card">
+            <span class="quote-mark">&#8220;</span>
+            <div class="quote-text">${q.text}</div>
+            <div class="quote-meta">${q.dept}</div>
+        </div>`;
+    }
+
+    document.getElementById('quotes-applied').innerHTML      = appliedQuotes.map(quoteCard).join('');
+    document.getElementById('quotes-suggestions').innerHTML  = suggestionQuotes.map(quoteCard).join('');
+    document.getElementById('quotes-other').innerHTML        = otherQuotes.map(quoteCard).join('');
+}
+
+// ── Tab switching ────────────────────────────────────────
+function showQuotes(tab) {
+    ['applied','suggestions','other'].forEach(t => {
+        document.getElementById(`quotes-${t}`).style.display = t === tab ? 'grid' : 'none';
+    });
+    document.querySelectorAll('.quote-tab-btn').forEach((btn, i) => {
+        btn.classList.toggle('active', ['applied','suggestions','other'][i] === tab);
+    });
+}
+</script>
+</body>
+</html>
