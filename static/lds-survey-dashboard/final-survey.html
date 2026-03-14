@@ -297,6 +297,7 @@
         </div>
         <div class="chart-wrap" id="q2-chart"></div>
         <div class="chart-legend" id="q2-legend"></div>
+        <div id="q2-takeaways" style="margin-top:16px;padding:14px 16px;background:#E8ECF2;border-radius:8px;font-size:0.88em;color:#1A2533;line-height:1.65;"></div>
     </div>
 
     <!-- ── Session Impact (Q3) ── -->
@@ -469,6 +470,7 @@ d3.csv('lds_final_survey.csv').then(raw => {
     // ── RENDER ───────────────────────────────────────────────
     renderKPIs(all.length, ndrStats, mcobStats, nps, avgScore, q4vals.length);
     renderStackedBars('q2-chart', 'q2-legend', q2Data);
+    renderQ2Takeaways(q2Data);
     renderQ3Chart(q3Data);
     renderNPS(nps, promoters, passives, detractors, q4vals.length, avgScore);
     renderQ4Chart(q4vals);
@@ -785,6 +787,28 @@ function renderQuotes(all) {
     document.getElementById('quotes-applied').innerHTML      = appliedQuotes.map(quoteCard).join('');
     document.getElementById('quotes-suggestions').innerHTML  = suggestionQuotes.map(quoteCard).join('');
     document.getElementById('quotes-other').innerHTML        = otherQuotes.map(quoteCard).join('');
+}
+
+// ═══════════════════════════════════════════════════════════
+// Q2 PROGRAM OUTCOMES TAKEAWAYS
+// ═══════════════════════════════════════════════════════════
+function renderQ2Takeaways(q2Data) {
+    // Sort by % positive to find strongest and weakest items
+    const sorted = [...q2Data].sort((a, b) => b.posPct - a.posPct);
+    const strongest = sorted[0];
+    const weakest   = sorted[sorted.length - 1];
+    const highCount = q2Data.filter(d => d.posPct >= 80).length;
+
+    document.getElementById('q2-takeaways').innerHTML = `
+        <div style="font-weight:700;color:#0C2340;margin-bottom:10px;font-size:0.95em;">Key Takeaways</div>
+        <div style="display:flex;gap:8px;margin-bottom:8px;align-items:flex-start">
+            <span style="color:#2E7D32;font-weight:700;font-size:1.1em;flex-shrink:0">1.</span>
+            <span><strong>${highCount} of 4 outcome statements received 80% or higher agreement.</strong> The standout result: <em>${strongest.label}</em> at ${Math.round(strongest.posPct)}% positive — indicating participants left the series feeling they gained practical, applicable skills, not just theory.</span>
+        </div>
+        <div style="display:flex;gap:8px;align-items:flex-start">
+            <span style="color:#E65100;font-weight:700;font-size:1.1em;flex-shrink:0">2.</span>
+            <span><strong><em>${weakest.label}</em> had the lowest agreement at ${Math.round(weakest.posPct)}%</strong> — the only item below 70%. This aligns with written feedback citing the P2P sessions as feeling rushed and lower in take-away value compared to the half-day sessions. Format improvements here represent the clearest opportunity to raise overall program scores.</span>
+        </div>`;
 }
 
 // ═══════════════════════════════════════════════════════════
