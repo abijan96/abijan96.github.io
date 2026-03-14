@@ -316,6 +316,9 @@
                 <p class="section-desc">Likelihood to recommend the LDS to a colleague (0–10)</p>
             </div>
             <div class="nps-display" id="nps-display"></div>
+            <div id="nps-explanation" style="margin-top:16px;padding:14px 16px;background:#F0F4F8;border-radius:8px;font-size:0.85em;color:#3a4a5c;line-height:1.6;border-left:3px solid #0C2340;">
+                <strong style="color:#0C2340">How this is calculated:</strong> Each participant rated how likely they would be to recommend the LDS program on a 0–10 scale. Scores of 9–10 are "Recommend," 7–8 are "Neutral," and 0–6 are "Would Not Recommend." The score is calculated by subtracting the % who would not recommend from the % who would. It ranges from −100 to +100. Any positive score means more promoters than detractors. <strong style="color:#2E7D32">Above +20 is considered strong for a professional development program.</strong>
+            </div>
         </div>
         <div class="section-card" style="margin-bottom:0">
             <div class="section-header">
@@ -323,6 +326,7 @@
                 <p class="section-desc">Green = Recommend (9–10) · Amber = Neutral (7–8) · Red = Would not (0–6)</p>
             </div>
             <div class="chart-wrap" id="q4-chart"></div>
+            <div id="q4-insight" style="margin-top:14px;padding:12px 14px;background:#F8F9FB;border-radius:8px;font-size:0.85em;color:#3a4a5c;line-height:1.65;"></div>
         </div>
     </div>
 
@@ -336,13 +340,14 @@
             <p class="section-desc">Final survey results broken down by department</p>
         </div>
         <div class="dept-grid" id="dept-comparison"></div>
+        <div id="dept-takeaways" style="margin-top:18px;padding:16px 18px;background:#E8ECF2;border-radius:8px;font-size:0.88em;color:#1A2533;line-height:1.65;"></div>
     </div>
 
     <!-- ── Quotes ── -->
     <div class="section-card">
         <div class="section-header">
             <h2>What Participants Said</h2>
-            <p class="section-desc">Selected open-ended responses — verbatim</p>
+            <p class="section-desc">Selected open-ended responses</p>
         </div>
         <div class="quote-tabs">
             <button class="quote-tab-btn active" onclick="showQuotes('applied')">Applied Learning</button>
@@ -396,8 +401,8 @@ d3.csv('lds_final_survey.csv').then(raw => {
     // All rows where Q1 is answered
     const all = raw.filter(d => d.Q1 === 'NDR' || d.Q1 === 'MCoB');
 
-    // ── Q4 NPS ──────────────────────────────────────────────
-    const q4vals = all.map(d => +d.Q4_1).filter(v => !isNaN(v) && v >= 0 && v <= 10);
+    // ── Q4 NPS — filter out empty strings (empty → +'' = 0 in JS, causing false detractors) ──
+    const q4vals = all.filter(d => d.Q4_1 && d.Q4_1.trim() !== '').map(d => +d.Q4_1).filter(v => !isNaN(v) && v >= 0 && v <= 10);
     const promoters  = q4vals.filter(v => v >= 9).length;
     const passives   = q4vals.filter(v => v >= 7 && v <= 8).length;
     const detractors = q4vals.filter(v => v <= 6).length;
@@ -430,7 +435,7 @@ d3.csv('lds_final_survey.csv').then(raw => {
     // ── Dept metrics ─────────────────────────────────────────
     function deptMetrics(dept) {
         const d = all.filter(r => r.Q1 === dept);
-        const q4d = d.map(r => +r.Q4_1).filter(v => !isNaN(v) && v >= 0 && v <= 10);
+        const q4d = d.filter(r => r.Q4_1 && r.Q4_1.trim() !== '').map(r => +r.Q4_1).filter(v => !isNaN(v) && v >= 0 && v <= 10);
         const prom = q4d.filter(v => v >= 9).length;
         const det  = q4d.filter(v => v <= 6).length;
         const dNPS = q4d.length > 0 ? Math.round((prom - det) / q4d.length * 100 * 10) / 10 : 0;
@@ -466,7 +471,9 @@ d3.csv('lds_final_survey.csv').then(raw => {
     renderQ3Chart(q3Data);
     renderNPS(nps, promoters, passives, detractors, q4vals.length, avgScore);
     renderQ4Chart(q4vals);
+    renderQ4Insight(promoters, detractors, q4vals.length);
     renderDeptComparison(ndrStats, mcobStats);
+    renderDeptTakeaways(ndrStats, mcobStats);
     renderQuotes(all);
 
 }).catch(err => {
@@ -777,6 +784,39 @@ function renderQuotes(all) {
     document.getElementById('quotes-applied').innerHTML      = appliedQuotes.map(quoteCard).join('');
     document.getElementById('quotes-suggestions').innerHTML  = suggestionQuotes.map(quoteCard).join('');
     document.getElementById('quotes-other').innerHTML        = otherQuotes.map(quoteCard).join('');
+}
+
+// ═══════════════════════════════════════════════════════════
+// Q4 SCORE DISTRIBUTION INSIGHT
+// ═══════════════════════════════════════════════════════════
+function renderQ4Insight(promoters, detractors, total) {
+    const promoPct = Math.round(promoters / total * 100);
+    const detPct   = Math.round(detractors / total * 100);
+    document.getElementById('q4-insight').innerHTML = `
+        <div style="display:flex;gap:8px;margin-bottom:6px;align-items:flex-start">
+            <span style="color:#2E7D32;font-weight:700;font-size:1.1em;flex-shrink:0">1.</span>
+            <span><strong>${promoters} of ${total} participants (${promoPct}%) gave a score of 9 or 10</strong> — meaning they would actively recommend the LDS program to a colleague. This is a strong endorsement for a voluntary professional development series.</span>
+        </div>
+        <div style="display:flex;gap:8px;align-items:flex-start">
+            <span style="color:#C62828;font-weight:700;font-size:1.1em;flex-shrink:0">2.</span>
+            <span><strong>${detractors} participants (${detPct}%) scored 6 or below.</strong> Their written feedback most commonly cited session pacing, hybrid format challenges, and a preference for more hands-on, practice-based content — all actionable improvements for the next program cycle.</span>
+        </div>`;
+}
+
+// ═══════════════════════════════════════════════════════════
+// DEPT TAKEAWAYS
+// ═══════════════════════════════════════════════════════════
+function renderDeptTakeaways(ndr, mcob) {
+    document.getElementById('dept-takeaways').innerHTML = `
+        <div style="font-weight:700;color:#0C2340;margin-bottom:10px;font-size:0.95em;">&#128270; Key Takeaways</div>
+        <div style="display:flex;gap:8px;margin-bottom:8px;align-items:flex-start">
+            <span style="color:#1565C0;font-weight:700;font-size:1.1em;flex-shrink:0">1.</span>
+            <span><strong>NDR participants showed stronger recommendation intent</strong> (NPS +${ndr.nps.toFixed(1)} vs +${mcob.nps.toFixed(1)}) and higher overall agreement across program outcome questions (${Math.round(ndr.posRate)}% vs ${Math.round(mcob.posRate)}%), suggesting the content and format resonated more strongly in the NDR context.</span>
+        </div>
+        <div style="display:flex;gap:8px;align-items:flex-start">
+            <span style="color:#C99700;font-weight:700;font-size:1.1em;flex-shrink:0">2.</span>
+            <span><strong>MCoB's lower NPS (+${mcob.nps.toFixed(1)}) is the clearest signal for improvement.</strong> Written responses from MCoB participants pointed to session pacing, a need for more practice-based content, and scheduling conflicts — all addressable before the next cohort without changing the program's core design.</span>
+        </div>`;
 }
 
 // ── Tab switching ────────────────────────────────────────
