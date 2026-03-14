@@ -576,7 +576,7 @@ function renderStackedBars(chartId, legendId, items) {
 // Q3 SESSION IMPACT BARS
 // ═══════════════════════════════════════════════════════════
 function renderQ3Chart(items) {
-    const margin = {top: 12, right: 120, bottom: 20, left: 300};
+    const margin = {top: 12, right: 20, bottom: 20, left: 300};
     const barH = 32, barPad = 16;
     const containerW = document.getElementById('q3-chart').offsetWidth || 860;
     const W = Math.max(containerW - margin.left - margin.right, 300);
@@ -624,10 +624,6 @@ function renderQ3Chart(items) {
             .text(item.label);
 
         // Attendance note (right)
-        svg.append('text')
-            .attr('x', W + 8).attr('y', y + barH / 2)
-            .attr('dominant-baseline', 'middle').attr('font-size', '11px').attr('fill', '#888')
-            .text(`n=${item.n} of ${item.total}`);
     });
 
     // Legend note
