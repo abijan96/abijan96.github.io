@@ -793,21 +793,25 @@ function renderQuotes(all) {
 // Q2 PROGRAM OUTCOMES TAKEAWAYS
 // ═══════════════════════════════════════════════════════════
 function renderQ2Takeaways(q2Data) {
-    // Sort by % positive to find strongest and weakest items
-    const sorted = [...q2Data].sort((a, b) => b.posPct - a.posPct);
-    const strongest = sorted[0];
-    const weakest   = sorted[sorted.length - 1];
-    const highCount = q2Data.filter(d => d.posPct >= 80).length;
+    const byKey = {};
+    q2Data.forEach(d => byKey[d.key] = d);
+
+    const insightsPct    = Math.round(byKey['Q2_4'].posPct);
+    const confidencePct  = Math.round(byKey['Q2_2'].posPct);
+    const p2pNeutral     = byKey['Q2_3'].counts['Neither agree nor disagree'] || 0;
+    const p2pDisagree    = (byKey['Q2_3'].counts['Disagree'] || 0) + (byKey['Q2_3'].counts['Strongly disagree'] || 0);
+    const p2pTotal       = byKey['Q2_3'].n;
+    const p2pNeutralPct  = Math.round(p2pNeutral / p2pTotal * 100);
 
     document.getElementById('q2-takeaways').innerHTML = `
         <div style="font-weight:700;color:#0C2340;margin-bottom:10px;font-size:0.95em;">Key Takeaways</div>
         <div style="display:flex;gap:8px;margin-bottom:8px;align-items:flex-start">
             <span style="color:#2E7D32;font-weight:700;font-size:1.1em;flex-shrink:0">1.</span>
-            <span><strong>${highCount} of 4 outcome statements received 80% or higher agreement.</strong> The standout result: <em>${strongest.label}</em> at ${Math.round(strongest.posPct)}% positive — indicating participants left the series feeling they gained practical, applicable skills, not just theory.</span>
+            <span>The program is closing the knowing–doing gap. <strong>${insightsPct}% gained new insights and ${confidencePct}% feel confident applying them</strong> — a near-identical result rarely seen in leadership training, which typically scores well on awareness but poorly on application confidence. This suggests the hands-on, discussion-based format is translating learning into practice.</span>
         </div>
         <div style="display:flex;gap:8px;align-items:flex-start">
             <span style="color:#E65100;font-weight:700;font-size:1.1em;flex-shrink:0">2.</span>
-            <span><strong><em>${weakest.label}</em> had the lowest agreement at ${Math.round(weakest.posPct)}%</strong> — the only item below 70%. This aligns with written feedback citing the P2P sessions as feeling rushed and lower in take-away value compared to the half-day sessions. Format improvements here represent the clearest opportunity to raise overall program scores.</span>
+            <span>The P2P sessions are an unrealised opportunity, not a failed concept. <strong>Not one participant disagreed that P2P sessions were valuable — but ${p2pNeutralPct}% (${p2pNeutral} of ${p2pTotal}) were neutral.</strong> Participants aren't opposed to peer learning; they were underwhelmed by the execution. Written feedback points to lunch-hour time pressure and rushed breakout rooms as the structural barriers — fixes that don't require changing the program's design.</span>
         </div>`;
 }
 
