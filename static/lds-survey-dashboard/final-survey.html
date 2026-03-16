@@ -399,8 +399,11 @@ const Q3_LABELS = {
 // ═══════════════════════════════════════════════════════════
 d3.csv('lds_final_survey.csv').then(raw => {
 
+    // Total submissions (Q1 answered, regardless of completion)
+    const totalSubmissions = raw.filter(d => d.Q1 === 'NDR' || d.Q1 === 'MCoB').length;
+
     // Exclude blank submissions — keep only rows where at least Q4_1 was answered
-    // (3 rows had Q1 answered but left every question blank; Progress 0–20%)
+    // (5 rows had Q1 answered but left every question blank; Progress 0–20%)
     const all = raw.filter(d => (d.Q1 === 'NDR' || d.Q1 === 'MCoB') && d.Q4_1 && d.Q4_1.trim() !== '');
 
     // ── Q4 NPS — filter out empty strings (empty → +'' = 0 in JS, causing false detractors) ──
@@ -468,7 +471,7 @@ d3.csv('lds_final_survey.csv').then(raw => {
     const mcobStats = deptMetrics('MCoB');
 
     // ── RENDER ───────────────────────────────────────────────
-    renderKPIs(all.length, ndrStats, mcobStats, nps, avgScore, q4vals.length);
+    renderKPIs(totalSubmissions, all.length, ndrStats, mcobStats, nps, avgScore, q4vals.length);
     renderStackedBars('q2-chart', 'q2-legend', q2Data);
     renderQ2Takeaways(q2Data);
     renderQ3Chart(q3Data);
@@ -489,9 +492,9 @@ d3.csv('lds_final_survey.csv').then(raw => {
 // ═══════════════════════════════════════════════════════════
 // KPI CARDS
 // ═══════════════════════════════════════════════════════════
-function renderKPIs(total, ndr, mcob, nps, avg, q4n) {
+function renderKPIs(total, completed, ndr, mcob, nps, avg, q4n) {
     const cards = [
-        {cls:'',      val: total,              label: 'Total Responses',            sub: `NDR: ${ndr.n} · MCoB: ${mcob.n}`},
+        {cls:'',      val: total,              label: 'Total Responses',            sub: `${completed} fully completed · NDR: ${ndr.n} · MCoB: ${mcob.n}`},
         {cls:'green', val: `+${nps.toFixed(1)}`, label: 'Recommendation Score (NPS)', sub: `Avg score: ${avg.toFixed(1)} / 10`},
         {cls:'blue',  val: `${Math.round(ndr.posRate)}%`,  label: 'NDR — Overall Agreement',    sub: `${ndr.n} respondents · NPS ${ndr.nps > 0 ? '+' : ''}${ndr.nps.toFixed(1)}`},
         {cls:'gold',  val: `${Math.round(mcob.posRate)}%`, label: 'MCoB — Overall Agreement',   sub: `${mcob.n} respondents · NPS ${mcob.nps > 0 ? '+' : ''}${mcob.nps.toFixed(1)}`},
