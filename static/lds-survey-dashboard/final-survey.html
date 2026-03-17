@@ -59,7 +59,7 @@
         /* ── KPI Row ── */
         .kpi-row {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(5, 1fr);
             gap: 16px;
             margin-bottom: 24px;
         }
@@ -73,9 +73,10 @@
             position: relative;
         }
 
-        .kpi-card.gold  { border-top-color: #C99700; }
-        .kpi-card.green { border-top-color: #2E7D32; }
-        .kpi-card.blue  { border-top-color: #1565C0; }
+        .kpi-card.gold   { border-top-color: #C99700; }
+        .kpi-card.green  { border-top-color: #2E7D32; }
+        .kpi-card.blue   { border-top-color: #1565C0; }
+        .kpi-card.purple { border-top-color: #5E35B1; }
 
         .kpi-value {
             font-size: 2.6em;
@@ -84,9 +85,10 @@
             margin-bottom: 4px;
             color: #0C2340;
         }
-        .kpi-card.gold  .kpi-value { color: #C99700; }
-        .kpi-card.green .kpi-value { color: #2E7D32; }
-        .kpi-card.blue  .kpi-value { color: #1565C0; }
+        .kpi-card.gold   .kpi-value { color: #C99700; }
+        .kpi-card.green  .kpi-value { color: #2E7D32; }
+        .kpi-card.blue   .kpi-value { color: #1565C0; }
+        .kpi-card.purple .kpi-value { color: #5E35B1; }
 
         .kpi-label { font-size: 0.9em; font-weight: 600; color: #555; margin-bottom: 3px; }
         .kpi-sub   { font-size: 0.78em; color: #888; }
@@ -265,7 +267,7 @@
 
         /* ── Responsive ── */
         @media (max-width: 900px) {
-            .kpi-row { grid-template-columns: repeat(2, 1fr); }
+            .kpi-row { grid-template-columns: repeat(3, 1fr); }
             .section-two-col { grid-template-columns: 1fr; }
             .dept-grid { grid-template-columns: 1fr; }
             .quotes-grid { grid-template-columns: 1fr; }
@@ -470,8 +472,18 @@ d3.csv('lds_final_survey.csv').then(raw => {
     const ndrStats  = deptMetrics('NDR');
     const mcobStats = deptMetrics('MCoB');
 
+    // ── Combined overall agreement (NDR + MCoB pooled across Q2 items) ──
+    let combPosTotal = 0, combPosCount = 0;
+    Q2_FIELDS.forEach(f => {
+        all.filter(r => LIKERT_ORDER.includes(r[f])).forEach(r => {
+            combPosCount++;
+            if (r[f] === 'Strongly agree' || r[f] === 'Agree') combPosTotal++;
+        });
+    });
+    const combinedPosRate = combPosCount > 0 ? combPosTotal / combPosCount * 100 : 0;
+
     // ── RENDER ───────────────────────────────────────────────
-    renderKPIs(totalSubmissions, all.length, ndrStats, mcobStats, nps, avgScore, q4vals.length);
+    renderKPIs(totalSubmissions, all.length, ndrStats, mcobStats, nps, avgScore, q4vals.length, combinedPosRate);
     renderStackedBars('q2-chart', 'q2-legend', q2Data);
     renderQ2Takeaways(q2Data);
     renderQ3Chart(q3Data);
@@ -492,12 +504,13 @@ d3.csv('lds_final_survey.csv').then(raw => {
 // ═══════════════════════════════════════════════════════════
 // KPI CARDS
 // ═══════════════════════════════════════════════════════════
-function renderKPIs(total, completed, ndr, mcob, nps, avg, q4n) {
+function renderKPIs(total, completed, ndr, mcob, nps, avg, q4n, combinedPosRate) {
     const cards = [
-        {cls:'',      val: total,              label: 'Total Responses',            sub: `${completed} fully completed · NDR: ${ndr.n} · MCoB: ${mcob.n}`},
-        {cls:'green', val: `+${nps.toFixed(1)}`, label: 'Recommendation Score (NPS)', sub: `Avg score: ${avg.toFixed(1)} / 10`},
-        {cls:'blue',  val: `${Math.round(ndr.posRate)}%`,  label: 'NDR — Overall Agreement',    sub: `${ndr.n} respondents · NPS ${ndr.nps > 0 ? '+' : ''}${ndr.nps.toFixed(1)}`},
-        {cls:'gold',  val: `${Math.round(mcob.posRate)}%`, label: 'MCoB — Overall Agreement',   sub: `${mcob.n} respondents · NPS ${mcob.nps > 0 ? '+' : ''}${mcob.nps.toFixed(1)}`},
+        {cls:'',       val: total,                         label: 'Total Responses',            sub: `${completed} fully completed · NDR: ${ndr.n} · MCoB: ${mcob.n}`},
+        {cls:'green',  val: `+${nps.toFixed(1)}`,          label: 'Recommendation Score (NPS)', sub: `Avg score: ${avg.toFixed(1)} / 10`},
+        {cls:'purple', val: `${Math.round(combinedPosRate)}%`, label: 'Overall Agreement',      sub: `NDR + MCoB combined · Q2 items`},
+        {cls:'blue',   val: `${Math.round(ndr.posRate)}%`, label: 'NDR — Overall Agreement',    sub: `${ndr.n} respondents · NPS ${ndr.nps > 0 ? '+' : ''}${ndr.nps.toFixed(1)}`},
+        {cls:'gold',   val: `${Math.round(mcob.posRate)}%`,label: 'MCoB — Overall Agreement',   sub: `${mcob.n} respondents · NPS ${mcob.nps > 0 ? '+' : ''}${mcob.nps.toFixed(1)}`},
     ];
     const row = document.getElementById('kpi-row');
     row.innerHTML = cards.map(c => `
