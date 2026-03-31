@@ -353,6 +353,66 @@
     </div>
   </div>
 
+  <!-- FEEDBACK SURVEY REPORT -->
+  <div class="section">
+    <div class="section-title">
+      Feedback Survey Report
+      <span class="badge">71 RESPONSES · SEP 2023–FEB 2026</span>
+    </div>
+
+    <div class="tab-bar">
+      <button class="tab-btn active" data-ftab="fy">Scores by Fiscal Year</button>
+      <button class="tab-btn" data-ftab="themes">Themes</button>
+      <button class="tab-btn" data-ftab="recs">Recommendations</button>
+    </div>
+
+    <!-- FY BREAKDOWN -->
+    <div class="tab-panel active" id="ftab-fy">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start;">
+        <div>
+          <div style="font-size:0.82em;font-weight:700;color:#0C2340;margin-bottom:12px;text-transform:uppercase;letter-spacing:0.4px;">Average Scores by Fiscal Year (1–5 scale)</div>
+          <table class="data-table" id="fy-scores-table">
+            <thead><tr><th>Fiscal Year</th><th>Responses</th><th>Encouraged to Participate</th><th>Connected with Colleagues</th></tr></thead>
+            <tbody>
+              <tr><td><strong>FY24</strong></td><td>33</td><td>4.30 / 5</td><td>4.06 / 5</td></tr>
+              <tr><td><strong>FY25</strong></td><td>33</td><td>4.76 / 5</td><td>4.27 / 5</td></tr>
+              <tr><td><strong>FY26 YTD</strong></td><td>5</td><td>4.80 / 5</td><td>3.60 / 5</td></tr>
+              <tr style="font-weight:700;background:#fff8e6;"><td>Overall</td><td>71</td><td>4.55 / 5</td><td>4.13 / 5</td></tr>
+            </tbody>
+          </table>
+          <div class="chart-insight" style="margin-top:14px;">
+            <strong>Key gap:</strong> "Encouraged to Participate" (4.55) consistently outscores "Connected with Colleagues" (4.13) — participants feel empowered to speak but may not be forming deeper peer connections. FY26 YTD shows the sharpest connection dip (3.60), worth monitoring as group sizes have decreased.
+          </div>
+        </div>
+        <div>
+          <svg id="fy-scores-chart"></svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- THEMES -->
+    <div class="tab-panel" id="ftab-themes">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:28px;">
+        <div>
+          <div style="font-size:0.82em;font-weight:700;color:#0C2340;margin-bottom:14px;text-transform:uppercase;letter-spacing:0.4px;">What Participants Liked — Top Themes (63 responses coded)</div>
+          <svg id="liked-themes-chart"></svg>
+        </div>
+        <div>
+          <div style="font-size:0.82em;font-weight:700;color:#0C2340;margin-bottom:14px;text-transform:uppercase;letter-spacing:0.4px;">Format Improvement Themes (48 responses coded)</div>
+          <svg id="suggest-themes-chart"></svg>
+        </div>
+      </div>
+      <div class="chart-insight" style="margin-top:18px;">
+        The top three things participants value — <strong>Open Forum / Safe Space</strong>, <strong>Hearing Diverse Perspectives</strong>, and <strong>Culture &amp; Community</strong> — align closely with the program's original intent. The top improvement request, sharing discussion topics in advance, is the single easiest operational change that could meaningfully raise both scores.
+      </div>
+    </div>
+
+    <!-- RECOMMENDATIONS -->
+    <div class="tab-panel" id="ftab-recs">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;" id="recs-grid"></div>
+    </div>
+  </div>
+
   <!-- KEY TAKEAWAYS -->
   <div class="section">
     <div class="section-title">Key Takeaways</div>
@@ -787,6 +847,135 @@ function showMoreSuggest() {
   if (suggestShown >= suggestResponses.length) document.getElementById("suggest-more-btn").style.display = "none";
 }
 
+// ===================== FY SCORES CHART =====================
+function renderFYScoresChart() {
+  const fys = ["FY24","FY25","FY26 YTD","Overall"];
+  const encouraged = [4.30, 4.76, 4.80, 4.55];
+  const connected  = [4.06, 4.27, 3.60, 4.13];
+  const W = 380, H = 220;
+  const margin = {top:20,right:20,bottom:40,left:80};
+  const w = W-margin.left-margin.right, h = H-margin.top-margin.bottom;
+  const svg = d3.select("#fy-scores-chart").attr("width",W).attr("height",H);
+  svg.selectAll("*").remove();
+  const g = svg.append("g").attr("transform",`translate(${margin.left},${margin.top})`);
+
+  const y = d3.scaleBand().domain(fys).range([0,h]).padding(0.35);
+  const x = d3.scaleLinear().domain([3,5]).range([0,w]);
+  const barH = y.bandwidth()/2 - 2;
+
+  // Gridlines
+  [3.5,4,4.5,5].forEach(v => {
+    g.append("line").attr("x1",x(v)).attr("x2",x(v)).attr("y1",0).attr("y2",h)
+      .attr("stroke","#e8edf3").attr("stroke-dasharray","3,3");
+  });
+
+  // 4.0 "agree" threshold
+  g.append("line").attr("x1",x(4)).attr("x2",x(4)).attr("y1",0).attr("y2",h)
+    .attr("stroke","#C99700").attr("stroke-dasharray","5,3").attr("stroke-width",1.5);
+  g.append("text").attr("x",x(4)+3).attr("y",-6).attr("font-size","9px").attr("fill","#C99700").text("4.0 threshold");
+
+  fys.forEach((fy, i) => {
+    const yPos = y(fy);
+    // Encouraged bar
+    g.append("rect").attr("x",0).attr("y",yPos).attr("width",x(encouraged[i])-x(3)).attr("height",barH).attr("fill","#0C2340").attr("rx",3).attr("opacity",0.8);
+    g.append("text").attr("x",x(encouraged[i])+4).attr("y",yPos+barH/2+4).attr("font-size","10px").attr("fill","#333").text(encouraged[i].toFixed(2));
+    // Connected bar
+    g.append("rect").attr("x",0).attr("y",yPos+barH+4).attr("width",x(connected[i])-x(3)).attr("height",barH).attr("fill","#C99700").attr("rx",3).attr("opacity",0.8);
+    g.append("text").attr("x",x(connected[i])+4).attr("y",yPos+barH+4+barH/2+4).attr("font-size","10px").attr("fill","#333").text(connected[i].toFixed(2));
+  });
+
+  g.append("g").call(d3.axisLeft(y).tickSize(0)).selectAll("text").attr("font-size","11px").attr("dx","-4");
+  g.append("g").attr("transform",`translate(0,${h})`).call(d3.axisBottom(x).ticks(4).tickFormat(d=>d)).selectAll("text").attr("font-size","10px");
+
+  // Legend
+  const leg = g.append("g").attr("transform",`translate(0,${h+26})`);
+  leg.append("rect").attr("width",12).attr("height",8).attr("fill","#0C2340").attr("rx",2);
+  leg.append("text").attr("x",16).attr("y",8).attr("font-size","10px").attr("fill","#555").text("Encouraged to Participate");
+  leg.append("rect").attr("x",160).attr("width",12).attr("height",8).attr("fill","#C99700").attr("rx",2);
+  leg.append("text").attr("x",176).attr("y",8).attr("font-size","10px").attr("fill","#555").text("Connected with Colleagues");
+}
+
+// ===================== THEME CHARTS =====================
+function renderThemeChart(containerId, data, color) {
+  const W = 340, H = data.length * 38 + 30;
+  const margin = {top:10,right:60,bottom:10,left:190};
+  const w = W-margin.left-margin.right, h = H-margin.top-margin.bottom;
+  const svg = d3.select("#"+containerId).attr("width",W).attr("height",H);
+  svg.selectAll("*").remove();
+  const g = svg.append("g").attr("transform",`translate(${margin.left},${margin.top})`);
+  const maxVal = d3.max(data, d=>d.count);
+  const x = d3.scaleLinear().domain([0,maxVal]).range([0,w]);
+  const y = d3.scaleBand().domain(data.map(d=>d.theme)).range([0,h]).padding(0.3);
+
+  g.selectAll(".bg").data(data).enter().append("rect").attr("class","bg")
+    .attr("x",0).attr("y",d=>y(d.theme)).attr("width",w).attr("height",y.bandwidth())
+    .attr("fill","#e8edf3").attr("rx",3);
+  g.selectAll(".bar").data(data).enter().append("rect").attr("class","bar")
+    .attr("x",0).attr("y",d=>y(d.theme)).attr("width",d=>x(d.count)).attr("height",y.bandwidth())
+    .attr("fill",color).attr("rx",3).attr("opacity",0.82);
+  g.selectAll(".lbl").data(data).enter().append("text").attr("class","lbl")
+    .attr("x",d=>x(d.count)+5).attr("y",d=>y(d.theme)+y.bandwidth()/2+4)
+    .attr("font-size","11px").attr("fill","#333").text(d=>d.count+" mentions");
+
+  g.append("g").call(d3.axisLeft(y).tickSize(0))
+    .selectAll("text").attr("font-size","10px").attr("dx","-4").call(wrap, margin.left-8);
+}
+
+function wrap(text, width) {
+  text.each(function() {
+    const t = d3.select(this);
+    const words = t.text().split(/\s+/).reverse();
+    let word, line = [], lineNumber = 0;
+    const y = t.attr("y"), dy = parseFloat(t.attr("dy")||0);
+    let tspan = t.text(null).append("tspan").attr("x",-4).attr("dy",dy+"em");
+    while (word = words.pop()) {
+      line.push(word);
+      tspan.text(line.join(" "));
+      if (tspan.node().getComputedTextLength() > width) {
+        line.pop();
+        tspan.text(line.join(" "));
+        line = [word];
+        tspan = t.append("tspan").attr("x",-4).attr("dy","1.1em").text(word);
+        lineNumber++;
+      }
+    }
+  });
+}
+
+// ===================== RECOMMENDATIONS =====================
+function renderRecommendations() {
+  const recs = [
+    {num:1, title:"Continue the Program", icon:"✓", color:"#00843D",
+     text:"With 100% positive ratings across all respondents and fiscal years, the Engagement Chat program has proven its value. Maintain regular scheduling and protect the small-group, informal format that staff consistently praise."},
+    {num:2, title:"Increase Frequency or Add Follow-Ups", icon:"↑", color:"#0C2340",
+     text:"Consider more frequent sessions or follow-up chats with the same groups to deepen connections and allow participants to track progress on issues raised in prior sessions."},
+    {num:3, title:"Send Discussion Topics in Advance", icon:"→", color:"#C99700",
+     text:"The most common suggestion across 48 improvement responses. Distributing 2–3 guiding questions before each session would allow staff to reflect and arrive more prepared, likely raising both participation and connection scores."},
+    {num:4, title:"Experiment with Group Composition", icon:"⊞", color:"#1a6ca8",
+     text:"Try smaller groups (4–6 people) and more intentional cross-functional mixing to strengthen peer connections. The current small format is valued — explore breakout pairs or structured networking within sessions."},
+    {num:5, title:"Add Interactive Elements", icon:"◎", color:"#C99700",
+     text:"Implement live phone-based polls, ice-breaker activities, or structured discussion prompts at the start. Multiple respondents specifically referenced the onsite survey format as something they'd like to see replicated."},
+    {num:6, title:"Close the Feedback Loop", icon:"⟲", color:"#00843D",
+     text:"Share a brief follow-up after each session summarizing key themes heard and any actions being taken. Even a short D2D entry saying 'here's what we heard and here's what we're doing' would meaningfully increase trust and participation."},
+    {num:7, title:"Address the Connection Gap", icon:"!", color:"#C41E3A",
+     text:"The gap between Participation (4.55) and Connection (4.13) — widening in FY26 YTD (3.60) — signals that smaller groups may limit peer bonding. Consider structured partner discussions or post-chat informal time to bridge this."},
+  ];
+
+  const grid = document.getElementById("recs-grid");
+  grid.innerHTML = "";
+  recs.forEach(r => {
+    const div = document.createElement("div");
+    div.style.cssText = `background:#f8f9fb;border-radius:8px;padding:16px 18px;border-left:4px solid ${r.color};`;
+    div.innerHTML = `
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+        <span style="background:${r.color};color:#fff;border-radius:50%;width:26px;height:26px;display:inline-flex;align-items:center;justify-content:center;font-size:0.85em;font-weight:700;flex-shrink:0;">${r.num}</span>
+        <strong style="color:#0C2340;font-size:0.92em;">${r.title}</strong>
+      </div>
+      <div style="font-size:0.85em;color:#444;line-height:1.65;">${r.text}</div>`;
+    grid.appendChild(div);
+  });
+}
+
 // ===================== INIT =====================
 renderKPIs();
 renderAttendanceChart("all");
@@ -795,6 +984,26 @@ renderSessionTable("all");
 renderScoreChart();
 renderFeedbackCards(likedResponses, "liked-grid", "liked", likedShown);
 renderFeedbackCards(suggestResponses, "suggest-grid", "suggest", suggestShown);
+
+// Feedback survey report
+renderFYScoresChart();
+renderThemeChart("liked-themes-chart", [
+  {theme:"Open Forum / Safe Space", count:31},
+  {theme:"Hearing Diverse Perspectives", count:26},
+  {theme:"Culture & Community", count:25},
+  {theme:"Quality Facilitation", count:18},
+  {theme:"Cross-Team Networking", count:22},
+  {theme:"Feel Heard by Leadership", count:14},
+], "#0C2340");
+renderThemeChart("suggest-themes-chart", [
+  {theme:"Send Topics in Advance", count:16},
+  {theme:"Close the Feedback Loop", count:12},
+  {theme:"Add Interactive Elements", count:9},
+  {theme:"Improve Remote Setup", count:8},
+  {theme:"Extend Session Length", count:7},
+  {theme:"Smaller Group Discussions", count:6},
+], "#C99700");
+renderRecommendations();
 
 // Attendance filter buttons
 document.querySelectorAll("[data-fy]").forEach(btn => {
@@ -814,13 +1023,33 @@ document.querySelectorAll("[data-tbl]").forEach(btn => {
   });
 });
 
-// Tab switching
-document.querySelectorAll(".tab-btn").forEach(btn => {
+// Survey tab switching
+document.querySelectorAll("[data-tab]").forEach(btn => {
   btn.addEventListener("click", function() {
-    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
-    document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
+    const bar = this.closest(".tab-bar");
+    bar.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
     this.classList.add("active");
+    const section = bar.nextElementSibling;
+    // find sibling panels
+    let el = section;
+    while (el) {
+      if (el.classList && el.classList.contains("tab-panel")) el.classList.remove("active");
+      el = el.nextElementSibling;
+    }
     document.getElementById("tab-" + this.dataset.tab).classList.add("active");
+  });
+});
+
+// Feedback report tab switching
+document.querySelectorAll("[data-ftab]").forEach(btn => {
+  btn.addEventListener("click", function() {
+    const bar = this.closest(".tab-bar");
+    bar.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+    this.classList.add("active");
+    ["ftab-fy","ftab-themes","ftab-recs"].forEach(id => {
+      document.getElementById(id).classList.remove("active");
+    });
+    document.getElementById("ftab-" + this.dataset.ftab).classList.add("active");
   });
 });
 
