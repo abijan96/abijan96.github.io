@@ -225,7 +225,7 @@
   <div class="header-inner">
     <div>
       <h1>NDR Engagement Chat Dashboard</h1>
-      <p class="subtitle">FY22 – FY26 YTD &nbsp;|&nbsp; 28 Sessions Analyzed</p>
+      <p class="subtitle">FY22 – FY26 YTD &nbsp;|&nbsp; 29 Sessions Analyzed</p>
     </div>
     <a href="feedback.html" class="btn-nav">View Feedback Survey &rarr;</a>
   </div>
@@ -236,12 +236,12 @@
   <!-- KPI CARDS -->
   <div class="kpi-grid">
     <div class="kpi-card navy">
-      <div class="kpi-value">28</div>
+      <div class="kpi-value">29</div>
       <div class="kpi-label">Total Sessions</div>
       <div class="kpi-sub">FY22 through FY26 YTD</div>
     </div>
     <div class="kpi-card gold">
-      <div class="kpi-value">189</div>
+      <div class="kpi-value">196</div>
       <div class="kpi-label">Total Participants</div>
       <div class="kpi-sub">Unique attendees across all sessions</div>
     </div>
@@ -276,7 +276,7 @@
   <div class="section" id="attendanceSection">
     <div class="section-title">
       Session Attendance Summary
-      <span class="badge">28 Sessions</span>
+      <span class="badge">29 Sessions</span>
     </div>
     <div class="two-col" style="align-items:start;">
       <div>
@@ -315,7 +315,7 @@
 
 </div>
 
-<footer>NDR Engagement Chat Analysis &nbsp;|&nbsp; FY22 – FY26 YTD &nbsp;|&nbsp; Data through January 2026</footer>
+<footer>NDR Engagement Chat Analysis &nbsp;|&nbsp; FY22 – FY26 YTD &nbsp;|&nbsp; Data through March 2026</footer>
 
 <script>
 /* ================================================================
@@ -431,10 +431,10 @@ const fyData = {
     evolution: "Culture mapping, Bravo Awards, and Development Day emerged as key topics. Performance management redesign and strategic goals communication were central themes. Positive and Needs Attention sentiment balanced out at 18% each — a sign of incremental improvement in engagement."
   },
   "FY26 YTD": {
-    sessions: 5, participants: 27, responses: 106,
+    sessions: 6, participants: 34, responses: 136,
     positivePct: 17, neutralPct: 65, needsAttentionPct: 18,
     topTheme: "Comm & Transparency", topThemeMentions: 19,
-    dateRange: "July 31, 2025 – January 29, 2026",
+    dateRange: "July 31, 2025 – March 26, 2026",
     themes: [
       {name:"Comm & Transparency",         mentions:19, score:52},
       {name:"Leadership & Management",     mentions:11, score:34},
@@ -448,6 +448,7 @@ const fyData = {
       {text:"With all the uncertainty around federal funding, it's hard to plan for the future or feel secure in your role.", source:"October 2025"},
       {text:"Leadership has been more communicative this year, which is appreciated — but we need clarity on what restructuring means for us.", source:"November 2025"},
       {text:"The conversation about AI in the workplace is important. I'd love for NDR to take a proactive stance on how we use it.", source:"January 2026"},
+      {text:"Our team is supportive, but between us and the rest of NDR there are massive communication gaps — IP decisions are being made without our input.", source:"March 2026"},
     ],
     keyQA: [
       {q:"How is federal funding uncertainty affecting your work?", a:["It creates anxiety about long-term project commitments","Planning is difficult without stable budget projections","Staff morale has been impacted by ongoing uncertainty"]},
@@ -474,7 +475,7 @@ const attendData = [
   {fy:"FY23",   sessions:7, invited:157, attended:40, rate:25.5, avg:5.7},
   {fy:"FY24",   sessions:7, invited:168, attended:57, rate:33.9, avg:8.1},
   {fy:"FY25",   sessions:6, invited:120, attended:48, rate:40.0, avg:8.0},
-  {fy:"FY26 YTD",sessions:5,invited:118, attended:54, rate:45.8, avg:10.8},
+  {fy:"FY26 YTD",sessions:6,invited:127, attended:61, rate:48.0, avg:10.2},
 ];
 
 const recommendations = [
@@ -667,9 +668,9 @@ function renderAllYears() {
   execDiv.className = "exec-summary";
   execDiv.innerHTML = `
     <h3>Executive Summary</h3>
-    <p>Between FY22 and FY26 YTD, NDR conducted <strong>28 Engagement Chat sessions</strong> with <strong>189 participants</strong>, collecting <strong>640 survey responses</strong>. Overall positive sentiment has remained stubbornly low — hovering between 15–23% — signaling persistent systemic challenges rather than isolated issues.</p>
+    <p>Between FY22 and FY26 YTD, NDR conducted <strong>29 Engagement Chat sessions</strong> with <strong>196 participants</strong>, collecting <strong>640 survey responses</strong>. Overall positive sentiment has remained stubbornly low — hovering between 15–23% — signaling persistent systemic challenges rather than isolated issues.</p>
     <p>Leadership & Management has been the most-discussed theme for three consecutive fiscal years (FY23–FY25), reflecting ongoing concerns about transparency and strategic direction. In FY26 YTD, Communication & Transparency surpassed it as the top theme — a first, and a signal that employees are watching how NDR communicates amid federal funding uncertainty, organizational restructuring, and the emergence of AI in the workplace.</p>
-    <p>Attendance trends have improved markedly: from 25.5% in FY23 to 45.8% in FY26 YTD, suggesting growing employee investment in the engagement process. However, translating engagement into meaningful sentiment improvement remains the critical challenge ahead.</p>`;
+    <p>Attendance trends have improved markedly: from 25.5% in FY23 to 48.0% in FY26 YTD, suggesting growing employee investment in the engagement process. However, translating engagement into meaningful sentiment improvement remains the critical challenge ahead.</p>`;
   panel.appendChild(execDiv);
 
   // Charts section
