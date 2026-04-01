@@ -7,1054 +7,948 @@
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f4f6f9; color: #2c3e50; line-height: 1.6; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+           background: #f0f2f5; color: #2c3e50; line-height: 1.6; }
 
-    /* ---- HEADER ---- */
+    /* HEADER */
     header {
-      background: linear-gradient(135deg, #0C2340 0%, #1a3a5c 60%, #0C2340 100%);
-      color: #fff; padding: 32px 40px; position: relative; overflow: hidden;
+      background: linear-gradient(135deg, #0C2340 0%, #163554 60%, #0C2340 100%);
+      color: #fff; padding: 28px 40px; position: relative; overflow: hidden;
     }
     header::after {
       content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 4px;
-      background: linear-gradient(90deg, #C99700, #e6b800, #C99700);
+      background: linear-gradient(90deg, #C99700, #f0c000, #C99700);
     }
-    header h1 { font-size: 1.9em; font-weight: 700; margin-bottom: 4px; }
-    header .subtitle { font-size: 1em; opacity: 0.85; }
-    header .meta { font-size: 0.8em; opacity: 0.65; margin-top: 6px; }
+    .header-inner { max-width: 1380px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+    header h1 { font-size: 1.75em; font-weight: 800; letter-spacing: -0.5px; }
+    header .subtitle { font-size: 0.9em; opacity: 0.8; margin-top: 4px; }
+    .btn-nav {
+      background: #C99700; color: #fff; border: none; padding: 10px 20px;
+      border-radius: 8px; font-size: 0.88em; font-weight: 700; cursor: pointer;
+      text-decoration: none; white-space: nowrap; transition: background 0.2s;
+    }
+    .btn-nav:hover { background: #a87d00; }
 
-    /* ---- LAYOUT ---- */
+    /* CONTAINER */
     .container { max-width: 1380px; margin: 0 auto; padding: 28px 24px; }
-    .section { background: #fff; border-radius: 12px; padding: 28px 28px 24px; margin-bottom: 28px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
-    .section-title {
-      font-size: 1.15em; font-weight: 700; color: #0C2340;
-      margin-bottom: 20px; padding-bottom: 10px;
-      border-bottom: 2px solid #C99700; display: flex; align-items: center; gap: 8px;
-    }
-    .section-title .badge {
-      background: #C99700; color: #fff; font-size: 0.72em; font-weight: 700;
-      padding: 2px 8px; border-radius: 20px; letter-spacing: 0.5px;
-    }
 
-    /* ---- KPI CARDS ---- */
-    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 18px; margin-bottom: 28px; }
+    /* KPI CARDS */
+    .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+    @media (max-width: 900px) { .kpi-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 500px) { .kpi-grid { grid-template-columns: 1fr; } }
     .kpi-card {
       background: #fff; border-radius: 10px; padding: 20px 22px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.07); border-top: 4px solid #C99700;
-      transition: transform 0.15s;
     }
-    .kpi-card:hover { transform: translateY(-2px); }
     .kpi-card.navy { border-top-color: #0C2340; }
-    .kpi-card.green { border-top-color: #00843D; }
     .kpi-card.gold { border-top-color: #C99700; }
+    .kpi-card.green { border-top-color: #00843D; }
     .kpi-card.red { border-top-color: #C41E3A; }
-    .kpi-value { font-size: 2.1em; font-weight: 800; color: #0C2340; line-height: 1; }
-    .kpi-label { font-size: 0.82em; color: #666; margin-top: 6px; font-weight: 500; }
-    .kpi-sub { font-size: 0.75em; color: #999; margin-top: 3px; }
+    .kpi-value { font-size: 2.2em; font-weight: 800; color: #0C2340; line-height: 1.1; }
+    .kpi-label { font-size: 0.82em; color: #64748b; margin-top: 4px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+    .kpi-sub { font-size: 0.8em; color: #94a3b8; margin-top: 2px; }
 
-    /* ---- LATEST SESSION SPOTLIGHT ---- */
-    .spotlight-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
-    @media (max-width: 800px) { .spotlight-grid { grid-template-columns: 1fr; } }
-    .spotlight-card { background: #f8f9fb; border-radius: 8px; padding: 16px 18px; }
-    .spotlight-card h4 { font-size: 0.88em; font-weight: 700; color: #0C2340; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.4px; }
-    .theme-list { list-style: none; }
-    .theme-list li { font-size: 0.88em; color: #444; padding: 5px 0; border-bottom: 1px solid #eee; display: flex; gap: 8px; }
-    .theme-list li:last-child { border-bottom: none; }
-    .theme-list li::before { content: '›'; color: #C99700; font-weight: 700; flex-shrink: 0; }
-    .action-item { background: #fff3cd; border-left: 3px solid #C99700; padding: 8px 12px; border-radius: 0 6px 6px 0; margin-bottom: 8px; font-size: 0.86em; }
-    .action-item strong { color: #0C2340; }
-    .attendee-pill {
-      display: inline-block; background: #e8edf3; color: #0C2340;
-      border-radius: 20px; padding: 3px 10px; font-size: 0.78em; margin: 3px;
+    /* FY NAV */
+    .fy-nav-wrap {
+      position: sticky; top: 0; z-index: 100;
+      background: #fff; border-radius: 10px; padding: 8px; margin-bottom: 24px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.10);
     }
-    .attendee-pill.virtual { background: #fff3cd; }
+    .fy-nav { display: flex; gap: 6px; flex-wrap: wrap; }
+    .fy-btn {
+      flex: 1; min-width: 90px; padding: 10px 16px; border: 2px solid #e2e8f0;
+      border-radius: 8px; background: #f8fafc; color: #475569; font-size: 0.88em;
+      font-weight: 700; cursor: pointer; transition: all 0.18s; text-align: center;
+      white-space: nowrap;
+    }
+    .fy-btn:hover { border-color: #0C2340; color: #0C2340; background: #f0f4f8; }
+    .fy-btn.active { background: #0C2340; color: #fff; border-color: #0C2340; }
+    .fy-btn.active-gold { background: #C99700; color: #fff; border-color: #C99700; }
 
-    /* ---- FILTERS ---- */
-    .filter-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 22px; align-items: center; }
-    .filter-label { font-size: 0.82em; font-weight: 600; color: #555; margin-right: 4px; }
-    .filter-btn {
-      padding: 6px 16px; border-radius: 20px; border: 2px solid #dde2ea;
-      background: #fff; color: #555; font-size: 0.82em; font-weight: 600;
-      cursor: pointer; transition: all 0.15s;
+    /* SECTION */
+    .section {
+      background: #fff; border-radius: 12px; padding: 24px 28px; margin-bottom: 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
     }
-    .filter-btn:hover { border-color: #0C2340; color: #0C2340; }
-    .filter-btn.active { background: #0C2340; color: #fff; border-color: #0C2340; }
+    .section-title {
+      font-size: 1.05em; font-weight: 800; color: #0C2340; margin-bottom: 18px;
+      padding-bottom: 10px; border-bottom: 2px solid #C99700;
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    }
+    .badge {
+      background: #0C2340; color: #fff; font-size: 0.7em; font-weight: 700;
+      padding: 2px 8px; border-radius: 20px; letter-spacing: 0.5px;
+    }
+    .badge.gold { background: #C99700; }
+    .badge.green { background: #00843D; }
+    .badge.red { background: #C41E3A; }
 
-    /* ---- CHARTS ---- */
-    .chart-wrap { width: 100%; overflow-x: auto; }
-    .chart-insight {
-      background: #f8f9fb; border-left: 4px solid #C99700;
-      padding: 12px 16px; border-radius: 0 8px 8px 0;
-      font-size: 0.88em; color: #444; margin-top: 18px; line-height: 1.7;
+    /* AT A GLANCE STRIP */
+    .glance-strip {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px;
+      background: #f8fafc; border-radius: 10px; padding: 16px; margin-bottom: 20px;
+    }
+    .glance-item { text-align: center; }
+    .glance-val { font-size: 1.6em; font-weight: 800; color: #0C2340; }
+    .glance-label { font-size: 0.75em; color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.4px; }
+
+    /* TWO-COL LAYOUT */
+    .two-col { display: grid; grid-template-columns: 1fr 1.6fr; gap: 20px; align-items: start; }
+    @media (max-width: 820px) { .two-col { grid-template-columns: 1fr; } }
+
+    /* CHART CONTAINERS */
+    .chart-wrap { position: relative; }
+    .chart-label { font-size: 0.82em; font-weight: 700; color: #475569; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+    svg { overflow: visible; }
+
+    /* THEME BARS */
+    .theme-bar-row { margin-bottom: 10px; }
+    .theme-bar-label { display: flex; justify-content: space-between; font-size: 0.8em; margin-bottom: 3px; color: #334155; font-weight: 600; }
+    .theme-bar-track { background: #f1f5f9; border-radius: 4px; height: 18px; overflow: hidden; }
+    .theme-bar-fill { height: 100%; border-radius: 4px; transition: width 0.5s ease; }
+    .theme-bar-score { font-size: 0.75em; color: #64748b; font-weight: 700; }
+
+    /* KEY Q&A ACCORDION */
+    .qa-item { border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 8px; overflow: hidden; }
+    .qa-question {
+      padding: 12px 16px; font-weight: 700; font-size: 0.88em; color: #0C2340;
+      cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+      background: #f8fafc; user-select: none;
+    }
+    .qa-question:hover { background: #f0f4f8; }
+    .qa-arrow { font-size: 0.75em; transition: transform 0.2s; color: #C99700; }
+    .qa-answers { display: none; padding: 0 16px 12px; background: #fff; }
+    .qa-answers.open { display: block; }
+    .qa-answers ul { padding-left: 18px; }
+    .qa-answers li { font-size: 0.85em; color: #475569; margin-bottom: 4px; }
+
+    /* QUOTE CARDS */
+    .quotes-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin-top: 16px; }
+    .quote-card {
+      background: #f8fafc; border-left: 4px solid #C99700; border-radius: 0 8px 8px 0;
+      padding: 14px 16px;
+    }
+    .quote-text { font-size: 0.87em; color: #334155; font-style: italic; line-height: 1.55; }
+    .quote-source { font-size: 0.75em; color: #94a3b8; margin-top: 8px; font-weight: 600; }
+
+    /* EVOLUTION NARRATIVE */
+    .evolution-box {
+      background: linear-gradient(135deg, #f0f4f8, #e8f0f8); border-radius: 10px;
+      padding: 16px 20px; border-left: 4px solid #0C2340; margin-top: 16px;
+    }
+    .evolution-box p { font-size: 0.88em; color: #334155; line-height: 1.6; }
+
+    /* ALL YEARS VIEW */
+    .all-years-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    @media (max-width: 820px) { .all-years-grid { grid-template-columns: 1fr; } }
+
+    /* EXEC SUMMARY */
+    .exec-summary {
+      background: #0C2340; color: #fff; border-radius: 12px; padding: 24px 28px; margin-bottom: 20px;
+    }
+    .exec-summary h3 { font-size: 1em; font-weight: 800; color: #C99700; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.8px; }
+    .exec-summary p { font-size: 0.87em; line-height: 1.65; opacity: 0.9; margin-bottom: 10px; }
+    .exec-summary p:last-child { margin-bottom: 0; }
+
+    /* ATTENDANCE TABLE */
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.85em; }
+    thead tr { background: #0C2340; color: #fff; }
+    thead th { padding: 10px 14px; text-align: left; font-weight: 700; font-size: 0.8em; letter-spacing: 0.4px; }
+    tbody tr:nth-child(even) { background: #f8fafc; }
+    tbody tr:hover { background: #f0f4f8; }
+    tbody td { padding: 9px 14px; border-bottom: 1px solid #e2e8f0; color: #334155; }
+    tfoot tr { background: #f0f4f8; font-weight: 800; }
+    tfoot td { padding: 10px 14px; border-top: 2px solid #0C2340; color: #0C2340; }
+    .pct-pill {
+      display: inline-block; padding: 2px 8px; border-radius: 12px;
+      font-weight: 700; font-size: 0.85em;
+    }
+    .pct-high { background: #dcfce7; color: #15803d; }
+    .pct-mid { background: #fef9c3; color: #854d0e; }
+    .pct-low { background: #fee2e2; color: #991b1b; }
+
+    /* RECOMMENDATIONS */
+    .rec-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }
+    .rec-card {
+      background: #f8fafc; border-radius: 10px; padding: 18px 20px;
+      border-top: 3px solid #0C2340; transition: box-shadow 0.2s;
+    }
+    .rec-card:hover { box-shadow: 0 4px 16px rgba(12,35,64,0.12); }
+    .rec-num { font-size: 0.7em; font-weight: 800; color: #C99700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+    .rec-title { font-size: 0.9em; font-weight: 800; color: #0C2340; margin-bottom: 6px; }
+    .rec-text { font-size: 0.82em; color: #475569; line-height: 1.55; }
+
+    /* HEATMAP */
+    .heatmap-wrap { overflow-x: auto; }
+
+    /* LEGEND */
+    .legend { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 10px; }
+    .legend-item { display: flex; align-items: center; gap: 6px; font-size: 0.78em; color: #475569; font-weight: 600; }
+    .legend-dot { width: 12px; height: 12px; border-radius: 3px; }
+
+    /* NARRATIVE LIST */
+    .narrative-list { list-style: none; }
+    .narrative-list li {
+      padding: 10px 14px 10px 42px; position: relative; border-bottom: 1px solid #f1f5f9;
+      font-size: 0.85em; color: #334155; line-height: 1.5;
+    }
+    .narrative-list li:last-child { border-bottom: none; }
+    .narrative-list li::before {
+      content: attr(data-fy); position: absolute; left: 8px; top: 50%; transform: translateY(-50%);
+      background: #0C2340; color: #fff; font-size: 0.7em; font-weight: 800;
+      padding: 2px 6px; border-radius: 4px; white-space: nowrap;
     }
 
-    /* ---- TOGGLE TABS ---- */
-    .tab-bar { display: flex; gap: 0; border-bottom: 2px solid #e0e4ea; margin-bottom: 22px; }
-    .tab-btn {
-      padding: 10px 22px; font-size: 0.86em; font-weight: 600; color: #666;
-      background: none; border: none; cursor: pointer; border-bottom: 3px solid transparent;
-      margin-bottom: -2px; transition: all 0.15s;
+    /* SENTIMENT TAG */
+    .sent-tag {
+      display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 0.78em; font-weight: 700;
     }
-    .tab-btn:hover { color: #0C2340; }
-    .tab-btn.active { color: #0C2340; border-bottom-color: #C99700; }
-    .tab-panel { display: none; }
-    .tab-panel.active { display: block; }
+    .sent-positive { background: #dcfce7; color: #15803d; }
+    .sent-neutral { background: #f1f5f9; color: #475569; }
+    .sent-attention { background: #fee2e2; color: #991b1b; }
 
-    /* ---- FEEDBACK CARDS ---- */
-    .feedback-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
-    .feedback-card {
-      background: #f8f9fb; border-radius: 8px; padding: 14px 16px;
-      border-left: 3px solid #e0e4ea; font-size: 0.86em; color: #444;
-      position: relative;
-    }
-    .feedback-card.liked { border-left-color: #00843D; }
-    .feedback-card.suggest { border-left-color: #C99700; }
-    .feedback-card .quote-icon { color: #C99700; font-size: 1.4em; line-height: 1; margin-bottom: 4px; }
-    .show-more-btn {
-      display: block; margin: 18px auto 0; padding: 8px 28px;
-      background: #0C2340; color: #fff; border: none; border-radius: 20px;
-      font-size: 0.84em; font-weight: 600; cursor: pointer;
-    }
-    .show-more-btn:hover { background: #1a3a5c; }
+    /* DONUT CENTER LABEL */
+    .donut-center { pointer-events: none; }
 
-    /* ---- SCORE BAR ---- */
-    .score-row { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
-    .score-label { font-size: 0.86em; color: #444; width: 260px; flex-shrink: 0; }
-    .score-bar-wrap { flex: 1; background: #e8edf3; border-radius: 10px; height: 14px; overflow: hidden; }
-    .score-bar-fill { height: 100%; border-radius: 10px; background: linear-gradient(90deg, #0C2340, #1a6ca8); }
-    .score-val { font-size: 0.9em; font-weight: 700; color: #0C2340; width: 50px; flex-shrink: 0; }
-
-    /* ---- ATTENDANCE TABLE ---- */
-    .data-table { width: 100%; border-collapse: collapse; font-size: 0.85em; }
-    .data-table th { background: #0C2340; color: #fff; padding: 9px 12px; text-align: left; font-weight: 600; }
-    .data-table td { padding: 8px 12px; border-bottom: 1px solid #eee; }
-    .data-table tr:nth-child(even) td { background: #f8f9fb; }
-    .data-table tr:last-child td { border-bottom: none; font-weight: 700; background: #fff8e6; }
-    .pct-chip {
-      display: inline-block; padding: 2px 8px; border-radius: 10px;
-      font-size: 0.82em; font-weight: 700; color: #fff;
-    }
-    .pct-high { background: #00843D; }
-    .pct-mid { background: #C99700; }
-    .pct-low { background: #C41E3A; }
-
-    /* ---- TAKEAWAYS ---- */
-    .takeaway-item {
-      display: flex; gap: 14px; padding: 14px 16px;
-      border-bottom: 1px solid #f0f2f5; align-items: flex-start;
-    }
-    .takeaway-item:last-child { border-bottom: none; }
-    .takeaway-icon {
-      width: 30px; height: 30px; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 0.9em; font-weight: 700; flex-shrink: 0; color: #fff;
-    }
-    .ti-green { background: #00843D; }
-    .ti-gold { background: #C99700; }
-    .ti-navy { background: #0C2340; }
-    .ti-red { background: #C41E3A; }
-
-    svg text { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-    .tooltip {
-      position: absolute; background: #0C2340; color: #fff;
-      padding: 8px 12px; border-radius: 6px; font-size: 0.8em;
-      pointer-events: none; opacity: 0; transition: opacity 0.15s;
-      max-width: 200px; line-height: 1.5; z-index: 100;
+    /* FOOTER */
+    footer {
+      text-align: center; font-size: 0.78em; color: #94a3b8;
+      padding: 24px; border-top: 1px solid #e2e8f0; margin-top: 12px;
     }
   </style>
 </head>
 <body>
 
+<!-- HEADER -->
 <header>
-  <h1>NDR Engagement Chat Analysis Dashboard</h1>
-  <div class="subtitle">Notre Dame Research &nbsp;|&nbsp; FY22 – FY26 YTD &nbsp;|&nbsp; 30 Sessions</div>
-  <div class="meta">FY26 is year-to-date through March 26, 2026 &nbsp;·&nbsp; Fiscal year: July 1 – June 30 &nbsp;·&nbsp; Survey data: 74 respondents</div>
+  <div class="header-inner">
+    <div>
+      <h1>NDR Engagement Chat Dashboard</h1>
+      <p class="subtitle">FY22 – FY26 YTD &nbsp;|&nbsp; 28 Sessions Analyzed</p>
+    </div>
+    <a href="feedback.html" class="btn-nav">View Feedback Survey &rarr;</a>
+  </div>
 </header>
-
-<div class="tooltip" id="tooltip"></div>
 
 <div class="container">
 
   <!-- KPI CARDS -->
-  <div class="kpi-grid" id="kpi-grid"></div>
+  <div class="kpi-grid">
+    <div class="kpi-card navy">
+      <div class="kpi-value">28</div>
+      <div class="kpi-label">Total Sessions</div>
+      <div class="kpi-sub">FY22 through FY26 YTD</div>
+    </div>
+    <div class="kpi-card gold">
+      <div class="kpi-value">189</div>
+      <div class="kpi-label">Total Participants</div>
+      <div class="kpi-sub">Unique attendees across all sessions</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="kpi-value">640</div>
+      <div class="kpi-label">Total Responses</div>
+      <div class="kpi-sub">Survey responses collected</div>
+    </div>
+    <div class="kpi-card red">
+      <div class="kpi-value">17%</div>
+      <div class="kpi-label">Overall Positive Sentiment</div>
+      <div class="kpi-sub">Avg across all themes &amp; FYs</div>
+    </div>
+  </div>
 
-  <!-- LATEST SESSION SPOTLIGHT -->
-  <div class="section">
+  <!-- FY NAVIGATOR -->
+  <div class="fy-nav-wrap">
+    <div class="fy-nav" id="fyNav">
+      <button class="fy-btn active" data-fy="all">All Years</button>
+      <button class="fy-btn" data-fy="FY22">FY22</button>
+      <button class="fy-btn" data-fy="FY23">FY23</button>
+      <button class="fy-btn" data-fy="FY24">FY24</button>
+      <button class="fy-btn" data-fy="FY25">FY25</button>
+      <button class="fy-btn" data-fy="FY26 YTD">FY26 YTD</button>
+    </div>
+  </div>
+
+  <!-- DYNAMIC FY DETAIL PANEL -->
+  <div id="fyPanel"></div>
+
+  <!-- ATTENDANCE SECTION -->
+  <div class="section" id="attendanceSection">
     <div class="section-title">
-      Latest Session &nbsp;—&nbsp; March 26, 2026
-      <span class="badge">MOST RECENT</span>
+      Session Attendance Summary
+      <span class="badge">28 Sessions</span>
     </div>
-    <div class="spotlight-grid">
+    <div class="two-col" style="align-items:start;">
       <div>
-        <div class="spotlight-card" style="margin-bottom:14px">
-          <h4>Attendees</h4>
-          <div style="margin-bottom:6px;">
-            <span class="attendee-pill">Olivia Poole</span>
-            <span class="attendee-pill">Jeongseek Kang</span>
-            <span class="attendee-pill">Lisa Harkins</span>
-            <span class="attendee-pill">MaryBeth Wegner</span>
-            <span class="attendee-pill">Matthew Lewis</span>
-            <span class="attendee-pill virtual">Kaitlyn Thrasher (Virtual)</span>
-          </div>
-          <div style="font-size:0.78em;color:#777;margin-top:6px;">Facilitators: Claudia Hawkins, Nancy Nalepinski &nbsp;·&nbsp; 9 invited, 7 attended (77.8%)</div>
-        </div>
-        <div class="spotlight-card">
-          <h4>Key Themes Discussed</h4>
-          <ul class="theme-list">
-            <li>NDR culture positive — Forbes #1 employer; family-first leadership style praised</li>
-            <li>Communication gaps persist between IDEA Center and departments — excluded from decisions until completion</li>
-            <li>Bravo Awards awareness is low; hard to find info — recommend standing link in "Dome to Den"</li>
-            <li>McCourtney digital monitors show info too fast to read; Lisa to contact signage team</li>
-            <li>Development Day valued for cross-functional networking; quarterly townhall frequency preferred</li>
-            <li>Staff wishlist: stop hiring freeze, consistent proposal policy, timely D2D submissions, better tools</li>
-          </ul>
-        </div>
-      </div>
-      <div>
-        <div class="spotlight-card" style="margin-bottom:14px">
-          <h4>Action Items</h4>
-          <div class="action-item"><strong>Kaitlyn Thrasher</strong> — Receive researcher/unit assignments list from MaryBeth Wegner</div>
-          <div class="action-item"><strong>Lisa Harkins</strong> — Contact digital signage team about McCourtney monitor timing &amp; content speed</div>
-          <div class="action-item"><strong>Olivia Poole</strong> — Write D2D story about how engagement chat connected team members</div>
-        </div>
-        <div class="spotlight-card">
-          <h4>Top Requests ("King/Queen for a Day")</h4>
-          <ul class="theme-list">
-            <li>Stop the hiring freeze</li>
-            <li>Hard proposal submission policy — consistency across NDR</li>
-            <li>Timely "Dome to Den" (D2D) submissions — late entries are a pain point</li>
-            <li>Better system tools and reporting capabilities</li>
-            <li>Cross-functional alignment: Preaward, Post-award &amp; IDEA Center heads meet regularly</li>
-            <li>Unit spotlight articles and standing weekly features in D2D</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ATTENDANCE ANALYSIS -->
-  <div class="section">
-    <div class="section-title">Attendance Analysis — All 30 Sessions</div>
-    <div class="filter-bar">
-      <span class="filter-label">Filter by Fiscal Year:</span>
-      <button class="filter-btn active" data-fy="all">All Years</button>
-      <button class="filter-btn" data-fy="FY22">FY22</button>
-      <button class="filter-btn" data-fy="FY23">FY23</button>
-      <button class="filter-btn" data-fy="FY24">FY24</button>
-      <button class="filter-btn" data-fy="FY25">FY25</button>
-      <button class="filter-btn" data-fy="FY26 YTD">FY26 YTD</button>
-    </div>
-    <div class="chart-wrap" id="attendance-chart-wrap">
-      <svg id="attendance-chart"></svg>
-    </div>
-    <div class="chart-insight" id="attendance-insight"></div>
-  </div>
-
-  <!-- FY SUMMARY TABLE + CHART -->
-  <div class="section">
-    <div class="section-title">Attendance by Fiscal Year</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start;">
-      <div>
-        <table class="data-table" id="fy-table"></table>
-      </div>
-      <div>
-        <div class="chart-wrap">
-          <svg id="fy-chart"></svg>
-        </div>
-      </div>
-    </div>
-    <div class="chart-insight" style="margin-top:18px;">
-      <strong>Trend:</strong> Attendance peaked in FY22 (61.5%), declined sharply through FY23 (27.4%) and FY24 (31.9%), then recovered steadily in FY25 (40.5%). FY26 YTD shows the strongest recovery at <strong>50.0%</strong> — a 3-year high, with the most recent session (Mar 26, 2026) reaching 77.8%. The program is clearly regaining momentum.
-    </div>
-  </div>
-
-  <!-- SESSION ATTENDANCE BROWSER -->
-  <div class="section">
-    <div class="section-title">Per-Session Attendance Detail</div>
-    <div class="filter-bar">
-      <span class="filter-label">Filter:</span>
-      <button class="filter-btn active" data-tbl="all">All Sessions</button>
-      <button class="filter-btn" data-tbl="FY22">FY22</button>
-      <button class="filter-btn" data-tbl="FY23">FY23</button>
-      <button class="filter-btn" data-tbl="FY24">FY24</button>
-      <button class="filter-btn" data-tbl="FY25">FY25</button>
-      <button class="filter-btn" data-tbl="FY26 YTD">FY26 YTD</button>
-    </div>
-    <div style="overflow-x:auto;">
-      <table class="data-table" id="session-table">
-        <thead><tr><th>#</th><th>Date</th><th>Fiscal Year</th><th>Invited</th><th>Attended</th><th>Attendance Rate</th></tr></thead>
-        <tbody id="session-tbody"></tbody>
-        <tfoot><tr id="session-tfoot"></tr></tfoot>
-      </table>
-    </div>
-  </div>
-
-  <!-- SURVEY FEEDBACK -->
-  <div class="section">
-    <div class="section-title">Survey Insights &nbsp;<span style="font-weight:400;font-size:0.85em;color:#666;">— 74 respondents, collected 2023–2025</span></div>
-
-    <div class="tab-bar">
-      <button class="tab-btn active" data-tab="scores">Quantitative Scores</button>
-      <button class="tab-btn" data-tab="liked">What Participants Liked (67)</button>
-      <button class="tab-btn" data-tab="suggest">Format Suggestions (53)</button>
-    </div>
-
-    <!-- TAB: SCORES -->
-    <div class="tab-panel active" id="tab-scores">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start;">
-        <div>
-          <div style="margin-bottom:20px;">
-            <div style="font-size:0.82em;font-weight:700;color:#0C2340;margin-bottom:12px;text-transform:uppercase;letter-spacing:0.4px;">Binary Ratings (n=74)</div>
-            <div class="score-row">
-              <div class="score-label">Would recommend to a co-worker</div>
-              <div class="score-bar-wrap"><div class="score-bar-fill" style="width:100%;background:linear-gradient(90deg,#00843D,#00a84f)"></div></div>
-              <div class="score-val" style="color:#00843D;">100%</div>
-            </div>
-            <div class="score-row">
-              <div class="score-label">Beneficial for NDR workplace culture</div>
-              <div class="score-bar-wrap"><div class="score-bar-fill" style="width:100%;background:linear-gradient(90deg,#00843D,#00a84f)"></div></div>
-              <div class="score-val" style="color:#00843D;">100%</div>
-            </div>
-          </div>
-          <div>
-            <div style="font-size:0.82em;font-weight:700;color:#0C2340;margin-bottom:12px;text-transform:uppercase;letter-spacing:0.4px;">Likert Scores (1–5 scale, n=74)</div>
-            <div class="score-row">
-              <div class="score-label">Felt encouraged to actively participate</div>
-              <div class="score-bar-wrap"><div class="score-bar-fill" style="width:90.8%"></div></div>
-              <div class="score-val">4.54 / 5</div>
-            </div>
-            <div class="score-row">
-              <div class="score-label">Had opportunity to connect with colleagues</div>
-              <div class="score-bar-wrap"><div class="score-bar-fill" style="width:82.8%"></div></div>
-              <div class="score-val">4.14 / 5</div>
-            </div>
-          </div>
-        </div>
-        <div>
-          <svg id="score-chart"></svg>
-          <div class="chart-insight" style="margin-top:14px;">
-            <strong>100%</strong> of respondents said they would recommend Engagement Chats to a co-worker and that the sessions are beneficial for NDR culture. The participation score of <strong>4.54/5</strong> reflects the informal, open atmosphere that staff consistently highlight as a strength. Connection score of <strong>4.14/5</strong> confirms cross-team networking is happening.
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- TAB: LIKED -->
-    <div class="tab-panel" id="tab-liked">
-      <div style="font-size:0.84em;color:#666;margin-bottom:16px;">67 of 74 respondents (90%) shared what they liked about the Engagement Chats.</div>
-      <div class="feedback-grid" id="liked-grid"></div>
-      <button class="show-more-btn" id="liked-more-btn" onclick="showMoreLiked()">Show More</button>
-    </div>
-
-    <!-- TAB: SUGGEST -->
-    <div class="tab-panel" id="tab-suggest">
-      <div style="font-size:0.84em;color:#666;margin-bottom:16px;">53 of 74 respondents (72%) provided format or improvement suggestions.</div>
-      <div class="feedback-grid" id="suggest-grid"></div>
-      <button class="show-more-btn" id="suggest-more-btn" onclick="showMoreSuggest()">Show More</button>
-    </div>
-  </div>
-
-  <!-- FEEDBACK SURVEY REPORT -->
-  <div class="section">
-    <div class="section-title">
-      Feedback Survey Report
-      <span class="badge">71 RESPONSES · SEP 2023–FEB 2026</span>
-    </div>
-
-    <div class="tab-bar">
-      <button class="tab-btn active" data-ftab="fy">Scores by Fiscal Year</button>
-      <button class="tab-btn" data-ftab="themes">Themes</button>
-      <button class="tab-btn" data-ftab="recs">Recommendations</button>
-    </div>
-
-    <!-- FY BREAKDOWN -->
-    <div class="tab-panel active" id="ftab-fy">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start;">
-        <div>
-          <div style="font-size:0.82em;font-weight:700;color:#0C2340;margin-bottom:12px;text-transform:uppercase;letter-spacing:0.4px;">Average Scores by Fiscal Year (1–5 scale)</div>
-          <table class="data-table" id="fy-scores-table">
-            <thead><tr><th>Fiscal Year</th><th>Responses</th><th>Encouraged to Participate</th><th>Connected with Colleagues</th></tr></thead>
-            <tbody>
-              <tr><td><strong>FY24</strong></td><td>33</td><td>4.30 / 5</td><td>4.06 / 5</td></tr>
-              <tr><td><strong>FY25</strong></td><td>33</td><td>4.76 / 5</td><td>4.27 / 5</td></tr>
-              <tr><td><strong>FY26 YTD</strong></td><td>5</td><td>4.80 / 5</td><td>3.60 / 5</td></tr>
-              <tr style="font-weight:700;background:#fff8e6;"><td>Overall</td><td>71</td><td>4.55 / 5</td><td>4.13 / 5</td></tr>
-            </tbody>
+        <div class="table-wrap">
+          <table id="attendTable">
+            <thead>
+              <tr>
+                <th>Fiscal Year</th>
+                <th>Sessions</th>
+                <th>Invited</th>
+                <th>Attended</th>
+                <th>Rate</th>
+                <th>Avg/Session</th>
+              </tr>
+            </thead>
+            <tbody id="attendBody"></tbody>
+            <tfoot id="attendFoot"></tfoot>
           </table>
-          <div class="chart-insight" style="margin-top:14px;">
-            <strong>Key gap:</strong> "Encouraged to Participate" (4.55) consistently outscores "Connected with Colleagues" (4.13) — participants feel empowered to speak but may not be forming deeper peer connections. FY26 YTD shows the sharpest connection dip (3.60), worth monitoring as group sizes have decreased.
-          </div>
-        </div>
-        <div>
-          <svg id="fy-scores-chart"></svg>
         </div>
       </div>
-    </div>
-
-    <!-- THEMES -->
-    <div class="tab-panel" id="ftab-themes">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:28px;">
-        <div>
-          <div style="font-size:0.82em;font-weight:700;color:#0C2340;margin-bottom:14px;text-transform:uppercase;letter-spacing:0.4px;">What Participants Liked — Top Themes (63 responses coded)</div>
-          <svg id="liked-themes-chart"></svg>
-        </div>
-        <div>
-          <div style="font-size:0.82em;font-weight:700;color:#0C2340;margin-bottom:14px;text-transform:uppercase;letter-spacing:0.4px;">Format Improvement Themes (48 responses coded)</div>
-          <svg id="suggest-themes-chart"></svg>
-        </div>
+      <div>
+        <div class="chart-label">Attendance Rate by FY</div>
+        <svg id="attendChart" width="100%" height="240"></svg>
       </div>
-      <div class="chart-insight" style="margin-top:18px;">
-        The top three things participants value — <strong>Open Forum / Safe Space</strong>, <strong>Hearing Diverse Perspectives</strong>, and <strong>Culture &amp; Community</strong> — align closely with the program's original intent. The top improvement request, sharing discussion topics in advance, is the single easiest operational change that could meaningfully raise both scores.
-      </div>
-    </div>
-
-    <!-- RECOMMENDATIONS -->
-    <div class="tab-panel" id="ftab-recs">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;" id="recs-grid"></div>
     </div>
   </div>
 
-  <!-- KEY TAKEAWAYS -->
+  <!-- RECOMMENDATIONS -->
   <div class="section">
-    <div class="section-title">Key Takeaways</div>
-    <div id="takeaways-list">
-      <div class="takeaway-item">
-        <div class="takeaway-icon ti-green">+</div>
-        <div><strong>Universal endorsement.</strong> All 74 survey respondents said they would recommend the Engagement Chats and find them beneficial for workplace culture — a remarkably consistent signal of program value across NDR.</div>
-      </div>
-      <div class="takeaway-item">
-        <div class="takeaway-icon ti-gold">↑</div>
-        <div><strong>Strong attendance recovery.</strong> After a sharp dip in FY23 (27.4%), attendance has improved for three straight years: FY24 (31.9%), FY25 (40.5%), FY26 YTD (50.0%). The most recent session (Mar 26, 2026) hit 77.8% — the highest since early FY22.</div>
-      </div>
-      <div class="takeaway-item">
-        <div class="takeaway-icon ti-navy">#</div>
-        <div><strong>Cross-unit connection is the #1 value driver.</strong> The most common theme across 67 "liked" responses is meeting colleagues from other parts of NDR. The small, diverse group format is what makes this work — participants consistently ask to preserve it.</div>
-      </div>
-      <div class="takeaway-item">
-        <div class="takeaway-icon ti-gold">!</div>
-        <div><strong>Communication gaps are a recurring pain point.</strong> Sessions consistently surface the same structural issue: information flowing from IDEA Center, leadership decisions, and D2D arrives too late or incompletely. This is an organizational design issue, not a chat format issue.</div>
-      </div>
-      <div class="takeaway-item">
-        <div class="takeaway-icon ti-navy">"</div>
-        <div><strong>Top format requests: send questions in advance + follow-up updates.</strong> The two most requested improvements across 53 format responses are (1) distribute discussion questions ahead of time, and (2) share what changed as a result of previous chats. Both are low-effort, high-impact improvements.</div>
-      </div>
-      <div class="takeaway-item">
-        <div class="takeaway-icon ti-green">→</div>
-        <div><strong>30 sessions, 201 total attendees, 39.6% overall rate.</strong> The program has reached 201 unique attendance instances across 507 invitations since March 2022. Maintaining momentum above 50% in FY26 YTD suggests the April–June 2026 sessions will be pivotal for closing the year strong.</div>
-      </div>
+    <div class="section-title">
+      Strategic Recommendations
+      <span class="badge">6 Actions</span>
     </div>
+    <div class="rec-grid" id="recGrid"></div>
   </div>
 
-</div><!-- /container -->
+</div>
+
+<footer>NDR Engagement Chat Analysis &nbsp;|&nbsp; FY22 – FY26 YTD &nbsp;|&nbsp; Data through January 2026</footer>
 
 <script>
-// ===================== DATA =====================
-const attendanceData = [
-  {n:1,  date:"2022-03-30", invited:13, attended:8,  fy:"FY22"},
-  {n:2,  date:"2022-05-11", invited:12, attended:8,  fy:"FY22"},
-  {n:3,  date:"2022-05-25", invited:13, attended:10, fy:"FY22"},
-  {n:4,  date:"2022-07-20", invited:20, attended:10, fy:"FY23"},
-  {n:5,  date:"2022-08-10", invited:21, attended:12, fy:"FY23"},
-  {n:6,  date:"2022-08-24", invited:13, attended:4,  fy:"FY23"},
-  {n:7,  date:"2022-09-27", invited:21, attended:2,  fy:"FY23"},
-  {n:8,  date:"2022-10-27", invited:22, attended:7,  fy:"FY23"},
-  {n:9,  date:"2022-12-01", invited:22, attended:6,  fy:"FY23"},
-  {n:10, date:"2023-01-19", invited:19, attended:4,  fy:"FY23"},
-  {n:11, date:"2023-01-26", invited:18, attended:3,  fy:"FY23"},
-  {n:12, date:"2023-10-26", invited:10, attended:6,  fy:"FY24"},
-  {n:13, date:"2023-12-07", invited:14, attended:8,  fy:"FY24"},
-  {n:14, date:"2024-01-18", invited:21, attended:8,  fy:"FY24"},
-  {n:15, date:"2024-02-29", invited:20, attended:5,  fy:"FY24"},
-  {n:16, date:"2024-03-21", invited:20, attended:6,  fy:"FY24"},
-  {n:17, date:"2024-05-30", invited:18, attended:6,  fy:"FY24"},
-  {n:18, date:"2024-06-27", invited:17, attended:4,  fy:"FY24"},
-  {n:19, date:"2025-01-30", invited:22, attended:7,  fy:"FY25"},
-  {n:20, date:"2025-03-12", invited:19, attended:7,  fy:"FY25"},
-  {n:21, date:"2025-03-27", invited:19, attended:8,  fy:"FY25"},
-  {n:22, date:"2025-04-23", invited:19, attended:7,  fy:"FY25"},
-  {n:23, date:"2025-05-15", invited:27, attended:11, fy:"FY25"},
-  {n:24, date:"2025-06-25", invited:19, attended:10, fy:"FY25"},
-  {n:25, date:"2025-07-31", invited:13, attended:5,  fy:"FY26 YTD"},
-  {n:26, date:"2025-09-18", invited:13, attended:8,  fy:"FY26 YTD"},
-  {n:27, date:"2025-10-29", invited:10, attended:2,  fy:"FY26 YTD"},
-  {n:28, date:"2025-12-18", invited:13, attended:5,  fy:"FY26 YTD"},
-  {n:29, date:"2026-01-29", invited:10, attended:7,  fy:"FY26 YTD"},
-  {n:30, date:"2026-03-26", invited:9,  attended:7,  fy:"FY26 YTD"},
+/* ================================================================
+   DATA
+   ================================================================ */
+const fyKeys = ["FY22","FY23","FY24","FY25","FY26 YTD"];
+
+const fyData = {
+  "FY22": {
+    sessions: 3, participants: 26, responses: 110,
+    positivePct: 23, neutralPct: 56, needsAttentionPct: 21,
+    topTheme: "Hybrid & Remote Work", topThemeMentions: 24,
+    dateRange: "March 30 – May 25, 2022",
+    themes: [
+      {name:"Hybrid & Remote Work",       mentions:24, score:23},
+      {name:"Culture & Community",         mentions:21, score:54},
+      {name:"Growth & Development",        mentions:null, score:53},
+      {name:"Recognition & Rewards",       mentions:null, score:51},
+      {name:"Processes & Operations",      mentions:null, score:39},
+      {name:"Leadership & Management",     mentions:null, score:38},
+      {name:"Comm & Transparency",         mentions:null, score:32},
+    ],
+    quotes: [
+      {text:"NDR leadership has been receptive to the core facilities. They've been going through a growth phase, and there is a lot of support from NDR, which is appreciated.", source:"May 11, 2022"},
+      {text:"People make a big difference. When they reach out with questions, everyone is very responsive, making the whole process more enjoyable.", source:"May 11, 2022"},
+      {text:"NDR does an excellent job of creating a culture in a diffused group.", source:"March 30, 2022"},
+    ],
+    keyQA: [
+      {q:"How can we make it better?", a:["Especially after covid, we may not see people in our unit","Focus on employees — there is always room for improvement","Have an opportunity to connect with others across units"]},
+      {q:"What is great about NDR?", a:["NDR does an excellent job of creating a culture in a diffused group","There IS a culture, and it's a good culture","We do an excellent job with our social events"]},
+      {q:"What is a challenge for NDR?", a:["Hybrid work makes it hard to feel connected","People work remotely and may not see those in their unit","Communication gaps exist between on-site and remote staff"]},
+    ],
+    evolution: "Focused heavily on post-COVID adjustment, hybrid work culture, and reconnecting after the pandemic. The NDR Fair concept emerged as employees sought cross-unit visibility. Culture scored highest; Hybrid & Remote Work was the most-discussed theme with mixed sentiment."
+  },
+  "FY23": {
+    sessions: 7, participants: 43, responses: 139,
+    positivePct: 16, neutralPct: 62, needsAttentionPct: 22,
+    topTheme: "Leadership & Management", topThemeMentions: 39,
+    dateRange: "July 20, 2022 – January 26, 2023",
+    themes: [
+      {name:"Leadership & Management",     mentions:39, score:29},
+      {name:"Comm & Transparency",         mentions:27, score:31},
+      {name:"Hybrid & Remote Work",        mentions:null, score:66},
+      {name:"Culture & Community",         mentions:null, score:49},
+      {name:"Recognition & Rewards",       mentions:null, score:23},
+      {name:"Growth & Development",        mentions:null, score:19},
+      {name:"Processes & Operations",      mentions:null, score:4},
+    ],
+    quotes: [
+      {text:"I would love to have clearer guidance on what the expectations are for career advancement in NDR.", source:"October 2022"},
+      {text:"The lack of documented SOPs makes it hard to onboard new people or ensure consistency across units.", source:"November 2022"},
+      {text:"There's a real hunger for more visibility into how decisions are made at the leadership level.", source:"January 2023"},
+    ],
+    keyQA: [
+      {q:"What would help you grow professionally?", a:["Clear career ladders with defined milestones","More feedback from managers on performance","Access to training and development resources"]},
+      {q:"What do you think about communication from leadership?", a:["We need more transparency about organizational decisions","Updates are often delayed or incomplete","Town halls help but we need more frequent touchpoints"]},
+      {q:"What process improvements are needed?", a:["SOPs need to be documented and accessible","Decision-making timelines are unclear","Better coordination between units would help"]},
+    ],
+    evolution: "Growth and development became a dominant concern as ND Voice results surfaced low scores in this area. Questions about career paths, SOP documentation, and organizational structure intensified. Processes & Operations scored just 4 — the lowest single score across the entire FY22–FY26 dataset."
+  },
+  "FY24": {
+    sessions: 7, participants: 43, responses: 168,
+    positivePct: 15, neutralPct: 62, needsAttentionPct: 23,
+    topTheme: "Leadership & Management", topThemeMentions: 33,
+    dateRange: "October 26, 2023 – June 27, 2024",
+    themes: [
+      {name:"Leadership & Management",     mentions:33, score:28},
+      {name:"Comm & Transparency",         mentions:20, score:25},
+      {name:"Recognition & Rewards",       mentions:null, score:59},
+      {name:"Growth & Development",        mentions:null, score:54},
+      {name:"Culture & Community",         mentions:null, score:26},
+      {name:"Processes & Operations",      mentions:null, score:24},
+      {name:"Performance Management",      mentions:null, score:23},
+      {name:"Hybrid & Remote Work",        mentions:null, score:17},
+    ],
+    quotes: [
+      {text:"Jeff's arrival brought fresh energy and a real sense that change is possible. I'm cautiously optimistic about the direction.", source:"November 2023"},
+      {text:"We need clearer metrics — it's hard to know if we're succeeding when the goalpost keeps shifting.", source:"March 2024"},
+      {text:"The new Town Hall format is a step in the right direction. People are more engaged when they can ask real questions.", source:"June 2024"},
+    ],
+    keyQA: [
+      {q:"What are your expectations for new leadership?", a:["Greater transparency about strategic direction","Consistency in applying policies across units","Regular touchpoints beyond the annual survey"]},
+      {q:"What metrics matter most to your work?", a:["Clear KPIs tied to individual contributions","Shared understanding of what success looks like for NDR","Better visibility into how our work connects to broader goals"]},
+      {q:"How is the hybrid work arrangement working for you?", a:["Remote work is harder now without strong norms","In-person days feel underutilized","Team schedules need better coordination"]},
+    ],
+    evolution: "Jeff Rhoads' arrival brought energy and new Town Hall formats. Employees expressed hunger for strategic direction, transparency on metrics, and clarity on the new organizational framework. Overall positive sentiment reached its lowest point at 15%, driven by Leadership & Management and Communication gaps."
+  },
+  "FY25": {
+    sessions: 6, participants: 50, responses: 117,
+    positivePct: 18, neutralPct: 64, needsAttentionPct: 18,
+    topTheme: "Leadership & Management", topThemeMentions: 22,
+    dateRange: "January 30 – June 25, 2025",
+    themes: [
+      {name:"Leadership & Management",     mentions:22, score:31},
+      {name:"Comm & Transparency",         mentions:18, score:41},
+      {name:"Culture & Community",         mentions:18, score:56},
+      {name:"Growth & Development",        mentions:null, score:38},
+      {name:"Processes & Operations",      mentions:null, score:38},
+      {name:"Hybrid & Remote Work",        mentions:null, score:38},
+      {name:"Recognition & Rewards",       mentions:null, score:37},
+      {name:"Performance Management",      mentions:null, score:17},
+    ],
+    quotes: [
+      {text:"The Bravo Awards program is making a real difference — people feel seen for the first time in years.", source:"March 2025"},
+      {text:"Development Day was a great initiative. More of these targeted learning opportunities would be really valuable.", source:"April 2025"},
+      {text:"The culture mapping process helped us understand where we are, but we need to now act on what we found.", source:"June 2025"},
+    ],
+    keyQA: [
+      {q:"How has recognition changed for you this year?", a:["Bravo Awards have increased visibility of contributions","Peer recognition is now more normalized","Formal recognition still feels inconsistent across units"]},
+      {q:"What is your experience with performance management changes?", a:["The redesign is needed but the rollout has been confusing","We need more manager training on the new framework","Employees are unsure how the new system affects advancement"]},
+      {q:"What would strengthen communication from leadership?", a:["Consistent messaging across all levels of management","More proactive updates on strategic decisions","Better alignment between what leadership says and what we experience"]},
+    ],
+    evolution: "Culture mapping, Bravo Awards, and Development Day emerged as key topics. Performance management redesign and strategic goals communication were central themes. Positive and Needs Attention sentiment balanced out at 18% each — a sign of incremental improvement in engagement."
+  },
+  "FY26 YTD": {
+    sessions: 5, participants: 27, responses: 106,
+    positivePct: 17, neutralPct: 65, needsAttentionPct: 18,
+    topTheme: "Comm & Transparency", topThemeMentions: 19,
+    dateRange: "July 31, 2025 – January 29, 2026",
+    themes: [
+      {name:"Comm & Transparency",         mentions:19, score:52},
+      {name:"Leadership & Management",     mentions:11, score:34},
+      {name:"Culture & Community",         mentions:11, score:41},
+      {name:"Processes & Operations",      mentions:null, score:51},
+      {name:"Hybrid & Remote Work",        mentions:null, score:31},
+      {name:"Performance Management",      mentions:null, score:30},
+      {name:"Growth & Development",        mentions:null, score:18},
+    ],
+    quotes: [
+      {text:"With all the uncertainty around federal funding, it's hard to plan for the future or feel secure in your role.", source:"October 2025"},
+      {text:"Leadership has been more communicative this year, which is appreciated — but we need clarity on what restructuring means for us.", source:"November 2025"},
+      {text:"The conversation about AI in the workplace is important. I'd love for NDR to take a proactive stance on how we use it.", source:"January 2026"},
+    ],
+    keyQA: [
+      {q:"How is federal funding uncertainty affecting your work?", a:["It creates anxiety about long-term project commitments","Planning is difficult without stable budget projections","Staff morale has been impacted by ongoing uncertainty"]},
+      {q:"What are your thoughts on AI in the workplace?", a:["NDR should establish clear guidelines for AI use","There is excitement but also fear about what AI means for roles","We need training to understand how to use AI tools effectively"]},
+      {q:"How do you feel about the organizational restructuring?", a:["More transparency is needed about what changes are coming","Communication about the restructuring has improved","We want to understand how restructuring affects our unit specifically"]},
+    ],
+    evolution: "Federal funding concerns emerged as a new and significant issue. Organizational restructuring, AI workplace impact, and transparency during uncertainty became dominant themes. Comm & Transparency overtook Leadership & Management as the top theme for the first time in three fiscal years."
+  }
+};
+
+const heatmapData = [
+  {theme:"Culture & Community",    FY22:54, FY23:49, FY24:26, FY25:56, "FY26 YTD":41},
+  {theme:"Comm & Transparency",    FY22:32, FY23:31, FY24:25, FY25:41, "FY26 YTD":52},
+  {theme:"Growth & Development",   FY22:53, FY23:19, FY24:54, FY25:38, "FY26 YTD":18},
+  {theme:"Hybrid & Remote Work",   FY22:23, FY23:66, FY24:17, FY25:38, "FY26 YTD":31},
+  {theme:"Processes & Operations", FY22:39, FY23:4,  FY24:24, FY25:38, "FY26 YTD":51},
+  {theme:"Leadership & Mgmt",      FY22:38, FY23:29, FY24:28, FY25:31, "FY26 YTD":34},
+  {theme:"Recognition & Rewards",  FY22:51, FY23:23, FY24:59, FY25:37, "FY26 YTD":null},
+  {theme:"Performance Mgmt",       FY22:null,FY23:6, FY24:21, FY25:17, "FY26 YTD":30},
 ];
 
-const likedResponses = [
-  "Good chance to hear from multiple people, viewpoints, and disciplines.",
-  "Bringing together different groups in NDRAC — beneficial to learn what issues each team faces and which are shared.",
-  "Gave an opportunity to voice my own opinion and hear the ideas, struggles, and compliments of others.",
-  "A good way to bring disparate people together. In a typical week we may never see each other, even though we're technically on the same team. It promotes a big-tent atmosphere.",
-  "Even if nothing changes as a result of the Chats, staff can walk away knowing that higher-level team members are listening.",
-  "The FISH program generated a lot of engagement — I like hearing others' perspectives.",
-  "Knowing that NDR leadership values the input of rank-and-file workers. It's reassuring that leadership wants to keep engagement high.",
-  "Really good conversations about things I would not normally expect to discuss openly.",
-  "I like seeing people in person and meeting colleagues I wouldn't usually interact with.",
-  "Nice to interact with NDR staff from other teams I would not normally get to talk to.",
-  "Hearing other perspectives from across NDR.",
-  "Meeting people across NDR — not just NDRAC.",
-  "Being able to interact with NDR colleagues from other teams, institutes, and centers.",
-  "I liked the variety of people who attended — a good cross-section.",
-  "It's nice to know that someone central to NDR cares about all of us.",
-  "Helps NDR's 'strays' feel more a part of things.",
-  "I feel heard.",
-  "I liked that it was a guided discussion.",
-  "Small but diverse group from different areas across campus.",
-  "The engagement chats were interactive.",
-  "It gives people a chance to gather and discuss issues.",
-  "Very informal, facilitating a relaxed atmosphere that encouraged people to speak up — even those joining remotely.",
-  "Cross-department insights.",
-  "Meeting others from different areas of research in a smaller setting.",
-  "The flow of the chat was easy to continue and build from.",
-  "Nice to feel heard, and to do check-ins after onboarding when we've had time to really understand the role and work culture.",
-  "Meeting new NDR staff and discussing ideas for improvement.",
-  "Really good, constructive, wide-ranging, and engaging conversation. Not just complaining.",
-  "The two emails sent ahead of time made me feel comfortable coming. Being around others with guided questions helped prompt my thinking.",
-  "Informal and participation was more or less voluntary. The prompts were helpful but I appreciated that we weren't 'called on'.",
-  "Helped me feel valued as an employee. A casual and comfortable venue that allowed the conversation to flow naturally.",
-  "Meeting people from other teams. Prompts from Claudia on topics of interest.",
-  "I liked the open-ended questions about what is working well, what needs to improve, and what we're proud of.",
-  "An opportunity to meet with others I don't normally get to meet — and to speak my mind in a smaller, welcoming space.",
-  "Interaction with staff in other areas of NDR and open discussion.",
-  "I like the mix of people.",
-  "People seemed open to sharing.",
-  "I liked how open and comfortable the environment was — easy to express my opinions.",
-  "The size of the group: NDR is large now and suggestions can feel unheard. This venue offers a small space to voice them.",
-  "Loved hearing from others in NDR and hearing about their experiences. Loved hearing that some things we're asking for are already being worked on.",
-  "I appreciated that Claudia and Nancy really seemed interested in listening to feedback.",
-  "Great meeting new people and discussing experiences and what we can do to build on them.",
-  "Casual yet approachable environment to share ideas.",
-  "Opportunity to engage with people from other areas, hear their thoughts, and learn interesting facts.",
-  "Valuable space for open communication. Opportunity to make cross-team connections and gain insight into others' challenges. Reinforces a culture of transparency, inclusion, and shared purpose.",
-  "A safe space to openly discuss NDR and its culture. Especially valuable to have both newer staff and long-time team members in the room.",
-  "Interesting to hear different ideas — the time set aside for discussion was just right.",
-  "Appreciated the size. Allowed most people to engage without going too deep into any one topic. Nice to see what other parts of NDR are thinking.",
-  "Small forum; ability to 'vent' in a healthy way.",
-  "Hearing perspectives from different units — didn't realize how different my unit functions from others. In-person time with Claudia.",
-  "I liked everything: the organization, the session, the facilitators. The cupcakes, drinks, and fruits too!",
-  "Good opportunity to ask questions of NDR individuals outside our direct team.",
-  "Interacting with others from Research.",
-  "Small group, randomly selected — gives good sample data without a lot of time commitment.",
-  "A chance to share my thoughts.",
-  "Allows HR to have a hand on the pulse of our culture. A great opportunity to discuss what we like or dislike in a protected environment.",
-  "People from lots of different areas, though hard to interact when online.",
-  "Opportunity to speak with and hear from colleagues in other areas of NDR I don't usually work with. The organizers seem genuinely interested in receiving feedback.",
-  "Liked the candid conversations — mostly uplifting, focused on what was possible or what could be improved.",
-  "Being able to be honest. I feel they're used to improve the future of our department(s) and aren't brushed aside.",
-  "The engagement chats are a safe place to be candid about our workplace.",
-  "Nice to get perspectives from across all of NDR — not just NDRAC.",
-  "Opportunity to hear from others outside my immediate teams.",
-  "Connecting with colleagues from other departments within NDR.",
-  "Appreciated the candor from everyone — everyone seemed comfortable giving honest feedback.",
+const attendData = [
+  {fy:"FY22",   sessions:3, invited:57,  attended:39, rate:68.4, avg:13.0},
+  {fy:"FY23",   sessions:7, invited:157, attended:40, rate:25.5, avg:5.7},
+  {fy:"FY24",   sessions:7, invited:168, attended:57, rate:33.9, avg:8.1},
+  {fy:"FY25",   sessions:6, invited:120, attended:48, rate:40.0, avg:8.0},
+  {fy:"FY26 YTD",sessions:5,invited:118, attended:54, rate:45.8, avg:10.8},
 ];
 
-const suggestResponses = [
-  "Keep the forum open and informal as was the case in the one I attended.",
-  "A forum on what is working and what is not working is a good approach. Explaining what we do in our day-to-day roles to the group is also valuable — many in NDRAC don't know what other roles entail.",
-  "It may be helpful to give participants a discussion guide or questions in advance so they can prepare their thoughts. Invite a larger group and use smaller group discussions within to encourage shy staff members to share.",
-  "Continue them — keep them going. Hold follow-up chats for the same groups.",
-  "An ice breaker to relax people and make it more social before diving into discussion.",
-  "Some of the interactive phone-based surveys we used at the onsite — those make it fun.",
-  "Themed chats — give us two topics to think about ahead of the meeting. Ask for an arrival 10–15 minutes earlier for networking.",
-  "Slightly longer sessions — it felt a little rushed. If sessions typically go over time, adjust the calendar invite.",
-  "Consider if in-person attendance is feasible — virtual works in a pinch but in-person is preferred.",
-  "A slightly larger group size would allow for more diverse perspectives.",
-  "There should be a clear next step on what is being done with the data and resulting action plans.",
-  "Maybe a small list of possible topics for discussion shared before the meeting.",
-  "It might be nice to encourage more discussion about what each participant does on a day-to-day basis in their functional unit.",
-  "Adding partner/small group portions would be nice — a time to reflect on questions directly with someone.",
-  "Sometimes providing context for ideas being discussed distracted from the conversation. Letting participants share ideas without hearing blockers might elicit more ideas and make suggestions feel more valued.",
-  "I thought the format was great; just the right duration for thought-provoking discussions.",
-  "Increased number of discussion-prompting questions — I learned a lot from others' thoughts.",
-  "A few more people could be added — small size is great but a slightly larger group would be more robust.",
-  "Find ways to engage the audience more, allowing NDR staff to step back a bit. Ensure all invitees have ample space to speak.",
-  "I sometimes get scared to share without knowing questions ahead of time. If specific questions are planned, distribute them in advance.",
-  "If discussion topics are known ahead of time, distribute them prior to the chat — it may lead to deeper discussions.",
-  "Consider incorporating breakout group activities or guided prompts to encourage deeper discussion and broader participation.",
-  "Include a brief recap at the end to reinforce key takeaways and outline next steps. Provide follow-up updates on changes implemented. Acknowledge suggestions that receive broad support but can't be implemented right away, with context on why.",
-  "I like being able to see the questions being asked — it lets me think through each part while others are talking.",
-  "Format is great. Prompt questions worked well. My session was dominated by one disgruntled individual, but I'm not sure what can be done about that.",
-  "Perhaps ask folks to submit questions or concerns ahead of time to further steer conversations.",
-  "There were technical issues that made it harder to include remote team members — a double-check of equipment beforehand would help.",
-  "Maybe ask for agenda items ahead of time and leave time for additional discussion.",
-  "It was hard to hear people in the room when I was on Zoom.",
-  "Once the in-room conversation gets going, remote attendees struggle to jump in. Consider seating organizers across from the screen so all participants can be seen at once.",
-  "Send out the questions prior to the chat — it would give us time to think before the meeting.",
-  "Being in a setting with couches or resembling a coffee shop would feel more like talking with family/friends.",
-  "I would love to see in a newsletter or email update some sort of update on how ideas from the Chats have been implemented. Without seeing change occur, it can feel futile.",
-  "Suggest providing a few questions to think about in advance, plus opportunities for feedback in alternative formats for those not comfortable with live feedback in front of peers.",
-  "It was difficult participating as a virtual attendee when most participants were in person. Consider an exclusively virtual session so remote/hybrid staff can better participate.",
+const recommendations = [
+  {title:"Prioritize Transparency During Uncertainty", body:"Establish a regular communication cadence from senior leadership addressing federal funding, restructuring, and AI impact — particularly given the concerns raised in FY26 YTD sessions."},
+  {title:"Reinvest in Growth & Development Pathways", body:"Growth & Development has declined to 18 in FY26 YTD after a rebound in FY24. Develop structured career ladders and mentorship programs with visible milestones."},
+  {title:"Sustain and Expand Recognition Programs", body:"Bravo Awards and peer recognition initiatives from FY25 showed measurable cultural impact. Formalize and expand these programs to ensure equitable reach across all units."},
+  {title:"Address Performance Management Confusion", body:"Performance Management has scored below 25 since its introduction. Provide manager training, clearer employee guidance, and a phased rollout timeline for any redesign."},
+  {title:"Develop a Proactive AI Workplace Strategy", body:"AI emerged as a top concern in FY26 YTD. NDR should establish usage guidelines, offer training, and communicate proactively about how AI will affect roles and responsibilities."},
+  {title:"Improve Hybrid Work Norms and Structure", body:"Hybrid & Remote Work sentiment has fluctuated across all five fiscal years. Establish clearer norms, team scheduling protocols, and purposeful in-person meeting structures."},
 ];
 
-// ===================== KPI CARDS =====================
-function renderKPIs() {
-  const total = attendanceData.length;
-  const totalInvited = d3.sum(attendanceData, d => d.invited);
-  const totalAttended = d3.sum(attendanceData, d => d.attended);
-  const overallPct = (totalAttended / totalInvited * 100).toFixed(1);
-  const fy26 = attendanceData.filter(d => d.fy === "FY26 YTD");
-  const fy26Pct = (d3.sum(fy26, d=>d.attended)/d3.sum(fy26, d=>d.invited)*100).toFixed(1);
-
-  const kpis = [
-    {val: total, label: "Total Sessions", sub: "FY22 – FY26 YTD", cls: "navy"},
-    {val: totalAttended, label: "Total Attendances", sub: `${totalInvited} total invited`, cls: "navy"},
-    {val: overallPct + "%", label: "Overall Attendance Rate", sub: "Across all 30 sessions", cls: "gold"},
-    {val: fy26Pct + "%", label: "FY26 YTD Rate", sub: "Jul 2025 – Mar 2026 (6 sessions)", cls: "green"},
-    {val: "100%", label: "Recommend Rate", sub: "74 of 74 survey respondents", cls: "green"},
-    {val: "4.54 / 5", label: "Participation Score", sub: "Avg felt encouraged to participate", cls: "gold"},
-    {val: "4.14 / 5", label: "Connection Score", sub: "Avg connected with colleagues", cls: "navy"},
-    {val: "77.8%", label: "Most Recent Session", sub: "March 26, 2026", cls: "green"},
-  ];
-
-  const grid = d3.select("#kpi-grid");
-  grid.selectAll(".kpi-card").data(kpis).enter()
-    .append("div")
-    .attr("class", d => `kpi-card ${d.cls}`)
-    .html(d => `<div class="kpi-value">${d.val}</div><div class="kpi-label">${d.label}</div><div class="kpi-sub">${d.sub}</div>`);
+/* ================================================================
+   UTILITIES
+   ================================================================ */
+function scoreColor(s) {
+  if (s === null) return "#e2e8f0";
+  if (s >= 50) return "#00843D";
+  if (s >= 30) return "#C99700";
+  return "#C41E3A";
+}
+function scoreBg(s) {
+  if (s === null) return "#f1f5f9";
+  if (s >= 50) return "#dcfce7";
+  if (s >= 30) return "#fef9c3";
+  return "#fee2e2";
+}
+function pctClass(r) {
+  if (r >= 45) return "pct-high";
+  if (r >= 30) return "pct-mid";
+  return "pct-low";
 }
 
-// ===================== ATTENDANCE BAR CHART =====================
-let currentFY = "all";
-function renderAttendanceChart(fy) {
-  const data = fy === "all" ? attendanceData : attendanceData.filter(d => d.fy === fy);
-  const wrap = document.getElementById("attendance-chart-wrap");
-  const W = Math.max(wrap.clientWidth || 900, 600);
-  const H = 280;
-  const margin = {top: 20, right: 20, bottom: 60, left: 44};
-  const w = W - margin.left - margin.right;
-  const h = H - margin.top - margin.bottom;
+/* ================================================================
+   RENDER: FY DETAIL PANEL
+   ================================================================ */
+function renderFY(fy) {
+  const d = fyData[fy];
+  const panel = document.getElementById("fyPanel");
+  panel.innerHTML = "";
 
-  const svg = d3.select("#attendance-chart")
-    .attr("width", W).attr("height", H);
-  svg.selectAll("*").remove();
-  const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
+  // --- Section wrapper ---
+  const sec = document.createElement("div");
+  sec.className = "section";
+  sec.innerHTML = `<div class="section-title">${fy} Analysis <span class="badge gold">${d.dateRange}</span></div>`;
 
-  const fyColors = {"FY22":"#1a6ca8","FY23":"#C41E3A","FY24":"#C99700","FY25":"#00843D","FY26 YTD":"#0C2340"};
+  // At-a-glance strip
+  sec.innerHTML += `
+    <div class="glance-strip">
+      <div class="glance-item"><div class="glance-val">${d.sessions}</div><div class="glance-label">Sessions</div></div>
+      <div class="glance-item"><div class="glance-val">${d.participants}</div><div class="glance-label">Participants</div></div>
+      <div class="glance-item"><div class="glance-val">${d.responses}</div><div class="glance-label">Responses</div></div>
+      <div class="glance-item"><div class="glance-val" style="color:#00843D">${d.positivePct}%</div><div class="glance-label">Positive</div></div>
+      <div class="glance-item"><div class="glance-val" style="color:#C41E3A">${d.needsAttentionPct}%</div><div class="glance-label">Needs Attention</div></div>
+      <div class="glance-item"><div class="glance-val" style="color:#0C2340">${d.topThemeMentions}</div><div class="glance-label">Top Theme Mentions<br><small style="font-size:0.75em;font-weight:600;color:#64748b">${d.topTheme}</small></div></div>
+    </div>`;
 
-  const x = d3.scaleBand().domain(data.map(d=>d.n)).range([0,w]).padding(0.25);
-  const y = d3.scaleLinear().domain([0,100]).range([h,0]);
+  // Two-col: donut + theme bars
+  const twocol = document.createElement("div");
+  twocol.className = "two-col";
+  twocol.style.marginBottom = "20px";
 
-  // Gridlines
-  g.append("g").attr("class","grid").selectAll("line")
-    .data([25,50,75,100]).enter().append("line")
-    .attr("x1",0).attr("x2",w)
-    .attr("y1",d=>y(d)).attr("y2",d=>y(d))
-    .attr("stroke","#e8edf3").attr("stroke-dasharray","4,3");
+  // Left: donut
+  const donutWrap = document.createElement("div");
+  donutWrap.innerHTML = `<div class="chart-label">Sentiment Distribution</div>
+    <svg id="donut_${fy.replace(/\s/g,'_')}" width="100%" height="220"></svg>`;
 
-  // Bars (invited - background)
-  g.selectAll(".bar-invited").data(data).enter()
-    .append("rect").attr("class","bar-invited")
-    .attr("x",d=>x(d.n)).attr("width",x.bandwidth())
-    .attr("y",d=>y(d.invited/d.invited*100)).attr("height",d=>h-y(100))
-    .attr("fill","#e8edf3").attr("rx",2);
-
-  // Bars (attended %)
-  g.selectAll(".bar-attended").data(data).enter()
-    .append("rect").attr("class","bar-attended")
-    .attr("x",d=>x(d.n)).attr("width",x.bandwidth())
-    .attr("y",d=>y(d.attended/d.invited*100))
-    .attr("height",d=>h-y(d.attended/d.invited*100))
-    .attr("fill",d=>fyColors[d.fy]||"#0C2340")
-    .attr("rx",2).attr("opacity",0.85)
-    .on("mouseover", function(event, d) {
-      const pct = (d.attended/d.invited*100).toFixed(1);
-      d3.select("#tooltip")
-        .style("opacity",1)
-        .style("left",(event.pageX+12)+"px")
-        .style("top",(event.pageY-28)+"px")
-        .html(`<strong>Session #${d.n}</strong><br/>${d.date}<br/>${d.fy}<br/>${d.attended}/${d.invited} attended<br/><strong>${pct}%</strong>`);
-      d3.select(this).attr("opacity",1);
-    })
-    .on("mousemove", function(event) {
-      d3.select("#tooltip").style("left",(event.pageX+12)+"px").style("top",(event.pageY-28)+"px");
-    })
-    .on("mouseout", function() {
-      d3.select("#tooltip").style("opacity",0);
-      d3.select(this).attr("opacity",0.85);
-    });
-
-  // X axis
-  g.append("g").attr("transform",`translate(0,${h})`).call(
-    d3.axisBottom(x).tickFormat(n => {
-      const d = data.find(r=>r.n===n);
-      return d ? d.date.slice(5) : "";
-    })
-  ).selectAll("text").attr("transform","rotate(-45)").attr("text-anchor","end").attr("font-size","10px");
-
-  // Y axis
-  g.append("g").call(d3.axisLeft(y).ticks(5).tickFormat(d=>d+"%")).selectAll("text").attr("font-size","10px");
-
-  // 50% reference line
-  g.append("line").attr("x1",0).attr("x2",w).attr("y1",y(50)).attr("y2",y(50))
-    .attr("stroke","#C99700").attr("stroke-dasharray","6,3").attr("stroke-width",1.5);
-  g.append("text").attr("x",w-4).attr("y",y(50)-5).attr("text-anchor","end")
-    .attr("font-size","10px").attr("fill","#C99700").text("50% target");
-
-  // Update insight
-  const totalInv = d3.sum(data, d=>d.invited);
-  const totalAtt = d3.sum(data, d=>d.attended);
-  const avgPct = (totalAtt/totalInv*100).toFixed(1);
-  const best = data.reduce((a,b) => a.attended/a.invited > b.attended/b.invited ? a : b);
-  const worst = data.reduce((a,b) => a.attended/a.invited < b.attended/b.invited ? a : b);
-  document.getElementById("attendance-insight").innerHTML =
-    `<strong>${fy === "all" ? "All sessions" : fy}:</strong> ${data.length} sessions | ${totalAtt} attended of ${totalInv} invited | Avg rate: <strong>${avgPct}%</strong> | Best: Session #${best.n} (${best.date}, ${(best.attended/best.invited*100).toFixed(0)}%) | Lowest: Session #${worst.n} (${worst.date}, ${(worst.attended/worst.invited*100).toFixed(0)}%)`;
-}
-
-// ===================== FY SUMMARY TABLE + CHART =====================
-function renderFYSummary() {
-  const fys = ["FY22","FY23","FY24","FY25","FY26 YTD"];
-  const fyData = fys.map(fy => {
-    const rows = attendanceData.filter(d=>d.fy===fy);
-    const inv = d3.sum(rows,d=>d.invited);
-    const att = d3.sum(rows,d=>d.attended);
-    return {fy, sessions: rows.length, invited: inv, attended: att, pct: att/inv*100};
+  // Right: theme bars
+  const barsWrap = document.createElement("div");
+  barsWrap.innerHTML = `<div class="chart-label">Theme Scores (% Positive Sentiment)</div>`;
+  d.themes.forEach(t => {
+    const col = scoreColor(t.score);
+    const pct = t.score || 0;
+    barsWrap.innerHTML += `
+      <div class="theme-bar-row">
+        <div class="theme-bar-label">
+          <span>${t.name}${t.mentions ? ` <span style="font-size:0.8em;color:#94a3b8">(${t.mentions} mentions)</span>` : ''}</span>
+          <span class="theme-bar-score" style="color:${col}">${t.score !== null ? t.score+'%' : 'N/A'}</span>
+        </div>
+        <div class="theme-bar-track">
+          <div class="theme-bar-fill" style="width:${pct}%;background:${col}"></div>
+        </div>
+      </div>`;
   });
 
-  // Table
-  const table = d3.select("#fy-table");
-  table.html("");
-  const thead = table.append("thead").append("tr");
-  ["Fiscal Year","Sessions","Invited","Attended","Rate"].forEach(h => thead.append("th").text(h));
-  const tbody = table.append("tbody");
-  fyData.forEach(d => {
-    const pctStr = d.pct.toFixed(1)+"%";
-    const cls = d.pct >= 50 ? "pct-high" : d.pct >= 35 ? "pct-mid" : "pct-low";
-    const tr = tbody.append("tr");
-    tr.append("td").text(d.fy).style("font-weight","600");
-    tr.append("td").text(d.sessions);
-    tr.append("td").text(d.invited);
-    tr.append("td").text(d.attended);
-    tr.append("td").html(`<span class="pct-chip ${cls}">${pctStr}</span>`);
-  });
-  // Totals row
-  const totInv = d3.sum(fyData,d=>d.invited);
-  const totAtt = d3.sum(fyData,d=>d.attended);
-  const tfoot = table.append("tfoot").append("tr").attr("id","fy-tfoot-row");
-  tfoot.append("td").text("Total");
-  tfoot.append("td").text(d3.sum(fyData,d=>d.sessions));
-  tfoot.append("td").text(totInv);
-  tfoot.append("td").text(totAtt);
-  tfoot.append("td").text((totAtt/totInv*100).toFixed(1)+"%");
+  twocol.appendChild(donutWrap);
+  twocol.appendChild(barsWrap);
+  sec.appendChild(twocol);
 
-  // Bar chart
-  const W = 380, H = 240;
-  const margin = {top:16,right:20,bottom:40,left:70};
-  const w = W-margin.left-margin.right, h = H-margin.top-margin.bottom;
-  const svg = d3.select("#fy-chart").attr("width",W).attr("height",H);
-  svg.selectAll("*").remove();
-  const g = svg.append("g").attr("transform",`translate(${margin.left},${margin.top})`);
-
-  const fyColors = {"FY22":"#1a6ca8","FY23":"#C41E3A","FY24":"#C99700","FY25":"#00843D","FY26 YTD":"#0C2340"};
-  const x = d3.scaleLinear().domain([0,100]).range([0,w]);
-  const y = d3.scaleBand().domain(fys).range([0,h]).padding(0.3);
-
-  // Background bars
-  g.selectAll(".bg-bar").data(fyData).enter().append("rect")
-    .attr("class","bg-bar").attr("x",0).attr("y",d=>y(d.fy))
-    .attr("width",w).attr("height",y.bandwidth())
-    .attr("fill","#e8edf3").attr("rx",3);
-
-  // Value bars
-  g.selectAll(".val-bar").data(fyData).enter().append("rect")
-    .attr("class","val-bar").attr("x",0).attr("y",d=>y(d.fy))
-    .attr("width",d=>x(d.pct)).attr("height",y.bandwidth())
-    .attr("fill",d=>fyColors[d.fy]).attr("rx",3).attr("opacity",0.85);
-
-  // Labels
-  g.selectAll(".bar-label").data(fyData).enter().append("text")
-    .attr("class","bar-label")
-    .attr("x",d=>x(d.pct)+5).attr("y",d=>y(d.fy)+y.bandwidth()/2+4)
-    .attr("font-size","11px").attr("fill","#333").text(d=>d.pct.toFixed(1)+"%");
-
-  // 50% line
-  g.append("line").attr("x1",x(50)).attr("x2",x(50)).attr("y1",0).attr("y2",h)
-    .attr("stroke","#C99700").attr("stroke-dasharray","4,3").attr("stroke-width",1.5);
-
-  g.append("g").call(d3.axisLeft(y).tickSize(0)).selectAll("text").attr("font-size","11px").attr("dx","-4");
-  g.append("g").attr("transform",`translate(0,${h})`).call(d3.axisBottom(x).ticks(4).tickFormat(d=>d+"%")).selectAll("text").attr("font-size","10px");
-}
-
-// ===================== SESSION TABLE =====================
-let currentTbl = "all";
-function renderSessionTable(fy) {
-  const data = fy === "all" ? attendanceData : attendanceData.filter(d => d.fy === fy);
-  const tbody = document.getElementById("session-tbody");
-  tbody.innerHTML = "";
-  data.forEach(d => {
-    const pct = (d.attended/d.invited*100).toFixed(1);
-    const cls = parseFloat(pct) >= 50 ? "pct-high" : parseFloat(pct) >= 35 ? "pct-mid" : "pct-low";
-    const flag = d.n === 30 ? ' <span style="background:#C99700;color:#fff;border-radius:10px;font-size:0.7em;padding:1px 6px;margin-left:4px;">LATEST</span>' : "";
-    tbody.innerHTML += `<tr>
-      <td>${d.n}</td>
-      <td>${d.date}${flag}</td>
-      <td>${d.fy}</td>
-      <td>${d.invited}</td>
-      <td>${d.attended}</td>
-      <td><span class="pct-chip ${cls}">${pct}%</span></td>
-    </tr>`;
-  });
-  // Totals
-  const tfoot = document.getElementById("session-tfoot");
-  const totInv = d3.sum(data,d=>d.invited);
-  const totAtt = d3.sum(data,d=>d.attended);
-  tfoot.innerHTML = `<td colspan="3">Total (${data.length} sessions)</td><td>${totInv}</td><td>${totAtt}</td><td>${(totAtt/totInv*100).toFixed(1)}%</td>`;
-}
-
-// ===================== SCORE DONUT =====================
-function renderScoreChart() {
-  const W = 340, H = 200;
-  const svg = d3.select("#score-chart").attr("width",W).attr("height",H);
-  const items = [
-    {label:"Would Recommend", val:100, color:"#00843D"},
-    {label:"Beneficial for Culture", val:100, color:"#1a6ca8"},
-    {label:"Active Participation (scaled)", val:90.8, color:"#C99700"},
-    {label:"Colleague Connection (scaled)", val:82.8, color:"#0C2340"},
-  ];
-  const barH = 28, gap = 14, left = 10, right = 60;
-  const barW = W - left - right;
-  items.forEach((item, i) => {
-    const y = i * (barH + gap) + 16;
-    svg.append("rect").attr("x",left).attr("y",y).attr("width",barW).attr("height",barH).attr("fill","#e8edf3").attr("rx",4);
-    svg.append("rect").attr("x",left).attr("y",y).attr("width",barW*item.val/100).attr("height",barH).attr("fill",item.color).attr("rx",4).attr("opacity",0.85);
-    svg.append("text").attr("x",left+barW+6).attr("y",y+barH/2+4).attr("font-size","11px").attr("fill","#333").attr("font-weight","700").text(item.val+"%");
-  });
-}
-
-// ===================== FEEDBACK CARDS =====================
-let likedShown = 12, suggestShown = 12;
-
-function renderFeedbackCards(responses, containerId, type, limit) {
-  const container = document.getElementById(containerId);
-  container.innerHTML = "";
-  responses.slice(0, limit).forEach(text => {
-    const div = document.createElement("div");
-    div.className = `feedback-card ${type}`;
-    div.innerHTML = `<div class="quote-icon">"</div>${text}`;
-    container.appendChild(div);
-  });
-}
-
-function showMoreLiked() {
-  likedShown = Math.min(likedShown + 12, likedResponses.length);
-  renderFeedbackCards(likedResponses, "liked-grid", "liked", likedShown);
-  if (likedShown >= likedResponses.length) document.getElementById("liked-more-btn").style.display = "none";
-}
-
-function showMoreSuggest() {
-  suggestShown = Math.min(suggestShown + 12, suggestResponses.length);
-  renderFeedbackCards(suggestResponses, "suggest-grid", "suggest", suggestShown);
-  if (suggestShown >= suggestResponses.length) document.getElementById("suggest-more-btn").style.display = "none";
-}
-
-// ===================== FY SCORES CHART =====================
-function renderFYScoresChart() {
-  const fys = ["FY24","FY25","FY26 YTD","Overall"];
-  const encouraged = [4.30, 4.76, 4.80, 4.55];
-  const connected  = [4.06, 4.27, 3.60, 4.13];
-  const W = 380, H = 220;
-  const margin = {top:20,right:20,bottom:40,left:80};
-  const w = W-margin.left-margin.right, h = H-margin.top-margin.bottom;
-  const svg = d3.select("#fy-scores-chart").attr("width",W).attr("height",H);
-  svg.selectAll("*").remove();
-  const g = svg.append("g").attr("transform",`translate(${margin.left},${margin.top})`);
-
-  const y = d3.scaleBand().domain(fys).range([0,h]).padding(0.35);
-  const x = d3.scaleLinear().domain([3,5]).range([0,w]);
-  const barH = y.bandwidth()/2 - 2;
-
-  // Gridlines
-  [3.5,4,4.5,5].forEach(v => {
-    g.append("line").attr("x1",x(v)).attr("x2",x(v)).attr("y1",0).attr("y2",h)
-      .attr("stroke","#e8edf3").attr("stroke-dasharray","3,3");
-  });
-
-  // 4.0 "agree" threshold
-  g.append("line").attr("x1",x(4)).attr("x2",x(4)).attr("y1",0).attr("y2",h)
-    .attr("stroke","#C99700").attr("stroke-dasharray","5,3").attr("stroke-width",1.5);
-  g.append("text").attr("x",x(4)+3).attr("y",-6).attr("font-size","9px").attr("fill","#C99700").text("4.0 threshold");
-
-  fys.forEach((fy, i) => {
-    const yPos = y(fy);
-    // Encouraged bar
-    g.append("rect").attr("x",0).attr("y",yPos).attr("width",x(encouraged[i])-x(3)).attr("height",barH).attr("fill","#0C2340").attr("rx",3).attr("opacity",0.8);
-    g.append("text").attr("x",x(encouraged[i])+4).attr("y",yPos+barH/2+4).attr("font-size","10px").attr("fill","#333").text(encouraged[i].toFixed(2));
-    // Connected bar
-    g.append("rect").attr("x",0).attr("y",yPos+barH+4).attr("width",x(connected[i])-x(3)).attr("height",barH).attr("fill","#C99700").attr("rx",3).attr("opacity",0.8);
-    g.append("text").attr("x",x(connected[i])+4).attr("y",yPos+barH+4+barH/2+4).attr("font-size","10px").attr("fill","#333").text(connected[i].toFixed(2));
-  });
-
-  g.append("g").call(d3.axisLeft(y).tickSize(0)).selectAll("text").attr("font-size","11px").attr("dx","-4");
-  g.append("g").attr("transform",`translate(0,${h})`).call(d3.axisBottom(x).ticks(4).tickFormat(d=>d)).selectAll("text").attr("font-size","10px");
-
-  // Legend
-  const leg = g.append("g").attr("transform",`translate(0,${h+26})`);
-  leg.append("rect").attr("width",12).attr("height",8).attr("fill","#0C2340").attr("rx",2);
-  leg.append("text").attr("x",16).attr("y",8).attr("font-size","10px").attr("fill","#555").text("Encouraged to Participate");
-  leg.append("rect").attr("x",160).attr("width",12).attr("height",8).attr("fill","#C99700").attr("rx",2);
-  leg.append("text").attr("x",176).attr("y",8).attr("font-size","10px").attr("fill","#555").text("Connected with Colleagues");
-}
-
-// ===================== THEME CHARTS =====================
-function renderThemeChart(containerId, data, color) {
-  const W = 340, H = data.length * 38 + 30;
-  const margin = {top:10,right:60,bottom:10,left:190};
-  const w = W-margin.left-margin.right, h = H-margin.top-margin.bottom;
-  const svg = d3.select("#"+containerId).attr("width",W).attr("height",H);
-  svg.selectAll("*").remove();
-  const g = svg.append("g").attr("transform",`translate(${margin.left},${margin.top})`);
-  const maxVal = d3.max(data, d=>d.count);
-  const x = d3.scaleLinear().domain([0,maxVal]).range([0,w]);
-  const y = d3.scaleBand().domain(data.map(d=>d.theme)).range([0,h]).padding(0.3);
-
-  g.selectAll(".bg").data(data).enter().append("rect").attr("class","bg")
-    .attr("x",0).attr("y",d=>y(d.theme)).attr("width",w).attr("height",y.bandwidth())
-    .attr("fill","#e8edf3").attr("rx",3);
-  g.selectAll(".bar").data(data).enter().append("rect").attr("class","bar")
-    .attr("x",0).attr("y",d=>y(d.theme)).attr("width",d=>x(d.count)).attr("height",y.bandwidth())
-    .attr("fill",color).attr("rx",3).attr("opacity",0.82);
-  g.selectAll(".lbl").data(data).enter().append("text").attr("class","lbl")
-    .attr("x",d=>x(d.count)+5).attr("y",d=>y(d.theme)+y.bandwidth()/2+4)
-    .attr("font-size","11px").attr("fill","#333").text(d=>d.count+" mentions");
-
-  g.append("g").call(d3.axisLeft(y).tickSize(0))
-    .selectAll("text").attr("font-size","10px").attr("dx","-4").call(wrap, margin.left-8);
-}
-
-function wrap(text, width) {
-  text.each(function() {
-    const t = d3.select(this);
-    const words = t.text().split(/\s+/).reverse();
-    let word, line = [], lineNumber = 0;
-    const y = t.attr("y"), dy = parseFloat(t.attr("dy")||0);
-    let tspan = t.text(null).append("tspan").attr("x",-4).attr("dy",dy+"em");
-    while (word = words.pop()) {
-      line.push(word);
-      tspan.text(line.join(" "));
-      if (tspan.node().getComputedTextLength() > width) {
-        line.pop();
-        tspan.text(line.join(" "));
-        line = [word];
-        tspan = t.append("tspan").attr("x",-4).attr("dy","1.1em").text(word);
-        lineNumber++;
-      }
-    }
-  });
-}
-
-// ===================== RECOMMENDATIONS =====================
-function renderRecommendations() {
-  const recs = [
-    {num:1, title:"Continue the Program", icon:"✓", color:"#00843D",
-     text:"With 100% positive ratings across all respondents and fiscal years, the Engagement Chat program has proven its value. Maintain regular scheduling and protect the small-group, informal format that staff consistently praise."},
-    {num:2, title:"Increase Frequency or Add Follow-Ups", icon:"↑", color:"#0C2340",
-     text:"Consider more frequent sessions or follow-up chats with the same groups to deepen connections and allow participants to track progress on issues raised in prior sessions."},
-    {num:3, title:"Send Discussion Topics in Advance", icon:"→", color:"#C99700",
-     text:"The most common suggestion across 48 improvement responses. Distributing 2–3 guiding questions before each session would allow staff to reflect and arrive more prepared, likely raising both participation and connection scores."},
-    {num:4, title:"Experiment with Group Composition", icon:"⊞", color:"#1a6ca8",
-     text:"Try smaller groups (4–6 people) and more intentional cross-functional mixing to strengthen peer connections. The current small format is valued — explore breakout pairs or structured networking within sessions."},
-    {num:5, title:"Add Interactive Elements", icon:"◎", color:"#C99700",
-     text:"Implement live phone-based polls, ice-breaker activities, or structured discussion prompts at the start. Multiple respondents specifically referenced the onsite survey format as something they'd like to see replicated."},
-    {num:6, title:"Close the Feedback Loop", icon:"⟲", color:"#00843D",
-     text:"Share a brief follow-up after each session summarizing key themes heard and any actions being taken. Even a short D2D entry saying 'here's what we heard and here's what we're doing' would meaningfully increase trust and participation."},
-    {num:7, title:"Address the Connection Gap", icon:"!", color:"#C41E3A",
-     text:"The gap between Participation (4.55) and Connection (4.13) — widening in FY26 YTD (3.60) — signals that smaller groups may limit peer bonding. Consider structured partner discussions or post-chat informal time to bridge this."},
-  ];
-
-  const grid = document.getElementById("recs-grid");
-  grid.innerHTML = "";
-  recs.forEach(r => {
-    const div = document.createElement("div");
-    div.style.cssText = `background:#f8f9fb;border-radius:8px;padding:16px 18px;border-left:4px solid ${r.color};`;
-    div.innerHTML = `
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-        <span style="background:${r.color};color:#fff;border-radius:50%;width:26px;height:26px;display:inline-flex;align-items:center;justify-content:center;font-size:0.85em;font-weight:700;flex-shrink:0;">${r.num}</span>
-        <strong style="color:#0C2340;font-size:0.92em;">${r.title}</strong>
+  // Key Q&A
+  const qaSection = document.createElement("div");
+  qaSection.innerHTML = `<div class="chart-label" style="margin-bottom:10px">Key Questions &amp; Responses</div>`;
+  d.keyQA.forEach((item, i) => {
+    const qa = document.createElement("div");
+    qa.className = "qa-item";
+    qa.innerHTML = `
+      <div class="qa-question" onclick="toggleQA(this)">
+        <span>${item.q}</span><span class="qa-arrow">&#9660;</span>
       </div>
-      <div style="font-size:0.85em;color:#444;line-height:1.65;">${r.text}</div>`;
-    grid.appendChild(div);
+      <div class="qa-answers">
+        <ul>${item.a.map(a=>`<li>${a}</li>`).join('')}</ul>
+      </div>`;
+    qaSection.appendChild(qa);
+  });
+  sec.appendChild(qaSection);
+
+  // Quotes
+  const quotesWrap = document.createElement("div");
+  quotesWrap.innerHTML = `<div class="chart-label" style="margin-top:20px;margin-bottom:10px">Selected Participant Quotes</div>`;
+  const quotesGrid = document.createElement("div");
+  quotesGrid.className = "quotes-grid";
+  d.quotes.forEach(q => {
+    quotesGrid.innerHTML += `
+      <div class="quote-card">
+        <div class="quote-text">"${q.text}"</div>
+        <div class="quote-source">${fy} &nbsp;|&nbsp; ${q.source}</div>
+      </div>`;
+  });
+  quotesWrap.appendChild(quotesGrid);
+  sec.appendChild(quotesWrap);
+
+  // Evolution narrative
+  sec.innerHTML += `
+    <div class="evolution-box" style="margin-top:20px">
+      <p><strong>Year in Context:</strong> ${d.evolution}</p>
+    </div>`;
+
+  panel.appendChild(sec);
+
+  // Draw donut after DOM insert
+  requestAnimationFrame(() => drawDonut(fy, d));
+}
+
+function toggleQA(el) {
+  const ans = el.nextElementSibling;
+  const arrow = el.querySelector(".qa-arrow");
+  ans.classList.toggle("open");
+  arrow.style.transform = ans.classList.contains("open") ? "rotate(180deg)" : "";
+}
+
+function drawDonut(fy, d) {
+  const svgId = `donut_${fy.replace(/\s/g,'_')}`;
+  const svgEl = document.getElementById(svgId);
+  if (!svgEl) return;
+  const W = svgEl.clientWidth || 280;
+  const H = 220;
+  const r = Math.min(W, H) / 2 - 20;
+  const data = [
+    {label:"Positive", value:d.positivePct, color:"#00843D"},
+    {label:"Neutral",  value:d.neutralPct,  color:"#94a3b8"},
+    {label:"Needs Attention", value:d.needsAttentionPct, color:"#C41E3A"},
+  ];
+  const svg = d3.select(`#${svgId}`)
+    .attr("viewBox", `0 0 ${W} ${H}`);
+  svg.selectAll("*").remove();
+  const g = svg.append("g").attr("transform", `translate(${W/2},${H/2})`);
+  const pie = d3.pie().value(v=>v.value).sort(null);
+  const arc = d3.arc().innerRadius(r*0.58).outerRadius(r);
+  pie(data).forEach(slice => {
+    g.append("path").attr("d", arc(slice)).attr("fill", slice.data.color)
+      .attr("stroke","#fff").attr("stroke-width",2);
+  });
+  // Center text
+  g.append("text").attr("text-anchor","middle").attr("dy","-0.3em")
+    .attr("font-size","1.6em").attr("font-weight","800").attr("fill","#0C2340")
+    .text(d.positivePct+"%");
+  g.append("text").attr("text-anchor","middle").attr("dy","1.1em")
+    .attr("font-size","0.72em").attr("fill","#64748b").attr("font-weight","600")
+    .text("Positive");
+  // Legend
+  const legG = svg.append("g").attr("transform",`translate(10,${H-32})`);
+  data.forEach((item,i) => {
+    const lx = i * (W/3);
+    legG.append("rect").attr("x",lx).attr("y",0).attr("width",10).attr("height",10)
+      .attr("rx",2).attr("fill",item.color);
+    legG.append("text").attr("x",lx+14).attr("y",9)
+      .attr("font-size","0.68em").attr("fill","#475569").attr("font-weight","600")
+      .text(`${item.label} ${item.value}%`);
   });
 }
 
-// ===================== INIT =====================
-renderKPIs();
-renderAttendanceChart("all");
-renderFYSummary();
-renderSessionTable("all");
-renderScoreChart();
-renderFeedbackCards(likedResponses, "liked-grid", "liked", likedShown);
-renderFeedbackCards(suggestResponses, "suggest-grid", "suggest", suggestShown);
+/* ================================================================
+   RENDER: ALL YEARS VIEW
+   ================================================================ */
+function renderAllYears() {
+  const panel = document.getElementById("fyPanel");
+  panel.innerHTML = "";
 
-// Feedback survey report
-renderFYScoresChart();
-renderThemeChart("liked-themes-chart", [
-  {theme:"Open Forum / Safe Space", count:31},
-  {theme:"Hearing Diverse Perspectives", count:26},
-  {theme:"Culture & Community", count:25},
-  {theme:"Quality Facilitation", count:18},
-  {theme:"Cross-Team Networking", count:22},
-  {theme:"Feel Heard by Leadership", count:14},
-], "#0C2340");
-renderThemeChart("suggest-themes-chart", [
-  {theme:"Send Topics in Advance", count:16},
-  {theme:"Close the Feedback Loop", count:12},
-  {theme:"Add Interactive Elements", count:9},
-  {theme:"Improve Remote Setup", count:8},
-  {theme:"Extend Session Length", count:7},
-  {theme:"Smaller Group Discussions", count:6},
-], "#C99700");
-renderRecommendations();
+  // Exec Summary
+  const execDiv = document.createElement("div");
+  execDiv.className = "exec-summary";
+  execDiv.innerHTML = `
+    <h3>Executive Summary</h3>
+    <p>Between FY22 and FY26 YTD, NDR conducted <strong>28 Engagement Chat sessions</strong> with <strong>189 participants</strong>, collecting <strong>640 survey responses</strong>. Overall positive sentiment has remained stubbornly low — hovering between 15–23% — signaling persistent systemic challenges rather than isolated issues.</p>
+    <p>Leadership & Management has been the most-discussed theme for three consecutive fiscal years (FY23–FY25), reflecting ongoing concerns about transparency and strategic direction. In FY26 YTD, Communication & Transparency surpassed it as the top theme — a first, and a signal that employees are watching how NDR communicates amid federal funding uncertainty, organizational restructuring, and the emergence of AI in the workplace.</p>
+    <p>Attendance trends have improved markedly: from 25.5% in FY23 to 45.8% in FY26 YTD, suggesting growing employee investment in the engagement process. However, translating engagement into meaningful sentiment improvement remains the critical challenge ahead.</p>`;
+  panel.appendChild(execDiv);
 
-// Attendance filter buttons
-document.querySelectorAll("[data-fy]").forEach(btn => {
-  btn.addEventListener("click", function() {
-    document.querySelectorAll("[data-fy]").forEach(b => b.classList.remove("active"));
-    this.classList.add("active");
-    renderAttendanceChart(this.dataset.fy);
+  // Charts section
+  const sec = document.createElement("div");
+  sec.className = "section";
+  sec.innerHTML = `<div class="section-title">Multi-Year Trends</div>`;
+
+  const grid = document.createElement("div");
+  grid.className = "all-years-grid";
+
+  // Sentiment evolution
+  const sentDiv = document.createElement("div");
+  sentDiv.innerHTML = `<div class="chart-label">Sentiment Evolution by FY</div>
+    <svg id="sentEvol" width="100%" height="260"></svg>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#00843D"></div>Positive</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#94a3b8"></div>Neutral</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#C41E3A"></div>Needs Attention</div>
+    </div>`;
+
+  // Theme heatmap
+  const heatDiv = document.createElement("div");
+  heatDiv.innerHTML = `<div class="chart-label">Theme Score Heatmap (% Positive)</div>
+    <div class="heatmap-wrap"><svg id="heatmapChart" width="100%" height="280"></svg></div>
+    <div class="legend" style="margin-top:8px">
+      <div class="legend-item"><div class="legend-dot" style="background:#00843D"></div>&ge;50 Strong</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#C99700"></div>30–49 Moderate</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#C41E3A"></div>&lt;30 Concern</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#e2e8f0"></div>No data</div>
+    </div>`;
+
+  grid.appendChild(sentDiv);
+  grid.appendChild(heatDiv);
+  sec.appendChild(grid);
+
+  // Theme evolution narrative
+  const narr = document.createElement("div");
+  narr.style.marginTop = "24px";
+  narr.innerHTML = `<div class="chart-label" style="margin-bottom:10px">Theme Evolution Narrative</div>
+    <ul class="narrative-list">
+      <li data-fy="FY22">Post-COVID recovery defined FY22. Hybrid & Remote Work was the dominant concern (24 mentions, 23% positive). Culture & Community scored highest at 54%, reflecting early resilience.</li>
+      <li data-fy="FY23">A year of organizational growing pains. Leadership & Management (39 mentions) and Communication & Transparency (27 mentions) emerged as top concerns. Processes & Operations bottomed out at 4% — the lowest single score across all years.</li>
+      <li data-fy="FY24">Leadership transition under Jeff Rhoads brought cautious optimism but also the lowest overall positive sentiment (15%). Recognition & Rewards jumped to 59% — the highest score recorded — while Hybrid & Remote Work collapsed to 17%.</li>
+      <li data-fy="FY25">Culture mapping and Bravo Awards drove Culture & Community to 56%. However, Performance Management redesign confusion kept that theme below 20%. Positive and Needs Attention sentiment equalized at 18% each.</li>
+      <li data-fy="FY26 YTD">Comm & Transparency became the top theme for the first time. Federal funding uncertainty and AI in the workplace are new emerging concerns. Growth & Development declined to 18% — its second-lowest point.</li>
+    </ul>`;
+  sec.appendChild(narr);
+  panel.appendChild(sec);
+
+  // Draw charts after DOM insert
+  requestAnimationFrame(() => {
+    drawSentEvol();
+    drawHeatmap();
   });
-});
+}
 
-// Session table filter buttons
-document.querySelectorAll("[data-tbl]").forEach(btn => {
-  btn.addEventListener("click", function() {
-    document.querySelectorAll("[data-tbl]").forEach(b => b.classList.remove("active"));
-    this.classList.add("active");
-    renderSessionTable(this.dataset.tbl);
+function drawSentEvol() {
+  const svgEl = document.getElementById("sentEvol");
+  if (!svgEl) return;
+  const W = svgEl.clientWidth || 440;
+  const H = 260;
+  const margin = {top:10, right:10, bottom:40, left:40};
+  const iW = W - margin.left - margin.right;
+  const iH = H - margin.top - margin.bottom;
+
+  const keys = ["FY22","FY23","FY24","FY25","FY26 YTD"];
+  const stacked = keys.map(k => ({
+    fy: k,
+    Positive: fyData[k].positivePct,
+    Neutral: fyData[k].neutralPct,
+    "Needs Attention": fyData[k].needsAttentionPct
+  }));
+  const layers = ["Positive","Neutral","Needs Attention"];
+  const colors = {"Positive":"#00843D","Neutral":"#94a3b8","Needs Attention":"#C41E3A"};
+
+  const series = d3.stack().keys(layers)(stacked);
+  const x = d3.scaleBand().domain(keys).range([0,iW]).padding(0.28);
+  const y = d3.scaleLinear().domain([0,100]).range([iH,0]);
+
+  const svg = d3.select("#sentEvol").attr("viewBox",`0 0 ${W} ${H}`);
+  svg.selectAll("*").remove();
+  const g = svg.append("g").attr("transform",`translate(${margin.left},${margin.top})`);
+
+  series.forEach(layer => {
+    g.selectAll(`.bar-${layer.key}`)
+      .data(layer).enter().append("rect")
+      .attr("x", d=>x(d.data.fy))
+      .attr("y", d=>y(d[1]))
+      .attr("height", d=>y(d[0])-y(d[1]))
+      .attr("width", x.bandwidth())
+      .attr("fill", colors[layer.key])
+      .attr("rx", 2);
+
+    // Label inside bar if tall enough
+    g.selectAll(`.lbl-${layer.key}`)
+      .data(layer).enter().append("text")
+      .attr("x", d=>x(d.data.fy)+x.bandwidth()/2)
+      .attr("y", d=>(y(d[0])+y(d[1]))/2+4)
+      .attr("text-anchor","middle").attr("font-size","0.65em").attr("fill","#fff").attr("font-weight","700")
+      .text(d => (y(d[0])-y(d[1])) > 14 ? (d[1]-d[0])+"%" : "");
   });
-});
 
-// Survey tab switching
-document.querySelectorAll("[data-tab]").forEach(btn => {
-  btn.addEventListener("click", function() {
-    const bar = this.closest(".tab-bar");
-    bar.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
-    this.classList.add("active");
-    const section = bar.nextElementSibling;
-    // find sibling panels
-    let el = section;
-    while (el) {
-      if (el.classList && el.classList.contains("tab-panel")) el.classList.remove("active");
-      el = el.nextElementSibling;
-    }
-    document.getElementById("tab-" + this.dataset.tab).classList.add("active");
+  // Axes
+  g.append("g").attr("transform",`translate(0,${iH})`).call(d3.axisBottom(x).tickSize(0))
+    .selectAll("text").attr("font-size","0.72em").attr("fill","#475569").attr("dy","1.2em");
+  g.append("g").call(d3.axisLeft(y).ticks(5).tickFormat(d=>d+"%").tickSize(-iW))
+    .selectAll("text").attr("font-size","0.65em").attr("fill","#94a3b8");
+  g.selectAll(".domain").remove();
+  g.selectAll(".tick line").attr("stroke","#f1f5f9");
+}
+
+function drawHeatmap() {
+  const svgEl = document.getElementById("heatmapChart");
+  if (!svgEl) return;
+  const W = svgEl.clientWidth || 440;
+  const themes = heatmapData.map(d=>d.theme);
+  const fys = fyKeys;
+  const cellH = 30;
+  const labelW = 150;
+  const H = themes.length * cellH + 40;
+  const cellW = (W - labelW) / fys.length;
+
+  const svg = d3.select("#heatmapChart").attr("viewBox",`0 0 ${W} ${H}`);
+  svg.selectAll("*").remove();
+
+  // Column headers
+  fys.forEach((fy,i) => {
+    svg.append("text")
+      .attr("x", labelW + i*cellW + cellW/2).attr("y", 14)
+      .attr("text-anchor","middle").attr("font-size","0.68em").attr("fill","#475569").attr("font-weight","700")
+      .text(fy);
   });
-});
 
-// Feedback report tab switching
-document.querySelectorAll("[data-ftab]").forEach(btn => {
-  btn.addEventListener("click", function() {
-    const bar = this.closest(".tab-bar");
-    bar.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
-    this.classList.add("active");
-    ["ftab-fy","ftab-themes","ftab-recs"].forEach(id => {
-      document.getElementById(id).classList.remove("active");
+  heatmapData.forEach((row,ri) => {
+    const y = 22 + ri * cellH;
+    // Row label
+    svg.append("text")
+      .attr("x",0).attr("y", y + cellH/2 + 4)
+      .attr("font-size","0.68em").attr("fill","#334155").attr("font-weight","600")
+      .text(row.theme);
+
+    fys.forEach((fy,ci) => {
+      const val = row[fy];
+      const cx = labelW + ci * cellW;
+      svg.append("rect")
+        .attr("x", cx+2).attr("y", y+2)
+        .attr("width", cellW-4).attr("height", cellH-4)
+        .attr("rx",4).attr("fill", scoreColor(val));
+      svg.append("text")
+        .attr("x", cx+cellW/2).attr("y", y+cellH/2+4)
+        .attr("text-anchor","middle").attr("font-size","0.7em")
+        .attr("fill", val===null ? "#94a3b8" : "#fff").attr("font-weight","700")
+        .text(val !== null ? val : "—");
     });
-    document.getElementById("ftab-" + this.dataset.ftab).classList.add("active");
   });
+}
+
+/* ================================================================
+   RENDER: ATTENDANCE TABLE + CHART
+   ================================================================ */
+function renderAttendance() {
+  const tbody = document.getElementById("attendBody");
+  const tfoot = document.getElementById("attendFoot");
+  tbody.innerHTML = "";
+  let totS=0,totI=0,totA=0;
+  attendData.forEach(r => {
+    totS+=r.sessions; totI+=r.invited; totA+=r.attended;
+    const cls = pctClass(r.rate);
+    tbody.innerHTML += `
+      <tr>
+        <td><strong>${r.fy}</strong></td>
+        <td>${r.sessions}</td>
+        <td>${r.invited}</td>
+        <td>${r.attended}</td>
+        <td><span class="pct-pill ${cls}">${r.rate}%</span></td>
+        <td>${r.avg}</td>
+      </tr>`;
+  });
+  const overallRate = ((totA/totI)*100).toFixed(1);
+  tfoot.innerHTML = `<tr>
+    <td>Overall</td><td>${totS}</td><td>${totI}</td><td>${totA}</td>
+    <td><span class="pct-pill pct-mid">${overallRate}%</span></td><td>—</td>
+  </tr>`;
+
+  // Chart
+  drawAttendChart();
+}
+
+function drawAttendChart() {
+  const svgEl = document.getElementById("attendChart");
+  if (!svgEl) return;
+  const W = svgEl.clientWidth || 400;
+  const H = 240;
+  const margin = {top:10,right:20,bottom:40,left:40};
+  const iW = W - margin.left - margin.right;
+  const iH = H - margin.top - margin.bottom;
+
+  const svg = d3.select("#attendChart").attr("viewBox",`0 0 ${W} ${H}`);
+  svg.selectAll("*").remove();
+  const g = svg.append("g").attr("transform",`translate(${margin.left},${margin.top})`);
+
+  const x = d3.scaleBand().domain(attendData.map(d=>d.fy)).range([0,iW]).padding(0.3);
+  const y = d3.scaleLinear().domain([0,80]).range([iH,0]);
+
+  g.selectAll(".bar")
+    .data(attendData).enter().append("rect")
+    .attr("x",d=>x(d.fy)).attr("y",d=>y(d.rate))
+    .attr("width",x.bandwidth()).attr("height",d=>iH-y(d.rate))
+    .attr("fill",d=>d.rate>=45?"#00843D":d.rate>=30?"#C99700":"#C41E3A")
+    .attr("rx",4);
+
+  g.selectAll(".bar-lbl")
+    .data(attendData).enter().append("text")
+    .attr("x",d=>x(d.fy)+x.bandwidth()/2)
+    .attr("y",d=>y(d.rate)-5)
+    .attr("text-anchor","middle").attr("font-size","0.72em").attr("fill","#334155").attr("font-weight","700")
+    .text(d=>d.rate+"%");
+
+  g.append("g").attr("transform",`translate(0,${iH})`)
+    .call(d3.axisBottom(x).tickSize(0))
+    .selectAll("text").attr("font-size","0.68em").attr("fill","#475569").attr("dy","1.2em");
+  g.append("g").call(d3.axisLeft(y).ticks(4).tickFormat(d=>d+"%").tickSize(-iW))
+    .selectAll("text").attr("font-size","0.65em").attr("fill","#94a3b8");
+  g.selectAll(".domain").remove();
+  g.selectAll(".tick line").attr("stroke","#f1f5f9");
+}
+
+/* ================================================================
+   RENDER: RECOMMENDATIONS
+   ================================================================ */
+function renderRecs() {
+  const grid = document.getElementById("recGrid");
+  grid.innerHTML = "";
+  recommendations.forEach((r,i) => {
+    grid.innerHTML += `
+      <div class="rec-card">
+        <div class="rec-num">Recommendation ${i+1}</div>
+        <div class="rec-title">${r.title}</div>
+        <div class="rec-text">${r.body}</div>
+      </div>`;
+  });
+}
+
+/* ================================================================
+   TAB SWITCHING
+   ================================================================ */
+let activeFY = "all";
+
+document.getElementById("fyNav").addEventListener("click", e => {
+  const btn = e.target.closest(".fy-btn");
+  if (!btn) return;
+  document.querySelectorAll(".fy-btn").forEach(b => b.classList.remove("active","active-gold"));
+  btn.classList.add("active");
+  activeFY = btn.dataset.fy;
+  if (activeFY === "all") {
+    renderAllYears();
+  } else {
+    renderFY(activeFY);
+  }
+  // scroll to panel
+  document.getElementById("fyPanel").scrollIntoView({behavior:"smooth", block:"start"});
 });
 
+/* ================================================================
+   INIT
+   ================================================================ */
+renderAllYears();
+renderAttendance();
+renderRecs();
+
+// Redraw charts on resize
 window.addEventListener("resize", () => {
-  renderAttendanceChart(document.querySelector("[data-fy].active")?.dataset.fy || "all");
+  if (activeFY === "all") {
+    drawSentEvol();
+    drawHeatmap();
+  } else {
+    drawDonut(activeFY, fyData[activeFY]);
+  }
+  drawAttendChart();
 });
 </script>
 </body>
