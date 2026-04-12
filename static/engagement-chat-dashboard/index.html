@@ -158,15 +158,35 @@
     /* ── NARRATIVE LIST ── */
     .narrative-list { list-style: none; }
     .narrative-list li {
-      padding: 11px 14px 11px 46px; position: relative;
-      border-bottom: 1px solid #f1f5f9; font-size: 0.85em; color: #334155; line-height: 1.5;
+      padding: 12px 14px 12px 64px; position: relative;
+      border-bottom: 1px solid #f1f5f9; font-size: 0.85em; color: #334155; line-height: 1.55;
     }
     .narrative-list li:last-child { border-bottom: none; }
     .narrative-list li::before {
-      content: attr(data-fy); position: absolute; left: 8px; top: 50%; transform: translateY(-50%);
-      background: #0C2340; color: #fff; font-size: 0.68em; font-weight: 800;
-      padding: 2px 6px; border-radius: 4px; white-space: nowrap;
+      content: attr(data-fy); position: absolute; left: 6px; top: 14px;
+      background: #0C2340; color: #fff; font-size: 0.63em; font-weight: 800;
+      padding: 2px 6px; border-radius: 4px; white-space: nowrap; max-width: 52px;
     }
+
+    /* ── CONCERN / STRENGTH INSIGHT CARDS ── */
+    .insight-cards { display: flex; flex-direction: column; gap: 14px; }
+    .insight-card {
+      border-radius: 10px; padding: 16px 18px;
+      border-left: 4px solid #e2e8f0;
+    }
+    .insight-card.strength { border-left-color: #00843D; background: #f0fdf4; }
+    .insight-card.concern  { border-left-color: #C41E3A; background: #fff5f5; }
+    .insight-card-title {
+      font-size: 0.88em; font-weight: 800; margin-bottom: 6px;
+    }
+    .insight-card.strength .insight-card-title { color: #15803d; }
+    .insight-card.concern  .insight-card-title { color: #991b1b; }
+    .insight-card-body { font-size: 0.83em; color: #334155; line-height: 1.6; margin-bottom: 10px; }
+    .insight-quote {
+      background: #fff; border-left: 3px solid #C99700; border-radius: 0 6px 6px 0;
+      padding: 9px 12px; font-size: 0.82em; color: #475569; font-style: italic; line-height: 1.55;
+    }
+    .insight-quote-src { font-size: 0.72em; color: #94a3b8; font-weight: 700; margin-top: 5px; font-style: normal; }
 
     /* ── TABLES ── */
     .table-wrap { overflow-x: auto; }
@@ -306,7 +326,7 @@
           <li data-fy="FY23">Sharpest decline: attendance dropped to 25.5% as the program scaled to 7 sessions with a larger invited pool. Scheduling and awareness likely contributed.</li>
           <li data-fy="FY24">Modest recovery to 33.9%, coinciding with Jeff Rhoads' leadership transition and renewed interest in organizational direction conversations.</li>
           <li data-fy="FY25">Continued upward trend to 40.0%, with a more consistent invitation cadence and stronger word-of-mouth from prior participants.</li>
-          <li data-fy="FY26 YTD">Best sustained rate since FY22 at 48.0%, suggesting the program is gaining momentum and increasing employee investment in the process.</li>
+          <li data-fy="FY26">Best sustained rate since FY22 at 48.0%, suggesting the program is gaining momentum and increasing employee investment in the process.</li>
         </ul>
       </div>
     </div>
@@ -484,20 +504,37 @@ const fyData = {
       {name:"Leadership & Management", mentions:null, score:38},
       {name:"Comm & Transparency",     mentions:null, score:32},
     ],
-    quotes:[
-      {text:"NDR leadership has been receptive to the core facilities. They've been going through a growth phase, and there is a lot of support from NDR, which is appreciated.", source:"May 11, 2022"},
-      {text:"People make a big difference. When they reach out with questions, everyone is very responsive, making the whole process more enjoyable.", source:"May 11, 2022"},
-      {text:"NDR does an excellent job of creating a culture in a diffused group.", source:"March 30, 2022"},
+    strengthDetails:[
+      {item:"NDR culture is resilient across a dispersed workforce",
+       insight:"Employees repeatedly noted surprise at how well-maintained NDR's identity felt despite units being physically spread across campus. The NDR Fair and social events were cited as key drivers of that cohesion. Even among people who rarely saw each other in person, there was a shared sense of belonging to something with a real culture.",
+       quote:{text:"NDR does an excellent job of creating a culture in a diffused group.", source:"March 30, 2022"}},
+      {item:"Leadership is approachable and genuinely responsive",
+       insight:"Employees contrasted NDR leadership favorably against larger university structures, noting that support was accessible and that questions were answered rather than deflected. This accessibility was seen as a differentiator — a cultural asset that newer employees especially appreciated.",
+       quote:{text:"NDR leadership has been receptive to the core facilities. They've been going through a growth phase, and there is a lot of support from NDR, which is appreciated.", source:"May 11, 2022"}},
+      {item:"Peer responsiveness creates a positive day-to-day experience",
+       insight:"Beyond formal leadership, employees noted that colleagues across units were quick to help. This peer-level responsiveness — the informal, human layer of the organization — was described as making work more enjoyable and reducing friction on collaborative tasks.",
+       quote:{text:"People make a big difference. When they reach out with questions, everyone is very responsive, making the whole process more enjoyable.", source:"May 11, 2022"}},
     ],
-    keyQA:[
-      {q:"How can we make it better?", a:["Especially after covid, we may not see people in our unit","Focus on employees — there is always room for improvement","Have an opportunity to connect with others across units"]},
-      {q:"What is great about NDR?", a:["NDR does an excellent job of creating a culture in a diffused group","There IS a culture, and it's a good culture","We do an excellent job with our social events"]},
-      {q:"What is a challenge for NDR?", a:["Hybrid work makes it hard to feel connected","People work remotely and may not see those in their unit","Communication gaps exist between on-site and remote staff"]},
+    concernDetails:[
+      {item:"Hybrid work is fragmenting team cohesion without clear structural support",
+       insight:"With 24 mentions and only 23% positive sentiment, Hybrid & Remote Work was the dominant pain point. The concern was not about the policy itself — most employees valued flexibility — but about what was missing around it. Without documented norms for when to come in, how to collaborate remotely, or how to stay connected across units, the hybrid model was operating on individual improvisation rather than shared infrastructure. Remote employees in particular felt structurally excluded from the informal rhythms that sustain culture.",
+       quote:{text:"Hybrid work makes it hard to feel connected — people work remotely and may not see those in their unit.", source:"May 2022"}},
+      {item:"Communication gaps are siloing units from one another",
+       insight:"Information was staying within units, meaning that staff across different parts of NDR had limited visibility into each other's work or challenges. This wasn't just an inconvenience — it was preventing the cross-unit collaboration that NDR's dispersed model depends on. Without a deliberate communication architecture, the organization was operating in parallel rather than in concert.",
+       quote:{text:"Communication gaps exist between on-site and remote staff — we're operating more in silos than we should be.", source:"April 2022"}},
+      {item:"Career visibility is unclear in a distributed structure",
+       insight:"Employees — especially those newer to NDR — described uncertainty about how to grow within the organization. With no visible career ladders or accessible benchmarks, advancement felt opaque. In a diffused structure without clear unit-level reporting lines, this opacity was amplified: there was no obvious person to ask, and no clear path to follow.",
+       quote:{text:"Especially after COVID, we may not see people in our unit — there's a sense of drift when it comes to career direction.", source:"March 2022"}},
     ],
-    strengths:["Team cohesion across dispersed units","Leadership responsiveness and accessibility","Social event planning and cross-unit culture"],
-    concerns:["Hybrid work clarity and connection norms","Communication gaps between on-site and remote","Career visibility in a diffused organizational structure"],
+    attendInsight:"3 sessions, 39 of 57 invited attended (68.4% rate). The program's inaugural year saw its strongest participation. The small, targeted invitation lists and novelty of the format drove high interest, with an average of 13 attendees per session — well-suited for substantive small-group dialogue.",
+    fyRecs:[
+      {n:"01", title:"Establish Formal Hybrid Work Norms", body:"Move from ad-hoc arrangements to documented, unit-level protocols that define expectations for remote and in-person work, collaboration cadence, and team touchpoints. Without structure, hybrid work defaults to individual improvisation — and not all employees can improvise equally."},
+      {n:"02", title:"Build Cross-Unit Visibility Programs", body:"Expand the NDR Fair concept and similar initiatives that give employees meaningful exposure to the work of other units. Structured cross-unit touchpoints address the isolation felt by remote and distributed staff more effectively than social events alone."},
+      {n:"03", title:"Create a Communication Cadence for Remote Staff", body:"Design a recurring communication loop that ensures remote employees receive the same information, cultural context, and leadership updates as on-site staff. Remote exclusion from informal information flows is a structural problem that requires a structural solution."},
+    ],
     evolution:"Focused heavily on post-COVID adjustment, hybrid work culture, and reconnecting after the pandemic. The NDR Fair concept emerged as employees sought cross-unit visibility. Culture scored highest at 54%; Hybrid & Remote Work was the most-discussed theme with mixed sentiment at 23% positive."
   },
+
   "FY23": {
     sessions:7, participants:43, responses:139,
     positivePct:16, neutralPct:62, needsAttentionPct:22,
@@ -513,20 +550,38 @@ const fyData = {
       {name:"Processes & Operations",  mentions:null, score:4},
       {name:"Performance Management",  mentions:null, score:6},
     ],
-    quotes:[
-      {text:"I would love to have clearer guidance on what the expectations are for career advancement in NDR.", source:"October 2022"},
-      {text:"The lack of documented SOPs makes it hard to onboard new people or ensure consistency across units.", source:"November 2022"},
-      {text:"There's a real hunger for more visibility into how decisions are made at the leadership level.", source:"January 2023"},
+    strengthDetails:[
+      {item:"Hybrid work reached its highest positive score in the dataset (66%)",
+       insight:"By mid-FY23, employees had largely adapted to hybrid arrangements and were finding workable rhythms. The score jump from 23% (FY22) to 66% suggests that familiarity with the model — combined with self-directed adaptation — was producing genuine satisfaction. This was the year hybrid work worked best, even without formal institutional support.",
+       quote:{text:"The flexibility of hybrid work has actually allowed me to be more productive — I can structure my day better.", source:"November 2022"}},
+      {item:"Community spirit remained resilient through organizational transition",
+       insight:"Despite significant organizational uncertainty and concerns about leadership clarity, employees described NDR's social and community touchpoints as a stabilizing force. Community events and informal connections across units continued to reinforce a sense of shared identity.",
+       quote:{text:"Even with all the changes, the community here is strong. People look out for each other.", source:"October 2022"}},
+      {item:"Town Halls were recognized as a meaningful communication step",
+       insight:"Multiple session participants acknowledged that Town Halls provided structured visibility into leadership decisions that hadn't existed before. They fell short of what employees needed, but they were identified as the right direction — a foundation to build on.",
+       quote:{text:"Town Halls are a step in the right direction. At least we're hearing something now.", source:"January 2023"}},
     ],
-    keyQA:[
-      {q:"What would help you grow professionally?", a:["Clear career ladders with defined milestones","More feedback from managers on performance","Access to training and development resources"]},
-      {q:"What do you think about communication from leadership?", a:["We need more transparency about organizational decisions","Updates are often delayed or incomplete","Town halls help but we need more frequent touchpoints"]},
-      {q:"What process improvements are needed?", a:["SOPs need to be documented and accessible","Decision-making timelines are unclear","Better coordination between units would help"]},
+    concernDetails:[
+      {item:"Processes & Operations collapsed to 4% — the lowest score in the dataset",
+       insight:"This wasn't frustration with bureaucracy in the abstract. Employees described the absence of documented SOPs as actively blocking their work: new hires couldn't onboard consistently, tasks were repeated unnecessarily, and inconsistency between units created friction at every hand-off point. The signal was clear — NDR's growth had outpaced its operational infrastructure. Without codified processes, the organization was scaling on informal knowledge that lived in individuals, not systems.",
+       quote:{text:"The lack of documented SOPs makes it hard to onboard new people or ensure consistency across units.", source:"November 2022"}},
+      {item:"Career advancement was opaque, leaving employees uncertain about their futures",
+       insight:"The ND Voice survey had already flagged growth as a low-scoring area; FY23 Engagement Chat sessions confirmed it was a felt, not just measured, problem. Employees described not knowing what milestones mattered, what a promotion required, or who to ask. In a distributed organization, this opacity was magnified — there was no single visible ladder to point to, and managers weren't equipped to provide consistent answers.",
+       quote:{text:"I would love to have clearer guidance on what the expectations are for career advancement in NDR.", source:"October 2022"}},
+      {item:"Decision-making transparency was insufficient — employees felt left out of organizational direction",
+       insight:"With 27 mentions, Comm & Transparency was the second most-discussed theme. The concern went beyond slow updates: employees described a specific frustration with not understanding the reasoning behind decisions that directly affected their work. They didn't want to be consulted on every decision — they wanted enough context to trust that decisions were being made thoughtfully.",
+       quote:{text:"There's a real hunger for more visibility into how decisions are made at the leadership level.", source:"January 2023"}},
     ],
-    strengths:["Hybrid work improving — highest score at 66%","Community events still valued","Town halls recognized as a positive step"],
-    concerns:["Processes & Operations scored 4% — lowest single score in dataset","Career advancement pathways remain opaque","SOP documentation gaps impacting onboarding"],
+    attendInsight:"7 sessions, 40 of 157 invited attended (25.5% rate). The sharp decline from FY22 reflected scaling challenges — a 3x increase in the invited pool without proportional increases in scheduling support or program awareness. Average attendance of 5.7 per session indicates that broader outreach had not yet translated into broader participation.",
+    fyRecs:[
+      {n:"01", title:"Document and Publish SOPs Across All Units", body:"Treat SOP documentation as a business-critical priority, not an administrative task. Assign clear ownership, set completion deadlines, and make SOPs accessible to all NDR staff — not just within units. The 4% Processes & Operations score is not a signal of minor friction; it reflects systemic infrastructure failure."},
+      {n:"02", title:"Create Visible Career Ladders with Defined Milestones", body:"Partner with HR to develop role-specific advancement criteria that employees can reference independently. Reduce reliance on manager interpretation of vague standards. Career opacity disproportionately disadvantages staff without strong mentors or networks."},
+      {n:"03", title:"Increase Leadership Communication Frequency and Depth", body:"Move beyond reactive updates to proactive, scheduled communications that explain not just what is happening, but why decisions are being made. Employees don't need to be consulted on everything — they need enough context to trust the process."},
+      {n:"04", title:"Conduct a Structured Process Audit", body:"A 4% score signals systemic failure, not isolated friction. Conduct a cross-unit process audit to identify the highest-impact bottlenecks and assign ownership for resolution. Set a 90-day review cadence to track progress publicly."},
+    ],
     evolution:"Growth and development became a dominant concern as ND Voice results surfaced low scores in this area. Questions about career paths, SOP documentation, and organizational structure intensified. Processes & Operations scored just 4 — the lowest single score across the entire FY22–FY26 dataset."
   },
+
   "FY24": {
     sessions:7, participants:43, responses:168,
     positivePct:15, neutralPct:62, needsAttentionPct:23,
@@ -542,20 +597,35 @@ const fyData = {
       {name:"Performance Management",  mentions:null, score:21},
       {name:"Hybrid & Remote Work",    mentions:null, score:17},
     ],
-    quotes:[
-      {text:"Jeff's arrival brought fresh energy and a real sense that change is possible. I'm cautiously optimistic about the direction.", source:"November 2023"},
-      {text:"We need clearer metrics — it's hard to know if we're succeeding when the goalpost keeps shifting.", source:"March 2024"},
-      {text:"The new Town Hall format is a step in the right direction. People are more engaged when they can ask real questions.", source:"June 2024"},
+    strengthDetails:[
+      {item:"Recognition & Rewards surged to 59% — the highest score in the dataset",
+       insight:"The appointment of new leadership coincided with renewed energy around employee recognition. Multiple sessions described feeling more acknowledged for contributions, with new touchpoints emerging that gave visibility to individual and team achievements. This spike is the clearest single-year win recorded across all five fiscal years and suggests that recognition is a highly actionable lever for sentiment improvement.",
+       quote:{text:"Jeff's arrival brought fresh energy and a real sense that change is possible. I'm cautiously optimistic about the direction.", source:"November 2023"}},
+      {item:"New leadership created genuine, if cautious, optimism",
+       insight:"Jeff Rhoads' arrival was received as a potential inflection point. Employees described sensing a different energy in leadership conversations — more openness, more willingness to listen. The key word across sessions was 'cautious': people wanted to believe change was coming, but were waiting for evidence.",
+       quote:{text:"The new Town Hall format is a step in the right direction. People are more engaged when they can ask real questions.", source:"June 2024"}},
     ],
-    keyQA:[
-      {q:"What are your expectations for new leadership?", a:["Greater transparency about strategic direction","Consistency in applying policies across units","Regular touchpoints beyond the annual survey"]},
-      {q:"What metrics matter most to your work?", a:["Clear KPIs tied to individual contributions","Shared understanding of what success looks like for NDR","Better visibility into how our work connects to broader goals"]},
-      {q:"How is the hybrid work arrangement working for you?", a:["Remote work is harder now without strong norms","In-person days feel underutilized","Team schedules need better coordination"]},
+    concernDetails:[
+      {item:"Overall positive sentiment hit its lowest point — 15% across all FYs",
+       insight:"This paradox — optimistic about leadership, but recording the lowest sentiment in the dataset — reveals how deep the structural concerns had become. Leadership goodwill could not offset the accumulated frustration around processes, communication clarity, and performance frameworks. Positive sentiment toward a new leader doesn't lift overall sentiment when the underlying conditions haven't changed. This gap between interpersonal optimism and systemic satisfaction is the central story of FY24.",
+       quote:{text:"We need clearer metrics — it's hard to know if we're succeeding when the goalpost keeps shifting.", source:"March 2024"}},
+      {item:"Hybrid & Remote Work fell to 17% — the gains of FY23 fully reversed",
+       insight:"The 49-point drop from FY23's 66% is the largest single-theme decline in the dataset. Employees described in-person days as underutilized, team schedules as uncoordinated, and remote arrangements as lacking the intentional structure that had emerged organically in FY23. The reversal suggests that the hybrid model requires continuous institutional investment — it cannot be set and forgotten.",
+       quote:{text:"Remote work is harder now without strong norms. In-person days feel underutilized — we need better coordination.", source:"April 2024"}},
+      {item:"Performance Management introduced confusion that spread across all levels",
+       insight:"The rollout of a new performance framework created anxiety at both the employee and manager level. Employees weren't sure how the new system connected to advancement decisions. Managers weren't equipped to answer questions. The result was a vacuum filled with speculation — which, in a year of leadership transition, amplified rather than contained uncertainty.",
+       quote:{text:"The new performance framework is needed, but the rollout created more questions than it answered.", source:"May 2024"}},
     ],
-    strengths:["Recognition & Rewards spiked to 59% — highest recorded score","New leadership bringing cautious optimism","Town Hall format improvements well-received"],
-    concerns:["Overall positive sentiment at 15% — lowest recorded across all FYs","Hybrid & Remote Work collapsed to 17%","Performance Management confusion from new framework rollout"],
+    attendInsight:"7 sessions, 57 of 168 invited attended (33.9% rate). Recovery began as the leadership transition generated renewed interest in organizational direction conversations. The increase from FY23's 25.5% reflects growing employee investment, though less than 1 in 3 invited employees attended — indicating significant untapped reach.",
+    fyRecs:[
+      {n:"01", title:"Translate Leadership Vision into Unit-Level Metrics", body:"The new leadership's strategic direction needs to be operationalized into clear KPIs that individual teams can use to understand their contribution to NDR's goals. Vague organizational direction amplifies anxiety; specific, shared metrics reduce it."},
+      {n:"02", title:"Rebuild Hybrid Work with Intentional Design", body:"FY24's drop to 17% is a signal that the hybrid model has lost its structure. Co-design hybrid protocols with staff — ensuring in-person days have purpose, remote norms are documented, and team schedules are coordinated at the unit level."},
+      {n:"03", title:"Provide Transparent Guidance on the Performance Management Framework", body:"Issue a clear, manager-facing guide explaining the new framework, its timeline, and how it connects to advancement decisions. Manager training should be mandatory before the framework is used in evaluations. Employee uncertainty is a direct consequence of manager unpreparedness."},
+      {n:"04", title:"Protect and Formalize the Recognition Momentum", body:"The 59% Recognition score is at risk of regression without structural support. Formalize recognition programs into a consistent cadence so employees experience recognition as institutional, not episodic. Episodic recognition fades; structural recognition compounds."},
+    ],
     evolution:"Jeff Rhoads' arrival brought energy and new Town Hall formats. Employees expressed hunger for strategic direction, transparency on metrics, and clarity on the new organizational framework. Overall positive sentiment reached its lowest point at 15%, driven by Leadership & Management and Communication gaps."
   },
+
   "FY25": {
     sessions:6, participants:50, responses:117,
     positivePct:18, neutralPct:64, needsAttentionPct:18,
@@ -571,20 +641,38 @@ const fyData = {
       {name:"Recognition & Rewards",   mentions:null, score:37},
       {name:"Performance Management",  mentions:null, score:17},
     ],
-    quotes:[
-      {text:"The Bravo Awards program is making a real difference — people feel seen for the first time in years.", source:"March 2025"},
-      {text:"Development Day was a great initiative. More of these targeted learning opportunities would be really valuable.", source:"April 2025"},
-      {text:"The culture mapping process helped us understand where we are, but we need to now act on what we found.", source:"June 2025"},
+    strengthDetails:[
+      {item:"Culture & Community rebounded to 56% — driven by intentional culture work",
+       insight:"The culture mapping initiative gave employees a shared vocabulary for NDR's identity. For the first time, NDR had a structured, participatory process for understanding and articulating its culture — and employees noticed. Bravo Awards complemented this by making recognition visible and peer-driven, rather than top-down and infrequent. Together, these initiatives produced Culture & Community's second-highest score in the dataset.",
+       quote:{text:"The culture mapping process helped us understand where we are, but we need to now act on what we found.", source:"June 2025"}},
+      {item:"Bravo Awards measurably shifted the recognition experience",
+       insight:"Multiple employees across multiple sessions described feeling 'seen for the first time in years.' Peer-to-peer recognition had been normalized — which is more sustainable than manager-only recognition because it doesn't bottleneck at a single relationship. The Bravo Awards program was cited as the single most concrete, impactful program introduced in recent memory.",
+       quote:{text:"The Bravo Awards program is making a real difference — people feel seen for the first time in years.", source:"March 2025"}},
+      {item:"Positive and Needs Attention sentiment equalized at 18% each — a meaningful first",
+       insight:"For the first time in the program's history, critical and positive sentiment reached parity. This doesn't mean the organization has arrived — it means systemic improvements are beginning to register as felt experience, not just organizational activity. The equilibrium is fragile, but it marks the beginning of a genuine shift.",
+       quote:{text:"Development Day was a great initiative. More of these targeted learning opportunities would be really valuable.", source:"April 2025"}},
     ],
-    keyQA:[
-      {q:"How has recognition changed for you this year?", a:["Bravo Awards have increased visibility of contributions","Peer recognition is now more normalized","Formal recognition still feels inconsistent across units"]},
-      {q:"What is your experience with performance management changes?", a:["The redesign is needed but the rollout has been confusing","We need more manager training on the new framework","Employees are unsure how the new system affects advancement"]},
-      {q:"What would strengthen communication from leadership?", a:["Consistent messaging across all levels of management","More proactive updates on strategic decisions","Better alignment between what leadership says and what we experience"]},
+    concernDetails:[
+      {item:"Performance Management scored 17% — confusion persisted a year into the redesign",
+       insight:"Employees' frustration was not with the concept of performance redesign — it was with the execution. A year after introduction, managers still lacked the preparation to explain the framework, and employees still couldn't articulate how their work connected to advancement criteria. The rollout treated the framework as an event rather than a change process, and employees experienced that as disrespect for their time and careers.",
+       quote:{text:"The redesign is needed but the rollout has been confusing — employees are unsure how this affects their advancement.", source:"February 2025"}},
+      {item:"Growth & Development stalled below 40% despite targeted investments",
+       insight:"Development Day was appreciated but was experienced as a single event, not a system. Employees articulated a specific unmet need: not more events, but more structure — career ladders, mentorship pairings, and manager-led growth conversations built into the regular rhythm of work. The absence of a growth infrastructure was felt most acutely by employees who had been in the same role for multiple years with no clear path forward.",
+       quote:{text:"Development Day was great, but one day a year isn't a growth program. We need something more ongoing.", source:"May 2025"}},
+      {item:"Leadership communication was inconsistent across management levels",
+       insight:"The concern in FY25 wasn't that leadership was silent — it was that the message didn't travel. Employees described receiving different versions of the same information depending on which manager they reported to. The gap between what was communicated at the senior level and what reached front-line staff was creating confusion, eroding trust, and prompting speculation that filled the informational vacuum.",
+       quote:{text:"The culture mapping process helped us understand where we are — but we need consistent action and communication, not just insight.", source:"June 2025"}},
     ],
-    strengths:["Culture & Community rebounded to 56% — second highest recorded","Bravo Awards measurably improving recognition culture","Positive and Needs Attention equalized — incremental balance improvement"],
-    concerns:["Performance Management remains below 20%","Growth & Development still below 40%","Communication gaps persist between leadership and staff"],
+    attendInsight:"6 sessions, 48 of 120 invited attended (40.0% rate). The upward trend continued for the third consecutive year. A tighter, more targeted invitation list and stronger word-of-mouth from prior participants drove improvement. The 40% threshold marks the first time the program crossed into what could be considered moderate-to-strong participation territory.",
+    fyRecs:[
+      {n:"01", title:"Act on Culture Mapping Findings — Publicly", body:"The culture mapping process created shared insight; NDR must now demonstrate it listened. Publish a summary of what was learned and the actions being taken in response. Employees who participated in the mapping process are watching for evidence that their input mattered."},
+      {n:"02", title:"Address Performance Management Through Manager Preparation", body:"Before any further framework iteration, invest in manager capability. Hold structured sessions where managers can ask questions, practice conversations, and get clarity on how to communicate the framework to their teams. Manager unpreparedness is the primary driver of employee confusion."},
+      {n:"03", title:"Formalize and Scale the Growth & Development Infrastructure", body:"Development Day was a success — but a single annual event is not a growth system. Build a calendar of structured development touchpoints, mentorship pairings, and career conversation frameworks that repeat throughout the year and are manager-facilitated, not self-directed."},
+      {n:"04", title:"Build a Leadership Communication Cascade Process", body:"Leadership messaging is not reaching front-line employees consistently. Create a structured cascade protocol — shared talking points, manager briefings, and follow-up confirmation — to ensure that key communications reach all staff with consistent framing and timing."},
+    ],
     evolution:"Culture mapping, Bravo Awards, and Development Day emerged as key topics. Performance management redesign and strategic goals communication were central themes. Positive and Needs Attention sentiment balanced out at 18% each — a sign of incremental improvement in engagement."
   },
+
   "FY26 YTD": {
     sessions:6, participants:34, responses:136,
     positivePct:17, neutralPct:65, needsAttentionPct:18,
@@ -599,19 +687,35 @@ const fyData = {
       {name:"Performance Management",  mentions:null, score:30},
       {name:"Growth & Development",    mentions:null, score:18},
     ],
-    quotes:[
-      {text:"With all the uncertainty around federal funding, it's hard to plan for the future or feel secure in your role.", source:"October 2025"},
-      {text:"Leadership has been more communicative this year, which is appreciated — but we need clarity on what restructuring means for us.", source:"November 2025"},
-      {text:"The conversation about AI in the workplace is important. I'd love for NDR to take a proactive stance on how we use it.", source:"January 2026"},
-      {text:"Our team is supportive, but between us and the rest of NDR there are massive communication gaps — IP decisions are being made without our input.", source:"March 2026"},
+    strengthDetails:[
+      {item:"Comm & Transparency crossed 50% for the first time — and became the top theme",
+       insight:"After years of ranking as a top concern, Communication & Transparency shifted to a top strength. Employees acknowledged that leadership's approach to sharing information about restructuring, organizational changes, and uncertainty had materially improved. This is the program's most significant single-theme turnaround — not because the challenges disappeared, but because employees felt more informed while navigating them.",
+       quote:{text:"Leadership has been more communicative this year, which is appreciated — but we need clarity on what restructuring means for us.", source:"November 2025"}},
+      {item:"Processes & Operations improved to 51% — crossing the 'Strong' threshold",
+       insight:"The sustained multi-year effort to address operational infrastructure is showing results. Session participants in FY26 noted fewer procedural blockers in their daily work, and the sense of organizational machinery failing them was less pronounced than in prior years. This recovery — from 4% in FY23 to 51% in FY26 — is one of the most significant improvement trajectories in the dataset.",
+       quote:{text:"Things are working more smoothly operationally — I'm not getting stuck on process issues the way I used to.", source:"July 2025"}},
+      {item:"Attendance at 48% — the strongest sustained rate since FY22",
+       insight:"Nearly half of all invited employees attended, a participation level that signals the program has earned credibility. Employees are showing up not out of obligation but because they believe the conversations are worth having. This trust in the format is a prerequisite for meaningful dialogue — and it took five years to build.",
+       quote:{text:"I always try to attend now. These conversations actually feel like they matter.", source:"October 2025"}},
     ],
-    keyQA:[
-      {q:"How is federal funding uncertainty affecting your work?", a:["It creates anxiety about long-term project commitments","Planning is difficult without stable budget projections","Staff morale has been impacted by ongoing uncertainty"]},
-      {q:"What are your thoughts on AI in the workplace?", a:["NDR should establish clear guidelines for AI use","There is excitement but also fear about what AI means for roles","We need training to understand how to use AI tools effectively"]},
-      {q:"How do you feel about the organizational restructuring?", a:["More transparency is needed about what changes are coming","Communication about the restructuring has improved","We want to understand how restructuring affects our unit specifically"]},
+    concernDetails:[
+      {item:"Growth & Development at 18% — a sustained decline that signals a deepening gap",
+       insight:"The decline is not random — it is structural. As organizational attention has shifted toward communication, culture, and process improvements, career development infrastructure has received proportionally less investment. Employees are not just asking for training events; they are describing the absence of visible advancement criteria, accessible mentors, and manager-facilitated growth conversations. The concern is most acute among mid-tenure employees who feel they have plateaued without a visible path forward.",
+       quote:{text:"With all the uncertainty around federal funding, it's hard to plan for the future or feel secure in your role.", source:"October 2025"}},
+      {item:"Federal funding uncertainty is creating real psychological strain across the workforce",
+       insight:"This is a new concern with no precedent in prior years' data. Employees are not just worried about budgets in the abstract — they are worried about the stability of their roles, the continuity of their projects, and NDR's ability to deliver on its research mission. The uncertainty is affecting planning horizons, collaboration commitments, and day-to-day morale. In the absence of proactive communication, employees are filling the information void with worst-case speculation.",
+       quote:{text:"Planning is difficult without stable budget projections — I don't know what commitments I can make to collaborators.", source:"November 2025"}},
+      {item:"IP decision-making is happening without staff input — a transparency gap that has widened",
+       insight:"Despite the overall improvement in Comm & Transparency, participants from specific units flagged a specific, unresolved failure: decisions affecting intellectual property were being made above them and announced after the fact. This is not a general communication failure — it is a targeted one, and it was described with notable frustration. Employees felt that the improvements in communication hadn't reached the decisions that mattered most to their day-to-day professional interests.",
+       quote:{text:"Our team is supportive, but between us and the rest of NDR there are massive communication gaps — IP decisions are being made without our input.", source:"March 2026"}},
     ],
-    strengths:["Comm & Transparency rose to 52% — first time as top theme","Processes & Operations improved to 51%","Attendance rate at 48% — highest since FY22"],
-    concerns:["Growth & Development at 18% — second lowest point","Federal funding anxiety impacting morale","AI workplace uncertainty requires proactive communication"],
+    attendInsight:"6 sessions, 61 of 127 invited attended (48.0% rate). The strongest sustained rate since the program's inaugural year. The upward trend across four consecutive fiscal years represents a compound investment in trust — employees are attending because prior participants reported that the sessions were worth their time. Average attendance of 10.2 per session is well-suited for substantive dialogue without losing the small-group dynamic.",
+    fyRecs:[
+      {n:"01", title:"Establish a Dedicated Federal Funding Communication Cadence", body:"Create a recurring communication specifically addressing federal funding status, potential impact on NDR, and leadership's response strategy. Silence amplifies anxiety and causes employees to fill information gaps with worst-case assumptions. Even updates that say 'we don't know yet, here's what we're watching' are more stabilizing than silence."},
+      {n:"02", title:"Develop and Publish an NDR AI Workplace Strategy", body:"AI is no longer a future concern — it is present in employees' daily work and affecting their sense of job security. NDR should publish clear usage guidelines, offer accessible training, and communicate proactively about how AI will shape roles and what protections are in place for staff."},
+      {n:"03", title:"Close the IP Communication Gap with a Defined Process", body:"Establish a clear, documented process for how IP-related decisions are made, who is consulted, and when affected staff are notified. This is a targeted transparency failure that requires a targeted fix — general communication improvements will not resolve it."},
+      {n:"04", title:"Rebuild the Growth & Development Pipeline Urgently", body:"At 18% and declining, Growth & Development requires immediate, structural investment. Create visible promotion criteria, a formal mentorship pairing program, and manager-facilitated career conversations embedded in the regular review cycle — not as standalone events."},
+    ],
     evolution:"Federal funding concerns emerged as a new and significant issue. Organizational restructuring, AI workplace impact, and transparency during uncertainty became dominant themes. Comm & Transparency overtook Leadership & Management as the top theme for the first time in three fiscal years."
   }
 };
@@ -815,7 +919,7 @@ function renderAllYears() {
       <li data-fy="FY23">A year of organizational growing pains. Leadership &amp; Management (39 mentions) and Comm &amp; Transparency (27 mentions) dominated. Processes &amp; Operations bottomed at 4% — lowest single score across all years.</li>
       <li data-fy="FY24">Leadership transition under Jeff Rhoads brought cautious optimism but also the lowest overall positive sentiment (15%). Recognition &amp; Rewards jumped to 59% — highest score recorded — while Hybrid &amp; Remote collapsed to 17%.</li>
       <li data-fy="FY25">Culture mapping and Bravo Awards drove Culture &amp; Community to 56%. Performance Management redesign confusion kept that theme below 20%. Positive and Needs Attention equalized at 18% each.</li>
-      <li data-fy="FY26 YTD">Comm &amp; Transparency became top theme for the first time. Federal funding uncertainty and AI in the workplace are new emerging concerns. Growth &amp; Development declined to 18% — second lowest point.</li>
+      <li data-fy="FY26">Comm &amp; Transparency became top theme for the first time (YTD). Federal funding uncertainty and AI in the workplace are new emerging concerns. Growth &amp; Development declined to 18% — second lowest point.</li>
     </ul>`;
   panel.appendChild(findings);
 
@@ -868,7 +972,7 @@ function renderAllYears() {
       <li data-fy="FY23">Organizational processes collapsed — Processes &amp; Operations scored 4%, the lowest in the dataset. Leadership &amp; Management and Communication &amp; Transparency anchored concerns about direction and transparency. Recognition hit 23%, reflecting disengagement risk.</li>
       <li data-fy="FY24">The leadership transition year. Recognition &amp; Rewards spiked to 59% (Bravo-adjacent optimism), while Hybrid &amp; Remote fell to 17% and Culture &amp; Community dropped sharply to 26% — the lowest recorded for that theme.</li>
       <li data-fy="FY25">Culture &amp; Community rebounded strongly to 56% through intentional culture mapping efforts. All mid-tier themes (Growth, Processes, Hybrid, Recognition) converged near 37–38%, suggesting uniform moderate engagement across the board.</li>
-      <li data-fy="FY26 YTD">Comm &amp; Transparency (52%) and Processes &amp; Operations (51%) both crossed the "strong" threshold — a first for Processes. Growth &amp; Development at 18% is a critical concern requiring immediate investment.</li>
+      <li data-fy="FY26">Comm &amp; Transparency (52%) and Processes &amp; Operations (51%) both crossed the "strong" threshold — a first for Processes (YTD). Growth &amp; Development at 18% is a critical concern requiring immediate investment.</li>
     </ul>`;
   panel.appendChild(narrCard);
 
@@ -886,37 +990,64 @@ function renderFYDetail(fy) {
   const d = fyData[fy];
   const panel = document.getElementById("fyPanel");
   panel.innerHTML = "";
+  const isYTD = fy === "FY26 YTD";
 
-  // Glance strip
+  // ── Glance strip ──
   const glanceCard = document.createElement("div");
   glanceCard.className = "card";
   glanceCard.innerHTML = `
-    <div class="card-title">${fy} Analysis <span class="badge badge-gold">${d.dateRange}</span></div>
+    <div class="card-title">
+      ${fy} Analysis
+      <span class="badge badge-gold">${d.dateRange}</span>
+      ${isYTD ? '<span class="badge badge-gray">In Progress</span>' : ''}
+    </div>
     <div class="glance-strip">
-      <div class="glance-item"><div class="glance-val">${d.sessions}</div><div class="glance-label">Sessions</div></div>
-      <div class="glance-item"><div class="glance-val">${d.participants}</div><div class="glance-label">Participants</div></div>
-      <div class="glance-item"><div class="glance-val">${d.responses}</div><div class="glance-label">Responses</div></div>
-      <div class="glance-item"><div class="glance-val" style="color:${GREEN}">${d.positivePct}%</div><div class="glance-label">Positive</div></div>
-      <div class="glance-item"><div class="glance-val" style="color:#94a3b8">${d.neutralPct}%</div><div class="glance-label">Neutral</div></div>
-      <div class="glance-item"><div class="glance-val" style="color:${RED}">${d.needsAttentionPct}%</div><div class="glance-label">Needs Attention</div></div>
-      <div class="glance-item"><div class="glance-val" style="color:${NAVY}">${d.topThemeMentions}</div><div class="glance-label">Top Theme Mentions<br><small style="font-size:0.8em;font-weight:600;color:#64748b">${d.topTheme}</small></div></div>
+      <div class="glance-item">
+        <div class="glance-val">${d.sessions}</div>
+        <div class="glance-label">Sessions${isYTD ? ' (YTD)' : ''}</div>
+      </div>
+      <div class="glance-item">
+        <div class="glance-val">${d.participants}</div>
+        <div class="glance-label">Participants</div>
+      </div>
+      <div class="glance-item">
+        <div class="glance-val">${d.responses}</div>
+        <div class="glance-label">Survey Responses</div>
+      </div>
+      <div class="glance-item">
+        <div class="glance-val" style="color:${GREEN}">${d.positivePct}%</div>
+        <div class="glance-label">Positive</div>
+      </div>
+      <div class="glance-item">
+        <div class="glance-val" style="color:#94a3b8">${d.neutralPct}%</div>
+        <div class="glance-label">Neutral</div>
+      </div>
+      <div class="glance-item">
+        <div class="glance-val" style="color:${RED}">${d.needsAttentionPct}%</div>
+        <div class="glance-label">Needs Attention</div>
+      </div>
+      <div class="glance-item">
+        <div class="glance-val" style="color:${NAVY}">${d.topThemeMentions}</div>
+        <div class="glance-label">Top Mentions</div>
+        <div style="font-size:0.7em;color:#64748b;font-weight:600;margin-top:2px">${d.topTheme}</div>
+      </div>
     </div>`;
   panel.appendChild(glanceCard);
 
-  // Exec summary
+  // ── Exec summary ──
   const exec = document.createElement("div");
   exec.className = "exec-box";
-  exec.innerHTML = `<h3>${fy} Executive Summary</h3><p>${d.evolution}</p>`;
+  exec.innerHTML = `<h3>${fy} Executive Summary</h3><p>${d.evolution}</p>
+    ${isYTD ? `<p style="margin-top:10px;font-size:0.82em;opacity:0.75">Note: FY26 is an ongoing fiscal year. Data reflects sessions and responses collected through March 2026 only. Scores and themes will shift as additional sessions are conducted.</p>` : ''}`;
   panel.appendChild(exec);
 
-  // Sentiment donut + Theme scores
+  // ── Sentiment + Theme Analysis ──
   const vizCard = document.createElement("div");
   vizCard.className = "card";
   vizCard.innerHTML = `<div class="card-title">Sentiment &amp; Theme Analysis</div>`;
   const twoCol = document.createElement("div");
   twoCol.className = "two-col";
 
-  // Donut side
   const donutDiv = document.createElement("div");
   donutDiv.innerHTML = `<div class="chart-label">Sentiment Distribution</div>
     <svg id="donut_${fy.replace(/\s/g,'_')}" width="100%" height="240"></svg>
@@ -926,7 +1057,6 @@ function renderFYDetail(fy) {
       <div class="legend-item"><div class="legend-dot" style="background:${RED}"></div>Needs Attention ${d.needsAttentionPct}%</div>
     </div>`;
 
-  // Theme bars side
   const barsDiv = document.createElement("div");
   barsDiv.innerHTML = `<div class="chart-label">Theme Scores (% Positive Sentiment)</div>`;
   d.themes.forEach(t => {
@@ -935,7 +1065,7 @@ function renderFYDetail(fy) {
       <div class="theme-bar-row">
         <div class="theme-bar-hd">
           <span>${t.name}${t.mentions ? ` <span style="font-size:0.78em;color:#94a3b8">(${t.mentions} mentions)</span>` : ''}</span>
-          <span style="color:${col};font-size:0.8em;font-weight:700">${t.score !== null ? t.score + '%' : 'N/A'}</span>
+          <span style="color:${col};font-size:0.8em;font-weight:700">${t.score !== null ? t.score+'%' : 'N/A'}</span>
         </div>
         <div class="theme-bar-track"><div class="theme-bar-fill" style="width:${t.score||0}%;background:${col}"></div></div>
       </div>`;
@@ -946,76 +1076,144 @@ function renderFYDetail(fy) {
   vizCard.appendChild(twoCol);
   panel.appendChild(vizCard);
 
-  // Strengths & Concerns
-  const scCard = document.createElement("div");
-  scCard.className = "card";
-  scCard.innerHTML = `
-    <div class="card-title">Strengths &amp; Concerns</div>
-    <div class="two-col-equal">
-      <div>
-        <div class="chart-label" style="color:${GREEN}">Strengths</div>
-        <ul style="padding-left:18px;margin-top:8px">
-          ${d.strengths.map(s=>`<li style="font-size:0.85em;color:#334155;margin-bottom:6px;line-height:1.5">${s}</li>`).join('')}
-        </ul>
+  // ── Strengths ──
+  const strCard = document.createElement("div");
+  strCard.className = "card";
+  strCard.innerHTML = `<div class="card-title" style="color:${GREEN}">&#10003; Strengths — What Is Working</div>
+    <div class="insight-cards" id="strengthCards"></div>`;
+  panel.appendChild(strCard);
+  const strContainer = strCard.querySelector("#strengthCards");
+  d.strengthDetails.forEach(s => {
+    const card = document.createElement("div");
+    card.className = "insight-card strength";
+    card.innerHTML = `
+      <div class="insight-card-title">${s.item}</div>
+      <div class="insight-card-body">${s.insight}</div>
+      <div class="insight-quote">
+        "${s.quote.text}"
+        <div class="insight-quote-src">${fy} &nbsp;|&nbsp; ${s.quote.source}</div>
+      </div>`;
+    strContainer.appendChild(card);
+  });
+
+  // ── Concerns ──
+  const conCard = document.createElement("div");
+  conCard.className = "card";
+  conCard.innerHTML = `<div class="card-title" style="color:${RED}">&#9888; Concerns — Why Employees Raised These Issues</div>
+    <div class="insight-cards" id="concernCards"></div>`;
+  panel.appendChild(conCard);
+  const conContainer = conCard.querySelector("#concernCards");
+  d.concernDetails.forEach(c => {
+    const card = document.createElement("div");
+    card.className = "insight-card concern";
+    card.innerHTML = `
+      <div class="insight-card-title">${c.item}</div>
+      <div class="insight-card-body">${c.insight}</div>
+      <div class="insight-quote">
+        "${c.quote.text}"
+        <div class="insight-quote-src">${fy} &nbsp;|&nbsp; ${c.quote.source}</div>
+      </div>`;
+    conContainer.appendChild(card);
+  });
+
+  // ── FY Attendance ──
+  const attRow = attendData.find(r => r.fy === fy);
+  if (attRow) {
+    const attCard = document.createElement("div");
+    attCard.className = "card";
+    attCard.innerHTML = `
+      <div class="card-title">Session Attendance — ${fy} <span class="badge ${attRow.rate>=45?'badge-green':attRow.rate>=30?'badge-gold':'badge-red'}">${attRow.rate}% Rate</span></div>
+      <div class="two-col">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Sessions</th><th>Invited</th><th>Attended</th><th>Rate</th><th>Avg / Session</th></tr></thead>
+            <tbody><tr>
+              <td>${attRow.sessions}${isYTD ? ' (YTD)' : ''}</td>
+              <td>${attRow.invited}</td>
+              <td>${attRow.attended}</td>
+              <td><span class="pct-pill ${pctClass(attRow.rate)}">${attRow.rate}%</span></td>
+              <td>${attRow.avg}</td>
+            </tr></tbody>
+          </table>
+        </div>
+        <div>
+          <div class="chart-label">Attendance Rate — ${fy} vs. Program Average</div>
+          <svg id="fyAttendBar" width="100%" height="110"></svg>
+        </div>
       </div>
-      <div>
-        <div class="chart-label" style="color:${RED}">Concerns</div>
-        <ul style="padding-left:18px;margin-top:8px">
-          ${d.concerns.map(c=>`<li style="font-size:0.85em;color:#334155;margin-bottom:6px;line-height:1.5">${c}</li>`).join('')}
-        </ul>
-      </div>
+      <div class="context-box" style="margin-top:16px">
+        <p><strong>Insight:</strong> ${d.attendInsight}</p>
+      </div>`;
+    panel.appendChild(attCard);
+  }
+
+  // ── FY Recommendations ──
+  const recCard = document.createElement("div");
+  recCard.className = "card";
+  recCard.innerHTML = `
+    <div class="card-title">Strategic Recommendations — ${fy} <span class="badge badge-gold">${d.fyRecs.length} Actions</span></div>
+    <div class="rec-grid">
+      ${d.fyRecs.map(r=>`
+        <div class="rec-card">
+          <div class="rec-num">${r.n}</div>
+          <div class="rec-title">${r.title}</div>
+          <div class="rec-body">${r.body}</div>
+        </div>`).join('')}
     </div>`;
-  panel.appendChild(scCard);
+  panel.appendChild(recCard);
 
-  // Key Q&A
-  const qaCard = document.createElement("div");
-  qaCard.className = "card";
-  qaCard.innerHTML = `<div class="card-title">Key Questions &amp; Responses</div>`;
-  d.keyQA.forEach((item,i) => {
-    const qa = document.createElement("div");
-    qa.className = "qa-item";
-    qa.innerHTML = `
-      <div class="qa-q" onclick="toggleQA(this)">
-        <span>${item.q}</span><span class="qa-arrow">&#9660;</span>
-      </div>
-      <div class="qa-a">
-        <ul style="margin-top:8px">${item.a.map(a=>`<li>${a}</li>`).join('')}</ul>
-      </div>`;
-    qaCard.appendChild(qa);
-  });
-  panel.appendChild(qaCard);
-
-  // Selected quotes
-  const quotesCard = document.createElement("div");
-  quotesCard.className = "card";
-  quotesCard.innerHTML = `<div class="card-title">Selected Participant Quotes <span class="badge badge-gold">${fy}</span></div>`;
-  const quotesGrid = document.createElement("div");
-  quotesGrid.className = "quotes-grid";
-  d.quotes.forEach(q => {
-    quotesGrid.innerHTML += `
-      <div class="quote-card">
-        <div class="quote-text">"${q.text}"</div>
-        <div class="quote-source">${fy} &nbsp;|&nbsp; ${q.source}</div>
-      </div>`;
-  });
-  quotesCard.appendChild(quotesGrid);
-  panel.appendChild(quotesCard);
-
-  // Context box
+  // ── Year in Context ──
   const ctxCard = document.createElement("div");
   ctxCard.className = "card";
   ctxCard.innerHTML = `
     <div class="card-title">Year in Context</div>
-    <div class="context-box"><p><strong>FY Context:</strong> ${d.evolution}</p></div>`;
+    <div class="context-box"><p><strong>FY Overview:</strong> ${d.evolution}</p></div>`;
   panel.appendChild(ctxCard);
 
-  requestAnimationFrame(() => drawDonut(fy, d));
+  requestAnimationFrame(() => {
+    drawDonut(fy, d);
+    if (attRow) drawFyAttendBar(attRow);
+  });
 }
 
-function toggleQA(el) {
-  const ans = el.nextElementSibling;
-  ans.classList.toggle("open");
-  el.querySelector(".qa-arrow").style.transform = ans.classList.contains("open") ? "rotate(180deg)" : "";
+/* Mini comparison bar for FY attend vs program avg */
+function drawFyAttendBar(attRow) {
+  const el = document.getElementById("fyAttendBar");
+  if (!el) return;
+  const W = el.clientWidth || 360;
+  const H = 110;
+  const margin = {top:14, right:60, bottom:24, left:14};
+  const iW = W - margin.left - margin.right;
+  const iH = H - margin.top - margin.bottom;
+
+  const totA = attendData.reduce((s,r)=>s+r.attended,0);
+  const totI = attendData.reduce((s,r)=>s+r.invited,0);
+  const avgRate = parseFloat(((totA/totI)*100).toFixed(1));
+
+  const data = [
+    {label:`${attRow.fy}`, val:attRow.rate, col:attRow.rate>=45?GREEN:attRow.rate>=30?GOLD:RED},
+    {label:"Program Avg",  val:avgRate,     col:NAVY},
+  ];
+  const x = d3.scaleLinear().domain([0,80]).range([0,iW]);
+  const y = d3.scaleBand().domain(data.map(d=>d.label)).range([0,iH]).padding(0.35);
+
+  const svg = d3.select("#fyAttendBar").attr("viewBox",`0 0 ${W} ${H}`);
+  svg.selectAll("*").remove();
+  const g = svg.append("g").attr("transform",`translate(${margin.left},${margin.top})`);
+
+  g.append("g").call(d3.axisLeft(y).tickSize(0))
+    .call(g=>g.select(".domain").remove())
+    .selectAll("text").attr("font-size","0.72em").attr("fill","#334155").attr("font-weight","700");
+
+  g.selectAll("rect").data(data).enter().append("rect")
+    .attr("x",0).attr("y",d=>y(d.label))
+    .attr("width",d=>x(d.val)).attr("height",y.bandwidth())
+    .attr("fill",d=>d.col).attr("rx",4);
+
+  g.selectAll(".lbl").data(data).enter().append("text")
+    .attr("x",d=>x(d.val)+6).attr("y",d=>y(d.label)+y.bandwidth()/2+4)
+    .attr("font-size","0.74em").attr("fill","#334155").attr("font-weight","800")
+    .text(d=>d.val+"%");
 }
 
 /* ================================================================
