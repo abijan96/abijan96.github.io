@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NDR Engagement Chat Dashboard | FY22–FY26 YTD</title>
+  <title>NDR Engagement Chat Dashboard | FY22–FY26 YTD (April)</title>
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -90,6 +90,17 @@
     }
     .fy-btn:hover   { border-color: #0C2340; color: #0C2340; background: #f0f4f8; }
     .fy-btn.active  { background: #0C2340; color: #fff; border-color: #0C2340; }
+    .fy-btn-latest  { border-color: #C99700; color: #C99700; position: relative; }
+    .fy-btn-latest:hover { border-color: #a87d00; color: #a87d00; background: #fffbeb; }
+    .fy-btn-latest.active { background: #C99700; color: #fff; border-color: #C99700; }
+    .latest-pip { background: #C99700; color: #fff; font-size: 0.6em; padding: 2px 6px; border-radius: 8px; font-weight: 800; margin-left: 5px; vertical-align: middle; letter-spacing: 0.4px; }
+    .fy-btn-latest.active .latest-pip { background: #fff; color: #C99700; }
+    .session-q { border-radius: 0 8px 8px 0; padding: 14px 18px; background: #f8fafc; margin-bottom: 14px; }
+    .session-q-label { font-size: 0.75em; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+    .session-q-title { font-size: 0.87em; font-weight: 700; color: #0C2340; margin-bottom: 10px; }
+    .session-q ul { margin: 0; padding-left: 18px; font-size: 0.83em; color: #374151; line-height: 1.75; }
+    .attendee-col-head { font-size: 0.73em; font-weight: 800; color: #0C2340; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+    .attendee-name { font-size: 0.83em; color: #374151; padding: 4px 0; border-bottom: 1px solid #f1f5f9; }
 
     /* ── EXEC SUMMARY BOX ── */
     .exec-box {
@@ -268,7 +279,7 @@
   <header class="site-header">
     <div class="site-header-left">
       <h1><span class="gold-dot"></span>NDR Engagement Chat Dashboard</h1>
-      <p class="subtitle">FY22 – FY26 YTD &nbsp;|&nbsp; 29 Sessions &nbsp;|&nbsp; Data through March 2026</p>
+      <p class="subtitle">FY22 – FY26 YTD (April) &nbsp;|&nbsp; 30 Sessions &nbsp;|&nbsp; Data through April 2026</p>
     </div>
     <div class="view-toggle">
       <button class="view-btn active" id="btnAnalysis" onclick="switchView('analysis')">Engagement Chat Analysis</button>
@@ -289,7 +300,8 @@
         <button class="fy-btn" data-fy="FY23">FY23</button>
         <button class="fy-btn" data-fy="FY24">FY24</button>
         <button class="fy-btn" data-fy="FY25">FY25</button>
-        <button class="fy-btn" data-fy="FY26 YTD">FY26 YTD</button>
+        <button class="fy-btn" data-fy="FY26 YTD (April)">FY26 YTD (April)</button>
+        <button class="fy-btn fy-btn-latest" data-fy="session-latest">Apr 29 '26 <span class="latest-pip">NEW</span></button>
       </div>
     </div>
 
@@ -361,16 +373,16 @@
         <button class="fy-btn active" data-fbfy="all">All Years</button>
         <button class="fy-btn" data-fbfy="FY24">FY24</button>
         <button class="fy-btn" data-fbfy="FY25">FY25</button>
-        <button class="fy-btn" data-fbfy="FY26 YTD">FY26 YTD</button>
+        <button class="fy-btn" data-fbfy="FY26 YTD (April)">FY26 YTD (April)</button>
       </div>
     </div>
 
     <!-- Feedback KPI Cards -->
     <div class="kpi-grid">
       <div class="kpi-card navy">
-        <div class="kpi-value">74</div>
+        <div class="kpi-value">76</div>
         <div class="kpi-label">Total Responses</div>
-        <div class="kpi-sub">FY24 through FY26 YTD</div>
+        <div class="kpi-sub">FY24 through FY26 YTD (April)</div>
       </div>
       <div class="kpi-card green">
         <div class="kpi-value">100%</div>
@@ -399,9 +411,9 @@
             <tbody>
               <tr><td>FY24</td><td>33</td><td>4.30</td><td>4.06</td></tr>
               <tr><td>FY25</td><td>33</td><td>4.76</td><td>4.27</td></tr>
-              <tr><td>FY26 YTD</td><td>8</td><td>4.63</td><td>3.88</td></tr>
+              <tr><td>FY26 YTD (April)</td><td>10</td><td>4.70</td><td>4.10</td></tr>
             </tbody>
-            <tfoot><tr><td>Overall</td><td>74</td><td>4.54</td><td>4.14</td></tr></tfoot>
+            <tfoot><tr><td>Overall</td><td>76</td><td>4.55</td><td>4.16</td></tr></tfoot>
           </table>
         </div>
         <div>
@@ -459,7 +471,7 @@
         <button class="toggle-btn active" data-qfy="all" onclick="filterFbQuotes(this,'all')">All Years</button>
         <button class="toggle-btn" data-qfy="FY24" onclick="filterFbQuotes(this,'FY24')">FY24</button>
         <button class="toggle-btn" data-qfy="FY25" onclick="filterFbQuotes(this,'FY25')">FY25</button>
-        <button class="toggle-btn" data-qfy="FY26 YTD" onclick="filterFbQuotes(this,'FY26 YTD')">FY26 YTD</button>
+        <button class="toggle-btn" data-qfy="FY26 YTD (April)" onclick="filterFbQuotes(this,'FY26 YTD (April)')">FY26 YTD (April)</button>
       </div>
       <div id="fbQuotesGrid" class="quotes-grid"></div>
     </div>
@@ -473,7 +485,7 @@
   </div><!-- /#view-feedback -->
 
 </div><!-- /.container -->
-<footer>NDR Engagement Chat Dashboard &nbsp;|&nbsp; FY22 – FY26 YTD &nbsp;|&nbsp; Data through March 2026</footer>
+<footer>NDR Engagement Chat Dashboard &nbsp;|&nbsp; FY22 – FY26 YTD (April) &nbsp;|&nbsp; Data through April 2026</footer>
 
 <script>
 /* ================================================================
@@ -487,7 +499,7 @@ const RED   = "#C41E3A";
 /* ================================================================
    DATA — ENGAGEMENT CHAT ANALYSIS
    ================================================================ */
-const fyKeys = ["FY22","FY23","FY24","FY25","FY26 YTD"];
+const fyKeys = ["FY22","FY23","FY24","FY25","FY26 YTD (April)"];
 
 const fyData = {
   "FY22": {
@@ -673,15 +685,15 @@ const fyData = {
     evolution:"Culture mapping, Bravo Awards, and Development Day emerged as key topics. Performance management redesign and strategic goals communication were central themes. Positive and Needs Attention sentiment balanced out at 18% each — a sign of incremental improvement in engagement."
   },
 
-  "FY26 YTD": {
-    sessions:6, participants:34, responses:136,
+  "FY26 YTD (April)": {
+    sessions:7, participants:42, responses:168,
     positivePct:17, neutralPct:65, needsAttentionPct:18,
-    topTheme:"Comm & Transparency", topThemeMentions:19,
-    dateRange:"July 31, 2025 – March 26, 2026",
+    topTheme:"Comm & Transparency", topThemeMentions:20,
+    dateRange:"July 31, 2025 – April 29, 2026",
     themes:[
-      {name:"Comm & Transparency",     mentions:19, score:52},
-      {name:"Leadership & Management", mentions:11, score:34},
-      {name:"Culture & Community",     mentions:11, score:41},
+      {name:"Comm & Transparency",     mentions:20, score:52},
+      {name:"Leadership & Management", mentions:13, score:34},
+      {name:"Culture & Community",     mentions:12, score:41},
       {name:"Processes & Operations",  mentions:null, score:51},
       {name:"Hybrid & Remote Work",    mentions:null, score:31},
       {name:"Performance Management",  mentions:null, score:30},
@@ -697,6 +709,9 @@ const fyData = {
       {item:"Attendance at 48% — the strongest sustained rate since FY22",
        insight:"Nearly half of all invited employees attended, a participation level that signals the program has earned credibility. Employees are showing up not out of obligation but because they believe the conversations are worth having. This trust in the format is a prerequisite for meaningful dialogue — and it took five years to build.",
        quote:{text:"I always try to attend now. These conversations actually feel like they matter.", source:"October 2025"}},
+      {item:"Jeff Rhoads' leadership communication reinforcing stability during uncertain times",
+       insight:"In the April 2026 session, Jeff Rhoads' consistent and transparent communication — through town halls, regular emails, and direct dialogue — was cited repeatedly as a stabilizing force. Employees described his style as 'eloquent,' 'direct,' and 'approachable,' and specifically valued that his communications acknowledged the difficulty of the moment rather than minimizing it. Repeat attendees noted that actions from prior sessions had been taken, reinforcing their decision to return.",
+       quote:{text:"It's a scary time to be here with the funding changes. Hearing from Jeff on a regular basis, even with the emails, it sounds honest.", source:"April 2026"}},
     ],
     concernDetails:[
       {item:"Growth & Development at 18% — a sustained decline that signals a deepening gap",
@@ -708,27 +723,30 @@ const fyData = {
       {item:"IP decision-making is happening without staff input — a transparency gap that has widened",
        insight:"Despite the overall improvement in Comm & Transparency, participants from specific units flagged a specific, unresolved failure: decisions affecting intellectual property were being made above them and announced after the fact. This is not a general communication failure — it is a targeted one, and it was described with notable frustration. Employees felt that the improvements in communication hadn't reached the decisions that mattered most to their day-to-day professional interests.",
        quote:{text:"Our team is supportive, but between us and the rest of NDR there are massive communication gaps — IP decisions are being made without our input.", source:"March 2026"}},
+      {item:"Performance Management matrix design creating friction — process not intuitive, goals cycle truncated",
+       insight:"In the April 2026 session, employees appreciated the structural elements of the PM process — particularly the two mid-cycle check-ins — but flagged the matrix design as misaligned with how they actually work. Dimensions didn't map to real tasks, making self-assessment feel performative rather than developmental. The goals timeline further compressed the cycle: entered in October, concluded by March, leaving fewer months for meaningful progress. The goals rollout was also described as underprepared — presented as handouts only, with no contextualizing explanation.",
+       quote:{text:"They had the matrix, but the dimensions don't fall into that. It was not intuitive.", source:"April 2026"}},
     ],
-    attendInsight:"6 sessions, 61 of 127 invited attended (48.0% rate). The strongest sustained rate since the program's inaugural year. The upward trend across four consecutive fiscal years represents a compound investment in trust — employees are attending because prior participants reported that the sessions were worth their time. Average attendance of 10.2 per session is well-suited for substantive dialogue without losing the small-group dynamic.",
+    attendInsight:"7 sessions, 69 of 139 invited attended (49.6% rate). The strongest sustained rate since the program's inaugural year continues into April. The upward trend across four consecutive fiscal years represents a compound investment in trust — employees are attending because prior participants reported that the sessions were worth their time. Average attendance of 9.9 per session is well-suited for substantive dialogue without losing the small-group dynamic.",
     fyRecs:[
       {n:"01", title:"Establish a Dedicated Federal Funding Communication Cadence", body:"Create a recurring communication specifically addressing federal funding status, potential impact on NDR, and leadership's response strategy. Silence amplifies anxiety and causes employees to fill information gaps with worst-case assumptions. Even updates that say 'we don't know yet, here's what we're watching' are more stabilizing than silence."},
       {n:"02", title:"Develop and Publish an NDR AI Workplace Strategy", body:"AI is no longer a future concern — it is present in employees' daily work and affecting their sense of job security. NDR should publish clear usage guidelines, offer accessible training, and communicate proactively about how AI will shape roles and what protections are in place for staff."},
       {n:"03", title:"Close the IP Communication Gap with a Defined Process", body:"Establish a clear, documented process for how IP-related decisions are made, who is consulted, and when affected staff are notified. This is a targeted transparency failure that requires a targeted fix — general communication improvements will not resolve it."},
       {n:"04", title:"Rebuild the Growth & Development Pipeline Urgently", body:"At 18% and declining, Growth & Development requires immediate, structural investment. Create visible promotion criteria, a formal mentorship pairing program, and manager-facilitated career conversations embedded in the regular review cycle — not as standalone events."},
     ],
-    evolution:"Federal funding concerns emerged as a new and significant issue. Organizational restructuring, AI workplace impact, and transparency during uncertainty became dominant themes. Comm & Transparency overtook Leadership & Management as the top theme for the first time in three fiscal years."
+    evolution:"Federal funding concerns emerged as a new and significant issue. Organizational restructuring, AI workplace impact, and transparency during uncertainty became dominant themes. Comm & Transparency overtook Leadership & Management as the top theme for the first time in three fiscal years. In April 2026, Jeff Rhoads' leadership communication was praised as a stabilizing force during ongoing uncertainty, while Performance Management process design and town hall accessibility emerged as new focus areas for improvement."
   }
 };
 
 const heatmapData = [
-  {theme:"Culture & Community",    FY22:54, FY23:49, FY24:26, FY25:56, "FY26 YTD":41},
-  {theme:"Comm & Transparency",    FY22:32, FY23:31, FY24:25, FY25:41, "FY26 YTD":52},
-  {theme:"Growth & Development",   FY22:53, FY23:19, FY24:54, FY25:38, "FY26 YTD":18},
-  {theme:"Hybrid & Remote Work",   FY22:23, FY23:66, FY24:17, FY25:38, "FY26 YTD":31},
-  {theme:"Processes & Operations", FY22:39, FY23:4,  FY24:24, FY25:38, "FY26 YTD":51},
-  {theme:"Leadership & Mgmt",      FY22:38, FY23:29, FY24:28, FY25:31, "FY26 YTD":34},
-  {theme:"Recognition & Rewards",  FY22:51, FY23:23, FY24:59, FY25:37, "FY26 YTD":null},
-  {theme:"Performance Mgmt",       FY22:null,FY23:6, FY24:21, FY25:17, "FY26 YTD":30},
+  {theme:"Culture & Community",    FY22:54, FY23:49, FY24:26, FY25:56, "FY26 YTD (April)":41},
+  {theme:"Comm & Transparency",    FY22:32, FY23:31, FY24:25, FY25:41, "FY26 YTD (April)":52},
+  {theme:"Growth & Development",   FY22:53, FY23:19, FY24:54, FY25:38, "FY26 YTD (April)":18},
+  {theme:"Hybrid & Remote Work",   FY22:23, FY23:66, FY24:17, FY25:38, "FY26 YTD (April)":31},
+  {theme:"Processes & Operations", FY22:39, FY23:4,  FY24:24, FY25:38, "FY26 YTD (April)":51},
+  {theme:"Leadership & Mgmt",      FY22:38, FY23:29, FY24:28, FY25:31, "FY26 YTD (April)":34},
+  {theme:"Recognition & Rewards",  FY22:51, FY23:23, FY24:59, FY25:37, "FY26 YTD (April)":null},
+  {theme:"Performance Mgmt",       FY22:null,FY23:6, FY24:21, FY25:17, "FY26 YTD (April)":30},
 ];
 
 const attendData = [
@@ -736,15 +754,15 @@ const attendData = [
   {fy:"FY23",    sessions:7, invited:157, attended:40, rate:25.5, avg:5.7},
   {fy:"FY24",    sessions:7, invited:168, attended:57, rate:33.9, avg:8.1},
   {fy:"FY25",    sessions:6, invited:120, attended:48, rate:40.0, avg:8.0},
-  {fy:"FY26 YTD",sessions:6, invited:127, attended:61, rate:48.0, avg:10.2},
+  {fy:"FY26 YTD (April)",sessions:7, invited:139, attended:69, rate:49.6, avg:9.9},
 ];
 
 const recommendations = [
-  {n:"01", title:"Prioritize Transparency During Uncertainty", body:"Establish a regular communication cadence from senior leadership addressing federal funding, restructuring, and AI impact — particularly given the concerns raised in FY26 YTD sessions."},
-  {n:"02", title:"Reinvest in Growth & Development Pathways", body:"Growth & Development has declined to 18% in FY26 YTD after a rebound in FY24. Develop structured career ladders and mentorship programs with visible milestones."},
+  {n:"01", title:"Prioritize Transparency During Uncertainty", body:"Establish a regular communication cadence from senior leadership addressing federal funding, restructuring, and AI impact — particularly given the concerns raised in FY26 YTD (April) sessions."},
+  {n:"02", title:"Reinvest in Growth & Development Pathways", body:"Growth & Development has declined to 18% in FY26 YTD (April) after a rebound in FY24. Develop structured career ladders and mentorship programs with visible milestones."},
   {n:"03", title:"Sustain and Expand Recognition Programs", body:"Bravo Awards and peer recognition initiatives from FY25 showed measurable cultural impact. Formalize and expand these programs to ensure equitable reach across all units."},
   {n:"04", title:"Address Performance Management Confusion", body:"Performance Management has scored below 25% since its introduction. Provide manager training, clearer employee guidance, and a phased rollout timeline for any redesign."},
-  {n:"05", title:"Develop a Proactive AI Workplace Strategy", body:"AI emerged as a top concern in FY26 YTD. NDR should establish usage guidelines, offer training, and communicate proactively about how AI will affect roles and responsibilities."},
+  {n:"05", title:"Develop a Proactive AI Workplace Strategy", body:"AI emerged as a top concern in FY26 YTD (April). NDR should establish usage guidelines, offer training, and communicate proactively about how AI will affect roles and responsibilities."},
   {n:"06", title:"Improve Hybrid Work Norms and Structure", body:"Hybrid & Remote Work sentiment has fluctuated across all five fiscal years. Establish clearer norms, team scheduling protocols, and purposeful in-person meeting structures."},
 ];
 
@@ -754,7 +772,7 @@ const recommendations = [
 const fbByFY = [
   {fy:"FY24",     n:33, participation:4.30, connection:4.06},
   {fy:"FY25",     n:33, participation:4.76, connection:4.27},
-  {fy:"FY26 YTD", n:8,  participation:4.63, connection:3.88},
+  {fy:"FY26 YTD (April)", n:10,  participation:4.70, connection:4.10},
 ];
 
 // Estimated Likert distributions (derived from FY means)
@@ -762,12 +780,12 @@ const likertData = {
   participation: [
     {fy:"FY24",     dist:[0,2,4,9,18]},
     {fy:"FY25",     dist:[0,0,2,4,27]},
-    {fy:"FY26 YTD", dist:[0,0,0,3,5]},
+    {fy:"FY26 YTD (April)", dist:[0,0,0,3,7]},
   ],
   connection: [
     {fy:"FY24",     dist:[1,2,4,13,13]},
     {fy:"FY25",     dist:[0,1,3,15,14]},
-    {fy:"FY26 YTD", dist:[0,1,1,4,2]},
+    {fy:"FY26 YTD (April)", dist:[0,1,1,4,4]},
   ]
 };
 const likertColors = ["#C41E3A","#f97316","#C99700","#64b5f6","#00843D"];
@@ -797,28 +815,31 @@ const likedQuotes = [
   {text:"I liked being able to hear from colleagues I don't normally interact with.",                           fy:"FY24"},
   {text:"The facilitator kept things moving and made sure everyone had a chance to speak.",                     fy:"FY25"},
   {text:"Small group size made it easier to share openly.",                                                     fy:"FY24"},
-  {text:"Topics felt relevant to what we're actually experiencing day to day.",                                 fy:"FY26 YTD"},
+  {text:"Topics felt relevant to what we're actually experiencing day to day.",                                 fy:"FY26 YTD (April)"},
   {text:"It felt like leadership genuinely wanted to hear our concerns.",                                       fy:"FY25"},
   {text:"The chat format was less intimidating than a large town hall.",                                        fy:"FY24"},
   {text:"I appreciated that the conversation stayed focused and didn't go off track.",                          fy:"FY25"},
-  {text:"The anonymity element made people more willing to be candid.",                                         fy:"FY26 YTD"},
+  {text:"The anonymity element made people more willing to be candid.",                                         fy:"FY26 YTD (April)"},
+  {text:"I feel like it's a way to ensure management is receiving feedback regarding staff satisfaction. I also enjoy meeting others in vastly different roles at ND.", fy:"FY26 YTD (April)"},
+  {text:"Meeting NDR colleagues I haven't met yet, catching up with NDR colleagues I haven't seen lately, putting a face with a name, providing input and feedback on important topics.", fy:"FY26 YTD (April)"},
 ];
 const improveQuotes = [
   {text:"Would love to see follow-up on what actually changed after the sessions.",                             fy:"FY25"},
   {text:"Larger group sizes might help get a broader range of perspectives.",                                   fy:"FY24"},
   {text:"It would be helpful to share a summary of discussion themes with all staff afterward.",                fy:"FY24"},
   {text:"More sessions per year would be valuable — quarterly would be ideal.",                                 fy:"FY25"},
-  {text:"The timing of sessions sometimes conflicts with busy project periods.",                                fy:"FY26 YTD"},
+  {text:"The timing of sessions sometimes conflicts with busy project periods.",                                fy:"FY26 YTD (April)"},
   {text:"Would like to see senior leadership attend at least part of some sessions.",                           fy:"FY25"},
   {text:"Some questions felt too broad — more specific prompts would help.",                                    fy:"FY24"},
-  {text:"Would appreciate a way to submit questions or topics beforehand.",                                     fy:"FY26 YTD"},
+  {text:"Would appreciate a way to submit questions or topics beforehand.",                                     fy:"FY26 YTD (April)"},
   {text:"The sessions should lead to a visible action plan that gets shared back.",                             fy:"FY25"},
+  {text:"If specific information is requested, perhaps have a list of topics in the invitation so we can provide well thought out answers.", fy:"FY26 YTD (April)"},
 ];
 
 const fbRecommendations = [
   {n:"01", title:"Close the Feedback Loop", body:"Share a summary of key themes and any resulting actions after each cycle of sessions. Participants consistently asked what changed as a result of their input."},
   {n:"02", title:"Increase Session Frequency", body:"Move toward quarterly sessions rather than clustering them in one semester. More touchpoints throughout the year improve continuity and reduce recency bias."},
-  {n:"03", title:"Expand Reach Across All Units", body:"FY26 YTD had only 8 feedback respondents. Increase awareness and accessibility of the feedback process to ensure representation across all NDR units."},
+  {n:"03", title:"Expand Reach Across All Units", body:"FY26 YTD (April) has 10 feedback respondents. Continue to increase awareness and accessibility of the feedback process to ensure representation across all NDR units."},
   {n:"04", title:"Develop a Visible Action Tracking System", body:"Create a simple, shared document or dashboard that tracks what was raised in sessions and what has been done in response."},
   {n:"05", title:"Introduce Pre-Session Agenda Sharing", body:"Allow participants to submit questions or topics beforehand. This improves the quality of discussion and helps facilitators prepare targeted prompts."},
   {n:"06", title:"Invite Leadership Observers Occasionally", body:"Consider having a senior leader attend select sessions in a listening-only capacity. This signals that feedback is taken seriously at the highest level."},
@@ -879,8 +900,193 @@ document.getElementById("fyNav").addEventListener("click", e => {
   document.querySelectorAll("#fyNav .fy-btn").forEach(b => b.classList.remove("active"));
   btn.classList.add("active");
   if (currentFY === "all") renderAllYears();
+  else if (currentFY === "session-latest") renderLatestSession();
   else renderFYDetail(currentFY);
 });
+
+/* ================================================================
+   RENDER: LATEST SESSION (April 29, 2026)
+   ================================================================ */
+function renderLatestSession() {
+  setStaticCards(false);
+  const panel = document.getElementById("fyPanel");
+  panel.innerHTML = `
+
+    <!-- ── SESSION HEADER ── -->
+    <div class="exec-box" style="margin-bottom:22px;">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:14px;">
+        <div>
+          <div style="font-size:0.73em;font-weight:800;color:#C99700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Latest Session &nbsp;·&nbsp; Session 7 of FY26</div>
+          <div style="font-size:1.45em;font-weight:800;color:#fff;margin-bottom:5px;">Engagement Chat — April 29, 2026</div>
+          <div style="font-size:0.85em;opacity:0.8;line-height:1.6;">2:30 PM &nbsp;·&nbsp; Hybrid Format (In-Person + Virtual) &nbsp;·&nbsp; Facilitated by Claudia Hawkins &amp; Nancy Nalepinski</div>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding-top:4px;">
+          <span class="badge badge-gold">FY26 Session #7</span>
+          <span class="badge badge-green">100% Would Recommend</span>
+          <span class="badge badge-green">5.0 / 5.0 Feedback</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── AT-A-GLANCE KPIs ── -->
+    <div class="kpi-grid" style="margin-bottom:22px;">
+      <div class="kpi-card navy">
+        <div class="kpi-value">7</div>
+        <div class="kpi-label">Attendees</div>
+        <div class="kpi-sub">5 in-person · 2 virtual</div>
+      </div>
+      <div class="kpi-card gold">
+        <div class="kpi-value">58.3%</div>
+        <div class="kpi-label">Attendance Rate</div>
+        <div class="kpi-sub">7 of 12 invited</div>
+      </div>
+      <div class="kpi-card green">
+        <div class="kpi-value">5.0 / 5.0</div>
+        <div class="kpi-label">Feedback Scores</div>
+        <div class="kpi-sub">Participation · Connection</div>
+      </div>
+      <div class="kpi-card" style="border-top:4px solid #64748b;">
+        <div class="kpi-value">4</div>
+        <div class="kpi-label">Themes Surfaced</div>
+        <div class="kpi-sub">Comm · Leadership · PM · Culture</div>
+      </div>
+    </div>
+
+    <!-- ── DISCUSSION HIGHLIGHTS ── -->
+    <div class="card" style="margin-bottom:22px;">
+      <div class="card-title">Discussion Highlights <span class="badge badge-navy">April 29, 2026</span></div>
+
+      <div class="session-q" style="border-left:4px solid #C99700;">
+        <div class="session-q-label" style="color:#C99700;">Format &amp; Expectations</div>
+        <div class="session-q-title">What was your expectation coming in? Would you like questions beforehand?</div>
+        <ul>
+          <li>Helpful <em>not</em> to have questions in advance — impromptu responses tend to be the most honest</li>
+          <li>Exception: if specific deep-thought feedback is needed, pre-send one targeted question</li>
+          <li>Providing questions in advance risks making the session feel like a task rather than a conversation</li>
+        </ul>
+      </div>
+
+      <div class="session-q" style="border-left:4px solid #0C2340;">
+        <div class="session-q-label" style="color:#0C2340;">Retention &amp; Return Attendance</div>
+        <div class="session-q-title">For returning attendees — why did you come back?</div>
+        <ul>
+          <li>Actions were taken on issues raised in prior sessions — the most-cited reason for returning</li>
+          <li>Valued the chance to provide feedback on topics that matter across all of NDR</li>
+          <li>"My voice does matter and I can make a difference in achieving NDR's overall goals and mission"</li>
+        </ul>
+      </div>
+
+      <div class="session-q" style="border-left:4px solid #00843D;">
+        <div class="session-q-label" style="color:#00843D;">Comm &amp; Transparency — Town Hall</div>
+        <div class="session-q-title">Were you at the Town Hall? What did you think? What would you like to have seen?</div>
+        <ul>
+          <li>Zoom format appreciated — everyone on the same platform felt more unified and inclusive</li>
+          <li>Jeff Rhoads described as <strong>"eloquent," "direct and approachable"</strong> — regular communication valued during uncertain times</li>
+          <li>Jeff's emails praised specifically for connecting past events to present context and showing trends</li>
+          <li><strong style="color:#C41E3A;">Concern:</strong> Town hall was not recorded; no recap was distributed — at minimum a written summary was requested</li>
+          <li>Suggestion: C&amp;I spotlight in the D2D newsletter to improve cross-unit awareness of their work</li>
+        </ul>
+      </div>
+
+      <div class="session-q" style="border-left:4px solid #C41E3A;">
+        <div class="session-q-label" style="color:#C41E3A;">Performance Management</div>
+        <div class="session-q-title">How was the Performance Management process?</div>
+        <ul>
+          <li>ND's structured PM approach preferred over prior checkbox-style processes — felt meaningful and developmental</li>
+          <li>Two mid-cycle check-ins valued — forces useful mid-year reflection</li>
+          <li><strong style="color:#C41E3A;">Concern:</strong> Matrix dimensions don't map to actual daily work — described as <em>"not intuitive"</em></li>
+          <li><strong style="color:#C41E3A;">Concern:</strong> Goals entered in October, cycle concluded by March — leaves a truncated window for real progress</li>
+          <li>Goals rollout felt underprepared: communicated as handouts only, no contextualizing presentation</li>
+        </ul>
+      </div>
+
+      <div class="session-q" style="border-left:4px solid #64748b;margin-bottom:0;">
+        <div class="session-q-label" style="color:#64748b;">Culture &amp; Community</div>
+        <div class="session-q-title">How would you describe NDR?</div>
+        <ul>
+          <li>"Collaborative environment" — the most common descriptor from participants</li>
+          <li>"Feels more like a team now with Jeff" — stronger organizational cohesion noted under current leadership</li>
+          <li>"Strong support system" within individual units</li>
+          <li><strong style="color:#C41E3A;">Concern:</strong> Some staff still feel like a <em>"stepchild"</em> — identity and belonging gap for units on the periphery of NDR's core structure</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ── THEMES + FEEDBACK side-by-side ── -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-bottom:22px;">
+
+      <div class="card">
+        <div class="card-title">Themes Surfaced <span class="badge badge-navy">This Session</span></div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div style="display:flex;align-items:flex-start;gap:12px;padding:10px 14px;background:#f0f4f8;border-radius:8px;">
+            <div style="width:10px;height:10px;border-radius:50%;background:#00843D;flex-shrink:0;margin-top:4px;"></div>
+            <div><div style="font-size:0.84em;font-weight:700;color:#0C2340;">Comm &amp; Transparency</div><div style="font-size:0.77em;color:#64748b;margin-top:2px;">Town hall format, recording/recap gap, C&amp;I cross-unit visibility</div></div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:12px;padding:10px 14px;background:#f0f4f8;border-radius:8px;">
+            <div style="width:10px;height:10px;border-radius:50%;background:#C99700;flex-shrink:0;margin-top:4px;"></div>
+            <div><div style="font-size:0.84em;font-weight:700;color:#0C2340;">Leadership &amp; Management</div><div style="font-size:0.77em;color:#64748b;margin-top:2px;">Jeff Rhoads praised; consistent communication stabilizing during uncertainty</div></div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:12px;padding:10px 14px;background:#f0f4f8;border-radius:8px;">
+            <div style="width:10px;height:10px;border-radius:50%;background:#C41E3A;flex-shrink:0;margin-top:4px;"></div>
+            <div><div style="font-size:0.84em;font-weight:700;color:#0C2340;">Performance Management</div><div style="font-size:0.77em;color:#64748b;margin-top:2px;">Matrix misalignment with real work; truncated goals cycle; weak rollout</div></div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:12px;padding:10px 14px;background:#f0f4f8;border-radius:8px;">
+            <div style="width:10px;height:10px;border-radius:50%;background:#64748b;flex-shrink:0;margin-top:4px;"></div>
+            <div><div style="font-size:0.84em;font-weight:700;color:#0C2340;">Culture &amp; Community</div><div style="font-size:0.77em;color:#64748b;margin-top:2px;">Collaborative tone under Jeff; persistent "stepchild" identity concern</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Session Feedback <span class="badge badge-green">2 Responses</span></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+          <div style="text-align:center;padding:18px 12px;background:#f0fdf4;border-radius:10px;border:1px solid #bbf7d0;">
+            <div style="font-size:2em;font-weight:800;color:#00843D;line-height:1;">5.0</div>
+            <div style="font-size:0.72em;font-weight:800;color:#374151;margin-top:6px;text-transform:uppercase;letter-spacing:0.5px;">Participation</div>
+            <div style="font-size:0.70em;color:#64748b;margin-top:2px;">out of 5.0 &nbsp;·&nbsp; n=2</div>
+          </div>
+          <div style="text-align:center;padding:18px 12px;background:#f0fdf4;border-radius:10px;border:1px solid #bbf7d0;">
+            <div style="font-size:2em;font-weight:800;color:#00843D;line-height:1;">5.0</div>
+            <div style="font-size:0.72em;font-weight:800;color:#374151;margin-top:6px;text-transform:uppercase;letter-spacing:0.5px;">Connection</div>
+            <div style="font-size:0.70em;color:#64748b;margin-top:2px;">out of 5.0 &nbsp;·&nbsp; n=2</div>
+          </div>
+        </div>
+        <div style="font-size:0.75em;font-weight:800;color:#0C2340;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">Participant Feedback</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div style="background:#f8fafc;border-radius:8px;padding:12px 14px;border-left:3px solid #C99700;">
+            <div style="font-size:0.81em;color:#374151;line-height:1.65;font-style:italic;">"I feel like it's a way to ensure management is receiving feedback regarding staff satisfaction. I also enjoy meeting others in vastly different roles at ND."</div>
+          </div>
+          <div style="background:#f8fafc;border-radius:8px;padding:12px 14px;border-left:3px solid #C99700;">
+            <div style="font-size:0.81em;color:#374151;line-height:1.65;font-style:italic;">"Meeting NDR colleagues I haven't met yet, catching up with NDR colleagues I haven't seen lately — putting a face with a name, providing input and feedback on important topics."</div>
+          </div>
+          <div style="background:#fffbeb;border-radius:8px;padding:10px 14px;border-left:3px solid #C99700;">
+            <div style="font-size:0.73em;font-weight:700;color:#92400e;margin-bottom:3px;">IMPROVEMENT SUGGESTION</div>
+            <div style="font-size:0.81em;color:#374151;line-height:1.65;font-style:italic;">"If specific information is requested, perhaps have a list of topics in the invitation so we can provide well thought out answers."</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ATTENDEES ── -->
+    <div class="card">
+      <div class="card-title">Session Attendees <span class="badge badge-gray">April 29, 2026 · 2:30 PM</span></div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;">
+        <div>
+          <div class="attendee-col-head">In-Person (5)</div>
+          ${["Barb Villarosa","Anna Matzner","Andrew Bishop","Olivia Poole","Emily Stoler"].map(n=>`<div class="attendee-name">${n}</div>`).join("")}
+        </div>
+        <div>
+          <div class="attendee-col-head">Virtual (2)</div>
+          ${["Ashley Hudson","Swarna Pothur"].map(n=>`<div class="attendee-name">${n}</div>`).join("")}
+        </div>
+        <div>
+          <div class="attendee-col-head">Crew</div>
+          ${["Claudia Hawkins","Nancy Nalepinski"].map(n=>`<div class="attendee-name">${n}</div>`).join("")}
+        </div>
+      </div>
+    </div>
+  `;
+}
 
 /* ================================================================
    RENDER: ALL YEARS
@@ -901,9 +1107,9 @@ function renderAllYears() {
   const kpis = document.createElement("div");
   kpis.className = "kpi-grid";
   kpis.innerHTML = `
-    <div class="kpi-card navy"><div class="kpi-value">29</div><div class="kpi-label">Total Sessions</div><div class="kpi-sub">FY22 through FY26 YTD</div></div>
-    <div class="kpi-card gold"><div class="kpi-value">196</div><div class="kpi-label">Total Participants</div><div class="kpi-sub">Unique attendees across all FYs</div></div>
-    <div class="kpi-card green"><div class="kpi-value">640</div><div class="kpi-label">Survey Responses</div><div class="kpi-sub">Collected across all sessions</div></div>
+    <div class="kpi-card navy"><div class="kpi-value">30</div><div class="kpi-label">Total Sessions</div><div class="kpi-sub">FY22 through FY26 YTD (April)</div></div>
+    <div class="kpi-card gold"><div class="kpi-value">204</div><div class="kpi-label">Total Participants</div><div class="kpi-sub">Unique attendees across all FYs</div></div>
+    <div class="kpi-card green"><div class="kpi-value">672</div><div class="kpi-label">Survey Responses</div><div class="kpi-sub">Collected across all sessions</div></div>
     <div class="kpi-card red"><div class="kpi-value">17%</div><div class="kpi-label">Avg Positive Sentiment</div><div class="kpi-sub">Across all themes &amp; fiscal years</div></div>`;
   panel.appendChild(kpis);
 
@@ -912,9 +1118,9 @@ function renderAllYears() {
   exec.className = "exec-box";
   exec.innerHTML = `
     <h3>Executive Summary</h3>
-    <p>Between FY22 and FY26 YTD, NDR conducted <strong>29 Engagement Chat sessions</strong> with <strong>196 unique participants</strong>, collecting <strong>640 survey responses</strong>. Overall positive sentiment has remained stubbornly low — hovering between 15–23% — signaling persistent systemic challenges rather than isolated issues.</p>
-    <p><strong>Leadership &amp; Management</strong> has been the most-discussed theme for three consecutive fiscal years (FY23–FY25), reflecting ongoing concerns about transparency and strategic direction. In FY26 YTD, <strong>Communication &amp; Transparency</strong> surpassed it as the top theme for the first time — a signal that employees are watching how NDR communicates amid federal funding uncertainty, organizational restructuring, and AI in the workplace.</p>
-    <p>Attendance trends show marked improvement: from 25.5% in FY23 to <strong>48.0% in FY26 YTD</strong>, suggesting growing employee investment. However, translating participation into meaningful sentiment improvement remains the critical challenge ahead.</p>`;
+    <p>Between FY22 and FY26 YTD (April), NDR conducted <strong>30 Engagement Chat sessions</strong> with <strong>204 unique participants</strong>, collecting <strong>672 survey responses</strong>. Overall positive sentiment has remained stubbornly low — hovering between 15–23% — signaling persistent systemic challenges rather than isolated issues.</p>
+    <p><strong>Leadership &amp; Management</strong> has been the most-discussed theme for three consecutive fiscal years (FY23–FY25), reflecting ongoing concerns about transparency and strategic direction. In FY26 YTD (April), <strong>Communication &amp; Transparency</strong> surpassed it as the top theme for the first time — a signal that employees are watching how NDR communicates amid federal funding uncertainty, organizational restructuring, and AI in the workplace.</p>
+    <p>Attendance trends show marked improvement: from 25.5% in FY23 to <strong>49.6% in FY26 YTD (April)</strong>, suggesting growing employee investment. However, translating participation into meaningful sentiment improvement remains the critical challenge ahead.</p>`;
   panel.appendChild(exec);
 
   // Key Findings
@@ -999,7 +1205,7 @@ function renderFYDetail(fy) {
   const d = fyData[fy];
   const panel = document.getElementById("fyPanel");
   panel.innerHTML = "";
-  const isYTD = fy === "FY26 YTD";
+  const isYTD = fy === "FY26 YTD (April)";
 
   // ── Glance strip ──
   const glanceCard = document.createElement("div");
@@ -1047,7 +1253,7 @@ function renderFYDetail(fy) {
   const exec = document.createElement("div");
   exec.className = "exec-box";
   exec.innerHTML = `<h3>${fy} Executive Summary</h3><p>${d.evolution}</p>
-    ${isYTD ? `<p style="margin-top:10px;font-size:0.82em;opacity:0.75">Note: FY26 is an ongoing fiscal year. Data reflects sessions and responses collected through March 2026 only. Scores and themes will shift as additional sessions are conducted.</p>` : ''}`;
+    ${isYTD ? `<p style="margin-top:10px;font-size:0.82em;opacity:0.75">Note: FY26 is an ongoing fiscal year. Data reflects sessions and responses collected through April 2026 only. Scores and themes will shift as additional sessions are conducted.</p>` : ''}`;
   panel.appendChild(exec);
 
   // ── Sentiment + Theme Analysis ──
@@ -1400,7 +1606,7 @@ function drawSmallMultiples() {
         .attr("y", iH + 13)
         .attr("text-anchor","middle")
         .attr("font-size","0.55em").attr("fill","#64748b").attr("font-weight","700")
-        .text(d.fy === "FY26 YTD" ? "FY26" : d.fy);
+        .text(d.fy === "FY26 YTD (April)" ? "FY26" : d.fy);
     });
 
     card.appendChild(svgEl.node());
@@ -1620,7 +1826,7 @@ function drawLikert(metric) {
   const src = likertData[metric];
   const fys = src.map(d=>d.fy);
   // Convert to pct of n per FY
-  const fbN = {FY24:33, FY25:33, "FY26 YTD":8};
+  const fbN = {FY24:33, FY25:33, "FY26 YTD (April)":10};
   const data = src.map(d => {
     const n = fbN[d.fy];
     const pcts = d.dist.map(v=>(v/n)*100);
