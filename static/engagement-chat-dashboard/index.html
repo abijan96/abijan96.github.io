@@ -1645,7 +1645,7 @@ function drawDonut(fy, d) {
     {label:"Needs Attention",value:d.needsAttentionPct, color:RED},
   ];
 
-  const svg = d3.select(`#${svgId}`).attr("viewBox",`0 0 ${W} ${H}`);
+  const svg = d3.select(el).attr("viewBox",`0 0 ${W} ${H}`);
   svg.selectAll("*").remove();
   const g = svg.append("g").attr("transform",`translate(${W/2},${H/2-10})`);
   const pie = d3.pie().value(v=>v.value).sort(null);
