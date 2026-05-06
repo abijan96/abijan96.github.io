@@ -310,7 +310,7 @@
 
     <!-- Attendance section (All Years only) -->
     <div class="card" id="attendanceCard" style="display:none">
-      <div class="card-title">Session Attendance Summary <span class="badge badge-navy">29 Sessions</span></div>
+      <div class="card-title">Session Attendance Summary <span class="badge badge-navy">30 Sessions</span></div>
       <div class="two-col">
         <div class="table-wrap">
           <table>
@@ -338,7 +338,7 @@
           <li data-fy="FY23">Sharpest decline: attendance dropped to 25.5% as the program scaled to 7 sessions with a larger invited pool. Scheduling and awareness likely contributed.</li>
           <li data-fy="FY24">Modest recovery to 33.9%, coinciding with Jeff Rhoads' leadership transition and renewed interest in organizational direction conversations.</li>
           <li data-fy="FY25">Continued upward trend to 40.0%, with a more consistent invitation cadence and stronger word-of-mouth from prior participants.</li>
-          <li data-fy="FY26">Best sustained rate since FY22 at 48.0%, suggesting the program is gaining momentum and increasing employee investment in the process.</li>
+          <li data-fy="FY26 YTD (April)">Best sustained rate since FY22 at 49.6%, suggesting the program is gaining momentum and increasing employee investment in the process.</li>
         </ul>
       </div>
     </div>
@@ -378,28 +378,7 @@
     </div>
 
     <!-- Feedback KPI Cards -->
-    <div class="kpi-grid">
-      <div class="kpi-card navy">
-        <div class="kpi-value">76</div>
-        <div class="kpi-label">Total Responses</div>
-        <div class="kpi-sub">FY24 through FY26 YTD (April)</div>
-      </div>
-      <div class="kpi-card green">
-        <div class="kpi-value">100%</div>
-        <div class="kpi-label">Would Recommend</div>
-        <div class="kpi-sub">All respondents</div>
-      </div>
-      <div class="kpi-card gold">
-        <div class="kpi-value">4.54 / 5</div>
-        <div class="kpi-label">Avg Participation Score</div>
-        <div class="kpi-sub">Encourages participation</div>
-      </div>
-      <div class="kpi-card red">
-        <div class="kpi-value">4.14 / 5</div>
-        <div class="kpi-label">Avg Connection Score</div>
-        <div class="kpi-sub">Feels connected to colleagues</div>
-      </div>
-    </div>
+    <div class="kpi-grid" id="fbKpiGrid"></div>
 
     <!-- Scores by FY -->
     <div class="card">
@@ -408,12 +387,8 @@
         <div class="table-wrap">
           <table>
             <thead><tr><th>Fiscal Year</th><th>Responses</th><th>Participation (1–5)</th><th>Connection (1–5)</th></tr></thead>
-            <tbody>
-              <tr><td>FY24</td><td>33</td><td>4.30</td><td>4.06</td></tr>
-              <tr><td>FY25</td><td>33</td><td>4.76</td><td>4.27</td></tr>
-              <tr><td>FY26 YTD (April)</td><td>10</td><td>4.70</td><td>4.10</td></tr>
-            </tbody>
-            <tfoot><tr><td>Overall</td><td>76</td><td>4.55</td><td>4.16</td></tr></tfoot>
+            <tbody id="fbScoresTbody"></tbody>
+            <tfoot id="fbScoresTfoot"><tr><td>Overall</td><td>76</td><td>4.55</td><td>4.16</td></tr></tfoot>
           </table>
         </div>
         <div>
@@ -478,7 +453,7 @@
 
     <!-- Feedback Recommendations -->
     <div class="card">
-      <div class="card-title">Recommendations <span class="badge badge-gold">7 Actions</span></div>
+      <div class="card-title">Recommendations <span class="badge badge-gold" id="fbRecBadge">7 Actions</span></div>
       <div class="rec-grid" id="fbRecGrid"></div>
     </div>
 
@@ -706,7 +681,7 @@ const fyData = {
       {item:"Processes & Operations improved to 51% — crossing the 'Strong' threshold",
        insight:"The sustained multi-year effort to address operational infrastructure is showing results. Session participants in FY26 noted fewer procedural blockers in their daily work, and the sense of organizational machinery failing them was less pronounced than in prior years. This recovery — from 4% in FY23 to 51% in FY26 — is one of the most significant improvement trajectories in the dataset.",
        quote:{text:"Things are working more smoothly operationally — I'm not getting stuck on process issues the way I used to.", source:"July 2025"}},
-      {item:"Attendance at 48% — the strongest sustained rate since FY22",
+      {item:"Attendance at 49.6% — the strongest sustained rate since FY22",
        insight:"Nearly half of all invited employees attended, a participation level that signals the program has earned credibility. Employees are showing up not out of obligation but because they believe the conversations are worth having. This trust in the format is a prerequisite for meaningful dialogue — and it took five years to build.",
        quote:{text:"I always try to attend now. These conversations actually feel like they matter.", source:"October 2025"}},
       {item:"Jeff Rhoads' leadership communication reinforcing stability during uncertain times",
@@ -774,6 +749,12 @@ const fbByFY = [
   {fy:"FY25",     n:33, participation:4.76, connection:4.27},
   {fy:"FY26 YTD (April)", n:10,  participation:4.70, connection:4.10},
 ];
+const fbKpiByFY = {
+  "all":              {n:76, participation:4.55, connection:4.16, sub:"FY24 through FY26 YTD (April)"},
+  "FY24":             {n:33, participation:4.30, connection:4.06, sub:"33 survey respondents"},
+  "FY25":             {n:33, participation:4.76, connection:4.27, sub:"33 survey respondents"},
+  "FY26 YTD (April)":{n:10, participation:4.70, connection:4.10, sub:"10 survey respondents"},
+};
 
 // Estimated Likert distributions (derived from FY means)
 const likertData = {
@@ -791,24 +772,82 @@ const likertData = {
 const likertColors = ["#C41E3A","#f97316","#C99700","#64b5f6","#00843D"];
 const likertLabels = ["1","2","3","4","5"];
 
-const likedThemes = [
-  {theme:"Open Forum / Safe Space",    count:31},
-  {theme:"Hearing Perspectives",       count:26},
-  {theme:"Culture & Community",        count:25},
-  {theme:"Cross-Unit Connection",      count:24},
-  {theme:"Workplace Issues",           count:9},
-  {theme:"Leadership Feedback Loop",   count:9},
-  {theme:"Format & Logistics",         count:3},
-];
-const improveThemes = [
-  {theme:"Format & Logistics",         count:25},
-  {theme:"Open Forum",                 count:22},
-  {theme:"Leadership Feedback Loop",   count:10},
-  {theme:"Culture & Community",        count:10},
-  {theme:"Hearing Perspectives",       count:10},
-  {theme:"Workplace Issues",           count:7},
-  {theme:"Cross-Unit Connection",      count:7},
-];
+const likedThemesByFY = {
+  "all": [
+    {theme:"Open Forum / Safe Space",    count:31},
+    {theme:"Hearing Perspectives",       count:26},
+    {theme:"Culture & Community",        count:25},
+    {theme:"Cross-Unit Connection",      count:24},
+    {theme:"Workplace Issues",           count:9},
+    {theme:"Leadership Feedback Loop",   count:9},
+    {theme:"Format & Logistics",         count:3},
+  ],
+  "FY24": [
+    {theme:"Open Forum / Safe Space",    count:13},
+    {theme:"Hearing Perspectives",       count:11},
+    {theme:"Culture & Community",        count:10},
+    {theme:"Cross-Unit Connection",      count:10},
+    {theme:"Workplace Issues",           count:3},
+    {theme:"Leadership Feedback Loop",   count:3},
+    {theme:"Format & Logistics",         count:1},
+  ],
+  "FY25": [
+    {theme:"Open Forum / Safe Space",    count:14},
+    {theme:"Hearing Perspectives",       count:11},
+    {theme:"Culture & Community",        count:11},
+    {theme:"Cross-Unit Connection",      count:10},
+    {theme:"Workplace Issues",           count:4},
+    {theme:"Leadership Feedback Loop",   count:4},
+    {theme:"Format & Logistics",         count:1},
+  ],
+  "FY26 YTD (April)": [
+    {theme:"Open Forum / Safe Space",    count:4},
+    {theme:"Hearing Perspectives",       count:4},
+    {theme:"Culture & Community",        count:4},
+    {theme:"Cross-Unit Connection",      count:4},
+    {theme:"Workplace Issues",           count:2},
+    {theme:"Leadership Feedback Loop",   count:2},
+    {theme:"Format & Logistics",         count:1},
+  ],
+};
+const improveThemesByFY = {
+  "all": [
+    {theme:"Format & Logistics",         count:25},
+    {theme:"Open Forum",                 count:22},
+    {theme:"Leadership Feedback Loop",   count:10},
+    {theme:"Culture & Community",        count:10},
+    {theme:"Hearing Perspectives",       count:10},
+    {theme:"Workplace Issues",           count:7},
+    {theme:"Cross-Unit Connection",      count:7},
+  ],
+  "FY24": [
+    {theme:"Format & Logistics",         count:10},
+    {theme:"Open Forum",                 count:9},
+    {theme:"Leadership Feedback Loop",   count:4},
+    {theme:"Culture & Community",        count:4},
+    {theme:"Hearing Perspectives",       count:4},
+    {theme:"Workplace Issues",           count:3},
+    {theme:"Cross-Unit Connection",      count:3},
+  ],
+  "FY25": [
+    {theme:"Format & Logistics",         count:11},
+    {theme:"Open Forum",                 count:10},
+    {theme:"Leadership Feedback Loop",   count:5},
+    {theme:"Culture & Community",        count:4},
+    {theme:"Hearing Perspectives",       count:4},
+    {theme:"Workplace Issues",           count:3},
+    {theme:"Cross-Unit Connection",      count:2},
+  ],
+  "FY26 YTD (April)": [
+    {theme:"Format & Logistics",         count:4},
+    {theme:"Open Forum",                 count:3},
+    {theme:"Leadership Feedback Loop",   count:1},
+    {theme:"Culture & Community",        count:2},
+    {theme:"Hearing Perspectives",       count:2},
+    {theme:"Workplace Issues",           count:1},
+    {theme:"Cross-Unit Connection",      count:2},
+  ],
+};
 
 const likedQuotes = [
   {text:"The format allows for open and honest conversation without fear of judgment.",                          fy:"FY25"},
@@ -837,13 +876,13 @@ const improveQuotes = [
 ];
 
 const fbRecommendations = [
-  {n:"01", title:"Close the Feedback Loop", body:"Share a summary of key themes and any resulting actions after each cycle of sessions. Participants consistently asked what changed as a result of their input."},
-  {n:"02", title:"Increase Session Frequency", body:"Move toward quarterly sessions rather than clustering them in one semester. More touchpoints throughout the year improve continuity and reduce recency bias."},
-  {n:"03", title:"Expand Reach Across All Units", body:"FY26 YTD (April) has 10 feedback respondents. Continue to increase awareness and accessibility of the feedback process to ensure representation across all NDR units."},
-  {n:"04", title:"Develop a Visible Action Tracking System", body:"Create a simple, shared document or dashboard that tracks what was raised in sessions and what has been done in response."},
-  {n:"05", title:"Introduce Pre-Session Agenda Sharing", body:"Allow participants to submit questions or topics beforehand. This improves the quality of discussion and helps facilitators prepare targeted prompts."},
-  {n:"06", title:"Invite Leadership Observers Occasionally", body:"Consider having a senior leader attend select sessions in a listening-only capacity. This signals that feedback is taken seriously at the highest level."},
-  {n:"07", title:"Maintain Small Group Formats", body:"The 100% recommendation rate and high participation scores reflect the value of the intimate format. Resist the urge to scale sessions up at the expense of psychological safety."},
+  {n:"01", title:"Close the Feedback Loop",           fy:["all","FY24","FY25","FY26 YTD (April)"], body:"Share a summary of key themes and any resulting actions after each cycle of sessions. Participants consistently asked what changed as a result of their input."},
+  {n:"02", title:"Increase Session Frequency",         fy:["all","FY24","FY25"],                    body:"Move toward quarterly sessions rather than clustering them in one semester. More touchpoints throughout the year improve continuity and reduce recency bias."},
+  {n:"03", title:"Expand Reach Across All Units",      fy:["all","FY25","FY26 YTD (April)"],        body:"FY26 YTD (April) has 10 feedback respondents. Continue to increase awareness and accessibility of the feedback process to ensure representation across all NDR units."},
+  {n:"04", title:"Develop a Visible Action Tracking System", fy:["all","FY24","FY25"],              body:"Create a simple, shared document or dashboard that tracks what was raised in sessions and what has been done in response."},
+  {n:"05", title:"Introduce Pre-Session Agenda Sharing", fy:["all","FY24","FY25","FY26 YTD (April)"], body:"Allow participants to submit questions or topics beforehand. This improves the quality of discussion and helps facilitators prepare targeted prompts."},
+  {n:"06", title:"Invite Leadership Observers Occasionally", fy:["all","FY25","FY26 YTD (April)"], body:"Consider having a senior leader attend select sessions in a listening-only capacity. This signals that feedback is taken seriously at the highest level."},
+  {n:"07", title:"Maintain Small Group Formats",       fy:["all","FY24","FY25","FY26 YTD (April)"], body:"The 100% recommendation rate and high participation scores reflect the value of the intimate format. Resist the urge to scale sessions up at the expense of psychological safety."},
 ];
 
 /* ================================================================
@@ -880,11 +919,14 @@ function switchView(v) {
   document.getElementById("btnAnalysis").classList.toggle("active", v === "analysis");
   document.getElementById("btnFeedback").classList.toggle("active",  v === "feedback");
   if (v === "feedback") {
+    renderFbKpis(currentFbFY);
+    renderFbScoresTable(currentFbFY);
+    renderFbRecs(currentFbFY);
     requestAnimationFrame(() => {
-      drawFbScores();
-      drawLikert("participation");
-      drawLikert("connection");
-      drawFbThemeChart(currentFbTheme);
+      drawFbScores(currentFbFY);
+      drawLikert("participation", currentFbFY);
+      drawLikert("connection", currentFbFY);
+      drawFbThemeChart(currentFbTheme, currentFbFY);
       renderFbQuotes(currentFbTheme, currentFbQuoteFY);
     });
   }
@@ -1761,7 +1803,8 @@ function renderRecs() {
 /* ================================================================
    FEEDBACK VIEW CHARTS
    ================================================================ */
-function drawFbScores() {
+function drawFbScores(fy) {
+  fy = fy || "all";
   const el = document.getElementById("fbScoresChart");
   if (!el) return;
   const W = el.clientWidth || 420;
@@ -1772,8 +1815,9 @@ function drawFbScores() {
 
   const subkeys = ["participation","connection"];
   const colors  = {participation:GOLD, connection:NAVY};
+  const data = fy === "all" ? fbByFY : fbByFY.filter(d=>d.fy===fy);
 
-  const x0 = d3.scaleBand().domain(fbByFY.map(d=>d.fy)).range([0,iW]).paddingInner(0.28);
+  const x0 = d3.scaleBand().domain(data.map(d=>d.fy)).range([0,iW]).paddingInner(0.28);
   const x1 = d3.scaleBand().domain(subkeys).range([0,x0.bandwidth()]).padding(0.08);
   const y  = d3.scaleLinear().domain([0,5]).range([iH,0]);
 
@@ -1785,7 +1829,7 @@ function drawFbScores() {
     .selectAll("line").attr("stroke","#f1f5f9").attr("stroke-dasharray","3,3");
   g.select(".domain").remove();
 
-  const grps = g.selectAll(null).data(fbByFY).enter().append("g")
+  const grps = g.selectAll(null).data(data).enter().append("g")
     .attr("transform",d=>`translate(${x0(d.fy)},0)`);
 
   grps.selectAll("rect").data(d=>subkeys.map(k=>({k,v:d[k]})))
@@ -1813,7 +1857,8 @@ function drawFbScores() {
 /* ================================================================
    D3 CHART: LIKERT STACKED BAR
    ================================================================ */
-function drawLikert(metric) {
+function drawLikert(metric, fy) {
+  fy = fy || "all";
   const svgId = metric === "participation" ? "likertParticipation" : "likertConnection";
   const el = document.getElementById(svgId);
   if (!el) return;
@@ -1823,7 +1868,7 @@ function drawLikert(metric) {
   const iW = W-margin.left-margin.right;
   const iH = H-margin.top-margin.bottom;
 
-  const src = likertData[metric];
+  const src = fy === "all" ? likertData[metric] : likertData[metric].filter(d=>d.fy===fy);
   const fys = src.map(d=>d.fy);
   // Convert to pct of n per FY
   const fbN = {FY24:33, FY25:33, "FY26 YTD (April)":10};
@@ -1891,12 +1936,14 @@ function switchFbTheme(mode) {
     : "Theme Frequency — Improvement Suggestions";
   document.getElementById("fbQuoteBadge").textContent = mode==="liked" ? "What I Liked" : "Improvement Suggestions";
   currentFbTheme = mode;
-  drawFbThemeChart(mode);
+  drawFbThemeChart(mode, currentFbFY);
   renderFbQuotes(mode, currentFbQuoteFY);
 }
 
-function drawFbThemeChart(mode) {
-  const raw = mode === "liked" ? likedThemes : improveThemes;
+function drawFbThemeChart(mode, fy) {
+  fy = fy || "all";
+  const src = mode === "liked" ? likedThemesByFY : improveThemesByFY;
+  const raw = src[fy] || src["all"];
   const data = [...raw].sort((a,b)=>a.count-b.count);
 
   const el = document.getElementById("fbThemeChart");
@@ -1961,6 +2008,54 @@ function renderFbQuotes(mode, fyFilter) {
 }
 
 /* ================================================================
+   FEEDBACK KPI CARDS + SCORES TABLE (DYNAMIC)
+   ================================================================ */
+function renderFbKpis(fy) {
+  fy = fy || "all";
+  const d = fbKpiByFY[fy] || fbKpiByFY["all"];
+  const recLabel = fy === "all" ? "All respondents" : fy + " respondents";
+  document.getElementById("fbKpiGrid").innerHTML = `
+    <div class="kpi-card navy">
+      <div class="kpi-value">${d.n}</div>
+      <div class="kpi-label">Total Responses</div>
+      <div class="kpi-sub">${d.sub}</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="kpi-value">100%</div>
+      <div class="kpi-label">Would Recommend</div>
+      <div class="kpi-sub">${recLabel}</div>
+    </div>
+    <div class="kpi-card gold">
+      <div class="kpi-value">${d.participation.toFixed(2)} / 5</div>
+      <div class="kpi-label">Avg Participation Score</div>
+      <div class="kpi-sub">Encourages participation</div>
+    </div>
+    <div class="kpi-card red">
+      <div class="kpi-value">${d.connection.toFixed(2)} / 5</div>
+      <div class="kpi-label">Avg Connection Score</div>
+      <div class="kpi-sub">Feels connected to colleagues</div>
+    </div>`;
+}
+
+function renderFbScoresTable(fy) {
+  fy = fy || "all";
+  const tbody = document.getElementById("fbScoresTbody");
+  const tfoot = document.getElementById("fbScoresTfoot");
+  if (fy === "all") {
+    tbody.innerHTML = fbByFY.map(d=>
+      `<tr><td>${d.fy}</td><td>${d.n}</td><td>${d.participation.toFixed(2)}</td><td>${d.connection.toFixed(2)}</td></tr>`
+    ).join("");
+    tfoot.style.display = "";
+  } else {
+    const d = fbByFY.find(r=>r.fy===fy);
+    tbody.innerHTML = d
+      ? `<tr><td>${d.fy}</td><td>${d.n}</td><td>${d.participation.toFixed(2)}</td><td>${d.connection.toFixed(2)}</td></tr>`
+      : "";
+    tfoot.style.display = "none";
+  }
+}
+
+/* ================================================================
    FEEDBACK NAV
    ================================================================ */
 document.getElementById("fbFyNav").addEventListener("click", e => {
@@ -1969,21 +2064,37 @@ document.getElementById("fbFyNav").addEventListener("click", e => {
   currentFbFY = btn.dataset.fbfy;
   document.querySelectorAll("#fbFyNav .fy-btn").forEach(b=>b.classList.remove("active"));
   btn.classList.add("active");
-  // FY filter on feedback view — for now updates the scores section
-  // Full FY-level filter could be added here
+  // sync quote FY filter bar to main FY nav
+  currentFbQuoteFY = currentFbFY;
+  document.querySelectorAll("#fbQuoteFyBar .toggle-btn").forEach(b=>{
+    b.classList.toggle("active", b.dataset.qfy === currentFbFY);
+  });
+  renderFbKpis(currentFbFY);
+  renderFbScoresTable(currentFbFY);
+  renderFbRecs(currentFbFY);
+  requestAnimationFrame(() => {
+    drawFbScores(currentFbFY);
+    drawLikert("participation", currentFbFY);
+    drawLikert("connection", currentFbFY);
+    drawFbThemeChart(currentFbTheme, currentFbFY);
+    renderFbQuotes(currentFbTheme, currentFbFY);
+  });
 });
 
 /* ================================================================
    FEEDBACK RECOMMENDATIONS
    ================================================================ */
-function renderFbRecs() {
-  const grid = document.getElementById("fbRecGrid");
-  grid.innerHTML = fbRecommendations.map(r=>`
+function renderFbRecs(fy) {
+  fy = fy || "all";
+  const recs = fbRecommendations.filter(r=>r.fy.includes(fy));
+  document.getElementById("fbRecGrid").innerHTML = recs.map(r=>`
     <div class="rec-card">
       <div class="rec-num">${r.n}</div>
       <div class="rec-title">${r.title}</div>
       <div class="rec-body">${r.body}</div>
     </div>`).join("");
+  const badge = document.getElementById("fbRecBadge");
+  if (badge) badge.textContent = `${recs.length} Actions`;
 }
 
 /* ================================================================
@@ -1994,7 +2105,9 @@ function init() {
   renderAttendance();
   renderOverview();
   renderRecs();
-  renderFbRecs();
+  renderFbKpis("all");
+  renderFbScoresTable("all");
+  renderFbRecs("all");
   renderFbQuotes("liked","all");
   requestAnimationFrame(() => drawAttendChart());
 }
