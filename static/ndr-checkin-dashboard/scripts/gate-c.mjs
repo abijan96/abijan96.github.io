@@ -154,7 +154,58 @@ try {
   await page.setRequestInterception(false);
   page.off("request", blockHandler);
 
-  // 13. Console errors (from the normal, non-blocked load)
+  // 13a. Notation scan on VISIBLE text (details/tooltips exempt) across all tabs
+  await page.goto(filePath, { waitUntil: "networkidle0" });
+  await new Promise(r => setTimeout(r, 400));
+  let visibleTextAll = "";
+  for (const stage of ["overview", "thirtyDay", "ninetyDay", "sixMonth"]) {
+    await page.click(`#tab-${stage}`);
+    await new Promise(r => setTimeout(r, 300));
+    const visText = await page.evaluate(() => {
+      const clone = document.querySelector("main").cloneNode(true);
+      clone.querySelectorAll("details").forEach(d => d.remove());
+      return clone.innerText;
+    });
+    visibleTextAll += "\n" + visText;
+  }
+  const hasNEquals = /\bn\s*=\s*\d/.test(visibleTextAll);
+  check("No visible 'n=' notation outside <details>", !hasNEquals);
+  const hasBareQid = /\bQ\d{1,2}(-\d{1,2})?\s*:/.test(visibleTextAll);
+  check("No bare Q+digit label outside <details>", !hasBareQid);
+  check("No 'reverse-scor' outside <details>", !/reverse.scor/i.test(visibleTextAll));
+  check("No 'SA/A' abbreviation outside <details>", !/\bSA\/A\b/.test(visibleTextAll));
+  check("No 'special questions' phrase outside <details>", !/special questions/i.test(visibleTextAll));
+  check("No bare 'KPI' abbreviation outside <details>", !/\bKPIs?\b/.test(visibleTextAll));
+
+  // 13b. About dialog: open, contains required sections, Esc closes, click-away closes
+  await page.click("#aboutOpenBtn");
+  await new Promise(r => setTimeout(r, 200));
+  const aboutOpen1 = await page.evaluate(() => document.getElementById("aboutDialog").open);
+  check("About dialog opens", aboutOpen1);
+  const aboutText = await page.evaluate(() => document.getElementById("aboutDialog").innerText);
+  check("About dialog has Sources", /Sources/i.test(aboutText));
+  check("About dialog has Updated through", /Updated through/i.test(aboutText));
+  check("About dialog has Anonymization", /Anonymization/i.test(aboutText));
+  check("About dialog has dot legend", /published report/i.test(aboutText) && aboutText.includes("•"));
+  await page.keyboard.press("Escape");
+  await new Promise(r => setTimeout(r, 200));
+  const aboutAfterEsc = await page.evaluate(() => document.getElementById("aboutDialog").open);
+  check("Esc closes About dialog", !aboutAfterEsc);
+  await page.click("#aboutOpenBtn");
+  await new Promise(r => setTimeout(r, 200));
+  await page.mouse.click(5, 5); // click far corner = backdrop, outside content box
+  await new Promise(r => setTimeout(r, 200));
+  const aboutAfterClickAway = await page.evaluate(() => document.getElementById("aboutDialog").open);
+  check("Click-away closes About dialog", !aboutAfterClickAway);
+
+  // 13c. 768px viewport no overflow
+  await page.setViewport({ width: 768, height: 900 });
+  await new Promise(r => setTimeout(r, 300));
+  const hOverflow768 = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth + 5);
+  check("No horizontal overflow at 768px", !hOverflow768);
+  await page.setViewport({ width: 1280, height: 900 });
+
+  // 14. Console errors (from the normal, non-blocked load)
   consoleErrors.length = 0;
   await page.goto(filePath, { waitUntil: "networkidle0" });
   await new Promise(r => setTimeout(r, 500));

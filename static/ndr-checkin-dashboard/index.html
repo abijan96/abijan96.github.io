@@ -134,13 +134,55 @@ table.plain th{background:#F3F5F8; color:var(--text-2); font-weight:700; font-si
 
 .headline-tile{border-top:3px solid var(--pos)}
 .headline-tile.neg{border-top-color:var(--neg)}
-.headline-tile h3{font-size:15px; margin-bottom:6px}
+.headline-tile h3{font-size:15px; margin-bottom:6px; line-height:1.3}
 .headline-tile p{font-size:13.5px; color:var(--text-2); margin:0}
 
 .banner{background:#FFF8E6; border:1px solid #EFDBA0; color:#5C4A0A; border-radius:10px; padding:14px 18px; font-size:14px; margin:20px 0}
 
-footer.site{border-top:1px solid var(--line); padding:26px 0 40px; font-size:12.5px; color:var(--text-3)}
-footer.site .legend-dot{display:inline-block; width:12px; height:12px; border-radius:50%; background:var(--stage-30); vertical-align:middle; margin-right:6px}
+/* section takeaway — bold, always visible, no hover required */
+.section-takeaway{font-size:15px; font-weight:700; color:var(--ink); margin:4px 0 16px; line-height:1.4}
+
+/* status chip (green/gold/red bands) for table-based KPI views */
+.status-chip{
+  display:inline-flex; align-items:center; gap:5px; padding:3px 11px; border-radius:7px;
+  font-weight:700; font-variant-numeric:tabular-nums; font-size:13.5px; white-space:nowrap;
+}
+.status-chip.pos{background:#E3F2E9; color:#046032}
+.status-chip.mix{background:#FBF1DC; color:#8a6d00}
+.status-chip.neg{background:#FBE8E9; color:#9c1420}
+.status-chip.muted{background:#EEF1F4; color:var(--text-3); font-weight:600}
+
+/* trend arrow cell */
+.trend-cell{font-weight:700; white-space:nowrap; font-variant-numeric:tabular-nums; cursor:help}
+.trend-up{color:#046032} .trend-down{color:#9c1420} .trend-flat{color:var(--text-3)}
+
+/* plain metric table (Journey at a glance, FY explorer) */
+table.metric-table{width:100%; border-collapse:collapse; font-size:14px}
+table.metric-table th,table.metric-table td{text-align:left; padding:10px 12px; border-bottom:1px solid var(--line); vertical-align:middle}
+table.metric-table th{background:#F3F5F8; color:var(--text-2); font-weight:700; font-size:12px; text-transform:uppercase; letter-spacing:.03em}
+table.metric-table td:first-child{font-weight:600}
+table.concern-table td{font-size:13.5px; cursor:help}
+table.concern-table .subhead td{background:#F7F8FA; font-weight:700; color:var(--text-2); font-size:12px; text-transform:uppercase; letter-spacing:.03em; cursor:default; padding:8px 12px}
+
+footer.site{border-top:1px solid var(--line); padding:20px 0 32px; font-size:13.5px; color:var(--text-2); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px}
+footer.site .about-link{background:none; border:1px solid var(--line); color:var(--stage-30); font-weight:600; font-size:12.5px; padding:5px 12px; border-radius:999px; cursor:pointer; font-family:inherit}
+footer.site .about-link:focus-visible{outline:2px solid var(--stage-30); outline-offset:2px}
+
+/* About dialog */
+dialog#aboutDialog{
+  border:none; border-radius:14px; padding:0; max-width:480px; width:calc(100% - 48px);
+  box-shadow:0 20px 60px rgb(12 35 64 / .25);
+}
+dialog#aboutDialog::backdrop{background:rgb(12 35 64 / .45)}
+.about-body{padding:24px}
+.about-body h2{font-size:17px; margin-bottom:14px}
+.about-body h3{font-size:13px; color:var(--text-3); text-transform:uppercase; letter-spacing:.04em; margin:16px 0 6px}
+.about-body h3:first-of-type{margin-top:0}
+.about-body p,.about-body li{font-size:13.5px; color:var(--text-2); line-height:1.55}
+.about-body ul{margin:0; padding-left:18px}
+.about-body .dot-legend-row{display:flex; align-items:center; gap:8px; margin-top:4px}
+.about-close{position:absolute; top:16px; right:18px; background:none; border:none; font-size:20px; color:var(--text-3); cursor:pointer; line-height:1}
+.about-close:focus-visible{outline:2px solid var(--stage-30); outline-offset:2px}
 
 .notice{background:#FBE8E9; border:1px solid #F1C0C3; color:var(--neg); padding:12px 18px; border-radius:8px; margin:16px 0; font-size:14px}
 
@@ -182,11 +224,33 @@ footer.site .legend-dot{display:inline-block; width:12px; height:12px; border-ra
   <section class="panel" id="panel-sixMonth" role="tabpanel" aria-labelledby="tab-sixMonth"></section>
 </main>
 
-<footer class="site"><div class="wrap">
-  Source: NDR 30-Day Check-In, 90-Day Onboarding Survey, and 6-Month Check-In published reports, plus sessions collected since ·
-  <span class="legend-dot"></span> Updated with sessions collected through Jul 2026 ·
-  Data through Jul 24, 2026 · Personal names removed from all quotes · Static dashboard — data set at build time.
+<footer class="site"><div class="wrap" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px">
+  <span>Notre Dame Research · New-employee check-ins · Sept 2023 – Jul 2026</span>
+  <button type="button" class="about-link" id="aboutOpenBtn">About this data</button>
 </div></footer>
+
+<dialog id="aboutDialog" aria-labelledby="aboutDialogTitle">
+  <div class="about-body">
+    <button type="button" class="about-close" id="aboutCloseBtn" aria-label="Close">✕</button>
+    <h2 id="aboutDialogTitle">About this data</h2>
+
+    <h3>Sources</h3>
+    <p>NDR 30-Day Check-In, 90-Day Onboarding Survey, and 6-Month Check-In published reports, plus focus-group sessions and survey responses collected since those reports came out.</p>
+
+    <h3>Updated through</h3>
+    <p>Jul 24, 2026.</p>
+
+    <h3>Anonymization</h3>
+    <p>Personal names are removed from every quote and note. Where a name would otherwise appear, it's replaced with a bracketed role (e.g. "[my manager]").</p>
+
+    <h3>Reading the update dots</h3>
+    <div class="dot-legend-row"><span class="dot" aria-hidden="true" style="cursor:default">•</span><span>A number that differs from the published report. Hover or focus any dot to see both values.</span></div>
+
+    <h3 id="aboutMethodologyHead">How the 90-day survey was scored</h3>
+    <ul id="aboutMethodologyList"></ul>
+    <p id="aboutExclusionNote"></p>
+  </div>
+</dialog>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
@@ -648,7 +712,74 @@ const PALETTE = {
 function fmtPct(n){ return Math.round(n) + "%"; }
 function bandColorQual(v){ return v>=90?PALETTE.pos : v>=70?PALETTE.mix : PALETTE.neg; }
 function bandColorScore(v){ return v>=4.5?PALETTE.pos : PALETTE.mix; }
+function bandKey(v){ return v>=90?"pos" : v>=70?"mix" : "neg"; }
 function esc(s){ return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+/* plain-language axis labels for Q1..Q11 sentiment rows — never show a bare
+   question ID in a chart; wrapLabel() below breaks these to <=2 lines. */
+const PLAIN_Q = {
+  "Q1":"Job matches expectations", "Q2":"Feeling challenged, not bored", "Q3":"Felt welcomed by the team",
+  "Q4":"Any roadblocks or challenges", "Q5-6":"Team communication & support", "Q7":"Training or tools needed",
+  "Q8":"Views on NDR culture", "Q9":"Clear on 30-day goals", "Q10":"Expertise being used well",
+  "Q11":"Wants role/workflow changes"
+};
+
+/* wraps a label to at most 2 lines (~maxLen chars/line) for Chart.js tick
+   labels — pass an array back and Chart.js renders each entry as a line. */
+function wrapLabel(text, maxLen){
+  maxLen = maxLen || 20;
+  const words = String(text).split(" ");
+  const lines = [];
+  let cur = "";
+  for (const w of words) {
+    const next = cur ? cur + " " + w : w;
+    if (next.length > maxLen && cur) { lines.push(cur); cur = w; }
+    else { cur = next; }
+    if (lines.length === 1 && cur.length > maxLen) {
+      // second line still overlong -> truncate with ellipsis
+      cur = cur.slice(0, maxLen - 1) + "…";
+      break;
+    }
+  }
+  if (cur) lines.push(cur);
+  return lines.length > 1 ? lines.slice(0,2) : lines[0];
+}
+
+/* datalabels config shared by every 0-100 horizontal bar chart: label sits
+   outside the bar in ink text, except when the bar is within 5% of the axis
+   max, where it moves inside the bar end in white so it never floats past
+   the chart edge with nothing to anchor to. */
+function smartPctLabels(getValue, axisMax){
+  axisMax = axisMax || 100;
+  return {
+    display:true,
+    color:(ctx)=> (getValue(ctx)/axisMax) >= 0.95 ? "#fff" : PALETTE.ink,
+    anchor:"end",
+    align:(ctx)=> (getValue(ctx)/axisMax) >= 0.95 ? "start" : "right",
+    font:{ weight:600, size:11 },
+    formatter:(v)=> v==null ? "" : Math.round(v)+"%"
+  };
+}
+
+/* status chip HTML: green >=90, gold 70-89, red <70 (matches report bands) */
+function statusChip(pct, isScore){
+  if (pct == null) return `<span class="status-chip muted">not asked</span>`;
+  const band = isScore ? (pct>=4.5?"pos":"mix") : bandKey(pct);
+  const label = isScore ? pct.toFixed(2) : Math.round(pct)+"%";
+  return `<span class="status-chip ${band}">${label}</span>`;
+}
+
+/* trend arrow between a first and last value: >=3pt move shows an arrow,
+   otherwise a flat dash. Tooltip spells out the full sentence. */
+function trendArrow(from, to, fromLabel, toLabel, unit){
+  unit = unit || "%";
+  if (from == null || to == null) return `<span class="trend-cell trend-flat" title="Not available at both stages">—</span>`;
+  const diff = Math.round(to - from);
+  const sentence = `${from}${unit} at ${fromLabel} → ${to}${unit} at ${toLabel}`;
+  if (diff >= 3) return `<span class="trend-cell trend-up" title="${esc(sentence)}">▲ +${diff}</span>`;
+  if (diff <= -3) return `<span class="trend-cell trend-down" title="${esc(sentence)}">▼ ${diff}</span>`;
+  return `<span class="trend-cell trend-flat" title="${esc(sentence)}">→ ${diff>=0?"+":""}${diff}</span>`;
+}
 
 /* dot marker: renders a small "•" style badge with a native tooltip
    showing "Published report: X · Updated: Y" whenever a `pub` value is
@@ -697,16 +828,16 @@ function rowHeight(n){ return Math.max(220, n*34 + 60); }
 
 function hbarKPI(canvasId, items, targetPct){
   if (chartFailed) return;
-  const labels = items.map(i=>i.label);
+  const labels = items.map(i=>wrapLabel(i.label, 20));
   const values = items.map(i=>i.pct);
   const colors = values.map(bandColorQual);
   charts[canvasId] = new Chart(document.getElementById(canvasId), {
     type:"bar",
     data:{ labels, datasets:[{ data:values, backgroundColor:colors, borderRadius:4, borderSkipped:"start",
-      categoryPercentage:0.62, borderColor:"#fff", borderWidth:2 }] },
+      maxBarThickness:16, categoryPercentage:0.62, borderColor:"#fff", borderWidth:2 }] },
     options:{
       indexAxis:"y", responsive:true, maintainAspectRatio:false,
-      layout:{ padding:{ right:38 } },
+      layout:{ padding:{ left:6, right:38 } },
       animation:{ duration:300, easing:"easeOutQuad" },
       scales:{ x:{ min:0, max:100, grid:{ color:PALETTE.line }, ticks:{ callback:v=>v+"%" } },
                y:{ grid:{ display:false } } },
@@ -719,8 +850,7 @@ function hbarKPI(canvasId, items, targetPct){
             if (item.pub !== undefined) l += ` (published: ${Math.round(item.pub)}%)`;
             return l;
           } } },
-        datalabels:{ display:true, anchor:"end", align:"right", color:PALETTE.ink, font:{ weight:600, size:11 },
-          formatter:(v)=>Math.round(v)+"%" }
+        datalabels: smartPctLabels((ctx)=>values[ctx.dataIndex], 100)
       }
     },
     plugins: targetPct != null ? [targetLinePlugin(targetPct)] : []
@@ -773,26 +903,33 @@ function flagRowOutline(rows){
 }
 function stackedSentiment(canvasId, rows, questionRef){
   if (chartFailed) return;
-  const labels = rows.map(r=>`${r.flag ? "⚑ " : ""}${r.q}: ${r.label}`);
+  const labels = rows.map(r=>{
+    const plain = PLAIN_Q[r.q] || r.label;
+    const wrapped = wrapLabel(plain, 20);
+    const lines = Array.isArray(wrapped) ? wrapped.slice() : [wrapped];
+    if (r.flag) lines[0] = "⚑ " + lines[0];
+    return lines;
+  });
   const pos = rows.map(r=>r.positive);
   const mix = rows.map(r=>r.mixed);
   const refMap = {}; questionRef.forEach(q=>refMap[q.id]=q.text);
   charts[canvasId] = new Chart(document.getElementById(canvasId), {
     type:"bar",
     data:{ labels, datasets:[
-      { label:"Positive", data:pos, backgroundColor:PALETTE.pos, borderColor:"#fff", borderWidth:2, categoryPercentage:0.62, borderRadius:4, borderSkipped:"start" },
-      { label:"Mixed", data:mix, backgroundColor:PALETTE.mix, borderColor:"#fff", borderWidth:2, categoryPercentage:0.62 }
+      { label:"Positive", data:pos, backgroundColor:PALETTE.pos, borderColor:"#fff", borderWidth:2, maxBarThickness:16, categoryPercentage:0.62, borderRadius:4, borderSkipped:"start" },
+      { label:"Mixed", data:mix, backgroundColor:PALETTE.mix, borderColor:"#fff", borderWidth:2, maxBarThickness:16, categoryPercentage:0.62 }
     ]},
     plugins:[flagRowOutline(rows)],
     options:{
       indexAxis:"y", responsive:true, maintainAspectRatio:false, stacked:true,
+      layout:{ padding:{ left:6 } },
       animation:{ duration:300 },
       scales:{ x:{ stacked:true, min:0, max:100, grid:{ color:PALETTE.line }, ticks:{ callback:v=>v+"%" } },
                y:{ stacked:true, grid:{ display:false } } },
       plugins:{
         legend:{ display:true, position:"top", align:"start", labels:{ usePointStyle:true } },
         tooltip:{ backgroundColor:PALETTE.ink, cornerRadius:8, callbacks:{
-          title:(items)=>{ const r = rows[items[0].dataIndex]; return refMap[r.q] || items[0].label; },
+          title:(items)=>{ const r = rows[items[0].dataIndex]; return refMap[r.q] || r.label; },
           label:(ctx)=>{
             const r = rows[ctx.dataIndex];
             const isPos = ctx.dataset.label==="Positive";
@@ -832,29 +969,6 @@ function donut(canvasId, items, colorMap){
   });
 }
 
-function groupedHbar(canvasId, labels, series, opts){
-  if (chartFailed) return;
-  const datasets = series.map(s=>({ label:s.label, data:s.data, backgroundColor:s.color,
-    borderColor:"#fff", borderWidth:2, categoryPercentage:0.7, barPercentage:0.9,
-    borderRadius:4, borderSkipped:"start" }));
-  charts[canvasId] = new Chart(document.getElementById(canvasId), {
-    type:"bar",
-    data:{ labels, datasets },
-    options:{
-      indexAxis:"y", responsive:true, maintainAspectRatio:false, animation:{ duration:300 },
-      layout:{ padding:{ right:38 } },
-      scales:{ x:{ min:0, max: opts.axisMax||100, grid:{ color:PALETTE.line }, ticks:{ callback:v=>v+"%" } },
-               y:{ grid:{ display:false } } },
-      plugins:{
-        legend:{ display:true, position:"top", align:"start", labels:{ usePointStyle:true } },
-        tooltip:{ backgroundColor:PALETTE.ink, cornerRadius:8, callbacks: opts.tooltipCallbacks || {} },
-        datalabels:{ display:(ctx)=>ctx.dataset.data[ctx.dataIndex]!=null, color:PALETTE.ink, font:{ weight:600, size:10 },
-          anchor:"end", align:"right", formatter:(v)=>v==null?"":Math.round(v)+"%" }
-      }
-    }
-  });
-}
-
 function lineChart(canvasId, labels, dataPoints, opts){
   if (chartFailed) return;
   charts[canvasId] = new Chart(document.getElementById(canvasId), {
@@ -866,6 +980,7 @@ function lineChart(canvasId, labels, dataPoints, opts){
     }]},
     options:{
       responsive:true, maintainAspectRatio:false, animation:{ duration:300 },
+      layout:{ padding:{ right: opts.rightPad || 0 } },
       scales:{ y:{ min:opts.yMin, max:opts.yMax, grid:{ color:PALETTE.line } }, x:{ grid:{ display:false } } },
       plugins:{
         legend:{ display:false },
@@ -893,12 +1008,12 @@ function targetLinePluginHorizontal(targetY){
 function divergingBar(canvasId, items){
   if (chartFailed) return;
   const sorted = [...items].sort((a,b)=>b.delta-a.delta);
-  const labels = sorted.map(i=>i.label);
+  const labels = sorted.map(i=>wrapLabel(i.label, 20));
   const values = sorted.map(i=>i.delta);
   const colors = values.map(v=>v>=0?PALETTE.pos:PALETTE.neg);
   charts[canvasId] = new Chart(document.getElementById(canvasId), {
     type:"bar",
-    data:{ labels, datasets:[{ data:values, backgroundColor:colors, borderRadius:4, categoryPercentage:0.62 }] },
+    data:{ labels, datasets:[{ data:values, backgroundColor:colors, borderRadius:4, maxBarThickness:16, categoryPercentage:0.62 }] },
     options:{
       indexAxis:"y", responsive:true, maintainAspectRatio:false, animation:{ duration:300 },
       layout:{ padding:{ left:30, right:30 } },
@@ -915,14 +1030,14 @@ function divergingBar(canvasId, items){
 
 function mentionsBar(canvasId, items, color){
   if (chartFailed) return;
-  const labels = items.map(i=>i.label);
+  const labels = items.map(i=>wrapLabel(i.label, 20));
   const values = items.map(i=>i.mentions);
   charts[canvasId] = new Chart(document.getElementById(canvasId), {
     type:"bar",
-    data:{ labels, datasets:[{ data:values, backgroundColor:color, borderRadius:4, categoryPercentage:0.62 }] },
+    data:{ labels, datasets:[{ data:values, backgroundColor:color, borderRadius:4, maxBarThickness:16, categoryPercentage:0.62 }] },
     options:{
       indexAxis:"y", responsive:true, maintainAspectRatio:false, animation:{ duration:300 },
-      layout:{ padding:{ right:30 } },
+      layout:{ padding:{ left:6, right:30 } },
       scales:{ x:{ min:0, ticks:{ stepSize:2, precision:0 }, grid:{ color:PALETTE.line } }, y:{ grid:{ display:false } } },
       plugins:{ legend:{ display:false },
         tooltip:{ backgroundColor:PALETTE.ink, cornerRadius:8 },
@@ -934,20 +1049,22 @@ function mentionsBar(canvasId, items, color){
 function scoreBar(canvasId, items){
   if (chartFailed) return;
   const sorted = [...items].sort((a,b)=>a.score-b.score);
-  const labels = sorted.map(i=>`${i.q}: ${i.label}`);
+  const labels = sorted.map(i=>wrapLabel(i.label, 22));
   const values = sorted.map(i=>i.score);
   const colors = values.map(bandColorScore);
   charts[canvasId] = new Chart(document.getElementById(canvasId), {
     type:"bar",
-    data:{ labels, datasets:[{ data:values, backgroundColor:colors, borderRadius:4, borderSkipped:"start", categoryPercentage:0.62, borderColor:"#fff", borderWidth:2 }] },
+    data:{ labels, datasets:[{ data:values, backgroundColor:colors, borderRadius:4, borderSkipped:"start", maxBarThickness:16, categoryPercentage:0.62, borderColor:"#fff", borderWidth:2 }] },
     options:{
       indexAxis:"y", responsive:true, maintainAspectRatio:false, animation:{ duration:300 },
-      layout:{ padding:{ right:38 } },
+      layout:{ padding:{ left:6, right:38 } },
       scales:{ x:{ min:0, max:5, grid:{ color:PALETTE.line } }, y:{ grid:{ display:false } } },
       plugins:{ legend:{ display:false },
         tooltip:{ backgroundColor:PALETTE.ink, cornerRadius:8, callbacks:{
-          label:(ctx)=>{ const item = sorted[ctx.dataIndex]; return `${item.label}: ${item.score.toFixed(2)} · ${Math.round(item.positivePct)}% positive · n=${item.n}`; } } },
-        datalabels:{ display:true, anchor:"end", align:"right", color:PALETTE.ink, font:{ weight:600, size:11 }, formatter:(v)=>v.toFixed(2) }
+          label:(ctx)=>{ const item = sorted[ctx.dataIndex]; return `${item.label}: ${item.score.toFixed(2)} · ${Math.round(item.positivePct)}% positive · ${item.n} responses`; } } },
+        datalabels:{ display:true, color:(ctx)=> (values[ctx.dataIndex]/5)>=0.95 ? "#fff" : PALETTE.ink,
+          anchor:"end", align:(ctx)=> (values[ctx.dataIndex]/5)>=0.95 ? "start" : "right",
+          font:{ weight:600, size:11 }, formatter:(v)=>v.toFixed(2) }
       }
     },
     plugins:[targetLinePlugin(4.0, "Target 4.00")]
@@ -956,7 +1073,7 @@ function scoreBar(canvasId, items){
 
 function stacked100(canvasId, rows){
   if (chartFailed) return;
-  const labels = rows.map(r=>r.label);
+  const labels = rows.map(r=>wrapLabel(r.label, 20));
   const cats = [
     { key:"sa", name:"Strongly Agree", color:PALETTE.pos },
     { key:"a", name:"Agree", color:PALETTE.pos2 },
@@ -964,12 +1081,13 @@ function stacked100(canvasId, rows){
     { key:"sd", name:"Strongly Disagree", color:PALETTE.neg }
   ];
   const datasets = cats.map(c=>({ label:c.name, data:rows.map(r=>r[c.key]), backgroundColor:c.color,
-    borderColor:"#fff", borderWidth:2, categoryPercentage:0.62 }));
+    borderColor:"#fff", borderWidth:2, maxBarThickness:16, categoryPercentage:0.62 }));
   charts[canvasId] = new Chart(document.getElementById(canvasId), {
     type:"bar",
     data:{ labels, datasets },
     options:{
       indexAxis:"y", responsive:true, maintainAspectRatio:false, stacked:true, animation:{ duration:300 },
+      layout:{ padding:{ left:6 } },
       scales:{ x:{ stacked:true, min:0, max:100, grid:{ color:PALETTE.line }, ticks:{ callback:v=>v+"%" } },
                y:{ stacked:true, grid:{ display:false } } },
       plugins:{
@@ -993,9 +1111,39 @@ function table(headers, rows){
 /* ---------------------------------------------------------------------
    OVERVIEW TAB
    --------------------------------------------------------------------- */
+/* short (<=6 word) versions of recurring-concern cells for the Overview
+   matrix — full detail from NDR_DATA.overview.recurringConcerns lives in the
+   cell's tooltip, so nothing here changes the underlying data, only how
+   much of it is visible without hovering. */
+const CONCERN_SHORT = {
+  "IT / system issues": { d30:"Access delays, mostly resolved", d90:"13% reported roadblocks", m6:"Freezing, credit card, ERA" },
+  "Training gaps & accessibility": { d30:"Mixed feedback on training", d90:"Training timing (3 mentions)", m6:"Feedback mixed; workshops missed" },
+  "Remote engagement": { d30:"Mentioned in several sessions", d90:"Remote support suggested", m6:"About half of sessions" },
+  "HR / benefits timing": { d30:"Recurring roadblock; info late", d90:"HR/benefits timing (4 mentions)", m6:null },
+  "Goal & vision clarity": { d30:"Vision clarity raised sometimes", d90:"Task clarity (5 mentions)", m6:"'Soft goals' feedback mixed" },
+  "Leadership transitions": { d30:null, d90:null, m6:"Top concern; no protocol" },
+  "Cross-team integration": { d30:null, d90:"Top suggestion (6 mentions)", m6:"Varies by unit" },
+  "Ideas not captured": { d30:null, d90:null, m6:"No formal channel" },
+  "Payroll deduction accuracy": { d30:"Possible withholding error flagged", d90:null, m6:null }
+};
+
+function headlineTiles(d){
+  const m = d.mappedMetrics;
+  const tiles = [
+    { claim:"Expectations climb through the whole journey", num:m[0].m6+"%", numLabel:"at 6 months", sub:`up from ${m[0].d30}% at 30 days`, accent:"pos" },
+    { claim:"Belonging is the one figure softening", num:m[1].m6+"%", numLabel:"at 6 months", sub:`down from ${m[1].d30}% at 30 days`, accent:"neg" },
+    { claim:"No-roadblocks eases, then returns by 6 months", num:m[6].m6+"%", numLabel:"no roadblocks, 6mo", sub:`peaked at ${m[6].d90}% at 90 days`, accent:"neg" },
+    { claim:"Culture beats the published numbers", num:m[5].m6+"%", numLabel:"culture, 6mo", sub:`published report said ${m[5].m6Pub}%`, accent:"pos" }
+  ];
+  return tiles;
+}
+
 function renderOverview(){
   const d = NDR_DATA.overview;
   const el = document.getElementById("panel-overview");
+  const tiles = headlineTiles(d);
+  const every = d.recurringConcerns.filter(r=>r.d30 && r.d90 && r.m6);
+  const specific = d.recurringConcerns.filter(r=>!(r.d30 && r.d90 && r.m6));
   el.innerHTML = `
     <div class="banner">${d.methodCaveat}</div>
 
@@ -1004,38 +1152,45 @@ function renderOverview(){
       <h2>1. What's changed since the published reports</h2>
     </div>
     <div class="grid-4">
-      ${d.headlines.map(h=>`
-        <div class="card headline-tile ${h.accent==='neg'?'neg':''}">
-          <h3>${esc(h.title)}</h3>
-          <p>${h.detail}</p>
+      ${tiles.map(t=>`
+        <div class="card headline-tile ${t.accent==='neg'?'neg':''}">
+          <h3>${esc(t.claim)}</h3>
+          <div class="num tabular" style="font-size:30px; margin:4px 0 2px">${t.num}</div>
+          <p>${esc(t.numLabel)} · ${esc(t.sub)}</p>
         </div>`).join("")}
     </div>
 
     <div class="section-head">
       <p class="eyebrow">Cross-stage comparison</p>
-      <h2>2. Metric by Stage</h2>
-      <p class="caption">Focus groups, 36 sessions (30-Day) · Survey, 48 responses (90-Day) · Focus groups, 12 sessions (6-Month)</p>
+      <h2>2. Journey at a Glance</h2>
     </div>
-    ${chartCard({
-      id:"chartMetricByStage", title:"% positive, by metric and stage",
-      readLine:"Dot markers show figures that differ from the published reports — hover or focus for both values.",
-      caption:"Each bar cites its own source question; culture satisfaction wasn't asked in the 90-day survey, shown as no bar.",
-      ariaLabel:"Grouped bar chart: seven metrics compared across 30-day, 90-day, and 6-month stages",
-      height: rowHeight(7)+40,
-      tableHTML: table(["Metric","30-Day","90-Day","6-Month"], d.mappedMetrics.map(m=>[
-        esc(m.metric), m.d30+"%"+(m.d30Pub!=null?` (published ${m.d30Pub}%)`:""),
-        m.d90==null?"n/a":m.d90+"%", m.m6+"%"+(m.m6Pub!=null?` (published ${m.m6Pub}%)`:"")
-      ]))
-    })}
+    <p class="section-takeaway">New hires stay positive at every stage; belonging and roadblocks are the two things to watch.</p>
+    <div class="card table-wrap">
+      <table class="metric-table">
+        <thead><tr><th>Metric</th><th>30-Day (focus groups)</th><th>90-Day (survey)</th><th>6-Month (focus groups)</th><th>Trend</th></tr></thead>
+        <tbody>
+          ${d.mappedMetrics.map(m=>`<tr>
+            <td>${esc(m.metric)}</td>
+            <td>${statusChip(m.d30)}${m.d30Pub!=null?dotHTML(m.d30,m.d30Pub):""}</td>
+            <td>${statusChip(m.d90)}</td>
+            <td>${statusChip(m.m6)}${m.m6Pub!=null?dotHTML(m.m6,m.m6Pub):""}</td>
+            <td>${trendArrow(m.d30, m.m6, "30 days", "6 months")}</td>
+          </tr>`).join("")}
+        </tbody>
+      </table>
+    </div>
+    <details class="datatable" style="margin-top:8px"><summary>View data table with sources</summary>
+      ${table(["Metric","30-Day source","90-Day source","6-Month source"], d.mappedMetrics.map(m=>[esc(m.metric), esc(m.src30), esc(m.src90), esc(m.src6)]))}
+    </details>
 
     <div class="section-head">
       <p class="eyebrow">Trend across the journey</p>
-      <h2>3. The 6-Month Story</h2>
+      <h2>3. Three Trends to Watch</h2>
     </div>
+    <p class="section-takeaway">Early friction eases by 90 days; a milder version returns by 6 months — a pattern to monitor, not a decline.</p>
     ${chartCard({
       id:"chartSixMonthStory", title:"No roadblocks · Culture satisfaction · Job expectations",
-      readLine:"Culture satisfaction (dashed) wasn't asked in the 90-day survey, so that point is skipped.",
-      caption:"Early friction eases by 90 days; a milder version of the same pattern shows up again by 6 months — not a decline.",
+      readLine:"Axis starts at 60%, not 0%, so the differences are easier to see. Culture satisfaction (dashed) wasn't asked in the 90-day survey.",
       ariaLabel:"Line chart: three metrics tracked across 30-day, 90-day, and 6-month stages",
       height:320,
       tableHTML: table(["Metric","30-Day","90-Day","6-Month"], [
@@ -1048,18 +1203,16 @@ function renderOverview(){
     <div class="section-head">
       <p class="eyebrow">Recurring themes</p>
       <h2>4. Concerns Across the Journey</h2>
-      <p class="caption">Issues showing up at every stage (IT/systems, training, remote engagement) are systemic; single-stage issues are specific to that point in the onboarding journey.</p>
     </div>
+    <p class="section-takeaway">Four issues show up at every stage — those are systemic; the rest are specific to one point in the journey.</p>
     <div class="card table-wrap">
-      <table class="plain">
+      <table class="plain concern-table">
         <thead><tr><th>Concern</th><th>30-Day</th><th>90-Day</th><th>6-Month</th></tr></thead>
         <tbody>
-          ${d.recurringConcerns.map(r=>`<tr>
-            <td>${esc(r.concern)}</td>
-            <td>${concernCell(r.d30, PALETTE.stage30)}</td>
-            <td>${concernCell(r.d90, PALETTE.stage90)}</td>
-            <td>${concernCell(r.m6, PALETTE.stage6m)}</td>
-          </tr>`).join("")}
+          <tr class="subhead"><td colspan="4">Seen at every stage</td></tr>
+          ${every.map(r=>concernRow(r, d)).join("")}
+          <tr class="subhead"><td colspan="4">Stage-specific</td></tr>
+          ${specific.map(r=>concernRow(r, d)).join("")}
         </tbody>
       </table>
     </div>
@@ -1073,7 +1226,6 @@ function renderOverview(){
         <div class="card tile" style="border-top:3px solid ${[PALETTE.stage30,PALETTE.stage90,PALETTE.stage6m][i]}">
           <div class="label">${esc(p.stage)}</div>
           <div class="num" style="font-size:20px">${p.detail}${p.detailPub?` <span class="dot" tabindex="0" title="${esc('Published report: '+p.detailPub+' · Updated: '+p.detail)}" aria-label="${esc('Published report: '+p.detailPub+' · Updated: '+p.detail)}">•</span>`:""}</div>
-          ${p.detailPub ? `<div class="ctx">Published report: ${esc(p.detailPub)}</div>` : ""}
           <span class="chip method">${esc(p.method)}</span>
         </div>`).join("")}
     </div>
@@ -1081,31 +1233,23 @@ function renderOverview(){
   `;
   renderCharts_overview(d);
 }
-function concernCell(text, color){
-  if (!text) return `<span style="color:${PALETTE.neutral}">—</span>`;
-  return `<span class="dot-cell" style="background:${color}"></span>${esc(text)}`;
+function concernRow(r, d){
+  const short = CONCERN_SHORT[r.concern] || {};
+  const cell = (short_text, full, color)=>{
+    if (!full) return `<td><span style="color:${PALETTE.neutral}">—</span></td>`;
+    return `<td title="${esc(full)}"><span class="dot-cell" style="background:${color}"></span>${esc(short_text||full)}</td>`;
+  };
+  return `<tr>
+    <td>${esc(r.concern)}</td>
+    ${cell(short.d30, r.d30, PALETTE.stage30)}
+    ${cell(short.d90, r.d90, PALETTE.stage90)}
+    ${cell(short.m6, r.m6, PALETTE.stage6m)}
+  </tr>`;
 }
 function renderCharts_overview(d){
-  groupedHbar("chartMetricByStage", d.mappedMetrics.map(m=>m.metric),
-    [
-      { label:"30-Day (focus groups)", data:d.mappedMetrics.map(m=>m.d30), color:PALETTE.stage30 },
-      { label:"90-Day (survey)", data:d.mappedMetrics.map(m=>m.d90), color:PALETTE.stage90 },
-      { label:"6-Month (focus groups)", data:d.mappedMetrics.map(m=>m.m6), color:PALETTE.stage6m }
-    ], {
-      tooltipCallbacks:{
-        label:(ctx)=>{
-          const m = d.mappedMetrics[ctx.dataIndex];
-          const stageIdx = ctx.datasetIndex;
-          const src = stageIdx===0?m.src30:stageIdx===1?m.src90:m.src6;
-          const val = ctx.raw;
-          if (val==null) return `${ctx.dataset.label}: not asked`;
-          return `${ctx.dataset.label} · ${src} — ${Math.round(val)}%`;
-        }
-      }
-    });
   lineChart("chartSixMonthStory", ["30-Day","90-Day","6-Month"],
     [d.mappedMetrics[6].d30, d.mappedMetrics[6].d90, d.mappedMetrics[6].m6], {
-      yMin:60, yMax:100, pointRadii:8,
+      yMin:60, yMax:100, pointRadii:8, rightPad:44,
       labelFormatter:(v)=>v==null?"":Math.round(v)+"%",
       tooltipCallbacks:{ label:(ctx)=> ctx.raw==null ? `${ctx.dataset.label}: not asked at 90 days` : `${ctx.dataset.label}: ${Math.round(ctx.raw)}%` }
     });
@@ -1117,19 +1261,23 @@ function renderCharts_overview(d){
     chart.data.datasets[0].backgroundColor = PALETTE.neg;
     chart.data.datasets[0].pointBackgroundColor = PALETTE.neg;
     chart.data.datasets[0].pointBorderColor = PALETTE.neg;
+    chart.data.datasets[0].borderWidth = 3;
     chart.data.datasets.push({
       label:"Culture satisfaction", data:[d.mappedMetrics[5].d30, null, d.mappedMetrics[5].m6],
-      borderColor:PALETTE.mix, backgroundColor:PALETTE.mix, borderWidth:2, borderDash:[6,4],
+      borderColor:PALETTE.mix, backgroundColor:PALETTE.mix, borderWidth:3, borderDash:[6,4],
       pointRadius:8, pointBackgroundColor:PALETTE.mix, spanGaps:true
     });
     chart.data.datasets.push({
       label:"Job expectations", data:[d.mappedMetrics[0].d30, d.mappedMetrics[0].d90, d.mappedMetrics[0].m6],
-      borderColor:PALETTE.pos, backgroundColor:PALETTE.pos, borderWidth:2,
+      borderColor:PALETTE.pos, backgroundColor:PALETTE.pos, borderWidth:3,
       pointRadius:8, pointBackgroundColor:PALETTE.pos
     });
     chart.options.plugins.legend.display = true;
     chart.options.plugins.legend.labels = { usePointStyle:true };
-    chart.options.plugins.datalabels.display = (ctx)=>ctx.raw!=null;
+    // direct-label only the right-hand (6-month) end of each series, per design
+    chart.options.plugins.datalabels.display = (ctx)=> ctx.dataIndex === ctx.dataset.data.length-1 && ctx.dataset.data[ctx.dataIndex] != null;
+    chart.options.plugins.datalabels.align = "right";
+    chart.options.plugins.datalabels.anchor = "center";
     chart.update();
   }
 }
@@ -1170,20 +1318,21 @@ function renderThirtyDay(){
 
     <p class="takeaway">This page covers 36 sessions — 28 behind the published report, plus 8 collected since. The overall picture is steady to slightly improved; No Roadblocks is the one measure to watch.</p>
 
+    <p class="section-takeaway">Six of seven measures beat the 80% target; only No Roadblocks falls short, at 70%.</p>
     ${chartCard({
-      id:"chart30KPI", title:"Key Performance Indicators", caption:d.kpiSummary,
+      id:"chart30KPI", title:"Key Performance Indicators",
       ariaLabel:"Bar chart: 30-day key performance indicators, sorted highest to lowest",
       height: rowHeight(7),
-      tableHTML: table(["KPI","Result","Published"], d.kpis.map(k=>[esc(k.label), k.pct+"%", k.pub!=null?k.pub+"%":"—"]))
+      tableHTML: table(["Metric","Result","Published"], d.kpis.map(k=>[esc(k.label), k.pct+"%", k.pub!=null?k.pub+"%":"—"]))
     })}
 
     <div class="section-head">
       <h2>2. Sentiment by Question</h2>
     </div>
+    <p class="section-takeaway">Most questions are strongly positive; roadblocks is the only question flagged for attention.</p>
     ${chartCard({
       id:"chart30Sentiment", title:"Positive vs. mixed, by question",
       readLine:"Green = positive responses · Gold = mixed feedback that includes suggestions or a resolved concern.",
-      caption:d.sentimentFlagRule,
       ariaLabel:"Stacked bar chart: sentiment by question for the 30-day check-in",
       height: rowHeight(10),
       tableHTML: table(["Question","Positive","Mixed","Flag"], d.sentiment.map(s=>[esc(s.q+": "+s.label), s.positive+"%", s.mixed+"%", s.flag?"Needs attention":""]))
@@ -1192,6 +1341,7 @@ function renderThirtyDay(){
     <div class="section-head">
       <h2>3. Fiscal Year Explorer</h2>
     </div>
+    <p class="section-takeaway">Every fiscal year has trended toward stronger scores — FY26 is the strongest yet.</p>
     <div class="fy-chips" role="group" aria-label="Filter by fiscal year">
       <button data-fy="all" aria-pressed="true">All years</button>
       <button data-fy="FY24" aria-pressed="false">FY24</button>
@@ -1203,6 +1353,7 @@ function renderThirtyDay(){
     <div class="section-head">
       <h2>4. Roadblocks</h2>
     </div>
+    <p class="section-takeaway">Seven in ten sessions report no roadblocks at all; when one comes up, it's usually a minor, resolved IT-access delay.</p>
     <div class="grid-2">
       <div class="card chart-card">
         <div class="chart-title">Roadblock breakdown</div>
@@ -1222,16 +1373,16 @@ function renderThirtyDay(){
 
     <div class="section-head">
       <h2>5. Strengths vs Areas of Concern</h2>
-      <p class="caption">Strengths are positive-sentiment scores; concerns are how often the issue came up — not the share who experienced it.</p>
     </div>
+    <p class="section-takeaway">Culture and team support are consistent strengths; acronyms and remote engagement are the top concerns.</p>
     <div class="grid-2">
       <div class="card chart-card">
-        <div class="chart-title" style="color:${PALETTE.pos}">Strengths</div>
+        <div class="chart-title" style="color:${PALETTE.pos}">Strengths <span style="font-weight:400; color:var(--text-3); font-size:12px">— ${esc(d.strengthsUnit)}</span></div>
         <div class="chart-holder" style="height:${rowHeight(5)}px"><canvas id="chart30Strengths" role="img" aria-label="Bar chart: 30-day strengths"></canvas></div>
         <details class="datatable"><summary>View data table</summary>${table(["Strength","Score"], d.strengths.map(s=>[esc(s.label), s.pct+"%"]))}</details>
       </div>
       <div class="card chart-card">
-        <div class="chart-title" style="color:${PALETTE.neg}">Areas of Concern</div>
+        <div class="chart-title" style="color:${PALETTE.neg}">Areas of Concern <span style="font-weight:400; color:var(--text-3); font-size:12px">— ${esc(d.concernsUnit)}</span></div>
         <div class="chart-holder" style="height:${rowHeight(5)}px"><canvas id="chart30Concerns" role="img" aria-label="Bar chart: 30-day areas of concern"></canvas></div>
         <details class="datatable"><summary>View data table</summary>${table(["Concern","Frequency"], d.concerns.map(s=>[esc(s.label), s.pct+"%"]))}</details>
       </div>
@@ -1280,9 +1431,9 @@ function renderThirtyDayCharts(d){
   const strengthsSorted = [...d.strengths].sort((a,b)=>b.pct-a.pct);
   charts["chart30Strengths"] = chartFailed ? null : new Chart(document.getElementById("chart30Strengths"), {
     type:"bar",
-    data:{ labels:strengthsSorted.map(s=>s.label), datasets:[{ data:strengthsSorted.map(s=>s.pct), backgroundColor:PALETTE.pos, borderRadius:4, categoryPercentage:0.62 }] },
+    data:{ labels:strengthsSorted.map(s=>wrapLabel(s.label,18)), datasets:[{ data:strengthsSorted.map(s=>s.pct), backgroundColor:PALETTE.pos, borderRadius:4, maxBarThickness:16, categoryPercentage:0.62 }] },
     options:{ indexAxis:"y", responsive:true, maintainAspectRatio:false, animation:{duration:300},
-      layout:{ padding:{ right:20 } },
+      layout:{ padding:{ left:6, right:20 } },
       scales:{ x:{ min:0, max:110, title:{display:true,text:d.strengthsUnit}, grid:{color:PALETTE.line} }, y:{grid:{display:false}} },
       plugins:{ legend:{display:false}, tooltip:{backgroundColor:PALETTE.ink,cornerRadius:8},
         datalabels:{ display:true, anchor:"end", align:"right", color:PALETTE.ink, font:{weight:600,size:11}, formatter:v=>v+"%" } } }
@@ -1290,9 +1441,9 @@ function renderThirtyDayCharts(d){
   const concernsSorted = [...d.concerns].sort((a,b)=>b.pct-a.pct);
   charts["chart30Concerns"] = chartFailed ? null : new Chart(document.getElementById("chart30Concerns"), {
     type:"bar",
-    data:{ labels:concernsSorted.map(s=>s.label), datasets:[{ data:concernsSorted.map(s=>s.pct), backgroundColor:PALETTE.neg, borderRadius:4, categoryPercentage:0.62 }] },
+    data:{ labels:concernsSorted.map(s=>wrapLabel(s.label,18)), datasets:[{ data:concernsSorted.map(s=>s.pct), backgroundColor:PALETTE.neg, borderRadius:4, maxBarThickness:16, categoryPercentage:0.62 }] },
     options:{ indexAxis:"y", responsive:true, maintainAspectRatio:false, animation:{duration:300},
-      layout:{ padding:{ right:20 } },
+      layout:{ padding:{ left:6, right:20 } },
       scales:{ x:{ min:0, max:60, title:{display:true,text:d.concernsUnit}, grid:{color:PALETTE.line} }, y:{grid:{display:false}} },
       plugins:{ legend:{display:false}, tooltip:{backgroundColor:PALETTE.ink,cornerRadius:8},
         datalabels:{ display:true, anchor:"end", align:"right", color:PALETTE.ink, font:{weight:600,size:11}, formatter:v=>v+"%" } } }
@@ -1301,22 +1452,23 @@ function renderThirtyDayCharts(d){
 function renderFYExplorer(d, fy){
   const holder = document.getElementById("fyContent");
   if (fy === "all") {
-    holder.innerHTML = `<div class="card chart-card">
-      <div class="chart-title">All years, by KPI</div>
-      <div class="chart-holder" style="height:${rowHeight(7)+20}px"><canvas id="chartFYAll" role="img" aria-label="Grouped bar chart: KPIs by fiscal year"></canvas></div>
-      <details class="datatable"><summary>View data table</summary>
-        ${table(["KPI","FY24 (n=9)","FY25 (n=13)","FY26 (n=14)"], Object.keys(d.byFY[0].kpis).map(k=>[
-          esc(k), d.byFY[0].kpis[k]+"%", d.byFY[1].kpis[k]+"%",
-          (typeof d.byFY[2].kpis[k]==="object"?d.byFY[2].kpis[k].v:d.byFY[2].kpis[k])+"%"
-        ]))}
-      </details>
-    </div>`;
     const keys = Object.keys(d.byFY[0].kpis);
-    groupedHbar("chartFYAll", keys, [
-      { label:"FY24 (n=9)", data:keys.map(k=>d.byFY[0].kpis[k]), color:PALETTE.stage30 },
-      { label:"FY25 (n=13)", data:keys.map(k=>d.byFY[1].kpis[k]), color:PALETTE.stage90 },
-      { label:"FY26 (n=14)", data:keys.map(k=>typeof d.byFY[2].kpis[k]==="object"?d.byFY[2].kpis[k].v:d.byFY[2].kpis[k]), color:PALETTE.stage6m }
-    ], { tooltipCallbacks:{ label:(ctx)=>`${ctx.dataset.label}: ${Math.round(ctx.raw)}%` } });
+    const valOf = (fyIdx,k)=>{ const v = d.byFY[fyIdx].kpis[k]; return typeof v==="object" ? v.v : v; };
+    const pubOf = (fyIdx,k)=>{ const v = d.byFY[fyIdx].kpis[k]; return typeof v==="object" ? v.pub : undefined; };
+    holder.innerHTML = `<div class="card table-wrap">
+      <table class="metric-table">
+        <thead><tr><th>Metric</th><th>FY24 · 9 sessions</th><th>FY25 · 13 sessions</th><th>FY26 · 14 sessions</th><th>Trend</th></tr></thead>
+        <tbody>
+          ${keys.map(k=>`<tr>
+            <td>${esc(k)}</td>
+            <td>${statusChip(valOf(0,k))}</td>
+            <td>${statusChip(valOf(1,k))}</td>
+            <td>${statusChip(valOf(2,k))}${pubOf(2,k)!=null?dotHTML(valOf(2,k),pubOf(2,k)):""}</td>
+            <td>${trendArrow(valOf(0,k), valOf(2,k), "FY24", "FY26")}</td>
+          </tr>`).join("")}
+        </tbody>
+      </table>
+    </div>`;
   } else {
     const fyObj = d.byFY.find(f=>f.fy===fy);
     const kpiItems = Object.entries(fyObj.kpis).map(([label,val])=>{
@@ -1328,7 +1480,7 @@ function renderFYExplorer(d, fy){
         <div class="chart-title">${fy} KPIs</div>
         <p class="caption">${fyObj.sessions} sessions${fyObj.sessionsPub?dotHTML(fyObj.sessions,fyObj.sessionsPub):""} · ${fyObj.participants} participants${fyObj.participantsPub?` <span class="dot" tabindex="0" title="${esc('Published report: '+fyObj.participantsPub+' · Updated: '+fyObj.participants)}" aria-label="${esc('Published report: '+fyObj.participantsPub+' · Updated: '+fyObj.participants)}">•</span>`:""} · ${fyObj.dateRange}${fyObj.dateRangePub?` <span style="color:var(--text-3)">(published ${fyObj.dateRangePub})</span>`:""}</p>
         <div class="chart-holder" style="height:${rowHeight(7)}px"><canvas id="chartFYSingle" role="img" aria-label="Bar chart: ${fy} key performance indicators"></canvas></div>
-        <details class="datatable"><summary>View data table</summary>${table(["KPI","Result","Published"], kpiItems.map(k=>[esc(k.label), k.pct+"%", k.pub!=null?k.pub+"%":"—"]))}</details>
+        <details class="datatable"><summary>View data table</summary>${table(["Metric","Result","Published"], kpiItems.map(k=>[esc(k.label), k.pct+"%", k.pub!=null?k.pub+"%":"—"]))}</details>
       </div>
       <div class="card">
         <div class="chart-title">Key observations</div>
@@ -1353,31 +1505,33 @@ function renderNinetyDay(){
       <div class="card tile"><div class="num">${d.overallScore.toFixed(2)} <span class="ctx" style="font-size:14px">/ 5.00</span></div><div class="label">Overall score</div><div class="ctx">Target 4.00</div></div>
       <div class="card tile"><div class="num">${Math.round(d.positiveRatePct)}%</div><div class="label">Positive rate</div><div class="ctx">Strongly agree + agree</div></div>
       <div class="card tile"><div class="num delta pos">+${d.yoyImprovement.toFixed(2)}</div><div class="label">Year over year</div><div class="ctx">4.34 → 4.55, 2024 → 2025</div></div>
-      <div class="card tile"><div class="num">${d.validResponses}</div><div class="label">Valid responses</div><div class="ctx">2 test responses excluded</div></div>
+      <div class="card tile"><div class="num">${d.validResponses}</div><div class="label">Responses</div><div class="ctx">2 test entries excluded</div></div>
     </div>
     <p class="takeaway">This page is unchanged from the published report — the workbook was checked for new responses and none exist beyond what's shown here.</p>
 
+    <p class="section-takeaway">Every question beats target; the weakest is still a strong 4.00 out of 5.</p>
     ${chartCard({
       id:"chart90Scores", title:"Overall Satisfaction Scores", caption:d.scoreSummary,
       ariaLabel:"Bar chart: 90-day question scores, weakest first",
       height: rowHeight(11),
-      tableHTML: table(["Question","Score","Positive","n"], d.questionScores.map(q=>[esc(q.q+": "+q.label), q.score.toFixed(2), Math.round(q.positivePct)+"%", q.n]))
+      tableHTML: table(["Question","Score","Positive","Responses"], d.questionScores.map(q=>[esc(q.label), q.score.toFixed(2), Math.round(q.positivePct)+"%", q.n]))
     })}
 
-    <div class="section-head"><h2>2. Response Distribution</h2></div>
+    <div class="section-head"><h2>2. How People Answered</h2></div>
+    <p class="section-takeaway">Almost every answer was positive — nobody strongly disagreed with anything except one question.</p>
     ${chartCard({
-      id:"chart90Dist", title:"Response distribution by question",
+      id:"chart90Dist", title:"Answers by question",
       readLine:"Green = strongly agree/agree · Gold/red = disagree or strongly disagree.",
-      caption:d.responseDistribution.note,
       ariaLabel:"100% stacked bar chart: response distribution by question",
       height: rowHeight(9),
       tableHTML: table(["Question","Strongly Agree","Agree","Disagree","Strongly Disagree"], d.responseDistribution.rows.map(r=>[esc(r.label), r.sa+"%", r.a+"%", r.d+"%", r.sd+"%"]))
     })}
 
-    <div class="section-head"><h2>3. Special Questions</h2></div>
+    <div class="section-head"><h2>3. Goals & Roadblocks</h2></div>
+    <p class="section-takeaway">Nearly everyone says their manager helped set goals, and most report no roadblocks to doing their job.</p>
     <div class="grid-2">
       <div class="card">
-        <div class="chart-title">${esc(d.specialQuestions.q5.title)}</div>
+        <div class="chart-title">Did your manager help set goals?</div>
         <div style="display:flex; gap:24px; margin:14px 0">
           <div><div class="num tabular" style="font-size:28px">${d.specialQuestions.q5.yes}</div><div class="label">Yes (${Math.round(d.specialQuestions.q5.yesPct)}%)</div></div>
           <div><div class="num tabular" style="font-size:28px; color:var(--text-3)">${d.specialQuestions.q5.no}</div><div class="label">No (${Math.round(d.specialQuestions.q5.noPct)}%)</div></div>
@@ -1387,7 +1541,7 @@ function renderNinetyDay(){
         </div>
       </div>
       <div class="card">
-        <div class="chart-title">${esc(d.specialQuestions.q10.title)}</div>
+        <div class="chart-title">Any roadblocks to doing your job?</div>
         <div style="display:flex; gap:24px; margin:14px 0">
           <div><div class="num tabular" style="font-size:28px">${d.specialQuestions.q10.noRoadblocks}</div><div class="label">No roadblocks (${Math.round(d.specialQuestions.q10.noPct)}%)</div></div>
           <div><div class="num tabular" style="font-size:28px; color:var(--mix)">${d.specialQuestions.q10.hasRoadblocks}</div><div class="label">Has roadblocks (${Math.round(d.specialQuestions.q10.hasPct)}%)</div></div>
@@ -1397,24 +1551,26 @@ function renderNinetyDay(){
         </div>
       </div>
     </div>
-    <p class="caption" style="margin-top:10px">${d.specialQuestions.observations.join(" ")}</p>
 
-    <div class="section-head"><h2>4. Year-over-Year Change (2024 → 2025)</h2></div>
+    <div class="section-head"><h2>4. Year Over Year Change (2024 → 2025)</h2></div>
+    <p class="section-takeaway">Ten of eleven areas improved; manager communication dipped slightly but is still well above target.</p>
     ${chartCard({
-      id:"chart90YoY", title:"Change in score, 2024 → 2025", caption:`${d.yoy.summary} ${d.yoy.declineNote}`,
+      id:"chart90YoY", title:"Change in score, 2024 → 2025",
       ariaLabel:"Diverging bar chart: year-over-year score change by question",
       height: rowHeight(11),
       tableHTML: table(["Metric","2024","2025","Change"], d.yoy.trendTable.map(r=>[esc(r.metric), r.y2024.toFixed(2), r.y2025.toFixed(2), r.change]))
     })}
     <div class="card table-wrap" style="margin-top:-6px">
-      <table class="plain"><thead><tr><th>Metric</th><th>2024 (n=${d.yoy.year2024.n})</th><th>2025 (n=${d.yoy.year2025.n})</th><th>Change</th></tr></thead>
+      <table class="plain"><thead><tr><th>Metric</th><th>2024 · ${d.yoy.year2024.n} responses</th><th>2025 · ${d.yoy.year2025.n} responses</th><th>Change</th></tr></thead>
         <tbody>${d.yoy.trendTable.map(r=>`<tr><td>${esc(r.metric)}</td><td>${r.y2024.toFixed(2)}</td><td>${r.y2025.toFixed(2)}</td><td style="color:${r.change.startsWith('-')?PALETTE.neg:PALETTE.pos}; font-weight:700">${r.change}</td></tr>`).join("")}</tbody>
       </table>
     </div>
 
     <div class="section-head"><h2>5. Overall Score Trend (2023–2026)</h2></div>
+    <p class="section-takeaway">Scores have run above target every year since 2023.</p>
     ${chartCard({
-      id:"chart90Trend", title:"Overall score by year", caption:d.overallTrend.note,
+      id:"chart90Trend", title:"Overall score by year",
+      caption:"Early and current-year points reflect very few responses.",
       ariaLabel:"Line chart: overall score trend from 2023 to 2026",
       height:320,
       tableHTML: table(["Year","Responses","Score"], d.overallTrend.points.map(p=>[p.year, p.responses, p.score.toFixed(2)]))
@@ -1444,12 +1600,6 @@ function renderNinetyDay(){
     <div class="grid-2">
       ${d.recommendations.map((r,i)=>`<div class="card action-card"><div class="n">${i+1}</div><div><h3>${esc(r.title)}</h3><p>${esc(r.body)}</p></div></div>`).join("")}
     </div>
-
-    <div class="section-head"><h2>8. Methodology</h2></div>
-    <details class="card"><summary style="cursor:pointer; font-weight:700">View methodology</summary>
-      <ul class="list-plain" style="margin-top:10px">${d.methodology.map(m=>`<li>${esc(m)}</li>`).join("")}</ul>
-      <p class="caption">${d.exclusionNote}</p>
-    </details>
   `;
   renderNinetyDayCharts(d);
 }
@@ -1460,8 +1610,8 @@ function renderNinetyDayCharts(d){
   lineChart("chart90Trend", d.overallTrend.points.map(p=>p.year), d.overallTrend.points.map(p=>p.score), {
     yMin:3.6, yMax:5.0, targetY:4.0,
     pointRadii: d.overallTrend.points.map(p=>p.responses<=3?7:5),
-    labelFormatter:(v,ctx)=>{ const p = d.overallTrend.points[ctx.dataIndex]; return `${p.score.toFixed(2)} (n=${p.responses})`; },
-    tooltipCallbacks:{ label:(ctx)=>{ const p = d.overallTrend.points[ctx.dataIndex]; return `${p.year}: ${p.score.toFixed(2)} (n=${p.responses})`; } }
+    labelFormatter:(v,ctx)=>{ const p = d.overallTrend.points[ctx.dataIndex]; return p.score.toFixed(2); },
+    tooltipCallbacks:{ label:(ctx)=>{ const p = d.overallTrend.points[ctx.dataIndex]; return `${p.year}: ${p.score.toFixed(2)} · ${p.responses} responses`; } }
   });
   const trendChart = charts["chart90Trend"];
   if (trendChart) {
@@ -1491,7 +1641,7 @@ function renderSixMonth(){
       </div>
       <div class="card tile">
         <div class="num">${at100} / 7</div>
-        <div class="label">KPIs at 100%</div>
+        <div class="label">Measures at 100%</div>
         <div class="ctx">Job match, engagement, communication, team support</div>
       </div>
       <div class="card tile">
@@ -1507,14 +1657,16 @@ function renderSixMonth(){
     </div>
     <p class="takeaway">This page covers 12 sessions — 8 behind the published report, plus 4 collected since. Culture satisfaction has actually improved; belonging has softened slightly and is the figure most worth watching.</p>
 
+    <p class="section-takeaway">Four of seven measures are at 100%; belonging and roadblocks are the two figures to watch.</p>
     ${chartCard({
       id:"chart6KPI", title:"Key Performance Indicators", caption:d.kpiSummary,
       ariaLabel:"Bar chart: 6-month key performance indicators, sorted highest to lowest",
       height: rowHeight(7),
-      tableHTML: table(["KPI","Result","Published"], d.kpis.map(k=>[esc(k.label), k.pct+"%", k.pub!=null?k.pub+"%":"—"]))
+      tableHTML: table(["Metric","Result","Published"], d.kpis.map(k=>[esc(k.label), k.pct+"%", k.pub!=null?k.pub+"%":"—"]))
     })}
 
     <div class="section-head"><h2>2. Sentiment by Question</h2></div>
+    <p class="section-takeaway">Most questions are strongly positive; roadblocks and workflow adjustments are the two flagged questions.</p>
     ${chartCard({
       id:"chart6Sentiment", title:"Positive vs. mixed, by question",
       readLine:"Green = positive responses · Gold = mixed feedback that includes suggestions or a resolved concern.",
@@ -1524,24 +1676,26 @@ function renderSixMonth(){
       tableHTML: table(["Question","Positive","Mixed","Flag"], d.sentiment.map(s=>[esc(s.q+": "+s.label), s.positive+"%", s.mixed+"%", s.flag?"Needs attention":""]))
     })}
     <details class="card" style="margin-top:-8px"><summary style="cursor:pointer; font-weight:700">Question reference</summary>
-      <ul class="list-plain" style="margin-top:10px">${NDR_DATA.meta.questionReference.map(q=>`<li><strong>${q.id}:</strong> ${esc(q.text)}</li>`).join("")}</ul>
+      <ul class="list-plain" style="margin-top:10px">${NDR_DATA.meta.questionReference.map(q=>`<li><strong>${esc(q.label)}:</strong> ${esc(q.text)}</li>`).join("")}</ul>
     </details>
 
     <div class="section-head"><h2>3. Strengths vs Areas of Concern</h2></div>
+    <p class="section-takeaway">Culture, communication, and engagement are universal strengths; leadership transitions are the top concern.</p>
     <div class="grid-2">
       <div class="card chart-card">
-        <div class="chart-title" style="color:${PALETTE.pos}">Strengths</div>
+        <div class="chart-title" style="color:${PALETTE.pos}">Strengths <span style="font-weight:400; color:var(--text-3); font-size:12px">— ${esc(d.strengthsUnit)}</span></div>
         <div class="chart-holder" style="height:${rowHeight(5)}px"><canvas id="chart6Strengths" role="img" aria-label="Bar chart: 6-month strengths"></canvas></div>
         <details class="datatable"><summary>View data table</summary>${table(["Strength","Score"], d.strengths.map(s=>[esc(s.label), s.pct+"%"]))}</details>
       </div>
       <div class="card chart-card">
-        <div class="chart-title" style="color:${PALETTE.neg}">Areas of Concern</div>
+        <div class="chart-title" style="color:${PALETTE.neg}">Areas of Concern <span style="font-weight:400; color:var(--text-3); font-size:12px">— ${esc(d.concernsUnit)}</span></div>
         <div class="chart-holder" style="height:${rowHeight(5)}px"><canvas id="chart6Concerns" role="img" aria-label="Bar chart: 6-month areas of concern"></canvas></div>
         <details class="datatable"><summary>View data table</summary>${table(["Concern","Frequency"], d.concerns.map(s=>[esc(s.label), s.pct+"%"]))}</details>
       </div>
     </div>
 
     <div class="section-head"><h2>4. Roadblocks</h2></div>
+    <p class="section-takeaway">Seven in ten sessions report no roadblocks; leadership transitions and system issues are the main causes when they happen.</p>
     <div class="grid-2">
       <div class="card chart-card">
         <div class="chart-title">Roadblock breakdown</div>
@@ -1591,9 +1745,9 @@ function renderSixMonthCharts(d){
   const strengthsSorted = [...d.strengths].sort((a,b)=>b.pct-a.pct);
   charts["chart6Strengths"] = chartFailed ? null : new Chart(document.getElementById("chart6Strengths"), {
     type:"bar",
-    data:{ labels:strengthsSorted.map(s=>s.label), datasets:[{ data:strengthsSorted.map(s=>s.pct), backgroundColor:PALETTE.pos, borderRadius:4, categoryPercentage:0.62 }] },
+    data:{ labels:strengthsSorted.map(s=>wrapLabel(s.label,18)), datasets:[{ data:strengthsSorted.map(s=>s.pct), backgroundColor:PALETTE.pos, borderRadius:4, maxBarThickness:16, categoryPercentage:0.62 }] },
     options:{ indexAxis:"y", responsive:true, maintainAspectRatio:false, animation:{duration:300},
-      layout:{ padding:{ right:20 } },
+      layout:{ padding:{ left:6, right:20 } },
       scales:{ x:{ min:0, max:110, title:{display:true,text:d.strengthsUnit}, grid:{color:PALETTE.line} }, y:{grid:{display:false}} },
       plugins:{ legend:{display:false}, tooltip:{backgroundColor:PALETTE.ink,cornerRadius:8},
         datalabels:{ display:true, anchor:"end", align:"right", color:PALETTE.ink, font:{weight:600,size:11}, formatter:v=>v+"%" } } }
@@ -1601,9 +1755,9 @@ function renderSixMonthCharts(d){
   const concernsSorted = [...d.concerns].sort((a,b)=>b.pct-a.pct);
   charts["chart6Concerns"] = chartFailed ? null : new Chart(document.getElementById("chart6Concerns"), {
     type:"bar",
-    data:{ labels:concernsSorted.map(s=>s.label), datasets:[{ data:concernsSorted.map(s=>s.pct), backgroundColor:PALETTE.neg, borderRadius:4, categoryPercentage:0.62 }] },
+    data:{ labels:concernsSorted.map(s=>wrapLabel(s.label,18)), datasets:[{ data:concernsSorted.map(s=>s.pct), backgroundColor:PALETTE.neg, borderRadius:4, maxBarThickness:16, categoryPercentage:0.62 }] },
     options:{ indexAxis:"y", responsive:true, maintainAspectRatio:false, animation:{duration:300},
-      layout:{ padding:{ right:20 } },
+      layout:{ padding:{ left:6, right:20 } },
       scales:{ x:{ min:0, max:80, title:{display:true,text:d.concernsUnit}, grid:{color:PALETTE.line} }, y:{grid:{display:false}} },
       plugins:{ legend:{display:false}, tooltip:{backgroundColor:PALETTE.ink,cornerRadius:8},
         datalabels:{ display:true, anchor:"end", align:"right", color:PALETTE.ink, font:{weight:600,size:11}, formatter:v=>v+"%" } } }
@@ -1670,6 +1824,31 @@ if (!location.hash) history.replaceState(null, "", HASH.overview);
 if (chartFailed) {
   document.querySelectorAll("details").forEach(d=>d.open = true);
 }
+
+/* ---------------------------------------------------------------------
+   About this data — dialog wiring (Esc + native <dialog> support click-away
+   is handled manually below since <dialog> only closes on backdrop click
+   if we detect the click landed outside the content box).
+   --------------------------------------------------------------------- */
+(function(){
+  const dialog = document.getElementById("aboutDialog");
+  const openBtn = document.getElementById("aboutOpenBtn");
+  const closeBtn = document.getElementById("aboutCloseBtn");
+  if (!dialog || !openBtn) return;
+
+  // populate 90-day methodology + exclusion note once, from NDR_DATA (unchanged)
+  const list = document.getElementById("aboutMethodologyList");
+  const excl = document.getElementById("aboutExclusionNote");
+  if (list) list.innerHTML = NDR_DATA.ninetyDay.methodology.map(m=>`<li>${esc(m)}</li>`).join("");
+  if (excl) excl.textContent = NDR_DATA.ninetyDay.exclusionNote;
+
+  openBtn.addEventListener("click", ()=> dialog.showModal());
+  closeBtn.addEventListener("click", ()=> dialog.close());
+  dialog.addEventListener("click", (e)=>{
+    if (e.target === dialog) dialog.close(); // click landed on backdrop, not content
+  });
+  // native <dialog> already closes on Escape
+})();
 
 })();
 </script>
