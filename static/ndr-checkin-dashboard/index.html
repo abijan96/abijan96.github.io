@@ -132,10 +132,15 @@ table.plain th,table.plain td{text-align:left; padding:8px 10px; border-bottom:1
 table.plain th{background:#F3F5F8; color:var(--text-2); font-weight:700; font-size:12.5px; text-transform:uppercase; letter-spacing:.03em}
 .dot-cell{display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:6px}
 
-.headline-tile{border-top:3px solid var(--pos)}
-.headline-tile.neg{border-top-color:var(--neg)}
-.headline-tile h3{font-size:15px; margin-bottom:6px; line-height:1.3}
-.headline-tile p{font-size:13.5px; color:var(--text-2); margin:0}
+.headline-tile .tile-label{font-size:12.5px; font-weight:700; color:var(--text-2); text-transform:uppercase; letter-spacing:.03em; margin:0 0 8px}
+.headline-tile .tile-hero{display:flex; align-items:baseline; gap:7px}
+.headline-tile .tile-hero .num{font-size:32px; font-weight:800; font-variant-numeric:tabular-nums; line-height:1}
+.tile-arrow{font-size:16px; font-weight:800}
+.tile-arrow.pos{color:#046032}
+.tile-arrow.neg{color:#9c1420}
+.tile-arrow.flat{color:var(--text-3)}
+.headline-tile .tile-spark{margin:8px 0 6px; line-height:0}
+.headline-tile .tile-sentence{font-size:13.5px; color:var(--text-2); margin:4px 0 0; line-height:1.4}
 
 .banner{background:#FFF8E6; border:1px solid #EFDBA0; color:#5C4A0A; border-radius:10px; padding:14px 18px; font-size:14px; margin:20px 0}
 
@@ -161,8 +166,21 @@ table.metric-table{width:100%; border-collapse:collapse; font-size:14px}
 table.metric-table th,table.metric-table td{text-align:left; padding:10px 12px; border-bottom:1px solid var(--line); vertical-align:middle}
 table.metric-table th{background:#F3F5F8; color:var(--text-2); font-weight:700; font-size:12px; text-transform:uppercase; letter-spacing:.03em}
 table.metric-table td:first-child{font-weight:600}
-table.concern-table td{font-size:13.5px; cursor:help}
+table.concern-table td{font-size:13.5px}
 table.concern-table .subhead td{background:#F7F8FA; font-weight:700; color:var(--text-2); font-size:12px; text-transform:uppercase; letter-spacing:.03em; cursor:default; padding:8px 12px}
+
+/* severity chip vocabulary for the concerns matrix — color = severity only,
+   never stage; the word on the chip is the only thing that carries meaning */
+.severity-chip{
+  display:inline-flex; align-items:center; padding:3px 10px; border-radius:999px;
+  font-size:12px; font-weight:700; white-space:nowrap; cursor:help;
+}
+.severity-chip:focus-visible{outline:2px solid var(--stage-30); outline-offset:2px}
+.severity-chip.top{background:var(--neg); color:#fff}
+.severity-chip.raised{background:var(--mix); color:#3d2e00}
+.severity-chip.improving{background:#E3F2E9; color:#046032}
+.concern-legend{display:flex; flex-wrap:wrap; align-items:center; gap:10px 16px; margin-top:10px; font-size:13px; color:var(--text-2)}
+.concern-legend .severity-chip{cursor:default}
 
 footer.site{border-top:1px solid var(--line); padding:20px 0 32px; font-size:13.5px; color:var(--text-2); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px}
 footer.site .about-link{background:none; border:1px solid var(--line); color:var(--stage-30); font-weight:600; font-size:12.5px; padding:5px 12px; border-radius:999px; cursor:pointer; font-family:inherit}
@@ -1115,27 +1133,113 @@ function table(headers, rows){
    matrix — full detail from NDR_DATA.overview.recurringConcerns lives in the
    cell's tooltip, so nothing here changes the underlying data, only how
    much of it is visible without hovering. */
-const CONCERN_SHORT = {
-  "IT / system issues": { d30:"Access delays, mostly resolved", d90:"13% reported roadblocks", m6:"Freezing, credit card, ERA" },
-  "Training gaps & accessibility": { d30:"Mixed feedback on training", d90:"Training timing (3 mentions)", m6:"Feedback mixed; workshops missed" },
-  "Remote engagement": { d30:"Mentioned in several sessions", d90:"Remote support suggested", m6:"About half of sessions" },
-  "HR / benefits timing": { d30:"Recurring roadblock; info late", d90:"HR/benefits timing (4 mentions)", m6:null },
-  "Goal & vision clarity": { d30:"Vision clarity raised sometimes", d90:"Task clarity (5 mentions)", m6:"'Soft goals' feedback mixed" },
-  "Leadership transitions": { d30:null, d90:null, m6:"Top concern; no protocol" },
-  "Cross-team integration": { d30:null, d90:"Top suggestion (6 mentions)", m6:"Varies by unit" },
-  "Ideas not captured": { d30:null, d90:null, m6:"No formal channel" },
-  "Payroll deduction accuracy": { d30:"Possible withholding error flagged", d90:null, m6:null }
-};
+/* ---------------------------------------------------------------------
+   Section 1 — headline tiles: metric name, 6-month hero number + trend
+   arrow vs 30-day, a 3-point sparkline, and one plain sentence. All verdicts
+   (arrow direction/color, sparkline shape) derive from NDR_DATA.overview
+   .mappedMetrics — never from the published-report comparison, which is
+   confined to the update-dot tooltip only.
+   --------------------------------------------------------------------- */
+function tileArrowInfo(from, to){
+  const diff = Math.round(to - from);
+  if (diff >= 3) return { glyph:"▲", cls:"pos" };
+  if (diff <= -3) return { glyph:"▼", cls:"neg" };
+  return { glyph:"→", cls:"flat" };
+}
+
+/* inline sparkline: 3 stage values on a fixed 60-100 scale, ~64x24px.
+   When the 90-day point is null (culture, not asked), only 2 points are
+   drawn with a dashed connector; the single endpoint dot always marks the
+   6-month value. */
+function sparkline(d30, d90, m6, color, ariaLabel){
+  const w=64, h=24, pad=4, min=60, max=100;
+  const yOf = v => h - pad - ((Math.max(min,Math.min(max,v)) - min) / (max - min)) * (h - 2*pad);
+  const xs = [pad, w/2, w-pad];
+  let pathD, dashAttr = "";
+  if (d90 == null) {
+    pathD = `M${xs[0]},${yOf(d30)} L${xs[2]},${yOf(m6)}`;
+    dashAttr = ' stroke-dasharray="3,3"';
+  } else {
+    pathD = `M${xs[0]},${yOf(d30)} L${xs[1]},${yOf(d90)} L${xs[2]},${yOf(m6)}`;
+  }
+  return `<svg class="tile-spark" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" role="img" aria-label="${esc(ariaLabel)}" focusable="false">
+    <path d="${pathD}" fill="none" stroke="${color}" stroke-width="2"${dashAttr}/>
+    <circle cx="${xs[2]}" cy="${yOf(m6)}" r="2.5" fill="${color}"/>
+  </svg>`;
+}
 
 function headlineTiles(d){
   const m = d.mappedMetrics;
-  const tiles = [
-    { claim:"Expectations climb through the whole journey", num:m[0].m6+"%", numLabel:"at 6 months", sub:`up from ${m[0].d30}% at 30 days`, accent:"pos" },
-    { claim:"Belonging is the one figure softening", num:m[1].m6+"%", numLabel:"at 6 months", sub:`down from ${m[1].d30}% at 30 days`, accent:"neg" },
-    { claim:"No-roadblocks eases, then returns by 6 months", num:m[6].m6+"%", numLabel:"no roadblocks, 6mo", sub:`peaked at ${m[6].d90}% at 90 days`, accent:"neg" },
-    { claim:"Culture beats the published numbers", num:m[5].m6+"%", numLabel:"culture, 6mo", sub:`published report said ${m[5].m6Pub}%`, accent:"pos" }
-  ];
-  return tiles;
+  const jobExp = m[0], belonging = m[1], culture = m[5], roadblocks = m[6];
+
+  const arrowColor = cls => cls==="pos" ? PALETTE.pos : cls==="neg" ? PALETTE.neg : PALETTE.neutral;
+  const sparkLabel = (d30,d90,m6) => d90==null
+    ? `${d30}% at 30 days, not asked at 90 days, ${m6}% at 6 months`
+    : `${d30}% at 30 days, ${d90}% at 90 days, ${m6}% at 6 months`;
+
+  const jobArrow = tileArrowInfo(jobExp.d30, jobExp.m6);
+  const belongArrow = tileArrowInfo(belonging.d30, belonging.m6);
+  const rbArrow = tileArrowInfo(roadblocks.d30, roadblocks.m6);
+  const cultureArrow = tileArrowInfo(culture.d30, culture.m6);
+
+  return [
+    { label:"Job expectations", metric:jobExp, arrow:jobArrow,
+      sentence:`Up from ${jobExp.d30}% at 30 days to ${jobExp.m6}% at 6 months.` },
+    { label:"Feeling part of the team", metric:belonging, arrow:belongArrow,
+      sentence:`Down from ${belonging.d30}% at 30 days to ${belonging.m6}% at 6 months.` },
+    { label:"Roadblock-free", metric:roadblocks, arrow:rbArrow,
+      sentence:`${roadblocks.m6}% report no roadblocks at 6 months — down from ${roadblocks.d90}% at 90 days.` },
+    { label:"Culture satisfaction", metric:culture, arrow:cultureArrow,
+      sentence:`Down from ${culture.d30}% at 30 days to ${culture.m6}% at 6 months.` }
+  ].map(t => ({
+    ...t,
+    color: arrowColor(t.arrow.cls),
+    sparkSVG: sparkline(t.metric.d30, t.metric.d90, t.metric.m6, arrowColor(t.arrow.cls), sparkLabel(t.metric.d30, t.metric.d90, t.metric.m6))
+  }));
+}
+
+/* ---------------------------------------------------------------------
+   Section 4 — concerns matrix severity mapping. Every non-empty cell in
+   NDR_DATA.overview.recurringConcerns is classified once here, by hand,
+   against the source text (never re-derived from anything else):
+     - "top"       = explicit "top concern" framing, or an unresolved
+                     structural impediment (no protocol/channel/process)
+     - "raised"    = mentions, requests, mixed feedback, or suggestions
+     - "improving" = explicit resolved/improving framing
+   Cell-by-cell:
+     IT / system issues        d30 improving ("mostly resolved")
+                                d90 raised ("reported by 13%...")
+                                m6  raised (lists active issues, not flagged top)
+     Training gaps & access.   d30/d90/m6 all raised ("mixed feedback"/"mentions")
+     Remote engagement         d30/d90/m6 all raised ("mentioned"/"suggestions")
+     HR / benefits timing      d30 top ("recurring roadblock category" = structural)
+                                d90 raised ("(4 mentions)")
+     Goal & vision clarity     d30/d90/m6 all raised ("raised"/"mentions"/"mixed")
+     Leadership transitions    m6 top (literal "Top concern; no transition protocols")
+     Cross-team integration    d90 raised ("top improvement SUGGESTION" = a suggestion)
+                                m6 raised ("varies by unit" reads descriptive, not flagged)
+     Ideas not captured        m6 top ("no formal ideas channel" = structural gap)
+     Payroll deduction acc.    d30 raised ("flagged" a possible issue)
+   --------------------------------------------------------------------- */
+const SEVERITY_MAP = {
+  "IT / system issues":            { d30:"improving", d90:"raised",  m6:"raised" },
+  "Training gaps & accessibility": { d30:"raised",    d90:"raised",  m6:"raised" },
+  "Remote engagement":             { d30:"raised",    d90:"raised",  m6:"raised" },
+  "HR / benefits timing":          { d30:"top",       d90:"raised",  m6:null },
+  "Goal & vision clarity":         { d30:"raised",    d90:"raised",  m6:"raised" },
+  "Leadership transitions":        { d30:null,        d90:null,      m6:"top" },
+  "Cross-team integration":        { d30:null,        d90:"raised",  m6:"raised" },
+  "Ideas not captured":            { d30:null,        d90:null,      m6:"top" },
+  "Payroll deduction accuracy":    { d30:"raised",    d90:null,      m6:null }
+};
+const SEVERITY_LABEL = { top:"Top concern", raised:"Raised", improving:"Improving" };
+const SEVERITY_RANK = { top:3, raised:2, improving:1 };
+function severityRank(sev){ return sev ? SEVERITY_RANK[sev] : 0; }
+function sortByUrgency(rows){
+  return [...rows].sort((a,b)=>{
+    const sa = SEVERITY_MAP[a.concern], sb = SEVERITY_MAP[b.concern];
+    return (severityRank(sb.m6)-severityRank(sa.m6)) || (severityRank(sb.d90)-severityRank(sa.d90)) || (severityRank(sb.d30)-severityRank(sa.d30));
+  });
 }
 
 function renderOverview(){
@@ -1149,14 +1253,19 @@ function renderOverview(){
 
     <div class="section-head first-section">
       <p class="eyebrow">Executive summary</p>
-      <h2>1. What's changed since the published reports</h2>
+      <h2>1. How onboarding is going</h2>
     </div>
+    <p class="section-takeaway">Most measures rise through six months; culture and roadblocks are the two to watch.</p>
     <div class="grid-4">
       ${tiles.map(t=>`
-        <div class="card headline-tile ${t.accent==='neg'?'neg':''}">
-          <h3>${esc(t.claim)}</h3>
-          <div class="num tabular" style="font-size:30px; margin:4px 0 2px">${t.num}</div>
-          <p>${esc(t.numLabel)} · ${esc(t.sub)}</p>
+        <div class="card headline-tile">
+          <p class="tile-label">${esc(t.label)}</p>
+          <div class="tile-hero">
+            <span class="num tabular">${t.metric.m6}%</span>${t.metric.m6Pub!=null?dotHTML(t.metric.m6,t.metric.m6Pub):""}
+            <span class="tile-arrow ${t.arrow.cls}" title="vs. 30 days">${t.arrow.glyph}</span>
+          </div>
+          ${t.sparkSVG}
+          <p class="tile-sentence">${esc(t.sentence)}</p>
         </div>`).join("")}
     </div>
 
@@ -1204,17 +1313,22 @@ function renderOverview(){
       <p class="eyebrow">Recurring themes</p>
       <h2>4. Concerns Across the Journey</h2>
     </div>
-    <p class="section-takeaway">Four issues show up at every stage — those are systemic; the rest are specific to one point in the journey.</p>
+    <p class="section-takeaway">Four issues follow new hires through every stage — and leadership transitions is the loudest flag at six months.</p>
     <div class="card table-wrap">
       <table class="plain concern-table">
         <thead><tr><th>Concern</th><th>30-Day</th><th>90-Day</th><th>6-Month</th></tr></thead>
         <tbody>
-          <tr class="subhead"><td colspan="4">Seen at every stage</td></tr>
-          ${every.map(r=>concernRow(r, d)).join("")}
-          <tr class="subhead"><td colspan="4">Stage-specific</td></tr>
-          ${specific.map(r=>concernRow(r, d)).join("")}
+          <tr class="subhead"><td colspan="4">Raised at every check-in</td></tr>
+          ${sortByUrgency(every).map(r=>concernRow(r)).join("")}
+          <tr class="subhead"><td colspan="4">Raised at one point in the journey</td></tr>
+          ${sortByUrgency(specific).map(r=>concernRow(r)).join("")}
         </tbody>
       </table>
+      <div class="concern-legend">
+        <span class="severity-chip top">Top concern</span>
+        <span class="severity-chip raised">Raised</span>
+        <span class="severity-chip improving">Improving</span>
+      </div>
     </div>
 
     <div class="section-head">
@@ -1233,17 +1347,18 @@ function renderOverview(){
   `;
   renderCharts_overview(d);
 }
-function concernRow(r, d){
-  const short = CONCERN_SHORT[r.concern] || {};
-  const cell = (short_text, full, color)=>{
-    if (!full) return `<td><span style="color:${PALETTE.neutral}">—</span></td>`;
-    return `<td title="${esc(full)}"><span class="dot-cell" style="background:${color}"></span>${esc(short_text||full)}</td>`;
+function concernRow(r){
+  const sev = SEVERITY_MAP[r.concern] || {};
+  const cell = (stageName, full, severity)=>{
+    if (!full || !severity) return `<td><span style="color:${PALETTE.neutral}">—</span></td>`;
+    const label = `${stageName}: ${full}`;
+    return `<td><span class="severity-chip ${severity}" tabindex="0" title="${esc(label)}" aria-label="${esc(label)}">${esc(SEVERITY_LABEL[severity])}</span></td>`;
   };
   return `<tr>
     <td>${esc(r.concern)}</td>
-    ${cell(short.d30, r.d30, PALETTE.stage30)}
-    ${cell(short.d90, r.d90, PALETTE.stage90)}
-    ${cell(short.m6, r.m6, PALETTE.stage6m)}
+    ${cell("30-Day", r.d30, sev.d30)}
+    ${cell("90-Day", r.d90, sev.d90)}
+    ${cell("6-Month", r.m6, sev.m6)}
   </tr>`;
 }
 function renderCharts_overview(d){
