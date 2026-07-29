@@ -1,0 +1,1677 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Notre Dame Research — New-Employee Check-In Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0C2340; --text-2:#425466; --text-3:#6B7A8C;
+  --page:#FCFCFB; --card:#FFFFFF; --line:#E4E8ED;
+  --stage-30:#2B6CB0; --stage-90:#00843D; --stage-6m:#B08900;
+  --pos:#00843D; --pos-2:#69B57E; --mix:#B08900; --neg:#AE1C28; --neutral:#8A97A6;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--page); color:var(--ink);
+  font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-size:15px; line-height:1.6; font-display:swap;
+}
+.wrap{max-width:1160px; margin:0 auto; padding:0 24px}
+h1,h2,h3{margin:0}
+button{font-family:inherit}
+.tabular{font-variant-numeric:tabular-nums}
+
+/* header */
+header.site{background:var(--ink); color:#fff; padding:20px 0; position:sticky; top:0; z-index:30}
+header.site h1{font-size:19px; font-weight:800}
+header.site p{margin:4px 0 0; font-size:13px; color:#C7D2E0}
+
+/* tabs */
+nav.tabs{background:var(--ink); position:sticky; top:64px; z-index:29; border-bottom:1px solid rgba(255,255,255,.12)}
+nav.tabs .wrap{display:flex; overflow-x:auto; gap:4px}
+nav.tabs button{
+  background:none; border:none; color:#C7D2E0; padding:14px 18px 12px;
+  font-size:14px; font-weight:600; cursor:pointer; border-bottom:3px solid transparent;
+  white-space:nowrap;
+}
+nav.tabs button[aria-selected="true"]{color:#fff}
+nav.tabs button:focus-visible{outline:2px solid #fff; outline-offset:-2px}
+nav.tabs button[data-stage="overview"][aria-selected="true"]{border-bottom-color:#fff}
+nav.tabs button[data-stage="thirtyDay"][aria-selected="true"]{border-bottom-color:var(--stage-30)}
+nav.tabs button[data-stage="ninetyDay"][aria-selected="true"]{border-bottom-color:var(--stage-90)}
+nav.tabs button[data-stage="sixMonth"][aria-selected="true"]{border-bottom-color:var(--stage-6m)}
+
+.context-strip{background:#fff; border-bottom:1px solid var(--line); font-size:13px; color:var(--text-2); padding:10px 0}
+.context-strip .wrap{display:flex; flex-wrap:wrap; gap:8px 16px; align-items:center}
+.chip{display:inline-flex; align-items:center; gap:5px; background:#EEF2F6; color:var(--text-2); border-radius:999px; padding:3px 11px; font-size:12px; font-weight:600}
+.chip.method{background:#E8EEF6; color:var(--ink)}
+
+.takeaway{font-size:15px; color:var(--ink); font-weight:600; padding:12px 0 0}
+
+main{padding-bottom:60px}
+section.panel{display:none}
+section.panel.active{display:block}
+
+.eyebrow{font-size:12px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--text-3); margin:0 0 4px}
+.section-head{margin:40px 0 16px}
+.section-head h2{font-size:20px; font-weight:800}
+.section-head .caption{color:var(--text-2); font-size:14px; margin-top:4px}
+section.first-section .section-head{margin-top:28px}
+
+.card{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:22px; box-shadow:0 1px 2px rgb(12 35 64 / .05)}
+.grid-4{display:grid; grid-template-columns:repeat(4,1fr); gap:16px}
+.grid-2{display:grid; grid-template-columns:1fr 1fr; gap:16px}
+@media (max-width:1000px){.grid-4{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:640px){.grid-4{grid-template-columns:1fr} .grid-2{grid-template-columns:1fr}}
+@media (max-width:900px){.grid-2{grid-template-columns:1fr}}
+
+/* stat tile */
+.tile{display:flex; flex-direction:column; gap:4px}
+.tile .num{font-size:34px; font-weight:800; font-variant-numeric:tabular-nums; line-height:1.1; display:flex; align-items:baseline; gap:6px}
+.tile .label{font-size:13px; font-weight:600; color:var(--text-2)}
+.tile .ctx{font-size:12px; color:var(--text-3)}
+.delta{font-weight:700}
+.delta.pos{color:var(--pos)} .delta.neg{color:var(--neg)}
+
+/* dot marker + tooltip */
+.dot{
+  display:inline-block; width:15px; height:15px; line-height:15px; text-align:center;
+  border-radius:50%; background:var(--stage-30); color:#fff; font-size:10px; font-weight:800;
+  cursor:help; vertical-align:middle; position:relative;
+}
+.dot:focus-visible{outline:2px solid var(--stage-30); outline-offset:2px}
+
+/* flag badge */
+.flag{display:inline-flex; align-items:center; gap:4px; background:#FBE8E9; color:var(--neg); font-size:11px; font-weight:700; padding:2px 8px; border-radius:999px}
+
+/* chart card */
+.chart-card .chart-title{font-size:15px; font-weight:700; margin-bottom:2px}
+.chart-card .chart-caption{font-size:13px; color:var(--text-2); margin:8px 0 0}
+.chart-card .read-line{font-size:12px; color:var(--text-3); margin-top:6px}
+.chart-holder{position:relative; width:100%}
+.chart-holder canvas{max-width:100%}
+details.datatable{margin-top:10px}
+details.datatable summary{cursor:pointer; font-size:12.5px; color:var(--stage-30); font-weight:600}
+details.datatable table{width:100%; border-collapse:collapse; margin-top:8px; font-size:13px}
+details.datatable th,details.datatable td{text-align:left; padding:6px 8px; border-bottom:1px solid var(--line)}
+details.datatable th{color:var(--text-3); font-weight:600}
+.table-wrap{overflow-x:auto}
+
+/* fy chips */
+.fy-chips{display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap}
+.fy-chips button{
+  border:1px solid var(--line); background:#fff; color:var(--text-2); border-radius:999px;
+  padding:6px 14px; font-size:13px; font-weight:600; cursor:pointer;
+}
+.fy-chips button[aria-pressed="true"]{background:var(--ink); color:#fff; border-color:var(--ink)}
+.fy-chips button:focus-visible{outline:2px solid var(--stage-30); outline-offset:2px}
+
+/* quote card */
+.quote{border-left:3px solid var(--stage-30); padding:10px 16px; font-style:italic; color:var(--ink)}
+.quote footer{margin-top:6px; font-style:normal; font-size:12px; color:var(--text-3)}
+.quote-strip{background:#F3F7FB; border-left:3px solid var(--stage-30); padding:12px 16px; font-style:italic; border-radius:0 8px 8px 0; margin-top:12px}
+
+/* theme / action cards */
+.theme-card h3{font-size:15px; margin-bottom:6px}
+.theme-card p{font-size:14px; color:var(--text-2); margin:0 0 8px}
+.action-card{display:flex; gap:12px}
+.action-card .n{font-weight:800; font-size:18px; color:var(--stage-30)}
+.action-card h3{font-size:14.5px; margin-bottom:4px}
+.action-card p{font-size:13.5px; color:var(--text-2); margin:0}
+
+.list-plain{margin:0; padding-left:18px; font-size:14px; color:var(--text-2)}
+.list-plain li{margin-bottom:6px}
+
+table.plain{width:100%; border-collapse:collapse; font-size:13.5px}
+table.plain th,table.plain td{text-align:left; padding:8px 10px; border-bottom:1px solid var(--line)}
+table.plain th{background:#F3F5F8; color:var(--text-2); font-weight:700; font-size:12.5px; text-transform:uppercase; letter-spacing:.03em}
+.dot-cell{display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:6px}
+
+.headline-tile{border-top:3px solid var(--pos)}
+.headline-tile.neg{border-top-color:var(--neg)}
+.headline-tile h3{font-size:15px; margin-bottom:6px}
+.headline-tile p{font-size:13.5px; color:var(--text-2); margin:0}
+
+.banner{background:#FFF8E6; border:1px solid #EFDBA0; color:#5C4A0A; border-radius:10px; padding:14px 18px; font-size:14px; margin:20px 0}
+
+footer.site{border-top:1px solid var(--line); padding:26px 0 40px; font-size:12.5px; color:var(--text-3)}
+footer.site .legend-dot{display:inline-block; width:12px; height:12px; border-radius:50%; background:var(--stage-30); vertical-align:middle; margin-right:6px}
+
+.notice{background:#FBE8E9; border:1px solid #F1C0C3; color:var(--neg); padding:12px 18px; border-radius:8px; margin:16px 0; font-size:14px}
+
+@media (max-width:900px){
+  header.site{position:static}
+  nav.tabs{position:sticky; top:0}
+}
+@media (prefers-reduced-motion:reduce){ *{animation:none !important; transition:none !important} }
+@media print{
+  nav.tabs, .fy-chips, header.site{display:none}
+  section.panel{display:block !important; break-before:page}
+  details.datatable{display:block}
+  * {print-color-adjust:exact; -webkit-print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+
+<header class="site"><div class="wrap">
+  <h1>Notre Dame Research — New-Employee Check-In Dashboard</h1>
+  <p>Overview · 30-Day · 90-Day · 6-Month check-ins · Sept 2023 – Jul 2026</p>
+</div></header>
+
+<nav class="tabs" role="tablist" aria-label="Dashboard sections"><div class="wrap">
+  <button role="tab" data-stage="overview" aria-selected="true" id="tab-overview" aria-controls="panel-overview">Overview</button>
+  <button role="tab" data-stage="thirtyDay" aria-selected="false" id="tab-thirtyDay" aria-controls="panel-thirtyDay">30-Day</button>
+  <button role="tab" data-stage="ninetyDay" aria-selected="false" id="tab-ninetyDay" aria-controls="panel-ninetyDay">90-Day</button>
+  <button role="tab" data-stage="sixMonth" aria-selected="false" id="tab-sixMonth" aria-controls="panel-sixMonth">6-Month</button>
+</div></nav>
+
+<div class="context-strip"><div class="wrap" id="contextStrip"></div></div>
+
+<div id="cdnNotice"></div>
+
+<main class="wrap">
+  <section class="panel active" id="panel-overview" role="tabpanel" aria-labelledby="tab-overview"></section>
+  <section class="panel" id="panel-thirtyDay" role="tabpanel" aria-labelledby="tab-thirtyDay"></section>
+  <section class="panel" id="panel-ninetyDay" role="tabpanel" aria-labelledby="tab-ninetyDay"></section>
+  <section class="panel" id="panel-sixMonth" role="tabpanel" aria-labelledby="tab-sixMonth"></section>
+</main>
+
+<footer class="site"><div class="wrap">
+  Source: NDR 30-Day Check-In, 90-Day Onboarding Survey, and 6-Month Check-In published reports, plus sessions collected since ·
+  <span class="legend-dot"></span> Updated with sessions collected through Jul 2026 ·
+  Data through Jul 24, 2026 · Personal names removed from all quotes · Static dashboard — data set at build time.
+</div></footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
+<script>
+/* ======================================================================
+   NDR_DATA — merged dataset. Every figure that differs from the value in
+   the published reports carries a `pub` (or `pubPositive`/`pubMixed`/
+   `pubV`) sibling field, used to render the dot marker + tooltip pair.
+   ====================================================================== */
+const NDR_DATA = {
+  meta: {
+    org: "Notre Dame Research",
+    title: "New-Employee Check-In Dashboard",
+    stages: ["thirtyDay","ninetyDay","sixMonth"],
+    unitsRepresented: ["NDRAC","FLSC","CBI","IDEA Center","HCRI","NDTL","Development","Comms","RPM","CRC","iNDustry Labs","NDnano","CHCP","P&P"],
+    questionReference: [
+      { id:"Q1", label:"Job Expected", text:"Is this job what you expected?" },
+      { id:"Q2", label:"Challenged", text:"Are you feeling challenged/bored?" },
+      { id:"Q3", label:"Welcomed", text:"Have you felt welcomed?" },
+      { id:"Q4", label:"Roadblocks", text:"Any roadblocks or challenges?" },
+      { id:"Q5-6", label:"Communication", text:"Is team communication simple? / How has your team helped onboarding?" },
+      { id:"Q7", label:"Training Needs", text:"Tools/training to be more successful?" },
+      { id:"Q8", label:"Culture", text:"NDR culture - likes and improvements?" },
+      { id:"Q9", label:"Goals", text:"Goals for next 30 days?" },
+      { id:"Q10", label:"Expertise", text:"Expertise that could be better utilized?" },
+      { id:"Q11", label:"Adjustments", text:"Adjustments to role/workflow?" }
+    ]
+  },
+
+  thirtyDay: {
+    name: "30-Day Check-In",
+    method: "Focus groups",
+    dateRange: "Sept 2023 – Jul 2026",
+    dateRangePub: "Sept 2023 – Feb 2026",
+    sessions: 36, sessionsPub: 28,
+    participants: "~71", participantsPub: "~60",
+    newSessions: 8,
+    questions: 11, fiscalYears: 3,
+    dataNote: "Focus-group notes from 36 sessions across 3 fiscal years — 28 sessions behind the published report, plus 8 collected since. Figures are the share of participants/sessions giving a positive response.",
+    kpiTargetPct: 80,
+    kpis: [
+      { label:"Job Matches Expectations", pct:91, pub:88 },
+      { label:"Felt Welcomed", pct:100 },
+      { label:"Engaged (Not Bored)", pct:97, pub:96 },
+      { label:"Communication Effective", pct:94, pub:92 },
+      { label:"Team Helped Onboarding", pct:97, pub:96 },
+      { label:"Culture Satisfaction", pct:90, pub:87 },
+      { label:"No Roadblocks", pct:70, pub:72 }
+    ],
+    kpiSummary: "Six of seven measures are above the 80% target. No Roadblocks sits at 70%, just under — welcoming culture and engagement remain consistent strengths.",
+    sentiment: [
+      { q:"Q1", label:"Job Expected", positive:91, mixed:9, flag:false, pubPositive:88, pubMixed:12 },
+      { q:"Q2", label:"Challenged", positive:97, mixed:3, flag:false, pubPositive:96, pubMixed:4 },
+      { q:"Q3", label:"Welcomed", positive:100, mixed:0, flag:false },
+      { q:"Q4", label:"Roadblocks", positive:33, mixed:67, flag:true, pubPositive:28, pubMixed:72 },
+      { q:"Q5-6", label:"Communication", positive:94, mixed:6, flag:false, pubPositive:92, pubMixed:8 },
+      { q:"Q7", label:"Training Needs", positive:65, mixed:35, flag:false, pubPositive:55, pubMixed:45 },
+      { q:"Q8", label:"Culture", positive:90, mixed:10, flag:false, pubPositive:87, pubMixed:13 },
+      { q:"Q9", label:"Goals", positive:84, mixed:16, flag:false, pubPositive:80, pubMixed:20 },
+      { q:"Q10", label:"Expertise", positive:77, mixed:23, flag:false, pubPositive:70, pubMixed:30 },
+      { q:"Q11", label:"Adjustments", positive:66, mixed:34, flag:false, pubPositive:60, pubMixed:40 }
+    ],
+    sentimentFlagRule: "Flagged when positive responses are under 60%, or mixed responses are over 40%.",
+    byFY: [
+      { fy:"FY24", dateRange:"Sept 2023 – June 2024", sessions:9, participants:"~15",
+        note:"First fiscal year of data collection.",
+        kpis:{ "Job Match":90,"Welcomed":100,"Engaged":95,"Communication":90,"Team Support":95,"Culture":85,"No Roadblocks":65 },
+        observations:[
+          "Structured onboarding praised by multiple employees",
+          "Learning curve acknowledged but welcomed",
+          "Some system access issues (Redmine, card access)",
+          "Industry hires noted softer goal structure than private sector",
+          "Culture questions revealed desire for long-term vision clarity"
+        ],
+        roadblocks:["Redmine not working properly","Card access delays to test cells","Acronym/jargon confusion ('no book to go by')"] },
+      { fy:"FY25", dateRange:"Aug 2024 – Aug 2025", sessions:13, participants:"~37",
+        note:"Largest data set across fiscal years.",
+        kpis:{ "Job Match":85,"Welcomed":100,"Engaged":95,"Communication":92,"Team Support":95,"Culture":88,"No Roadblocks":72 },
+        observations:[
+          "Buddy system highly effective",
+          "HR benefits communication issues identified",
+          "G-Suite training requested by Microsoft background users",
+          "Remote workers appreciated ice cream gift gesture",
+          "Some requested return to in-person HR orientation"
+        ],
+        roadblocks:["No email about health benefits signup","Difficulty finding benefits enrollment info","HR orientation suggested to return to in-person format"] },
+      { fy:"FY26", dateRange:"July 2025 – Jul 2026", dateRangePub:"July 2025 – Feb 2026",
+        sessions:14, sessionsPub:6, participants:"~19", participantsPub:"~8",
+        note:"8 sessions collected since the published report are folded in below (2 in July 2026 may belong to FY27 under a strict fiscal-year convention — grouped with FY26 here to match the source folder).",
+        kpis:{
+          "Job Match":{v:98,pub:95}, "Welcomed":100, "Engaged":100,
+          "Communication":{v:98,pub:95}, "Team Support":100,
+          "Culture":{v:96,pub:90}, "No Roadblocks":{v:70,pub:80}
+        },
+        observations:[
+          "Highest overall satisfaction scores across all fiscal years",
+          "Welcome baskets appreciated by new hires",
+          "JOVE videos praised as valuable resource",
+          "Most employees feel fully utilized in their roles",
+          "Sessions collected since the report show the same pattern: strong culture and engagement, with roadblocks (mostly resolved system-access delays) the one area to watch"
+        ],
+        improvements:[
+          "70% report no roadblocks (down slightly from the published report's 80%, still well ahead of FY24's 65%)",
+          "Culture satisfaction now 96%, up from 90% in the published report",
+          "100% engagement rate held"
+        ] }
+    ],
+    roadblockBreakdown: [
+      { label:"No Roadblocks Reported", pct:70, pub:72 },
+      { label:"IT/System Access", pct:18, pub:12 },
+      { label:"HR/Benefits Confusion", pct:8, pub:10 },
+      { label:"Training Gaps", pct:4, pub:6 }
+    ],
+    roadblockDetails: [
+      "IT/System Access: Card access delays, Redmine issues, system login problems",
+      "HR/Benefits: No email about health benefits, difficulty finding enrollment info",
+      "Training Gaps: HR orientation should be in-person, training notifications delayed",
+      "Acronym Confusion: Technical jargon with no reference guide",
+      "Sessions collected since the report: monitor/system access, a prior-system access lag, and an NDA-gated access delay — all minor and resolved during onboarding"
+    ],
+    positiveNote: "Problems that arise are typically resolved quickly: 'Any problems that I had got answered and resolved very quickly.'",
+    strengths: [
+      { label:"Welcoming Culture", pct:100 },
+      { label:"Team Support", pct:96 },
+      { label:"Employee Engagement", pct:96 },
+      { label:"Buddy System", pct:95 },
+      { label:"Structured Onboarding", pct:92 }
+    ],
+    concerns: [
+      { label:"Acronym Confusion", pct:40 },
+      { label:"Remote Engagement", pct:35 },
+      { label:"Vision Clarity", pct:30 },
+      { label:"IT/System Access", pct:28 },
+      { label:"HR Benefits Info", pct:25 }
+    ],
+    concernsUnit: "How often the issue came up (% of sessions)",
+    strengthsUnit: "Score (%)",
+    strengthsText: [
+      "Welcoming culture - universal across all sessions and fiscal years",
+      "Buddy system - highly effective for new hire support",
+      "Structured onboarding - spreadsheets with links praised frequently",
+      "Team communication - regular 1:1s and chat working well"
+    ],
+    concernsText: [
+      "IT/System access delays - card access, system logins",
+      "HR benefits information - arrives too late, no confirmation",
+      "Acronym/jargon overload - new hires overwhelmed",
+      "Remote worker engagement - limited NDR culture exposure"
+    ],
+    themes: [
+      { title:"Structured Onboarding Works", body:"Employees consistently praise the organized onboarding process.", quote:"The onboarding has been organized. Loved the spreadsheet with links and was assigned a buddy." },
+      { title:"Learning Curve is Welcome", body:"New employees appreciate the challenge. No one reports being bored.", quote:"Drinking from the firehose but starting to get an idea of what is going on." },
+      { title:"IT Access is a Friction Point", body:"Card access, system logins, and similar access issues are recurring frustrations in the first 30 days. These are solvable with process improvements.", quote:null },
+      { title:"HR Benefits Need Earlier Communication", body:"Multiple employees report not receiving health benefits enrollment information, or finding it difficult to locate. No confirmation after signing up adds uncertainty.", quote:null },
+      { title:"Acronyms Create Confusion", body:"New hires from industry particularly struggle with academic/research jargon without a reference guide.", quote:"Lot of acronyms - no book to go by." }
+    ],
+    recommendations: [
+      { title:"Streamline IT/System Access", body:"Create pre-boarding checklist to ensure card access, system logins, and system access are ready before day one. Track completion rates." },
+      { title:"Fix HR Benefits Communication", body:"Send benefits enrollment email within first week. Add confirmation email after enrollment. Create clear guide with deadlines." },
+      { title:"Create NDR Acronym Guide", body:"Develop a reference document for common NDR terminology and acronyms. Include in onboarding materials and make searchable." },
+      { title:"Consider In-Person HR Orientation", body:"Multiple employees requested return to in-person HR orientation. Evaluate feasibility and hybrid options." },
+      { title:"Develop G-Suite Basics Training", body:"Create training module for employees coming from Microsoft environments. Many struggle with G-Suite transition." },
+      { title:"Clarify Long-Term Vision", body:"Help new employees understand NDR's mission and goals. Address the question: 'What are we going for?'" },
+      { title:"Verify Payroll Deduction Accuracy", body:"A session collected since the published report flagged a possible retirement-contribution withholding error. Confirm payroll deduction rates are set correctly for new hires." }
+    ]
+  },
+
+  ninetyDay: {
+    name: "90-Day Onboarding Survey",
+    method: "Survey (1–5 scale)",
+    dateRange: "Oct 2023 – Feb 2026",
+    validResponses: 48,
+    exclusionNote: "2 test responses were identified and excluded from analysis. Final dataset: 48 valid responses.",
+    overallScore: 4.47, scaleMax: 5.0, positiveRatePct: 96, yoyImprovement: 0.21, targetScore: 4.0,
+    keyFindings: [
+      "100% of employees are happy with their decision to work at NDR",
+      "100% know where to go for questions about their role",
+      "100% rate manager communication as effective",
+      "94% report their manager helped establish goals",
+      "All measures improved from 2024 to 2025 except one (Manager Communication: -0.14)"
+    ],
+    questionScores: [
+      { q:"Q1", label:"Clear job expectations", score:4.44, positivePct:98, n:48 },
+      { q:"Q2", label:"Know where to ask questions", score:4.54, positivePct:100, n:48 },
+      { q:"Q3", label:"Happy with NDR decision", score:4.75, positivePct:100, n:48 },
+      { q:"Q4", label:"Feel part of NDR", score:4.44, positivePct:98, n:48 },
+      { q:"Q5", label:"Manager helped establish goals", score:4.69, positivePct:94, n:48, type:"yesno" },
+      { q:"Q6", label:"Manager communicates effectively", score:4.67, positivePct:100, n:48 },
+      { q:"Q7", label:"Manager provides feedback", score:4.52, positivePct:96, n:48 },
+      { q:"Q8", label:"Feel challenged and engaged", score:4.44, positivePct:96, n:48 },
+      { q:"Q9", label:"Feel part of team", score:4.44, positivePct:96, n:48 },
+      { q:"Q10", label:"No roadblocks", score:4.00, positivePct:87, n:47, type:"reverse" },
+      { q:"Q11", label:"Manager discussed progress", score:4.30, positivePct:94, n:47 }
+    ],
+    scoreBands: { excellent:"4.5+", good:"4.0–4.49" },
+    scoreSummary: "All 11 survey questions exceeded the 4.0 target. Five reached the 'Excellent' band (4.5+).",
+    responseDistribution: {
+      note: "As reported (n=48; Q11 n=47). Q5 (Yes/No) and Q10 (reverse-scored) are shown separately as special questions instead.",
+      categories: ["Strongly Agree","Agree","Disagree","Strongly Disagree"],
+      rows: [
+        { q:"Q1", label:"Clear expectations", sa:48, a:50, d:2, sd:0 },
+        { q:"Q2", label:"Know where to ask", sa:54, a:46, d:0, sd:0 },
+        { q:"Q3", label:"Happy with NDR", sa:75, a:25, d:0, sd:0 },
+        { q:"Q4", label:"Feel part of NDR", sa:48, a:50, d:2, sd:0 },
+        { q:"Q6", label:"Manager communicates", sa:67, a:33, d:0, sd:0 },
+        { q:"Q7", label:"Manager feedback", sa:60, a:35, d:4, sd:0 },
+        { q:"Q8", label:"Challenged/engaged", sa:52, a:44, d:4, sd:0 },
+        { q:"Q9", label:"Part of team", sa:52, a:44, d:4, sd:0 },
+        { q:"Q11", label:"Progress discussed", sa:45, a:49, d:4, sd:2 }
+      ]
+    },
+    specialQuestions: {
+      q5: { title:"Q5: Manager Helped Establish Goals", yes:45, no:3, total:48, yesPct:94, noPct:6 },
+      q10:{ title:"Q10: Roadblocks Preventing Job Performance", noRoadblocks:41, hasRoadblocks:6, total:47, noPct:87, hasPct:13 },
+      observations: [
+        "Goal Setting (Q5): 94% of employees report their manager helped establish goals within the first 90 days. 3 employees (6%) indicated their manager did not help with goal setting.",
+        "Roadblocks (Q10): 87% of employees report no significant roadblocks preventing job performance. 6 employees (13%) identified roadblocks worth a targeted follow-up."
+      ]
+    },
+    yoy: {
+      summary: "Overall satisfaction improved from 4.34 to 4.55 (+0.21 points). Ten of eleven areas improved.",
+      year2024:{ n:19, overall:4.34 }, year2025:{ n:25, overall:4.55 },
+      deltas: [
+        { label:"Challenged/engaged", delta:0.35 }, { label:"Feel part of NDR", delta:0.35 }, { label:"Feel part of team", delta:0.35 },
+        { label:"Manager feedback", delta:0.28 }, { label:"Manager helped goals", delta:0.26 }, { label:"Happy with NDR", delta:0.26 },
+        { label:"No roadblocks", delta:0.19 }, { label:"Know where to ask", delta:0.18 }, { label:"Progress discussed", delta:0.11 },
+        { label:"Clear expectations", delta:0.11 }, { label:"Manager communicates", delta:-0.14 }
+      ],
+      trendTable: [
+        { metric:"Feel part of NDR", y2024:4.21, y2025:4.56, change:"+0.35" },
+        { metric:"Feel part of team", y2024:4.21, y2025:4.56, change:"+0.35" },
+        { metric:"Feel challenged/engaged", y2024:4.21, y2025:4.56, change:"+0.35" },
+        { metric:"Manager provides feedback", y2024:4.32, y2025:4.60, change:"+0.28" },
+        { metric:"Happy with NDR decision", y2024:4.58, y2025:4.84, change:"+0.26" },
+        { metric:"Manager communicates", y2024:4.74, y2025:4.60, change:"-0.14" }
+      ],
+      declineNote: "Manager communicates is the only area showing decline; it remains above target at 4.60."
+    },
+    overallTrend: {
+      note: "2023 (3 responses) and 2026 year-to-date (1 response) are very small samples — read with caution.",
+      points: [
+        { year:"2023", responses:3, sharePct:6, score:4.79 },
+        { year:"2024", responses:19, sharePct:40, score:4.34 },
+        { year:"2025", responses:25, sharePct:52, score:4.55 },
+        { year:"2026 (YTD)", responses:1, sharePct:2, score:4.64 }
+      ]
+    },
+    openEnded: {
+      liked: { title:"What Employees Liked", responsesNote:"42 substantive responses", items:[
+        { label:"Structure/Organization", mentions:14 }, { label:"Personal Connections", mentions:10 },
+        { label:"Feeling Part of Team", mentions:9 }, { label:"Welcoming Culture", mentions:8 },
+        { label:"Training Quality", mentions:6 }, { label:"Manager Support", mentions:4 } ] },
+      improvements: { title:"Improvement Suggestions", responsesNote:"21 substantive responses", items:[
+        { label:"Cross-team Integration", mentions:6 }, { label:"Task Clarity/Due Dates", mentions:5 },
+        { label:"HR/Benefits Timing", mentions:4 }, { label:"Resource Centralization", mentions:4 },
+        { label:"Interview Process", mentions:3 }, { label:"New Employee Cohort", mentions:3 },
+        { label:"Training Timing", mentions:3 }, { label:"Remote Support", mentions:1 } ] },
+      valuedMost: [
+        "Structured onboarding process with clear checklists and timelines",
+        "Personal connections through meet-and-greets and team introductions",
+        "Welcoming culture and supportive colleagues",
+        "Self-paced training with multiple touchpoints"
+      ],
+      areasForImprovement: [
+        "Cross-team integration: Better understanding of how NDR teams connect",
+        "Task clarity: Clearer outlines with due dates for onboarding tasks",
+        "HR/Benefits: Earlier access to benefits enrollment information",
+        "Resource centralization: Single source for templates and guides"
+      ]
+    },
+    recommendations: [
+      { title:"Maintain Current Strengths", body:"Continue the structured onboarding approach, personal touchpoints, and welcoming culture that employees consistently praised." },
+      { title:"Address Cross-Team Integration", body:"Develop an NDR org chart and create opportunities for new employees to learn about other teams and how departments interconnect." },
+      { title:"Improve Task Clarity", body:"Add clear due dates to onboarding checklists and ensure automated task notifications reach new hires reliably." },
+      { title:"Streamline HR Processes", body:"Coordinate with HR to provide benefits information earlier in the onboarding process, ideally within the first week." },
+      { title:"Create Resource Library", body:"Develop a centralized repository of templates, guides, and role-specific resources for new employees." },
+      { title:"Monitor Manager Communication", body:"Investigate the slight decline in manager communication scores and provide support resources if needed." },
+      { title:"Support Remote Employees", body:"Develop specific strategies to help remote employees feel connected to NDR and their teams." }
+    ],
+    methodology: [
+      "Scale: Strongly Agree=5, Agree=4, Neutral=3, Disagree=2, Strongly Disagree=1",
+      "Q5 (Yes/No): Yes=5, No=1",
+      "Q10 (Roadblocks): Reverse scored - Disagree indicates no roadblocks (positive)",
+      "Overall Score: Mean of all 11 question scores",
+      "Positive Rate: Percentage of Strongly Agree + Agree responses"
+    ]
+  },
+
+  sixMonth: {
+    name: "6-Month Check-In",
+    method: "Focus groups",
+    dateRange: "Mar 2024 – Jul 2026", dateRangePub: "Mar 2024 – Jan 2026",
+    sessions: 12, sessionsPub: 8,
+    participants: "~33", participantsPub: "~28",
+    newSessions: 4,
+    questions: 11,
+    responsesCaptured: 36, responsesCapturedPub: 31,
+    dataNote: "Focus-group notes from 12 sessions — 8 sessions behind the published report, plus 4 collected since. 2 blank templates and 1 session log that cuts off before questions were recorded are excluded.",
+    kpiBands: { excellent:"90%+", good:"70–89%", needsAttention:"under 70%" },
+    kpis: [
+      { label:"Job Matches Expectations", pct:100 },
+      { label:"Felt Welcomed", pct:92, pub:100 },
+      { label:"Engaged (Not Bored)", pct:100 },
+      { label:"Communication Effective", pct:100 },
+      { label:"Team Helped Onboarding", pct:100 },
+      { label:"Culture Satisfaction", pct:83, pub:75 },
+      { label:"No Roadblocks", pct:70, pub:67 }
+    ],
+    kpiSummary: "Four of seven measures are at 100%. Felt Welcomed eased slightly to 92%, and Culture Satisfaction (83%) and No Roadblocks (70%) remain the two areas to watch — though both are higher than in the published report.",
+    sentiment: [
+      { q:"Q1", label:"Job Expected", positive:100, mixed:0, flag:false },
+      { q:"Q2", label:"Challenged", positive:100, mixed:0, flag:false },
+      { q:"Q3", label:"Welcomed", positive:92, mixed:8, flag:false, pubPositive:100, pubMixed:0 },
+      { q:"Q4", label:"Roadblocks", positive:30, mixed:70, flag:true, pubPositive:33, pubMixed:67 },
+      { q:"Q5-6", label:"Communication", positive:100, mixed:0, flag:false },
+      { q:"Q7", label:"Training Needs", positive:67, mixed:33, flag:false, pubPositive:50, pubMixed:50 },
+      { q:"Q8", label:"Culture", positive:83, mixed:17, flag:false, pubPositive:75, pubMixed:25 },
+      { q:"Q9", label:"Goals", positive:78, mixed:22, flag:false, pubPositive:67, pubMixed:33 },
+      { q:"Q10", label:"Expertise", positive:67, mixed:33, flag:false, pubPositive:50, pubMixed:50 },
+      { q:"Q11", label:"Adjustments", positive:47, mixed:53, flag:true, pubPositive:33, pubMixed:67 }
+    ],
+    sentimentFlagRule: "Flagged when positive responses are under 60%, or mixed responses are over 40%.",
+    strengths: [
+      { label:"Welcoming Culture", pct:100 }, { label:"Team Communication", pct:100 },
+      { label:"Job Expectations Met", pct:100 }, { label:"Employee Engagement", pct:100 }, { label:"Peer Support", pct:100 }
+    ],
+    concerns: [
+      { label:"Leadership Transitions", pct:67 }, { label:"Ideas Not Captured", pct:67 },
+      { label:"System/Tech Issues", pct:50 }, { label:"Remote Engagement", pct:50 }, { label:"Training Accessibility", pct:50 }
+    ],
+    concernsUnit: "How often the issue came up (% of sessions)",
+    strengthsUnit: "Score (%)",
+    strengthsText: [
+      "Welcoming culture - universal across all sessions",
+      "Strong team communication - regular 1:1s and chat working well",
+      "Jobs match expectations - onboarding praised as comprehensive",
+      "High employee engagement - no one reports being bored"
+    ],
+    concernsText: [
+      "Leadership transitions causing disruption - no transition protocols",
+      "System/technical issues - freezing, credit card problems, ERA rollout",
+      "Remote worker engagement - limited structured on-site opportunities",
+      "New employee ideas not being captured systematically"
+    ],
+    roadblockBreakdown: [
+      { label:"No Roadblocks Reported", pct:70, pub:67 },
+      { label:"Leadership Transitions", pct:11, pub:17 },
+      { label:"System/Tech Issues", pct:19, pub:16 }
+    ],
+    roadblockDetails: [
+      "A manager departed early with no transition period",
+      "System freezing up - technical infrastructure issues",
+      "Credit card system problems",
+      "New ERA system rollout challenges",
+      "Some units in holding pattern waiting for director role",
+      "Newly reported: one role split across two separate work locations instead of one centralized space"
+    ],
+    positiveNote: "Employees who experience roadblocks report having clear escalation paths: 'If there has been a roadblock, she goes to [a trusted senior contact].'",
+    themes: [
+      { title:"Complexity Increases at 6 Months", body:"Multiple employees noted that larger projects and unexpected responsibilities emerge at the 6-month mark. The job becomes 'more than expected' as they grow into their roles." },
+      { title:"Work-Life Balance Concerns", body:"Some employees report work 'pushing into weekends.' However, others demonstrate healthy boundary-setting: 'She absolutely does not work on weekends, and so sometimes has to say no.'" },
+      { title:"Training Accessibility", body:"Employees request: (1) Repeat leadership workshops for those who missed them, (2) G-Suite basics training for Microsoft background users, (3) More hands-on learning vs documentation." },
+      { title:"Culture Varies by Unit", body:"Units with stable leadership report strong culture. Units awaiting leadership (FLSC/Galvin) describe being in a 'holding pattern' and needing to 'build their culture more.'" },
+      { title:"Goal Structure Different from Industry", body:"Industry hires note goals are 'more flexible, more soft goals' compared to private sector. Most view this positively but some seek more structure." }
+    ],
+    quotes: [
+      { topic:"On Team Support", session:"1/22/26", text:"From day one the two girls regularly check in. Waiting for the day they get to answer questions!" },
+      { topic:"On Job Variety", session:"1/22/26", text:"50% of job is COI which is what they expected. The other 50% is working on national grant - continues to be an ongoing challenge." },
+      { topic:"On Goals", session:"1/22/26", text:"In industry, goals were very clear. Here they are more flexible, more soft goals, which is good." },
+      { topic:"On Culture", session:"1/28/26", text:"FLSC and Galvin need to build their culture more - holding pattern waiting for the director role to be filled." },
+      { topic:"On Manager Quality", session:"12/13/24", text:"[My manager] is the nicest boss." },
+      { topic:"On Onboarding", session:"3/1/24", text:"One of the more comprehensive onboarding processes I have gone through." },
+      { topic:"On Boundaries", session:"10/17/24", text:"She absolutely does not work on weekends, and so sometimes has to say no to things." },
+      { topic:"On Ideas", session:"1/22/26", text:"Still 6 months into it and lots of ideas, but needs to have a plan of how to include these ideas." },
+      { topic:"On Facility Layout", session:"4/22/26", text:"They have two areas instead of a centralized team — should be in one building." },
+      { topic:"On Team Support", session:"5/6/26", text:"They are so great. They all wore birthday hats to a team call on his birthday." }
+    ],
+    recommendations: [
+      { title:"Create Manager Transition Protocol", body:"Develop formal handoff process when managers leave. Assign interim support person to prevent disruption during leadership changes." },
+      { title:"Address System Issues", body:"Prioritize fixes for system freezing and credit card processing. Provide additional ERA system training and support." },
+      { title:"Improve Training Accessibility", body:"Repeat leadership workshops quarterly. Create G-Suite basics course for Microsoft background hires. Record sessions for on-demand access." },
+      { title:"Establish Ideas Channel", body:"Create formal mechanism for new employees to submit improvement ideas. Review and respond to suggestions within 30 days." },
+      { title:"Support Remote Workers", body:"Structure on-site days with networking activities. Create virtual coffee chat programs. Ensure remote employees feel included in culture." },
+      { title:"Support Units Awaiting Leadership", body:"Provide interim culture-building activities for units in transition. Accelerate director hiring where possible." },
+      { title:"Consolidate Split Facility Operations", body:"A session flagged a role split across two separate work locations instead of one centralized space. Evaluate whether operations can be consolidated to reduce logistical friction." }
+    ],
+    sessionsTable: [
+      { date:"1/22/26", format:"Standard", participants:7 },
+      { date:"1/28/26", format:"Standard", participants:1 },
+      { date:"10/17/24", format:"Standard", participants:3 },
+      { date:"8/22/25", format:"Standard", participants:5 },
+      { date:"12/13/24", format:"Standard", participants:4 },
+      { date:"1/31/25", format:"Standard", participants:4 },
+      { date:"3/24/25", format:"Standard", participants:2 },
+      { date:"3/1/24", format:"Custom (3 Q)", participants:4 },
+      { date:"4/22/26", format:"Standard", participants:1, isNew:true },
+      { date:"5/6/26", format:"Standard", participants:1, isNew:true },
+      { date:"6/19/26", format:"Standard", participants:1, isNew:true },
+      { date:"7/17/26", format:"Standard", participants:2, isNew:true }
+    ],
+    excludedSessions: [
+      "5/28/25 - Template present, no responses",
+      "9/17/25 - Template present, no responses",
+      "5/21/25 - Session log cuts off before questions were recorded"
+    ]
+  },
+
+  overview: {
+    name: "Overview",
+    methodCaveat: "30-Day and 6-Month figures come from focus-group notes; 90-Day figures come from a survey (1–5 scale). They're not the same people, and small groups can shift a lot on just one or two answers — read these as directional, not decimal-precise.",
+    mappedMetrics: [
+      { metric:"Job expectations", d30:91, d30Pub:88, d90:98, m6:100, src30:"Job Matches Expectations", src90:"Clear job expectations (% positive)", src6:"Job Matches Expectations" },
+      { metric:"Welcomed / belonging", d30:100, d90:96, m6:92, m6Pub:100, src30:"Felt Welcomed", src90:"Feel part of team (% positive)", src6:"Felt Welcomed" },
+      { metric:"Engaged & challenged", d30:97, d30Pub:96, d90:96, m6:100, src30:"Engaged (Not Bored)", src90:"Feel challenged and engaged (% positive)", src6:"Engaged (Not Bored)" },
+      { metric:"Communication", d30:94, d30Pub:92, d90:100, m6:100, src30:"Communication Effective (team)", src90:"Manager communicates effectively (% positive)", src6:"Communication Effective (team)" },
+      { metric:"Team support", d30:97, d30Pub:96, d90:100, m6:100, src30:"Team Helped Onboarding", src90:"Know where to ask questions (% positive)", src6:"Team Helped Onboarding" },
+      { metric:"Culture satisfaction", d30:90, d30Pub:87, d90:null, m6:83, m6Pub:75, src30:"Culture Satisfaction", src90:"Not asked in the 90-day survey", src6:"Culture Satisfaction" },
+      { metric:"No roadblocks", d30:70, d30Pub:72, d90:87, m6:70, m6Pub:67, src30:"No Roadblocks", src90:"No roadblocks (% positive)", src6:"No Roadblocks" }
+    ],
+    headlines: [
+      { title:"Expectations climb steadily", detail:"Job-matches-expectations rises from 91% at 30 days to 98% at 90 days to 100% at 6 months.", accent:"pos" },
+      { title:"Belonging softens a little by 6 months", detail:"Felt-welcomed holds near 100% through the first 90 days, then eases to 92% at 6 months — still high, and the one figure most worth a second look.", accent:"neg" },
+      { title:"No-roadblocks dips, then recovers", detail:"No-roadblocks eases to 70% in the first 30 days, climbs to 87% by 90 days, then settles back to 70% at 6 months — a pattern to keep monitoring, not a decline.", accent:"neg" },
+      { title:"Culture and engagement hold up well", detail:"Engagement never drops below 96% at any stage, and culture satisfaction is actually higher than the published reports at both 30 days (90%) and 6 months (83%).", accent:"pos" }
+    ],
+    recurringConcerns: [
+      { concern:"IT / system issues", d30:"Access delays, mostly resolved during onboarding", d90:"Reported by 13% of respondents; task notifications unreliable", m6:"Freezing, credit card system, ERA rollout" },
+      { concern:"Training gaps & accessibility", d30:"Mixed feedback on training needs", d90:"Training timing (3 mentions)", m6:"Mixed feedback on training needs; workshops missed" },
+      { concern:"Remote engagement", d30:"Mentioned in several sessions", d90:"Remote support suggestions; dedicated recommendation", m6:"Mentioned in about half of sessions" },
+      { concern:"HR / benefits timing", d30:"A recurring roadblock category; info late or missing", d90:"HR/benefits timing (4 mentions)", m6:null },
+      { concern:"Goal & vision clarity", d30:"Vision clarity raised in some sessions", d90:"Task clarity/due dates (5 mentions)", m6:"Mixed feedback on goals; 'soft goals' theme" },
+      { concern:"Leadership transitions", d30:null, d90:null, m6:"Top concern; no transition protocols" },
+      { concern:"Cross-team integration", d30:null, d90:"Top improvement suggestion (6 mentions)", m6:"Culture varies by unit; holding patterns" },
+      { concern:"Ideas not captured", d30:null, d90:null, m6:"No formal ideas channel" },
+      { concern:"Payroll deduction accuracy", d30:"One session flagged a possible retirement-contribution withholding error", d90:null, m6:null }
+    ],
+    participation: [
+      { stage:"30-Day", detail:"36 sessions · ~71 participants", detailPub:"28 sessions · ~60 participants", method:"Focus groups" },
+      { stage:"90-Day", detail:"48 responses", method:"Survey" },
+      { stage:"6-Month", detail:"12 sessions · ~33 participants", detailPub:"8 sessions · ~28 participants", method:"Focus groups" }
+    ],
+    participationCaveat: "Stages are separate collections; individuals may appear in more than one stage. Don't add these up as unique people."
+  }
+};
+</script>
+<script>
+/* ======================================================================
+   Rendering engine — all inline, no external JS/CSS per spec constraint.
+   ====================================================================== */
+(function(){
+"use strict";
+
+const PALETTE = {
+  ink:"#0C2340", text2:"#425466", text3:"#6B7A8C", line:"#E4E8ED",
+  stage30:"#2B6CB0", stage90:"#00843D", stage6m:"#B08900",
+  pos:"#00843D", pos2:"#69B57E", mix:"#B08900", neg:"#AE1C28", neutral:"#8A97A6"
+};
+
+function fmtPct(n){ return Math.round(n) + "%"; }
+function bandColorQual(v){ return v>=90?PALETTE.pos : v>=70?PALETTE.mix : PALETTE.neg; }
+function bandColorScore(v){ return v>=4.5?PALETTE.pos : PALETTE.mix; }
+function esc(s){ return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+/* dot marker: renders a small "•" style badge with a native tooltip
+   showing "Published report: X · Updated: Y" whenever a `pub` value is
+   present and differs from the current value. */
+function dotHTML(current, pub, isScore){
+  if (pub === undefined || pub === null) return "";
+  const fmt = isScore ? (v => v.toFixed(2)) : (v => Math.round(v) + "%");
+  if (fmt(current) === fmt(pub)) return "";
+  const label = `Published report: ${fmt(pub)} · Updated: ${fmt(current)}`;
+  return ` <span class="dot" tabindex="0" title="${esc(label)}" aria-label="${esc(label)}">•</span>`;
+}
+
+let chartFailed = (typeof window.Chart === "undefined");
+if (!chartFailed) {
+  Chart.register(ChartDataLabels);
+  Chart.defaults.set("plugins.datalabels", { display:false });
+  Chart.defaults.font.family = "Inter, system-ui, sans-serif";
+  Chart.defaults.color = PALETTE.ink;
+  const reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduceMotion) Chart.defaults.animation = false;
+}
+
+if (chartFailed) {
+  document.getElementById("cdnNotice").innerHTML =
+    '<div class="wrap"><div class="notice" role="alert">Charts could not load from the network — showing data tables instead. All figures below are still accurate.</div></div>';
+}
+
+const charts = {}; // canvasId -> Chart instance, created lazily on first tab activation
+
+/* ---------------------------------------------------------------------
+   Generic chart builders
+   --------------------------------------------------------------------- */
+function chartCard({id, title, caption, readLine, ariaLabel, height, tableHTML}){
+  return `<div class="card chart-card" style="margin-bottom:16px">
+    <div class="chart-title">${esc(title)}</div>
+    <div class="chart-holder" style="height:${height}px">
+      <canvas id="${id}" role="img" aria-label="${esc(ariaLabel)}"></canvas>
+    </div>
+    ${readLine ? `<div class="read-line">${readLine}</div>` : ""}
+    ${caption ? `<div class="chart-caption">${caption}</div>` : ""}
+    <details class="datatable"><summary>View data table</summary>${tableHTML}</details>
+  </div>`;
+}
+
+function rowHeight(n){ return Math.max(220, n*34 + 60); }
+
+function hbarKPI(canvasId, items, targetPct){
+  if (chartFailed) return;
+  const labels = items.map(i=>i.label);
+  const values = items.map(i=>i.pct);
+  const colors = values.map(bandColorQual);
+  charts[canvasId] = new Chart(document.getElementById(canvasId), {
+    type:"bar",
+    data:{ labels, datasets:[{ data:values, backgroundColor:colors, borderRadius:4, borderSkipped:"start",
+      categoryPercentage:0.62, borderColor:"#fff", borderWidth:2 }] },
+    options:{
+      indexAxis:"y", responsive:true, maintainAspectRatio:false,
+      layout:{ padding:{ right:38 } },
+      animation:{ duration:300, easing:"easeOutQuad" },
+      scales:{ x:{ min:0, max:100, grid:{ color:PALETTE.line }, ticks:{ callback:v=>v+"%" } },
+               y:{ grid:{ display:false } } },
+      plugins:{
+        legend:{ display:false },
+        tooltip:{ backgroundColor:PALETTE.ink, cornerRadius:8, callbacks:{
+          label:(ctx)=>{
+            const item = items[ctx.dataIndex];
+            let l = `${item.label}: ${Math.round(item.pct)}%`;
+            if (item.pub !== undefined) l += ` (published: ${Math.round(item.pub)}%)`;
+            return l;
+          } } },
+        datalabels:{ display:true, anchor:"end", align:"right", color:PALETTE.ink, font:{ weight:600, size:11 },
+          formatter:(v)=>Math.round(v)+"%" }
+      }
+    },
+    plugins: targetPct != null ? [targetLinePlugin(targetPct)] : []
+  });
+}
+
+function targetLinePlugin(targetVal, labelText){
+  const label = labelText || `Target ${targetVal}%`;
+  return {
+    id:"targetLine",
+    afterDraw(chart){
+      const xScale = chart.scales.x;
+      if (!xScale) return;
+      const x = xScale.getPixelForValue(targetVal);
+      const {top, bottom} = chart.chartArea;
+      const ctx = chart.ctx;
+      ctx.save();
+      ctx.strokeStyle = PALETTE.text3;
+      ctx.setLineDash([4,3]);
+      ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(x, top); ctx.lineTo(x, bottom); ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle = PALETTE.text2;
+      ctx.font = "11px Inter, sans-serif";
+      ctx.fillText(label, x+4, top+10);
+      ctx.restore();
+    }
+  };
+}
+
+function flagRowOutline(rows){
+  return {
+    id:"flagRowOutline",
+    afterDraw(chart){
+      const {left,right} = chart.chartArea;
+      const yScale = chart.scales.y;
+      const ctx = chart.ctx;
+      rows.forEach((r,i)=>{
+        if (!r.flag) return;
+        const center = yScale.getPixelForTick(i);
+        const half = (yScale.height / rows.length) / 2 - 1;
+        ctx.save();
+        ctx.strokeStyle = PALETTE.neg;
+        ctx.lineWidth = 1.5;
+        ctx.strokeRect(left+1, center-half, (right-left)-2, half*2);
+        ctx.restore();
+      });
+    }
+  };
+}
+function stackedSentiment(canvasId, rows, questionRef){
+  if (chartFailed) return;
+  const labels = rows.map(r=>`${r.flag ? "⚑ " : ""}${r.q}: ${r.label}`);
+  const pos = rows.map(r=>r.positive);
+  const mix = rows.map(r=>r.mixed);
+  const refMap = {}; questionRef.forEach(q=>refMap[q.id]=q.text);
+  charts[canvasId] = new Chart(document.getElementById(canvasId), {
+    type:"bar",
+    data:{ labels, datasets:[
+      { label:"Positive", data:pos, backgroundColor:PALETTE.pos, borderColor:"#fff", borderWidth:2, categoryPercentage:0.62, borderRadius:4, borderSkipped:"start" },
+      { label:"Mixed", data:mix, backgroundColor:PALETTE.mix, borderColor:"#fff", borderWidth:2, categoryPercentage:0.62 }
+    ]},
+    plugins:[flagRowOutline(rows)],
+    options:{
+      indexAxis:"y", responsive:true, maintainAspectRatio:false, stacked:true,
+      animation:{ duration:300 },
+      scales:{ x:{ stacked:true, min:0, max:100, grid:{ color:PALETTE.line }, ticks:{ callback:v=>v+"%" } },
+               y:{ stacked:true, grid:{ display:false } } },
+      plugins:{
+        legend:{ display:true, position:"top", align:"start", labels:{ usePointStyle:true } },
+        tooltip:{ backgroundColor:PALETTE.ink, cornerRadius:8, callbacks:{
+          title:(items)=>{ const r = rows[items[0].dataIndex]; return refMap[r.q] || items[0].label; },
+          label:(ctx)=>{
+            const r = rows[ctx.dataIndex];
+            const isPos = ctx.dataset.label==="Positive";
+            let l = `${ctx.dataset.label}: ${isPos?r.positive:r.mixed}%`;
+            if (r.pubPositive !== undefined) l += ` (published: ${isPos?r.pubPositive:r.pubMixed}%)`;
+            return l;
+          } } },
+        datalabels:{ display:(ctx)=>ctx.dataset.data[ctx.dataIndex] >= 8, color:"#fff", font:{ weight:600, size:11 },
+          formatter:(v)=>Math.round(v)+"%" }
+      }
+    }
+  });
+}
+
+function donut(canvasId, items, colorMap){
+  if (chartFailed) return;
+  const labels = items.map(i=>i.label);
+  const values = items.map(i=>i.pct);
+  const colors = items.map(i=>colorMap[i.label]);
+  charts[canvasId] = new Chart(document.getElementById(canvasId), {
+    type:"doughnut",
+    data:{ labels, datasets:[{ data:values, backgroundColor:colors, borderColor:"#fff", borderWidth:2 }] },
+    options:{
+      responsive:true, maintainAspectRatio:false, animation:{ duration:300 },
+      plugins:{
+        legend:{ display:true, position:"bottom", labels:{ usePointStyle:true } },
+        tooltip:{ backgroundColor:PALETTE.ink, cornerRadius:8, callbacks:{
+          label:(ctx)=>{
+            const item = items[ctx.dataIndex];
+            let l = `${item.label}: ${Math.round(item.pct)}%`;
+            if (item.pub !== undefined) l += ` (published: ${Math.round(item.pub)}%)`;
+            return l;
+          } } },
+        datalabels:{ display:true, color:"#fff", font:{ weight:700, size:12 }, formatter:(v)=>Math.round(v)+"%" }
+      }
+    }
+  });
+}
+
+function groupedHbar(canvasId, labels, series, opts){
+  if (chartFailed) return;
+  const datasets = series.map(s=>({ label:s.label, data:s.data, backgroundColor:s.color,
+    borderColor:"#fff", borderWidth:2, categoryPercentage:0.7, barPercentage:0.9,
+    borderRadius:4, borderSkipped:"start" }));
+  charts[canvasId] = new Chart(document.getElementById(canvasId), {
+    type:"bar",
+    data:{ labels, datasets },
+    options:{
+      indexAxis:"y", responsive:true, maintainAspectRatio:false, animation:{ duration:300 },
+      layout:{ padding:{ right:38 } },
+      scales:{ x:{ min:0, max: opts.axisMax||100, grid:{ color:PALETTE.line }, ticks:{ callback:v=>v+"%" } },
+               y:{ grid:{ display:false } } },
+      plugins:{
+        legend:{ display:true, position:"top", align:"start", labels:{ usePointStyle:true } },
+        tooltip:{ backgroundColor:PALETTE.ink, cornerRadius:8, callbacks: opts.tooltipCallbacks || {} },
+        datalabels:{ display:(ctx)=>ctx.dataset.data[ctx.dataIndex]!=null, color:PALETTE.ink, font:{ weight:600, size:10 },
+          anchor:"end", align:"right", formatter:(v)=>v==null?"":Math.round(v)+"%" }
+      }
+    }
+  });
+}
+
+function lineChart(canvasId, labels, dataPoints, opts){
+  if (chartFailed) return;
+  charts[canvasId] = new Chart(document.getElementById(canvasId), {
+    type:"line",
+    data:{ labels, datasets:[{
+      data:dataPoints, borderColor:PALETTE.stage90, backgroundColor:PALETTE.stage90,
+      borderWidth:2, pointRadius:opts.pointRadii||5, pointBackgroundColor:opts.pointBg||PALETTE.stage90,
+      pointBorderColor:PALETTE.stage90, pointBorderWidth:2, tension:0
+    }]},
+    options:{
+      responsive:true, maintainAspectRatio:false, animation:{ duration:300 },
+      scales:{ y:{ min:opts.yMin, max:opts.yMax, grid:{ color:PALETTE.line } }, x:{ grid:{ display:false } } },
+      plugins:{
+        legend:{ display:false },
+        tooltip:{ backgroundColor:PALETTE.ink, cornerRadius:8, callbacks: opts.tooltipCallbacks || {} },
+        datalabels:{ display:true, align:"top", color:PALETTE.ink, font:{ weight:600, size:11 },
+          formatter:opts.labelFormatter }
+      }
+    },
+    plugins: opts.targetY!=null ? [targetLinePluginHorizontal(opts.targetY)] : []
+  });
+}
+function targetLinePluginHorizontal(targetY){
+  return { id:"targetLineY", afterDraw(chart){
+    const yScale = chart.scales.y; if(!yScale) return;
+    const y = yScale.getPixelForValue(targetY);
+    const {left,right} = chart.chartArea; const ctx = chart.ctx;
+    ctx.save(); ctx.strokeStyle = PALETTE.text3; ctx.setLineDash([4,3]); ctx.lineWidth=1.5;
+    ctx.beginPath(); ctx.moveTo(left,y); ctx.lineTo(right,y); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle = PALETTE.text2; ctx.font="11px Inter, sans-serif";
+    ctx.fillText(`Target ${targetY.toFixed(2)}`, left+4, y-6);
+    ctx.restore();
+  }};
+}
+
+function divergingBar(canvasId, items){
+  if (chartFailed) return;
+  const sorted = [...items].sort((a,b)=>b.delta-a.delta);
+  const labels = sorted.map(i=>i.label);
+  const values = sorted.map(i=>i.delta);
+  const colors = values.map(v=>v>=0?PALETTE.pos:PALETTE.neg);
+  charts[canvasId] = new Chart(document.getElementById(canvasId), {
+    type:"bar",
+    data:{ labels, datasets:[{ data:values, backgroundColor:colors, borderRadius:4, categoryPercentage:0.62 }] },
+    options:{
+      indexAxis:"y", responsive:true, maintainAspectRatio:false, animation:{ duration:300 },
+      layout:{ padding:{ left:30, right:30 } },
+      scales:{ x:{ grid:{ color:PALETTE.line } }, y:{ grid:{ display:false } } },
+      plugins:{ legend:{ display:false },
+        tooltip:{ backgroundColor:PALETTE.ink, cornerRadius:8, callbacks:{
+          label:(ctx)=>`${ctx.label}: ${ctx.raw>=0?"+":""}${ctx.raw.toFixed(2)}` } },
+        datalabels:{ display:true, color:PALETTE.ink, font:{ weight:600, size:11 },
+          anchor:(ctx)=>ctx.raw>=0?"end":"start", align:(ctx)=>ctx.raw>=0?"right":"left", offset:6,
+          formatter:(v)=>(v>=0?"+":"")+v.toFixed(2) } }
+    }
+  });
+}
+
+function mentionsBar(canvasId, items, color){
+  if (chartFailed) return;
+  const labels = items.map(i=>i.label);
+  const values = items.map(i=>i.mentions);
+  charts[canvasId] = new Chart(document.getElementById(canvasId), {
+    type:"bar",
+    data:{ labels, datasets:[{ data:values, backgroundColor:color, borderRadius:4, categoryPercentage:0.62 }] },
+    options:{
+      indexAxis:"y", responsive:true, maintainAspectRatio:false, animation:{ duration:300 },
+      layout:{ padding:{ right:30 } },
+      scales:{ x:{ min:0, ticks:{ stepSize:2, precision:0 }, grid:{ color:PALETTE.line } }, y:{ grid:{ display:false } } },
+      plugins:{ legend:{ display:false },
+        tooltip:{ backgroundColor:PALETTE.ink, cornerRadius:8 },
+        datalabels:{ display:true, anchor:"end", align:"right", color:PALETTE.ink, font:{ weight:600, size:11 } } }
+    }
+  });
+}
+
+function scoreBar(canvasId, items){
+  if (chartFailed) return;
+  const sorted = [...items].sort((a,b)=>a.score-b.score);
+  const labels = sorted.map(i=>`${i.q}: ${i.label}`);
+  const values = sorted.map(i=>i.score);
+  const colors = values.map(bandColorScore);
+  charts[canvasId] = new Chart(document.getElementById(canvasId), {
+    type:"bar",
+    data:{ labels, datasets:[{ data:values, backgroundColor:colors, borderRadius:4, borderSkipped:"start", categoryPercentage:0.62, borderColor:"#fff", borderWidth:2 }] },
+    options:{
+      indexAxis:"y", responsive:true, maintainAspectRatio:false, animation:{ duration:300 },
+      layout:{ padding:{ right:38 } },
+      scales:{ x:{ min:0, max:5, grid:{ color:PALETTE.line } }, y:{ grid:{ display:false } } },
+      plugins:{ legend:{ display:false },
+        tooltip:{ backgroundColor:PALETTE.ink, cornerRadius:8, callbacks:{
+          label:(ctx)=>{ const item = sorted[ctx.dataIndex]; return `${item.label}: ${item.score.toFixed(2)} · ${Math.round(item.positivePct)}% positive · n=${item.n}`; } } },
+        datalabels:{ display:true, anchor:"end", align:"right", color:PALETTE.ink, font:{ weight:600, size:11 }, formatter:(v)=>v.toFixed(2) }
+      }
+    },
+    plugins:[targetLinePlugin(4.0, "Target 4.00")]
+  });
+}
+
+function stacked100(canvasId, rows){
+  if (chartFailed) return;
+  const labels = rows.map(r=>r.label);
+  const cats = [
+    { key:"sa", name:"Strongly Agree", color:PALETTE.pos },
+    { key:"a", name:"Agree", color:PALETTE.pos2 },
+    { key:"d", name:"Disagree", color:PALETTE.mix },
+    { key:"sd", name:"Strongly Disagree", color:PALETTE.neg }
+  ];
+  const datasets = cats.map(c=>({ label:c.name, data:rows.map(r=>r[c.key]), backgroundColor:c.color,
+    borderColor:"#fff", borderWidth:2, categoryPercentage:0.62 }));
+  charts[canvasId] = new Chart(document.getElementById(canvasId), {
+    type:"bar",
+    data:{ labels, datasets },
+    options:{
+      indexAxis:"y", responsive:true, maintainAspectRatio:false, stacked:true, animation:{ duration:300 },
+      scales:{ x:{ stacked:true, min:0, max:100, grid:{ color:PALETTE.line }, ticks:{ callback:v=>v+"%" } },
+               y:{ stacked:true, grid:{ display:false } } },
+      plugins:{
+        legend:{ display:true, position:"top", align:"start", labels:{ usePointStyle:true } },
+        tooltip:{ backgroundColor:PALETTE.ink, cornerRadius:8 },
+        datalabels:{ display:(ctx)=>ctx.dataset.data[ctx.dataIndex] >= 8, color:"#fff", font:{ weight:600, size:10 },
+          formatter:(v)=>v+"%" }
+      }
+    }
+  });
+}
+
+/* ---------------------------------------------------------------------
+   Data tables (for <details>) — always in DOM regardless of Chart.js
+   --------------------------------------------------------------------- */
+function table(headers, rows){
+  return `<div class="table-wrap"><table class="plain"><thead><tr>${headers.map(h=>`<th>${esc(h)}</th>`).join("")}</tr></thead>
+    <tbody>${rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+}
+
+/* ---------------------------------------------------------------------
+   OVERVIEW TAB
+   --------------------------------------------------------------------- */
+function renderOverview(){
+  const d = NDR_DATA.overview;
+  const el = document.getElementById("panel-overview");
+  el.innerHTML = `
+    <div class="banner">${d.methodCaveat}</div>
+
+    <div class="section-head first-section">
+      <p class="eyebrow">Executive summary</p>
+      <h2>1. What's changed since the published reports</h2>
+    </div>
+    <div class="grid-4">
+      ${d.headlines.map(h=>`
+        <div class="card headline-tile ${h.accent==='neg'?'neg':''}">
+          <h3>${esc(h.title)}</h3>
+          <p>${h.detail}</p>
+        </div>`).join("")}
+    </div>
+
+    <div class="section-head">
+      <p class="eyebrow">Cross-stage comparison</p>
+      <h2>2. Metric by Stage</h2>
+      <p class="caption">Focus groups, 36 sessions (30-Day) · Survey, 48 responses (90-Day) · Focus groups, 12 sessions (6-Month)</p>
+    </div>
+    ${chartCard({
+      id:"chartMetricByStage", title:"% positive, by metric and stage",
+      readLine:"Dot markers show figures that differ from the published reports — hover or focus for both values.",
+      caption:"Each bar cites its own source question; culture satisfaction wasn't asked in the 90-day survey, shown as no bar.",
+      ariaLabel:"Grouped bar chart: seven metrics compared across 30-day, 90-day, and 6-month stages",
+      height: rowHeight(7)+40,
+      tableHTML: table(["Metric","30-Day","90-Day","6-Month"], d.mappedMetrics.map(m=>[
+        esc(m.metric), m.d30+"%"+(m.d30Pub!=null?` (published ${m.d30Pub}%)`:""),
+        m.d90==null?"n/a":m.d90+"%", m.m6+"%"+(m.m6Pub!=null?` (published ${m.m6Pub}%)`:"")
+      ]))
+    })}
+
+    <div class="section-head">
+      <p class="eyebrow">Trend across the journey</p>
+      <h2>3. The 6-Month Story</h2>
+    </div>
+    ${chartCard({
+      id:"chartSixMonthStory", title:"No roadblocks · Culture satisfaction · Job expectations",
+      readLine:"Culture satisfaction (dashed) wasn't asked in the 90-day survey, so that point is skipped.",
+      caption:"Early friction eases by 90 days; a milder version of the same pattern shows up again by 6 months — not a decline.",
+      ariaLabel:"Line chart: three metrics tracked across 30-day, 90-day, and 6-month stages",
+      height:320,
+      tableHTML: table(["Metric","30-Day","90-Day","6-Month"], [
+        ["No roadblocks", d.mappedMetrics[6].d30+"%", d.mappedMetrics[6].d90+"%", d.mappedMetrics[6].m6+"%"],
+        ["Culture satisfaction", d.mappedMetrics[5].d30+"%", "not asked", d.mappedMetrics[5].m6+"%"],
+        ["Job expectations", d.mappedMetrics[0].d30+"%", d.mappedMetrics[0].d90+"%", d.mappedMetrics[0].m6+"%"]
+      ])
+    })}
+
+    <div class="section-head">
+      <p class="eyebrow">Recurring themes</p>
+      <h2>4. Concerns Across the Journey</h2>
+      <p class="caption">Issues showing up at every stage (IT/systems, training, remote engagement) are systemic; single-stage issues are specific to that point in the onboarding journey.</p>
+    </div>
+    <div class="card table-wrap">
+      <table class="plain">
+        <thead><tr><th>Concern</th><th>30-Day</th><th>90-Day</th><th>6-Month</th></tr></thead>
+        <tbody>
+          ${d.recurringConcerns.map(r=>`<tr>
+            <td>${esc(r.concern)}</td>
+            <td>${concernCell(r.d30, PALETTE.stage30)}</td>
+            <td>${concernCell(r.d90, PALETTE.stage90)}</td>
+            <td>${concernCell(r.m6, PALETTE.stage6m)}</td>
+          </tr>`).join("")}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section-head">
+      <p class="eyebrow">Who was involved</p>
+      <h2>5. Participation Across Stages</h2>
+    </div>
+    <div class="grid-4">
+      ${d.participation.map((p,i)=>`
+        <div class="card tile" style="border-top:3px solid ${[PALETTE.stage30,PALETTE.stage90,PALETTE.stage6m][i]}">
+          <div class="label">${esc(p.stage)}</div>
+          <div class="num" style="font-size:20px">${p.detail}${p.detailPub?` <span class="dot" tabindex="0" title="${esc('Published report: '+p.detailPub+' · Updated: '+p.detail)}" aria-label="${esc('Published report: '+p.detailPub+' · Updated: '+p.detail)}">•</span>`:""}</div>
+          ${p.detailPub ? `<div class="ctx">Published report: ${esc(p.detailPub)}</div>` : ""}
+          <span class="chip method">${esc(p.method)}</span>
+        </div>`).join("")}
+    </div>
+    <p class="caption" style="margin-top:12px; color:var(--text-2); font-size:13px">${d.participationCaveat}</p>
+  `;
+  renderCharts_overview(d);
+}
+function concernCell(text, color){
+  if (!text) return `<span style="color:${PALETTE.neutral}">—</span>`;
+  return `<span class="dot-cell" style="background:${color}"></span>${esc(text)}`;
+}
+function renderCharts_overview(d){
+  groupedHbar("chartMetricByStage", d.mappedMetrics.map(m=>m.metric),
+    [
+      { label:"30-Day (focus groups)", data:d.mappedMetrics.map(m=>m.d30), color:PALETTE.stage30 },
+      { label:"90-Day (survey)", data:d.mappedMetrics.map(m=>m.d90), color:PALETTE.stage90 },
+      { label:"6-Month (focus groups)", data:d.mappedMetrics.map(m=>m.m6), color:PALETTE.stage6m }
+    ], {
+      tooltipCallbacks:{
+        label:(ctx)=>{
+          const m = d.mappedMetrics[ctx.dataIndex];
+          const stageIdx = ctx.datasetIndex;
+          const src = stageIdx===0?m.src30:stageIdx===1?m.src90:m.src6;
+          const val = ctx.raw;
+          if (val==null) return `${ctx.dataset.label}: not asked`;
+          return `${ctx.dataset.label} · ${src} — ${Math.round(val)}%`;
+        }
+      }
+    });
+  lineChart("chartSixMonthStory", ["30-Day","90-Day","6-Month"],
+    [d.mappedMetrics[6].d30, d.mappedMetrics[6].d90, d.mappedMetrics[6].m6], {
+      yMin:60, yMax:100, pointRadii:8,
+      labelFormatter:(v)=>v==null?"":Math.round(v)+"%",
+      tooltipCallbacks:{ label:(ctx)=> ctx.raw==null ? `${ctx.dataset.label}: not asked at 90 days` : `${ctx.dataset.label}: ${Math.round(ctx.raw)}%` }
+    });
+  // overlay culture + job expectations as extra datasets via a second/third chart update
+  const chart = charts["chartSixMonthStory"];
+  if (chart) {
+    chart.data.datasets[0].label = "No roadblocks";
+    chart.data.datasets[0].borderColor = PALETTE.neg;
+    chart.data.datasets[0].backgroundColor = PALETTE.neg;
+    chart.data.datasets[0].pointBackgroundColor = PALETTE.neg;
+    chart.data.datasets[0].pointBorderColor = PALETTE.neg;
+    chart.data.datasets.push({
+      label:"Culture satisfaction", data:[d.mappedMetrics[5].d30, null, d.mappedMetrics[5].m6],
+      borderColor:PALETTE.mix, backgroundColor:PALETTE.mix, borderWidth:2, borderDash:[6,4],
+      pointRadius:8, pointBackgroundColor:PALETTE.mix, spanGaps:true
+    });
+    chart.data.datasets.push({
+      label:"Job expectations", data:[d.mappedMetrics[0].d30, d.mappedMetrics[0].d90, d.mappedMetrics[0].m6],
+      borderColor:PALETTE.pos, backgroundColor:PALETTE.pos, borderWidth:2,
+      pointRadius:8, pointBackgroundColor:PALETTE.pos
+    });
+    chart.options.plugins.legend.display = true;
+    chart.options.plugins.legend.labels = { usePointStyle:true };
+    chart.options.plugins.datalabels.display = (ctx)=>ctx.raw!=null;
+    chart.update();
+  }
+}
+
+/* ---------------------------------------------------------------------
+   30-DAY TAB
+   --------------------------------------------------------------------- */
+let fyFilter = "all";
+function renderThirtyDay(){
+  const d = NDR_DATA.thirtyDay;
+  const el = document.getElementById("panel-thirtyDay");
+  el.innerHTML = `
+    <div class="section-head first-section">
+      <h2>1. Key Performance Indicators</h2>
+    </div>
+    <div class="grid-4">
+      <div class="card tile">
+        <div class="num">${d.sessions}${dotHTML(d.sessions,d.sessionsPub)}</div>
+        <div class="label">Focus-group sessions</div>
+        <div class="ctx">${d.participants} participants · 3 fiscal years</div>
+      </div>
+      <div class="card tile">
+        <div class="num">100%</div>
+        <div class="label">Felt welcomed</div>
+        <div class="ctx">Steady since the published report</div>
+      </div>
+      <div class="card tile">
+        <div class="num">${d.kpis[2].pct}%${dotHTML(d.kpis[2].pct,d.kpis[2].pub)}</div>
+        <div class="label">Engaged (not bored)</div>
+        <div class="ctx">No one reports being bored</div>
+      </div>
+      <div class="card tile">
+        <div class="num">${d.kpis[6].pct}%${dotHTML(d.kpis[6].pct,d.kpis[6].pub)}</div>
+        <div class="label">No roadblocks</div>
+        <div class="ctx">30% ran into a system-access delay, mostly minor and resolved</div>
+      </div>
+    </div>
+
+    <p class="takeaway">This page covers 36 sessions — 28 behind the published report, plus 8 collected since. The overall picture is steady to slightly improved; No Roadblocks is the one measure to watch.</p>
+
+    ${chartCard({
+      id:"chart30KPI", title:"Key Performance Indicators", caption:d.kpiSummary,
+      ariaLabel:"Bar chart: 30-day key performance indicators, sorted highest to lowest",
+      height: rowHeight(7),
+      tableHTML: table(["KPI","Result","Published"], d.kpis.map(k=>[esc(k.label), k.pct+"%", k.pub!=null?k.pub+"%":"—"]))
+    })}
+
+    <div class="section-head">
+      <h2>2. Sentiment by Question</h2>
+    </div>
+    ${chartCard({
+      id:"chart30Sentiment", title:"Positive vs. mixed, by question",
+      readLine:"Green = positive responses · Gold = mixed feedback that includes suggestions or a resolved concern.",
+      caption:d.sentimentFlagRule,
+      ariaLabel:"Stacked bar chart: sentiment by question for the 30-day check-in",
+      height: rowHeight(10),
+      tableHTML: table(["Question","Positive","Mixed","Flag"], d.sentiment.map(s=>[esc(s.q+": "+s.label), s.positive+"%", s.mixed+"%", s.flag?"Needs attention":""]))
+    })}
+
+    <div class="section-head">
+      <h2>3. Fiscal Year Explorer</h2>
+    </div>
+    <div class="fy-chips" role="group" aria-label="Filter by fiscal year">
+      <button data-fy="all" aria-pressed="true">All years</button>
+      <button data-fy="FY24" aria-pressed="false">FY24</button>
+      <button data-fy="FY25" aria-pressed="false">FY25</button>
+      <button data-fy="FY26" aria-pressed="false">FY26</button>
+    </div>
+    <div id="fyContent"></div>
+
+    <div class="section-head">
+      <h2>4. Roadblocks</h2>
+    </div>
+    <div class="grid-2">
+      <div class="card chart-card">
+        <div class="chart-title">Roadblock breakdown</div>
+        <div class="chart-holder" style="height:300px">
+          <canvas id="chart30Roadblock" role="img" aria-label="Donut chart: roadblock category breakdown for the 30-day check-in"></canvas>
+        </div>
+        <details class="datatable"><summary>View data table</summary>
+          ${table(["Category","Share","Published"], d.roadblockBreakdown.map(r=>[esc(r.label), r.pct+"%", r.pub!=null?r.pub+"%":"—"]))}
+        </details>
+      </div>
+      <div class="card">
+        <div class="chart-title">Specific roadblocks identified</div>
+        <ul class="list-plain">${d.roadblockDetails.map(r=>`<li>${esc(r)}</li>`).join("")}</ul>
+        <div class="quote-strip">${d.positiveNote}</div>
+      </div>
+    </div>
+
+    <div class="section-head">
+      <h2>5. Strengths vs Areas of Concern</h2>
+      <p class="caption">Strengths are positive-sentiment scores; concerns are how often the issue came up — not the share who experienced it.</p>
+    </div>
+    <div class="grid-2">
+      <div class="card chart-card">
+        <div class="chart-title" style="color:${PALETTE.pos}">Strengths</div>
+        <div class="chart-holder" style="height:${rowHeight(5)}px"><canvas id="chart30Strengths" role="img" aria-label="Bar chart: 30-day strengths"></canvas></div>
+        <details class="datatable"><summary>View data table</summary>${table(["Strength","Score"], d.strengths.map(s=>[esc(s.label), s.pct+"%"]))}</details>
+      </div>
+      <div class="card chart-card">
+        <div class="chart-title" style="color:${PALETTE.neg}">Areas of Concern</div>
+        <div class="chart-holder" style="height:${rowHeight(5)}px"><canvas id="chart30Concerns" role="img" aria-label="Bar chart: 30-day areas of concern"></canvas></div>
+        <details class="datatable"><summary>View data table</summary>${table(["Concern","Frequency"], d.concerns.map(s=>[esc(s.label), s.pct+"%"]))}</details>
+      </div>
+    </div>
+
+    <div class="section-head"><h2>6. Key Themes</h2></div>
+    <div class="grid-2">
+      ${d.themes.map(t=>`<div class="card theme-card"><h3>${esc(t.title)}</h3><p>${esc(t.body)}</p>${t.quote?`<div class="quote">${esc(t.quote)}</div>`:""}</div>`).join("")}
+    </div>
+
+    <div class="section-head"><h2>7. Recommendations</h2></div>
+    <div class="grid-2">
+      ${d.recommendations.map((r,i)=>`<div class="card action-card"><div class="n">${i+1}</div><div><h3>${esc(r.title)}</h3><p>${esc(r.body)}</p></div></div>`).join("")}
+    </div>
+
+    <div class="section-head"><h2>8. Data Overview</h2></div>
+    <div class="card table-wrap">
+      <table class="plain">
+        <thead><tr><th>Fiscal Year</th><th>Sessions</th><th>Participants</th><th>Date Range</th></tr></thead>
+        <tbody>
+          ${d.byFY.map(fy=>`<tr><td>${fy.fy}</td><td>${fy.sessions}${fy.sessionsPub?` <span style="color:var(--text-3)">(published ${fy.sessionsPub})</span>`:""}</td><td>${fy.participants}${fy.participantsPub?` <span style="color:var(--text-3)">(published ${fy.participantsPub})</span>`:""}</td><td>${fy.dateRange}${fy.dateRangePub?` <span style="color:var(--text-3)">(published ${fy.dateRangePub})</span>`:""}</td></tr>`).join("")}
+          <tr style="font-weight:700"><td>Total</td><td>${d.sessions} <span style="color:var(--text-3);font-weight:400">(published ${d.sessionsPub})</span></td><td>${d.participants} <span style="color:var(--text-3);font-weight:400">(published ${d.participantsPub})</span></td><td>${d.dateRange}</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="caption" style="margin-top:10px">Units represented: ${NDR_DATA.meta.unitsRepresented.join(", ")}.</p>
+    <p class="caption">${d.dataNote}</p>
+  `;
+  renderThirtyDayCharts(d);
+  renderFYExplorer(d, "all");
+  el.querySelectorAll(".fy-chips button").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      el.querySelectorAll(".fy-chips button").forEach(b=>b.setAttribute("aria-pressed","false"));
+      btn.setAttribute("aria-pressed","true");
+      renderFYExplorer(d, btn.dataset.fy);
+    });
+  });
+}
+function renderThirtyDayCharts(d){
+  hbarKPI("chart30KPI", d.kpis, d.kpiTargetPct);
+  stackedSentiment("chart30Sentiment", d.sentiment, NDR_DATA.meta.questionReference);
+  donut("chart30Roadblock", d.roadblockBreakdown, {
+    "No Roadblocks Reported":PALETTE.pos, "IT/System Access":PALETTE.neg,
+    "HR/Benefits Confusion":PALETTE.mix, "Training Gaps":PALETTE.stage30
+  });
+  const strengthsSorted = [...d.strengths].sort((a,b)=>b.pct-a.pct);
+  charts["chart30Strengths"] = chartFailed ? null : new Chart(document.getElementById("chart30Strengths"), {
+    type:"bar",
+    data:{ labels:strengthsSorted.map(s=>s.label), datasets:[{ data:strengthsSorted.map(s=>s.pct), backgroundColor:PALETTE.pos, borderRadius:4, categoryPercentage:0.62 }] },
+    options:{ indexAxis:"y", responsive:true, maintainAspectRatio:false, animation:{duration:300},
+      layout:{ padding:{ right:20 } },
+      scales:{ x:{ min:0, max:110, title:{display:true,text:d.strengthsUnit}, grid:{color:PALETTE.line} }, y:{grid:{display:false}} },
+      plugins:{ legend:{display:false}, tooltip:{backgroundColor:PALETTE.ink,cornerRadius:8},
+        datalabels:{ display:true, anchor:"end", align:"right", color:PALETTE.ink, font:{weight:600,size:11}, formatter:v=>v+"%" } } }
+  });
+  const concernsSorted = [...d.concerns].sort((a,b)=>b.pct-a.pct);
+  charts["chart30Concerns"] = chartFailed ? null : new Chart(document.getElementById("chart30Concerns"), {
+    type:"bar",
+    data:{ labels:concernsSorted.map(s=>s.label), datasets:[{ data:concernsSorted.map(s=>s.pct), backgroundColor:PALETTE.neg, borderRadius:4, categoryPercentage:0.62 }] },
+    options:{ indexAxis:"y", responsive:true, maintainAspectRatio:false, animation:{duration:300},
+      layout:{ padding:{ right:20 } },
+      scales:{ x:{ min:0, max:60, title:{display:true,text:d.concernsUnit}, grid:{color:PALETTE.line} }, y:{grid:{display:false}} },
+      plugins:{ legend:{display:false}, tooltip:{backgroundColor:PALETTE.ink,cornerRadius:8},
+        datalabels:{ display:true, anchor:"end", align:"right", color:PALETTE.ink, font:{weight:600,size:11}, formatter:v=>v+"%" } } }
+  });
+}
+function renderFYExplorer(d, fy){
+  const holder = document.getElementById("fyContent");
+  if (fy === "all") {
+    holder.innerHTML = `<div class="card chart-card">
+      <div class="chart-title">All years, by KPI</div>
+      <div class="chart-holder" style="height:${rowHeight(7)+20}px"><canvas id="chartFYAll" role="img" aria-label="Grouped bar chart: KPIs by fiscal year"></canvas></div>
+      <details class="datatable"><summary>View data table</summary>
+        ${table(["KPI","FY24 (n=9)","FY25 (n=13)","FY26 (n=14)"], Object.keys(d.byFY[0].kpis).map(k=>[
+          esc(k), d.byFY[0].kpis[k]+"%", d.byFY[1].kpis[k]+"%",
+          (typeof d.byFY[2].kpis[k]==="object"?d.byFY[2].kpis[k].v:d.byFY[2].kpis[k])+"%"
+        ]))}
+      </details>
+    </div>`;
+    const keys = Object.keys(d.byFY[0].kpis);
+    groupedHbar("chartFYAll", keys, [
+      { label:"FY24 (n=9)", data:keys.map(k=>d.byFY[0].kpis[k]), color:PALETTE.stage30 },
+      { label:"FY25 (n=13)", data:keys.map(k=>d.byFY[1].kpis[k]), color:PALETTE.stage90 },
+      { label:"FY26 (n=14)", data:keys.map(k=>typeof d.byFY[2].kpis[k]==="object"?d.byFY[2].kpis[k].v:d.byFY[2].kpis[k]), color:PALETTE.stage6m }
+    ], { tooltipCallbacks:{ label:(ctx)=>`${ctx.dataset.label}: ${Math.round(ctx.raw)}%` } });
+  } else {
+    const fyObj = d.byFY.find(f=>f.fy===fy);
+    const kpiItems = Object.entries(fyObj.kpis).map(([label,val])=>{
+      if (typeof val === "object") return { label, pct:val.v, pub:val.pub };
+      return { label, pct:val };
+    });
+    holder.innerHTML = `<div class="grid-2">
+      <div class="card chart-card">
+        <div class="chart-title">${fy} KPIs</div>
+        <p class="caption">${fyObj.sessions} sessions${fyObj.sessionsPub?dotHTML(fyObj.sessions,fyObj.sessionsPub):""} · ${fyObj.participants} participants${fyObj.participantsPub?` <span class="dot" tabindex="0" title="${esc('Published report: '+fyObj.participantsPub+' · Updated: '+fyObj.participants)}" aria-label="${esc('Published report: '+fyObj.participantsPub+' · Updated: '+fyObj.participants)}">•</span>`:""} · ${fyObj.dateRange}${fyObj.dateRangePub?` <span style="color:var(--text-3)">(published ${fyObj.dateRangePub})</span>`:""}</p>
+        <div class="chart-holder" style="height:${rowHeight(7)}px"><canvas id="chartFYSingle" role="img" aria-label="Bar chart: ${fy} key performance indicators"></canvas></div>
+        <details class="datatable"><summary>View data table</summary>${table(["KPI","Result","Published"], kpiItems.map(k=>[esc(k.label), k.pct+"%", k.pub!=null?k.pub+"%":"—"]))}</details>
+      </div>
+      <div class="card">
+        <div class="chart-title">Key observations</div>
+        <ul class="list-plain">${fyObj.observations.map(o=>`<li>${esc(o)}</li>`).join("")}</ul>
+        <div class="chart-title" style="margin-top:16px">${fy==="FY26" ? "Improvements" : "Roadblocks"}</div>
+        <ul class="list-plain">${(fy==="FY26"?fyObj.improvements:fyObj.roadblocks).map(o=>`<li>${o}</li>`).join("")}</ul>
+      </div>
+    </div>`;
+    hbarKPI("chartFYSingle", kpiItems, d.kpiTargetPct);
+  }
+}
+
+/* ---------------------------------------------------------------------
+   90-DAY TAB
+   --------------------------------------------------------------------- */
+function renderNinetyDay(){
+  const d = NDR_DATA.ninetyDay;
+  const el = document.getElementById("panel-ninetyDay");
+  el.innerHTML = `
+    <div class="section-head first-section"><h2>1. Overview</h2></div>
+    <div class="grid-4">
+      <div class="card tile"><div class="num">${d.overallScore.toFixed(2)} <span class="ctx" style="font-size:14px">/ 5.00</span></div><div class="label">Overall score</div><div class="ctx">Target 4.00</div></div>
+      <div class="card tile"><div class="num">${Math.round(d.positiveRatePct)}%</div><div class="label">Positive rate</div><div class="ctx">Strongly agree + agree</div></div>
+      <div class="card tile"><div class="num delta pos">+${d.yoyImprovement.toFixed(2)}</div><div class="label">Year over year</div><div class="ctx">4.34 → 4.55, 2024 → 2025</div></div>
+      <div class="card tile"><div class="num">${d.validResponses}</div><div class="label">Valid responses</div><div class="ctx">2 test responses excluded</div></div>
+    </div>
+    <p class="takeaway">This page is unchanged from the published report — the workbook was checked for new responses and none exist beyond what's shown here.</p>
+
+    ${chartCard({
+      id:"chart90Scores", title:"Overall Satisfaction Scores", caption:d.scoreSummary,
+      ariaLabel:"Bar chart: 90-day question scores, weakest first",
+      height: rowHeight(11),
+      tableHTML: table(["Question","Score","Positive","n"], d.questionScores.map(q=>[esc(q.q+": "+q.label), q.score.toFixed(2), Math.round(q.positivePct)+"%", q.n]))
+    })}
+
+    <div class="section-head"><h2>2. Response Distribution</h2></div>
+    ${chartCard({
+      id:"chart90Dist", title:"Response distribution by question",
+      readLine:"Green = strongly agree/agree · Gold/red = disagree or strongly disagree.",
+      caption:d.responseDistribution.note,
+      ariaLabel:"100% stacked bar chart: response distribution by question",
+      height: rowHeight(9),
+      tableHTML: table(["Question","Strongly Agree","Agree","Disagree","Strongly Disagree"], d.responseDistribution.rows.map(r=>[esc(r.label), r.sa+"%", r.a+"%", r.d+"%", r.sd+"%"]))
+    })}
+
+    <div class="section-head"><h2>3. Special Questions</h2></div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="chart-title">${esc(d.specialQuestions.q5.title)}</div>
+        <div style="display:flex; gap:24px; margin:14px 0">
+          <div><div class="num tabular" style="font-size:28px">${d.specialQuestions.q5.yes}</div><div class="label">Yes (${Math.round(d.specialQuestions.q5.yesPct)}%)</div></div>
+          <div><div class="num tabular" style="font-size:28px; color:var(--text-3)">${d.specialQuestions.q5.no}</div><div class="label">No (${Math.round(d.specialQuestions.q5.noPct)}%)</div></div>
+        </div>
+        <div style="height:10px; border-radius:6px; overflow:hidden; display:flex; background:var(--line)">
+          <div style="width:${d.specialQuestions.q5.yesPct}%; background:${PALETTE.pos}"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="chart-title">${esc(d.specialQuestions.q10.title)}</div>
+        <div style="display:flex; gap:24px; margin:14px 0">
+          <div><div class="num tabular" style="font-size:28px">${d.specialQuestions.q10.noRoadblocks}</div><div class="label">No roadblocks (${Math.round(d.specialQuestions.q10.noPct)}%)</div></div>
+          <div><div class="num tabular" style="font-size:28px; color:var(--mix)">${d.specialQuestions.q10.hasRoadblocks}</div><div class="label">Has roadblocks (${Math.round(d.specialQuestions.q10.hasPct)}%)</div></div>
+        </div>
+        <div style="height:10px; border-radius:6px; overflow:hidden; display:flex; background:var(--line)">
+          <div style="width:${d.specialQuestions.q10.noPct}%; background:${PALETTE.pos}"></div>
+        </div>
+      </div>
+    </div>
+    <p class="caption" style="margin-top:10px">${d.specialQuestions.observations.join(" ")}</p>
+
+    <div class="section-head"><h2>4. Year-over-Year Change (2024 → 2025)</h2></div>
+    ${chartCard({
+      id:"chart90YoY", title:"Change in score, 2024 → 2025", caption:`${d.yoy.summary} ${d.yoy.declineNote}`,
+      ariaLabel:"Diverging bar chart: year-over-year score change by question",
+      height: rowHeight(11),
+      tableHTML: table(["Metric","2024","2025","Change"], d.yoy.trendTable.map(r=>[esc(r.metric), r.y2024.toFixed(2), r.y2025.toFixed(2), r.change]))
+    })}
+    <div class="card table-wrap" style="margin-top:-6px">
+      <table class="plain"><thead><tr><th>Metric</th><th>2024 (n=${d.yoy.year2024.n})</th><th>2025 (n=${d.yoy.year2025.n})</th><th>Change</th></tr></thead>
+        <tbody>${d.yoy.trendTable.map(r=>`<tr><td>${esc(r.metric)}</td><td>${r.y2024.toFixed(2)}</td><td>${r.y2025.toFixed(2)}</td><td style="color:${r.change.startsWith('-')?PALETTE.neg:PALETTE.pos}; font-weight:700">${r.change}</td></tr>`).join("")}</tbody>
+      </table>
+    </div>
+
+    <div class="section-head"><h2>5. Overall Score Trend (2023–2026)</h2></div>
+    ${chartCard({
+      id:"chart90Trend", title:"Overall score by year", caption:d.overallTrend.note,
+      ariaLabel:"Line chart: overall score trend from 2023 to 2026",
+      height:320,
+      tableHTML: table(["Year","Responses","Score"], d.overallTrend.points.map(p=>[p.year, p.responses, p.score.toFixed(2)]))
+    })}
+
+    <div class="section-head"><h2>6. Open-Ended Themes</h2></div>
+    <div class="grid-2">
+      <div class="card chart-card">
+        <div class="chart-title" style="color:${PALETTE.pos}">${esc(d.openEnded.liked.title)}</div>
+        <p class="caption" style="margin:0 0 8px">${d.openEnded.liked.responsesNote}</p>
+        <div class="chart-holder" style="height:${rowHeight(6)}px"><canvas id="chart90Liked" role="img" aria-label="Bar chart: what employees liked, by mentions"></canvas></div>
+        <details class="datatable"><summary>View data table</summary>${table(["Theme","Mentions"], d.openEnded.liked.items.map(i=>[esc(i.label), i.mentions]))}</details>
+      </div>
+      <div class="card chart-card">
+        <div class="chart-title" style="color:${PALETTE.mix}">${esc(d.openEnded.improvements.title)}</div>
+        <p class="caption" style="margin:0 0 8px">${d.openEnded.improvements.responsesNote}</p>
+        <div class="chart-holder" style="height:${rowHeight(8)}px"><canvas id="chart90Improve" role="img" aria-label="Bar chart: improvement suggestions, by mentions"></canvas></div>
+        <details class="datatable"><summary>View data table</summary>${table(["Theme","Mentions"], d.openEnded.improvements.items.map(i=>[esc(i.label), i.mentions]))}</details>
+      </div>
+    </div>
+    <div class="grid-2" style="margin-top:16px">
+      <div class="card"><div class="chart-title">Valued most</div><ul class="list-plain">${d.openEnded.valuedMost.map(v=>`<li>${esc(v)}</li>`).join("")}</ul></div>
+      <div class="card"><div class="chart-title">Areas for improvement</div><ul class="list-plain">${d.openEnded.areasForImprovement.map(v=>`<li>${esc(v)}</li>`).join("")}</ul></div>
+    </div>
+
+    <div class="section-head"><h2>7. Recommendations</h2></div>
+    <div class="grid-2">
+      ${d.recommendations.map((r,i)=>`<div class="card action-card"><div class="n">${i+1}</div><div><h3>${esc(r.title)}</h3><p>${esc(r.body)}</p></div></div>`).join("")}
+    </div>
+
+    <div class="section-head"><h2>8. Methodology</h2></div>
+    <details class="card"><summary style="cursor:pointer; font-weight:700">View methodology</summary>
+      <ul class="list-plain" style="margin-top:10px">${d.methodology.map(m=>`<li>${esc(m)}</li>`).join("")}</ul>
+      <p class="caption">${d.exclusionNote}</p>
+    </details>
+  `;
+  renderNinetyDayCharts(d);
+}
+function renderNinetyDayCharts(d){
+  scoreBar("chart90Scores", d.questionScores);
+  stacked100("chart90Dist", d.responseDistribution.rows);
+  divergingBar("chart90YoY", d.yoy.deltas);
+  lineChart("chart90Trend", d.overallTrend.points.map(p=>p.year), d.overallTrend.points.map(p=>p.score), {
+    yMin:3.6, yMax:5.0, targetY:4.0,
+    pointRadii: d.overallTrend.points.map(p=>p.responses<=3?7:5),
+    labelFormatter:(v,ctx)=>{ const p = d.overallTrend.points[ctx.dataIndex]; return `${p.score.toFixed(2)} (n=${p.responses})`; },
+    tooltipCallbacks:{ label:(ctx)=>{ const p = d.overallTrend.points[ctx.dataIndex]; return `${p.year}: ${p.score.toFixed(2)} (n=${p.responses})`; } }
+  });
+  const trendChart = charts["chart90Trend"];
+  if (trendChart) {
+    trendChart.data.datasets[0].pointBackgroundColor = d.overallTrend.points.map(p=>p.responses<=3?"#fff":PALETTE.stage90);
+    trendChart.data.datasets[0].pointBorderColor = PALETTE.stage90;
+    trendChart.data.datasets[0].pointBorderWidth = 2;
+    trendChart.update();
+  }
+  mentionsBar("chart90Liked", d.openEnded.liked.items, PALETTE.pos);
+  mentionsBar("chart90Improve", d.openEnded.improvements.items, PALETTE.mix);
+}
+
+/* ---------------------------------------------------------------------
+   6-MONTH TAB
+   --------------------------------------------------------------------- */
+function renderSixMonth(){
+  const d = NDR_DATA.sixMonth;
+  const el = document.getElementById("panel-sixMonth");
+  const at100 = d.kpis.filter(k=>k.pct===100).length;
+  el.innerHTML = `
+    <div class="section-head first-section"><h2>1. Key Performance Indicators</h2></div>
+    <div class="grid-4">
+      <div class="card tile">
+        <div class="num">${d.sessions}${dotHTML(d.sessions,d.sessionsPub)}</div>
+        <div class="label">Focus-group sessions</div>
+        <div class="ctx">${d.participants} participants · ${d.responsesCaptured} responses captured</div>
+      </div>
+      <div class="card tile">
+        <div class="num">${at100} / 7</div>
+        <div class="label">KPIs at 100%</div>
+        <div class="ctx">Job match, engagement, communication, team support</div>
+      </div>
+      <div class="card tile">
+        <div class="num">${d.kpis[5].pct}%${dotHTML(d.kpis[5].pct,d.kpis[5].pub)}</div>
+        <div class="label">Culture satisfaction</div>
+        <div class="ctx delta pos">Higher than the published report (${d.kpis[5].pub}%)</div>
+      </div>
+      <div class="card tile">
+        <div class="num">${100-d.kpis[6].pct}%${dotHTML(100-d.kpis[6].pct, 100-d.kpis[6].pub)}</div>
+        <div class="label">Report a roadblock</div>
+        <div class="ctx">Mostly leadership transitions and system issues</div>
+      </div>
+    </div>
+    <p class="takeaway">This page covers 12 sessions — 8 behind the published report, plus 4 collected since. Culture satisfaction has actually improved; belonging has softened slightly and is the figure most worth watching.</p>
+
+    ${chartCard({
+      id:"chart6KPI", title:"Key Performance Indicators", caption:d.kpiSummary,
+      ariaLabel:"Bar chart: 6-month key performance indicators, sorted highest to lowest",
+      height: rowHeight(7),
+      tableHTML: table(["KPI","Result","Published"], d.kpis.map(k=>[esc(k.label), k.pct+"%", k.pub!=null?k.pub+"%":"—"]))
+    })}
+
+    <div class="section-head"><h2>2. Sentiment by Question</h2></div>
+    ${chartCard({
+      id:"chart6Sentiment", title:"Positive vs. mixed, by question",
+      readLine:"Green = positive responses · Gold = mixed feedback that includes suggestions or a resolved concern.",
+      caption:d.sentimentFlagRule,
+      ariaLabel:"Stacked bar chart: sentiment by question for the 6-month check-in",
+      height: rowHeight(10),
+      tableHTML: table(["Question","Positive","Mixed","Flag"], d.sentiment.map(s=>[esc(s.q+": "+s.label), s.positive+"%", s.mixed+"%", s.flag?"Needs attention":""]))
+    })}
+    <details class="card" style="margin-top:-8px"><summary style="cursor:pointer; font-weight:700">Question reference</summary>
+      <ul class="list-plain" style="margin-top:10px">${NDR_DATA.meta.questionReference.map(q=>`<li><strong>${q.id}:</strong> ${esc(q.text)}</li>`).join("")}</ul>
+    </details>
+
+    <div class="section-head"><h2>3. Strengths vs Areas of Concern</h2></div>
+    <div class="grid-2">
+      <div class="card chart-card">
+        <div class="chart-title" style="color:${PALETTE.pos}">Strengths</div>
+        <div class="chart-holder" style="height:${rowHeight(5)}px"><canvas id="chart6Strengths" role="img" aria-label="Bar chart: 6-month strengths"></canvas></div>
+        <details class="datatable"><summary>View data table</summary>${table(["Strength","Score"], d.strengths.map(s=>[esc(s.label), s.pct+"%"]))}</details>
+      </div>
+      <div class="card chart-card">
+        <div class="chart-title" style="color:${PALETTE.neg}">Areas of Concern</div>
+        <div class="chart-holder" style="height:${rowHeight(5)}px"><canvas id="chart6Concerns" role="img" aria-label="Bar chart: 6-month areas of concern"></canvas></div>
+        <details class="datatable"><summary>View data table</summary>${table(["Concern","Frequency"], d.concerns.map(s=>[esc(s.label), s.pct+"%"]))}</details>
+      </div>
+    </div>
+
+    <div class="section-head"><h2>4. Roadblocks</h2></div>
+    <div class="grid-2">
+      <div class="card chart-card">
+        <div class="chart-title">Roadblock breakdown</div>
+        <div class="chart-holder" style="height:300px"><canvas id="chart6Roadblock" role="img" aria-label="Donut chart: roadblock category breakdown for the 6-month check-in"></canvas></div>
+        <details class="datatable"><summary>View data table</summary>${table(["Category","Share","Published"], d.roadblockBreakdown.map(r=>[esc(r.label), r.pct+"%", r.pub!=null?r.pub+"%":"—"]))}</details>
+      </div>
+      <div class="card">
+        <div class="chart-title">Specific roadblocks identified</div>
+        <ul class="list-plain">${d.roadblockDetails.map(r=>`<li>${esc(r)}</li>`).join("")}</ul>
+        <div class="quote-strip">${d.positiveNote}</div>
+      </div>
+    </div>
+
+    <div class="section-head"><h2>5. Key Themes</h2></div>
+    <div class="grid-2">
+      ${d.themes.map(t=>`<div class="card theme-card"><h3>${esc(t.title)}</h3><p>${esc(t.body)}</p></div>`).join("")}
+    </div>
+
+    <div class="section-head"><h2>6. Notable Quotes</h2></div>
+    <div class="grid-2">
+      ${d.quotes.map(q=>`<div class="card quote"><div>${esc(q.text)}</div><footer>${esc(q.topic)} · ${esc(q.session)}</footer></div>`).join("")}
+    </div>
+
+    <div class="section-head"><h2>7. Recommendations</h2></div>
+    <div class="grid-2">
+      ${d.recommendations.map((r,i)=>`<div class="card action-card"><div class="n">${i+1}</div><div><h3>${esc(r.title)}</h3><p>${esc(r.body)}</p></div></div>`).join("")}
+    </div>
+
+    <div class="section-head"><h2>8. Data Overview</h2></div>
+    <div class="card table-wrap">
+      <table class="plain">
+        <thead><tr><th>Date</th><th>Format</th><th>Participants</th></tr></thead>
+        <tbody>${[...d.sessionsTable].sort((a,b)=>new Date(a.date)-new Date(b.date)).map(s=>`<tr><td>${esc(s.date)}${s.isNew?' <span class="chip" style="background:#E8EEF6">added since</span>':''}</td><td>${esc(s.format)}</td><td>${s.participants}</td></tr>`).join("")}</tbody>
+      </table>
+    </div>
+    <p class="caption" style="margin-top:10px">Excluded: ${d.excludedSessions.join("; ")}.</p>
+    <p class="caption">${d.dataNote}</p>
+  `;
+  renderSixMonthCharts(d);
+}
+function renderSixMonthCharts(d){
+  hbarKPI("chart6KPI", d.kpis, 80);
+  stackedSentiment("chart6Sentiment", d.sentiment, NDR_DATA.meta.questionReference);
+  donut("chart6Roadblock", d.roadblockBreakdown, {
+    "No Roadblocks Reported":PALETTE.pos, "Leadership Transitions":PALETTE.neg, "System/Tech Issues":PALETTE.mix
+  });
+  const strengthsSorted = [...d.strengths].sort((a,b)=>b.pct-a.pct);
+  charts["chart6Strengths"] = chartFailed ? null : new Chart(document.getElementById("chart6Strengths"), {
+    type:"bar",
+    data:{ labels:strengthsSorted.map(s=>s.label), datasets:[{ data:strengthsSorted.map(s=>s.pct), backgroundColor:PALETTE.pos, borderRadius:4, categoryPercentage:0.62 }] },
+    options:{ indexAxis:"y", responsive:true, maintainAspectRatio:false, animation:{duration:300},
+      layout:{ padding:{ right:20 } },
+      scales:{ x:{ min:0, max:110, title:{display:true,text:d.strengthsUnit}, grid:{color:PALETTE.line} }, y:{grid:{display:false}} },
+      plugins:{ legend:{display:false}, tooltip:{backgroundColor:PALETTE.ink,cornerRadius:8},
+        datalabels:{ display:true, anchor:"end", align:"right", color:PALETTE.ink, font:{weight:600,size:11}, formatter:v=>v+"%" } } }
+  });
+  const concernsSorted = [...d.concerns].sort((a,b)=>b.pct-a.pct);
+  charts["chart6Concerns"] = chartFailed ? null : new Chart(document.getElementById("chart6Concerns"), {
+    type:"bar",
+    data:{ labels:concernsSorted.map(s=>s.label), datasets:[{ data:concernsSorted.map(s=>s.pct), backgroundColor:PALETTE.neg, borderRadius:4, categoryPercentage:0.62 }] },
+    options:{ indexAxis:"y", responsive:true, maintainAspectRatio:false, animation:{duration:300},
+      layout:{ padding:{ right:20 } },
+      scales:{ x:{ min:0, max:80, title:{display:true,text:d.concernsUnit}, grid:{color:PALETTE.line} }, y:{grid:{display:false}} },
+      plugins:{ legend:{display:false}, tooltip:{backgroundColor:PALETTE.ink,cornerRadius:8},
+        datalabels:{ display:true, anchor:"end", align:"right", color:PALETTE.ink, font:{weight:600,size:11}, formatter:v=>v+"%" } } }
+  });
+}
+
+/* ---------------------------------------------------------------------
+   Tabs, hash routing, context strip, footer
+   --------------------------------------------------------------------- */
+const STAGES = ["overview","thirtyDay","ninetyDay","sixMonth"];
+const HASH = { overview:"#overview", thirtyDay:"#30-day", ninetyDay:"#90-day", sixMonth:"#6-month" };
+const HASH_REV = { "#overview":"overview", "#30-day":"thirtyDay", "#90-day":"ninetyDay", "#6-month":"sixMonth" };
+const rendered = {};
+
+function renderContextStrip(stage){
+  const strip = document.getElementById("contextStrip");
+  if (stage === "overview") {
+    strip.innerHTML = `<span class="chip method">Cross-stage summary</span><span>30-Day · 90-Day · 6-Month, compared side by side</span>`;
+    return;
+  }
+  const d = NDR_DATA[stage];
+  const label = stage==="thirtyDay" ? "30-Day Check-In" : stage==="ninetyDay" ? "90-Day Onboarding Survey" : "6-Month Check-In";
+  const n = stage==="ninetyDay" ? `${d.validResponses} responses` : `${d.sessions} sessions`;
+  strip.innerHTML = `<strong>${label}</strong><span>${d.dateRange}</span><span class="chip method">${d.method}, ${n}</span>`;
+}
+
+function activate(stage, opts){
+  opts = opts || {};
+  STAGES.forEach(s=>{
+    document.getElementById("tab-"+s).setAttribute("aria-selected", s===stage ? "true":"false");
+    document.getElementById("panel-"+s).classList.toggle("active", s===stage);
+  });
+  renderContextStrip(stage);
+  if (!rendered[stage]) {
+    ({ overview:renderOverview, thirtyDay:renderThirtyDay, ninetyDay:renderNinetyDay, sixMonth:renderSixMonth })[stage]();
+    rendered[stage] = true;
+  } else {
+    Object.keys(charts).forEach(id=>{ if (charts[id]) charts[id].resize(); });
+  }
+  if (!opts.skipHash) {
+    history.pushState(null, "", HASH[stage]);
+  }
+}
+
+document.querySelectorAll('nav.tabs button').forEach(btn=>{
+  btn.addEventListener("click", ()=>activate(btn.dataset.stage));
+  btn.addEventListener("keydown", (e)=>{
+    const idx = STAGES.indexOf(btn.dataset.stage);
+    if (e.key === "ArrowRight") { document.getElementById("tab-"+STAGES[(idx+1)%STAGES.length]).focus(); }
+    if (e.key === "ArrowLeft") { document.getElementById("tab-"+STAGES[(idx-1+STAGES.length)%STAGES.length]).focus(); }
+  });
+});
+window.addEventListener("popstate", ()=>{
+  const stage = HASH_REV[location.hash] || "overview";
+  activate(stage, { skipHash:true });
+});
+
+// initial load
+const initialStage = HASH_REV[location.hash] || "overview";
+activate(initialStage, { skipHash:true });
+if (!location.hash) history.replaceState(null, "", HASH.overview);
+
+// CDN failure fallback: auto-open all details
+if (chartFailed) {
+  document.querySelectorAll("details").forEach(d=>d.open = true);
+}
+
+})();
+</script>
+</body>
+</html>
