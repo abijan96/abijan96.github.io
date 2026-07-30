@@ -8,12 +8,9 @@ and 6-Month — plus a cross-stage Overview.
 
 - `index.html` — the complete dashboard. Everything (styles, logic, data) is in
   this one file. No build step, no server required.
-- Data sources: the three NDR check-in analysis reports (30-Day, 90-Day,
-  6-Month), plus session notes and survey responses collected since those
-  reports were published.
-- Any figure that differs from its published-report value carries a small dot
-  marker (•) — hover or focus it to see both the published and current value.
-  The footer explains this convention once.
+- Data sources: NDR 30-Day Check-In, 90-Day Onboarding Survey, and 6-Month
+  Check-In feedback from new hires, Sept 2023 through mid-2026. There is a
+  single current value for every figure — no published-vs-updated distinction.
 - Personal names are removed throughout; quotes are anonymized to bracketed
   roles or omitted where a role reference wasn't available in the source.
 

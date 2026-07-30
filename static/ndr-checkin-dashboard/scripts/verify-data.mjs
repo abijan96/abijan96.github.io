@@ -36,33 +36,22 @@ for (const stage of ["thirtyDay", "sixMonth"]) {
   const d = NDR_DATA[stage];
   for (const s of d.sentiment) {
     assert(s.positive + s.mixed === 100, `${stage} sentiment ${s.q} sums to 100 (got ${s.positive}+${s.mixed})`);
-    if (s.pubPositive !== undefined) {
-      assert(s.pubPositive + s.pubMixed === 100, `${stage} sentiment ${s.q} published sums to 100`);
-    }
     const expectFlag = s.positive < 60 || s.mixed > 40;
     assert(s.flag === expectFlag, `${stage} sentiment ${s.q} flag matches rule (positive<60 or mixed>40): flag=${s.flag} positive=${s.positive} mixed=${s.mixed}`);
   }
   for (const k of d.kpis) {
     assert(k.pct >= 0 && k.pct <= 100, `${stage} KPI ${k.label} within 0-100 (got ${k.pct})`);
-    if (k.pub !== undefined) assert(k.pub >= 0 && k.pub <= 100, `${stage} KPI ${k.label} published within 0-100`);
   }
   const rbSum = d.roadblockBreakdown.reduce((a, r) => a + r.pct, 0);
   assert(rbSum === 100, `${stage} roadblock breakdown sums to 100 (got ${rbSum})`);
-  const rbPubVals = d.roadblockBreakdown.filter(r => r.pub !== undefined);
-  if (rbPubVals.length === d.roadblockBreakdown.length) {
-    const pubSum = rbPubVals.reduce((a, r) => a + r.pub, 0);
-    assert(pubSum === 100, `${stage} roadblock breakdown published sums to 100 (got ${pubSum})`);
-  }
 }
 for (const q of NDR_DATA.ninetyDay.questionScores) {
   assert(q.score >= 1 && q.score <= 5, `90-Day ${q.q} score within 1-5 (got ${q.score})`);
   assert(q.positivePct >= 0 && q.positivePct <= 100, `90-Day ${q.q} positivePct within 0-100`);
 }
 for (const row of NDR_DATA.ninetyDay.responseDistribution.rows) {
-  // Each category is independently rounded from n=48 integer counts in the
-  // published report (not a complementary pair I compute), so a rounding
-  // artifact of +/-1 point is expected and is NOT a transcription error --
-  // §2 says copy published numbers verbatim, not force them to sum exactly.
+  // Each category is independently rounded from integer counts in the raw
+  // survey export, so a rounding artifact of +/-1 point is expected here.
   const sum = row.sa + row.a + row.d + row.sd;
   assert(sum >= 98 && sum <= 102, `90-Day response distribution ${row.q} sums within rounding tolerance of 100 (got ${sum})`);
 }
@@ -72,13 +61,13 @@ const t = NDR_DATA.thirtyDay, s6 = NDR_DATA.sixMonth, n90 = NDR_DATA.ninetyDay;
 const kpiByLabel = arr => Object.fromEntries(arr.map(k => [k.label, k.pct]));
 const tK = kpiByLabel(t.kpis), sK = kpiByLabel(s6.kpis);
 const checks = [
-  ["Job expectations", tK["Job Matches Expectations"], 98, sK["Job Matches Expectations"]],
-  ["Welcomed / belonging", tK["Felt Welcomed"], 96, sK["Felt Welcomed"]],
-  ["Engaged & challenged", tK["Engaged (Not Bored)"], 96, sK["Engaged (Not Bored)"]],
-  ["Communication", tK["Communication Effective"], 100, sK["Communication Effective"]],
-  ["Team support", tK["Team Helped Onboarding"], 100, sK["Team Helped Onboarding"]],
+  ["Job expectations", tK["Job Matches Expectations"], 95, sK["Job Matches Expectations"]],
+  ["Welcomed / belonging", tK["Felt Welcomed"], 95, sK["Felt Welcomed"]],
+  ["Engaged & challenged", tK["Engaged (Not Bored)"], 95, sK["Engaged (Not Bored)"]],
+  ["Communication", tK["Communication Effective"], 98, sK["Communication Effective"]],
+  ["Team support", tK["Team Helped Onboarding"], 97, sK["Team Helped Onboarding"]],
   ["Culture satisfaction", tK["Culture Satisfaction"], null, sK["Culture Satisfaction"]],
-  ["No roadblocks", tK["No Roadblocks"], 87, sK["No Roadblocks"]],
+  ["No roadblocks", tK["No Roadblocks"], 83, sK["No Roadblocks"]],
 ];
 for (const [metric, d30, d90, m6] of checks) {
   const row = NDR_DATA.overview.mappedMetrics.find(r => r.metric === metric);
@@ -90,47 +79,42 @@ for (const [metric, d30, d90, m6] of checks) {
 assert(NDR_DATA.overview.mappedMetrics.find(r => r.metric === "Culture satisfaction").d90 === null,
   "Culture satisfaction's 90-day value is null, not 0");
 
-// ---- Published-vs-updated pair present for every dotted (changed) figure ----
-for (const stage of ["thirtyDay", "sixMonth"]) {
-  const d = NDR_DATA[stage];
-  for (const k of d.kpis) {
-    if (k.pub !== undefined) assert(typeof k.pub === "number", `${stage} KPI ${k.label} has a published pair`);
-  }
-  for (const sRow of d.sentiment) {
-    if (sRow.pubPositive !== undefined) {
-      assert(typeof sRow.pubPositive === "number" && typeof sRow.pubMixed === "number",
-        `${stage} sentiment ${sRow.q} has a complete published pair`);
+// ---- No published/updated dot-pair fields survive anywhere in NDR_DATA ----
+function collectKeys(obj, out) {
+  if (Array.isArray(obj)) { obj.forEach(v => collectKeys(v, out)); return; }
+  if (obj && typeof obj === "object") {
+    for (const [k, v] of Object.entries(obj)) {
+      if (/pub/i.test(k)) out.push(k);
+      collectKeys(v, out);
     }
   }
-  for (const r of d.roadblockBreakdown) {
-    // roadblock breakdown may legitimately be unchanged; no hard requirement here
-  }
 }
-assert(NDR_DATA.thirtyDay.sessionsPub === 28, "30-Day session count published pair = 28");
-assert(NDR_DATA.sixMonth.sessionsPub === 8, "6-Month session count published pair = 8");
+const pubKeys = [];
+collectKeys(NDR_DATA, pubKeys);
+assert(pubKeys.length === 0, `no published/updated pair fields remain anywhere in NDR_DATA (found keys: ${pubKeys.join(", ")})`);
 
-// ---- Baseline anchors (published-report values, unchanged where ingestion didn't touch them) ----
-assert(n90.overallScore === 4.47, "90-Day overall score unchanged at 4.47");
-assert(n90.positiveRatePct === 96, "90-Day positive rate unchanged at 96");
-assert(n90.validResponses === 48, "90-Day valid responses unchanged at 48");
-const deltas = n90.yoy.deltas.map(d => d.delta).sort((a, b) => b - a);
-assert(deltas.filter(x => x === 0.35).length === 3, "3 YoY deltas of +0.35");
-assert(deltas[deltas.length - 1] === -0.14, "1 YoY delta of -0.14");
+// ---- Baseline anchors (90-Day: recomputed from "90-day New Hire Survey as of
+// 7.30.26.xlsx", the single authoritative dataset; supersedes all prior anchors) ----
+assert(n90.overallScore === 4.44, "90-Day overall score = 4.44");
+assert(n90.positiveRatePct === 94, "90-Day positive rate = 94");
+assert(n90.validResponses === 59, "90-Day valid responses = 59");
+const deltas = n90.yoy.deltas.map(d => d.delta);
+assert(deltas.every(x => x > 0), "all 11 YoY deltas are positive (every area improved)");
+assert(deltas.length === 11, "11 YoY delta rows");
+const smallestDelta = [...deltas].sort((a, b) => a - b)[0];
+assert(smallestDelta === 0.01, "smallest YoY delta is +0.01 (manager communicates effectively)");
 const trendScores = n90.overallTrend.points.map(p => p.score);
-assert(JSON.stringify(trendScores) === JSON.stringify([4.79, 4.34, 4.55, 4.64]), "trend scores unchanged 4.79/4.34/4.55/4.64");
+assert(JSON.stringify(trendScores) === JSON.stringify([4.56, 4.19, 4.55, 4.74]), "trend scores 4.56/4.19/4.55/4.74");
 const trendN = n90.overallTrend.points.map(p => p.responses);
-assert(JSON.stringify(trendN) === JSON.stringify([3, 19, 25, 1]), "trend n unchanged 3/19/25/1");
+assert(JSON.stringify(trendN) === JSON.stringify([5, 22, 25, 7]), "trend n 5/22/25/7");
 
-// 30-Day merged anchors (from data-reconciliation.md §7)
-assert(tK["Job Matches Expectations"] === 91, "30-Day merged Job Match = 91");
-assert(tK["No Roadblocks"] === 70, "30-Day merged No Roadblocks = 70");
-assert(t.kpis.find(k => k.label === "Job Matches Expectations").pub === 88, "30-Day published Job Match = 88 preserved");
-assert(t.kpis.find(k => k.label === "No Roadblocks").pub === 72, "30-Day published No Roadblocks = 72 preserved");
+// 30-Day merged anchors (unchanged — 90-day refresh must not touch 30-day data)
+assert(tK["Job Matches Expectations"] === 91, "30-Day Job Match unchanged = 91");
+assert(tK["No Roadblocks"] === 70, "30-Day No Roadblocks unchanged = 70");
 
-// 6-Month merged anchors
-assert(sK["Culture Satisfaction"] === 83, "6-Month merged Culture Satisfaction = 83");
-assert(s6.kpis.find(k => k.label === "Culture Satisfaction").pub === 75, "6-Month published Culture Satisfaction = 75 preserved");
-assert(sK["No Roadblocks"] === 70, "6-Month merged No Roadblocks = 70");
+// 6-Month merged anchors (unchanged — 90-day refresh must not touch 6-month data)
+assert(sK["Culture Satisfaction"] === 83, "6-Month Culture Satisfaction unchanged = 83");
+assert(sK["No Roadblocks"] === 70, "6-Month No Roadblocks unchanged = 70");
 
 // ---- Flags: exactly which rows are flagged ----
 const t30Flags = t.sentiment.filter(s => s.flag).map(s => s.q);

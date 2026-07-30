@@ -106,17 +106,19 @@ try {
   check("No banned words visible in rendered DOM", foundBanned.length === 0, foundBanned.join(","));
   check("No 'blend' variant visible in rendered DOM", !/\bblend(ed|ing)?\b/i.test(bodyText));
 
-  // 9. Dot markers present and have tooltip text
-  await page.click("#tab-thirtyDay");
-  await new Promise(r => setTimeout(r, 250));
-  const dotCount = await page.evaluate(() => document.querySelectorAll(".dot").length);
-  check("30-Day tab has dot markers for changed figures", dotCount > 0, `${dotCount} dots`);
-  const dotTitle = await page.evaluate(() => {
-    const dot = document.querySelector(".dot");
-    return dot ? dot.getAttribute("title") : null;
-  });
-  check("Dot marker tooltip shows both published and updated values",
-    dotTitle && dotTitle.includes("Published report") && dotTitle.includes("Updated"), dotTitle);
+  // 9. Zero dot markers anywhere — the published-vs-updated mechanic is retired
+  let totalDots = 0;
+  let totalPublishedMatches = 0;
+  for (const stage of ["overview", "thirtyDay", "ninetyDay", "sixMonth"]) {
+    await page.click(`#tab-${stage}`);
+    await new Promise(r => setTimeout(r, 250));
+    const n = await page.evaluate(() => document.querySelectorAll(".dot").length);
+    totalDots += n;
+    const bodyHtml = await page.evaluate(() => document.body.innerHTML);
+    if (bodyHtml.includes("Published:")) totalPublishedMatches++;
+  }
+  check("Zero .dot elements across all tabs", totalDots === 0, `${totalDots} dots found`);
+  check("Zero 'Published:' matches across all tabs", totalPublishedMatches === 0, `${totalPublishedMatches} matches`);
 
   // 10. Responsive check at 375px width
   await page.setViewport({ width: 375, height: 800 });
@@ -184,9 +186,9 @@ try {
   check("About dialog opens", aboutOpen1);
   const aboutText = await page.evaluate(() => document.getElementById("aboutDialog").innerText);
   check("About dialog has Sources", /Sources/i.test(aboutText));
-  check("About dialog has Updated through", /Updated through/i.test(aboutText));
+  check("About dialog has Data through", /Data through/i.test(aboutText));
   check("About dialog has Anonymization", /Anonymization/i.test(aboutText));
-  check("About dialog has dot legend", /published report/i.test(aboutText) && aboutText.includes("•"));
+  check("About dialog has no dot legend / published-vs-updated language", !/published report/i.test(aboutText) && !aboutText.includes("•"));
   await page.keyboard.press("Escape");
   await new Promise(r => setTimeout(r, 200));
   const aboutAfterEsc = await page.evaluate(() => document.getElementById("aboutDialog").open);

@@ -78,14 +78,6 @@ section.first-section .section-head{margin-top:28px}
 .delta{font-weight:700}
 .delta.pos{color:var(--pos)} .delta.neg{color:var(--neg)}
 
-/* dot marker + tooltip */
-.dot{
-  display:inline-block; width:15px; height:15px; line-height:15px; text-align:center;
-  border-radius:50%; background:var(--stage-30); color:#fff; font-size:10px; font-weight:800;
-  cursor:help; vertical-align:middle; position:relative;
-}
-.dot:focus-visible{outline:2px solid var(--stage-30); outline-offset:2px}
-
 /* flag badge */
 .flag{display:inline-flex; align-items:center; gap:4px; background:#FBE8E9; color:var(--neg); font-size:11px; font-weight:700; padding:2px 8px; border-radius:999px}
 
@@ -198,7 +190,6 @@ dialog#aboutDialog::backdrop{background:rgb(12 35 64 / .45)}
 .about-body h3:first-of-type{margin-top:0}
 .about-body p,.about-body li{font-size:13.5px; color:var(--text-2); line-height:1.55}
 .about-body ul{margin:0; padding-left:18px}
-.about-body .dot-legend-row{display:flex; align-items:center; gap:8px; margin-top:4px}
 .about-close{position:absolute; top:16px; right:18px; background:none; border:none; font-size:20px; color:var(--text-3); cursor:pointer; line-height:1}
 .about-close:focus-visible{outline:2px solid var(--stage-30); outline-offset:2px}
 
@@ -253,16 +244,13 @@ dialog#aboutDialog::backdrop{background:rgb(12 35 64 / .45)}
     <h2 id="aboutDialogTitle">About this data</h2>
 
     <h3>Sources</h3>
-    <p>NDR 30-Day Check-In, 90-Day Onboarding Survey, and 6-Month Check-In published reports, plus focus-group sessions and survey responses collected since those reports came out.</p>
+    <p>NDR 30-Day Check-In, 90-Day Onboarding Survey, and 6-Month Check-In feedback from new hires, Sept 2023 through mid-2026.</p>
 
-    <h3>Updated through</h3>
-    <p>Jul 24, 2026.</p>
+    <h3>Data through</h3>
+    <p>July 30, 2026.</p>
 
     <h3>Anonymization</h3>
     <p>Personal names are removed from every quote and note. Where a name would otherwise appear, it's replaced with a bracketed role (e.g. "[my manager]").</p>
-
-    <h3>Reading the update dots</h3>
-    <div class="dot-legend-row"><span class="dot" aria-hidden="true" style="cursor:default">•</span><span>A number that differs from the published report. Hover or focus any dot to see both values.</span></div>
 
     <h3 id="aboutMethodologyHead">How the 90-day survey was scored</h3>
     <ul id="aboutMethodologyList"></ul>
@@ -274,9 +262,7 @@ dialog#aboutDialog::backdrop{background:rgb(12 35 64 / .45)}
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
 <script>
 /* ======================================================================
-   NDR_DATA — merged dataset. Every figure that differs from the value in
-   the published reports carries a `pub` (or `pubPositive`/`pubMixed`/
-   `pubV`) sibling field, used to render the dot marker + tooltip pair.
+   NDR_DATA — merged dataset, single current value per figure.
    ====================================================================== */
 const NDR_DATA = {
   meta: {
@@ -302,34 +288,32 @@ const NDR_DATA = {
     name: "30-Day Check-In",
     method: "Focus groups",
     dateRange: "Sept 2023 – Jul 2026",
-    dateRangePub: "Sept 2023 – Feb 2026",
-    sessions: 36, sessionsPub: 28,
-    participants: "~71", participantsPub: "~60",
-    newSessions: 8,
+    sessions: 36,
+    participants: "~71",
     questions: 11, fiscalYears: 3,
-    dataNote: "Focus-group notes from 36 sessions across 3 fiscal years — 28 sessions behind the published report, plus 8 collected since. Figures are the share of participants/sessions giving a positive response.",
+    dataNote: "Focus-group notes from 36 sessions across 3 fiscal years. Figures are the share of participants/sessions giving a positive response.",
     kpiTargetPct: 80,
     kpis: [
-      { label:"Job Matches Expectations", pct:91, pub:88 },
+      { label:"Job Matches Expectations", pct:91 },
       { label:"Felt Welcomed", pct:100 },
-      { label:"Engaged (Not Bored)", pct:97, pub:96 },
-      { label:"Communication Effective", pct:94, pub:92 },
-      { label:"Team Helped Onboarding", pct:97, pub:96 },
-      { label:"Culture Satisfaction", pct:90, pub:87 },
-      { label:"No Roadblocks", pct:70, pub:72 }
+      { label:"Engaged (Not Bored)", pct:97 },
+      { label:"Communication Effective", pct:94 },
+      { label:"Team Helped Onboarding", pct:97 },
+      { label:"Culture Satisfaction", pct:90 },
+      { label:"No Roadblocks", pct:70 }
     ],
     kpiSummary: "Six of seven measures are above the 80% target. No Roadblocks sits at 70%, just under — welcoming culture and engagement remain consistent strengths.",
     sentiment: [
-      { q:"Q1", label:"Job Expected", positive:91, mixed:9, flag:false, pubPositive:88, pubMixed:12 },
-      { q:"Q2", label:"Challenged", positive:97, mixed:3, flag:false, pubPositive:96, pubMixed:4 },
+      { q:"Q1", label:"Job Expected", positive:91, mixed:9, flag:false },
+      { q:"Q2", label:"Challenged", positive:97, mixed:3, flag:false },
       { q:"Q3", label:"Welcomed", positive:100, mixed:0, flag:false },
-      { q:"Q4", label:"Roadblocks", positive:33, mixed:67, flag:true, pubPositive:28, pubMixed:72 },
-      { q:"Q5-6", label:"Communication", positive:94, mixed:6, flag:false, pubPositive:92, pubMixed:8 },
-      { q:"Q7", label:"Training Needs", positive:65, mixed:35, flag:false, pubPositive:55, pubMixed:45 },
-      { q:"Q8", label:"Culture", positive:90, mixed:10, flag:false, pubPositive:87, pubMixed:13 },
-      { q:"Q9", label:"Goals", positive:84, mixed:16, flag:false, pubPositive:80, pubMixed:20 },
-      { q:"Q10", label:"Expertise", positive:77, mixed:23, flag:false, pubPositive:70, pubMixed:30 },
-      { q:"Q11", label:"Adjustments", positive:66, mixed:34, flag:false, pubPositive:60, pubMixed:40 }
+      { q:"Q4", label:"Roadblocks", positive:33, mixed:67, flag:true },
+      { q:"Q5-6", label:"Communication", positive:94, mixed:6, flag:false },
+      { q:"Q7", label:"Training Needs", positive:65, mixed:35, flag:false },
+      { q:"Q8", label:"Culture", positive:90, mixed:10, flag:false },
+      { q:"Q9", label:"Goals", positive:84, mixed:16, flag:false },
+      { q:"Q10", label:"Expertise", positive:77, mixed:23, flag:false },
+      { q:"Q11", label:"Adjustments", positive:66, mixed:34, flag:false }
     ],
     sentimentFlagRule: "Flagged when positive responses are under 60%, or mixed responses are over 40%.",
     byFY: [
@@ -355,32 +339,32 @@ const NDR_DATA = {
           "Some requested return to in-person HR orientation"
         ],
         roadblocks:["No email about health benefits signup","Difficulty finding benefits enrollment info","HR orientation suggested to return to in-person format"] },
-      { fy:"FY26", dateRange:"July 2025 – Jul 2026", dateRangePub:"July 2025 – Feb 2026",
-        sessions:14, sessionsPub:6, participants:"~19", participantsPub:"~8",
-        note:"8 sessions collected since the published report are folded in below (2 in July 2026 may belong to FY27 under a strict fiscal-year convention — grouped with FY26 here to match the source folder).",
+      { fy:"FY26", dateRange:"July 2025 – Jul 2026",
+        sessions:14, participants:"~19",
+        note:"2 sessions from July 2026 may belong to FY27 under a strict fiscal-year convention — grouped with FY26 here to match the source folder.",
         kpis:{
-          "Job Match":{v:98,pub:95}, "Welcomed":100, "Engaged":100,
-          "Communication":{v:98,pub:95}, "Team Support":100,
-          "Culture":{v:96,pub:90}, "No Roadblocks":{v:70,pub:80}
+          "Job Match":98, "Welcomed":100, "Engaged":100,
+          "Communication":98, "Team Support":100,
+          "Culture":96, "No Roadblocks":70
         },
         observations:[
           "Highest overall satisfaction scores across all fiscal years",
           "Welcome baskets appreciated by new hires",
           "JOVE videos praised as valuable resource",
           "Most employees feel fully utilized in their roles",
-          "Sessions collected since the report show the same pattern: strong culture and engagement, with roadblocks (mostly resolved system-access delays) the one area to watch"
+          "Strong culture and engagement, with roadblocks (mostly resolved system-access delays) the one area to watch"
         ],
         improvements:[
-          "70% report no roadblocks (down slightly from the published report's 80%, still well ahead of FY24's 65%)",
-          "Culture satisfaction now 96%, up from 90% in the published report",
+          "70% report no roadblocks, well ahead of FY24's 65%",
+          "Culture satisfaction at 96%, the strongest of any fiscal year",
           "100% engagement rate held"
         ] }
     ],
     roadblockBreakdown: [
-      { label:"No Roadblocks Reported", pct:70, pub:72 },
-      { label:"IT/System Access", pct:18, pub:12 },
-      { label:"HR/Benefits Confusion", pct:8, pub:10 },
-      { label:"Training Gaps", pct:4, pub:6 }
+      { label:"No Roadblocks Reported", pct:70 },
+      { label:"IT/System Access", pct:18 },
+      { label:"HR/Benefits Confusion", pct:8 },
+      { label:"Training Gaps", pct:4 }
     ],
     roadblockDetails: [
       "IT/System Access: Card access delays, Redmine issues, system login problems",
@@ -432,111 +416,111 @@ const NDR_DATA = {
       { title:"Consider In-Person HR Orientation", body:"Multiple employees requested return to in-person HR orientation. Evaluate feasibility and hybrid options." },
       { title:"Develop G-Suite Basics Training", body:"Create training module for employees coming from Microsoft environments. Many struggle with G-Suite transition." },
       { title:"Clarify Long-Term Vision", body:"Help new employees understand NDR's mission and goals. Address the question: 'What are we going for?'" },
-      { title:"Verify Payroll Deduction Accuracy", body:"A session collected since the published report flagged a possible retirement-contribution withholding error. Confirm payroll deduction rates are set correctly for new hires." }
+      { title:"Verify Payroll Deduction Accuracy", body:"A recent session flagged a possible retirement-contribution withholding error. Confirm payroll deduction rates are set correctly for new hires." }
     ]
   },
 
   ninetyDay: {
     name: "90-Day Onboarding Survey",
     method: "Survey (1–5 scale)",
-    dateRange: "Oct 2023 – Feb 2026",
-    validResponses: 48,
-    exclusionNote: "2 test responses were identified and excluded from analysis. Final dataset: 48 valid responses.",
-    overallScore: 4.47, scaleMax: 5.0, positiveRatePct: 96, yoyImprovement: 0.21, targetScore: 4.0,
+    dateRange: "Nov 2023 – Jun 2026",
+    validResponses: 59,
+    exclusionNote: "1 preview/test submission and 4 incomplete starts (0 questions answered) were excluded. Final dataset: 59 valid responses.",
+    overallScore: 4.44, scaleMax: 5.0, positiveRatePct: 94, yoyImprovement: 0.35, targetScore: 4.0,
     keyFindings: [
-      "100% of employees are happy with their decision to work at NDR",
-      "100% know where to go for questions about their role",
-      "100% rate manager communication as effective",
-      "94% report their manager helped establish goals",
-      "All measures improved from 2024 to 2025 except one (Manager Communication: -0.14)"
+      "97% are happy with their decision to work at NDR",
+      "98% rate manager communication as effective",
+      "95% report their manager helped establish goals",
+      "All 11 measures improved from 2024 to 2025",
+      "No roadblocks (Q10) is the one measure below the 4.0 target, at 3.88"
     ],
     questionScores: [
-      { q:"Q1", label:"Clear job expectations", score:4.44, positivePct:98, n:48 },
-      { q:"Q2", label:"Know where to ask questions", score:4.54, positivePct:100, n:48 },
-      { q:"Q3", label:"Happy with NDR decision", score:4.75, positivePct:100, n:48 },
-      { q:"Q4", label:"Feel part of NDR", score:4.44, positivePct:98, n:48 },
-      { q:"Q5", label:"Manager helped establish goals", score:4.69, positivePct:94, n:48, type:"yesno" },
-      { q:"Q6", label:"Manager communicates effectively", score:4.67, positivePct:100, n:48 },
-      { q:"Q7", label:"Manager provides feedback", score:4.52, positivePct:96, n:48 },
-      { q:"Q8", label:"Feel challenged and engaged", score:4.44, positivePct:96, n:48 },
-      { q:"Q9", label:"Feel part of team", score:4.44, positivePct:96, n:48 },
-      { q:"Q10", label:"No roadblocks", score:4.00, positivePct:87, n:47, type:"reverse" },
-      { q:"Q11", label:"Manager discussed progress", score:4.30, positivePct:94, n:47 }
+      { q:"Q1", label:"Clear job expectations", score:4.37, positivePct:95, n:59 },
+      { q:"Q2", label:"Know where to ask questions", score:4.47, positivePct:97, n:59 },
+      { q:"Q3", label:"Happy with NDR decision", score:4.64, positivePct:97, n:59 },
+      { q:"Q4", label:"Feel part of NDR", score:4.42, positivePct:97, n:59 },
+      { q:"Q5", label:"Manager helped establish goals", score:4.80, positivePct:95, n:59, type:"yesno" },
+      { q:"Q6", label:"Manager communicates effectively", score:4.63, positivePct:98, n:59 },
+      { q:"Q7", label:"Manager provides feedback", score:4.44, positivePct:93, n:59 },
+      { q:"Q8", label:"Feel challenged and engaged", score:4.46, positivePct:95, n:59 },
+      { q:"Q9", label:"Feel part of team", score:4.44, positivePct:95, n:59 },
+      { q:"Q10", label:"No roadblocks", score:3.88, positivePct:83, n:58, type:"reverse" },
+      { q:"Q11", label:"Manager discussed progress", score:4.28, positivePct:91, n:58 }
     ],
-    scoreBands: { excellent:"4.5+", good:"4.0–4.49" },
-    scoreSummary: "All 11 survey questions exceeded the 4.0 target. Five reached the 'Excellent' band (4.5+).",
+    scoreBands: { excellent:"4.5+", good:"4.0–4.49", needsAttention:"under 4.0" },
+    scoreSummary: "10 of 11 survey questions met or exceeded the 4.0 target. No roadblocks (Q10) is the one measure below target, at 3.88.",
     responseDistribution: {
-      note: "As reported (n=48; Q11 n=47). Q5 (Yes/No) and Q10 (reverse-scored) are shown separately as special questions instead.",
       categories: ["Strongly Agree","Agree","Disagree","Strongly Disagree"],
       rows: [
-        { q:"Q1", label:"Clear expectations", sa:48, a:50, d:2, sd:0 },
-        { q:"Q2", label:"Know where to ask", sa:54, a:46, d:0, sd:0 },
-        { q:"Q3", label:"Happy with NDR", sa:75, a:25, d:0, sd:0 },
-        { q:"Q4", label:"Feel part of NDR", sa:48, a:50, d:2, sd:0 },
-        { q:"Q6", label:"Manager communicates", sa:67, a:33, d:0, sd:0 },
-        { q:"Q7", label:"Manager feedback", sa:60, a:35, d:4, sd:0 },
-        { q:"Q8", label:"Challenged/engaged", sa:52, a:44, d:4, sd:0 },
-        { q:"Q9", label:"Part of team", sa:52, a:44, d:4, sd:0 },
-        { q:"Q11", label:"Progress discussed", sa:45, a:49, d:4, sd:2 }
+        { q:"Q1", label:"Clear expectations", sa:51, a:44, d:2, sd:3 },
+        { q:"Q2", label:"Know where to ask", sa:56, a:41, d:2, sd:2 },
+        { q:"Q3", label:"Happy with NDR", sa:73, a:24, d:2, sd:2 },
+        { q:"Q4", label:"Feel part of NDR", sa:51, a:46, d:2, sd:2 },
+        { q:"Q6", label:"Manager communicates", sa:68, a:31, d:0, sd:2 },
+        { q:"Q7", label:"Manager feedback", sa:61, a:32, d:3, sd:3 },
+        { q:"Q8", label:"Challenged/engaged", sa:56, a:39, d:5, sd:0 },
+        { q:"Q9", label:"Part of team", sa:56, a:39, d:3, sd:2 },
+        { q:"Q11", label:"Progress discussed", sa:48, a:43, d:5, sd:3 }
       ]
     },
     specialQuestions: {
-      q5: { title:"Q5: Manager Helped Establish Goals", yes:45, no:3, total:48, yesPct:94, noPct:6 },
-      q10:{ title:"Q10: Roadblocks Preventing Job Performance", noRoadblocks:41, hasRoadblocks:6, total:47, noPct:87, hasPct:13 },
+      q5: { title:"Q5: Manager Helped Establish Goals", yes:56, no:3, total:59, yesPct:95, noPct:5 },
+      q10:{ title:"Q10: Roadblocks Preventing Job Performance", noRoadblocks:48, hasRoadblocks:10, total:58, noPct:83, hasPct:17 },
       observations: [
-        "Goal Setting (Q5): 94% of employees report their manager helped establish goals within the first 90 days. 3 employees (6%) indicated their manager did not help with goal setting.",
-        "Roadblocks (Q10): 87% of employees report no significant roadblocks preventing job performance. 6 employees (13%) identified roadblocks worth a targeted follow-up."
+        "Goal Setting (Q5): 95% of employees report their manager helped establish goals within the first 90 days. 3 employees (5%) indicated their manager did not help with goal setting.",
+        "Roadblocks (Q10): 83% of employees report no significant roadblocks preventing job performance. 10 employees (17%) identified roadblocks worth a targeted follow-up."
       ]
     },
     yoy: {
-      summary: "Overall satisfaction improved from 4.34 to 4.55 (+0.21 points). Ten of eleven areas improved.",
-      year2024:{ n:19, overall:4.34 }, year2025:{ n:25, overall:4.55 },
+      summary: "Overall satisfaction improved from 4.19 to 4.55 (+0.35 points). All eleven areas improved.",
+      year2024:{ n:22, overall:4.19 }, year2025:{ n:25, overall:4.55 },
       deltas: [
-        { label:"Challenged/engaged", delta:0.35 }, { label:"Feel part of NDR", delta:0.35 }, { label:"Feel part of team", delta:0.35 },
-        { label:"Manager feedback", delta:0.28 }, { label:"Manager helped goals", delta:0.26 }, { label:"Happy with NDR", delta:0.26 },
-        { label:"No roadblocks", delta:0.19 }, { label:"Know where to ask", delta:0.18 }, { label:"Progress discussed", delta:0.11 },
-        { label:"Clear expectations", delta:0.11 }, { label:"Manager communicates", delta:-0.14 }
+        { label:"Manager feedback", delta:0.55 }, { label:"Happy with NDR", delta:0.52 },
+        { label:"Feel part of NDR", delta:0.42 }, { label:"Feel part of team", delta:0.42 }, { label:"Know where to ask", delta:0.42 },
+        { label:"Clear expectations", delta:0.39 }, { label:"Challenged/engaged", delta:0.38 },
+        { label:"Progress discussed", delta:0.33 }, { label:"No roadblocks", delta:0.22 },
+        { label:"Manager helped goals", delta:0.20 }, { label:"Manager communicates", delta:0.01 }
       ],
       trendTable: [
-        { metric:"Feel part of NDR", y2024:4.21, y2025:4.56, change:"+0.35" },
-        { metric:"Feel part of team", y2024:4.21, y2025:4.56, change:"+0.35" },
-        { metric:"Feel challenged/engaged", y2024:4.21, y2025:4.56, change:"+0.35" },
-        { metric:"Manager provides feedback", y2024:4.32, y2025:4.60, change:"+0.28" },
-        { metric:"Happy with NDR decision", y2024:4.58, y2025:4.84, change:"+0.26" },
-        { metric:"Manager communicates", y2024:4.74, y2025:4.60, change:"-0.14" }
+        { metric:"Manager provides feedback", y2024:4.05, y2025:4.60, change:"+0.55" },
+        { metric:"Happy with NDR decision", y2024:4.32, y2025:4.84, change:"+0.52" },
+        { metric:"Feel part of NDR", y2024:4.14, y2025:4.56, change:"+0.42" },
+        { metric:"Feel part of team", y2024:4.14, y2025:4.56, change:"+0.42" },
+        { metric:"Clear job expectations", y2024:4.09, y2025:4.48, change:"+0.39" },
+        { metric:"Manager communicates", y2024:4.59, y2025:4.60, change:"+0.01" }
       ],
-      declineNote: "Manager communicates is the only area showing decline; it remains above target at 4.60."
+      declineNote: "Every area improved year over year; manager communication had the smallest gain, essentially flat at +0.01."
     },
     overallTrend: {
-      note: "2023 (3 responses) and 2026 year-to-date (1 response) are very small samples — read with caution.",
+      note: "2023 and 2026-to-date reflect far fewer responses than the two full years in between — read those two points with extra caution.",
       points: [
-        { year:"2023", responses:3, sharePct:6, score:4.79 },
-        { year:"2024", responses:19, sharePct:40, score:4.34 },
-        { year:"2025", responses:25, sharePct:52, score:4.55 },
-        { year:"2026 (YTD)", responses:1, sharePct:2, score:4.64 }
+        { year:"2023", responses:5, sharePct:8, score:4.56 },
+        { year:"2024", responses:22, sharePct:37, score:4.19 },
+        { year:"2025", responses:25, sharePct:42, score:4.55 },
+        { year:"2026 (YTD)", responses:7, sharePct:12, score:4.74 }
       ]
     },
     openEnded: {
-      liked: { title:"What Employees Liked", responsesNote:"42 substantive responses", items:[
-        { label:"Structure/Organization", mentions:14 }, { label:"Personal Connections", mentions:10 },
-        { label:"Feeling Part of Team", mentions:9 }, { label:"Welcoming Culture", mentions:8 },
-        { label:"Training Quality", mentions:6 }, { label:"Manager Support", mentions:4 } ] },
-      improvements: { title:"Improvement Suggestions", responsesNote:"21 substantive responses", items:[
-        { label:"Cross-team Integration", mentions:6 }, { label:"Task Clarity/Due Dates", mentions:5 },
-        { label:"HR/Benefits Timing", mentions:4 }, { label:"Resource Centralization", mentions:4 },
-        { label:"Interview Process", mentions:3 }, { label:"New Employee Cohort", mentions:3 },
-        { label:"Training Timing", mentions:3 }, { label:"Remote Support", mentions:1 } ] },
+      liked: { title:"What Employees Liked", responsesNote:"49 substantive responses", items:[
+        { label:"Structure/Organization", mentions:15 }, { label:"Personal Connections", mentions:13 },
+        { label:"Welcoming Culture", mentions:10 }, { label:"Manager Support", mentions:7 },
+        { label:"Training Quality", mentions:6 }, { label:"Feeling Part of Team", mentions:3 } ] },
+      improvements: { title:"Improvement Suggestions", responsesNote:"26 substantive responses", items:[
+        { label:"Cross-team Integration", mentions:5 }, { label:"Task Clarity/Due Dates", mentions:4 },
+        { label:"HR/Benefits Timing", mentions:4 }, { label:"New Employee Cohort", mentions:4 },
+        { label:"Resource Centralization", mentions:3 }, { label:"Training Timing", mentions:3 },
+        { label:"Interview Process", mentions:2 }, { label:"Remote Support", mentions:1 } ] },
       valuedMost: [
         "Structured onboarding process with clear checklists and timelines",
         "Personal connections through meet-and-greets and team introductions",
         "Welcoming culture and supportive colleagues",
-        "Self-paced training with multiple touchpoints"
+        "Manager support and consistent check-ins along the way"
       ],
       areasForImprovement: [
         "Cross-team integration: Better understanding of how NDR teams connect",
         "Task clarity: Clearer outlines with due dates for onboarding tasks",
         "HR/Benefits: Earlier access to benefits enrollment information",
-        "Resource centralization: Single source for templates and guides"
+        "New employee cohort: More opportunities to connect with recently hired peers"
       ]
     },
     recommendations: [
@@ -544,8 +528,8 @@ const NDR_DATA = {
       { title:"Address Cross-Team Integration", body:"Develop an NDR org chart and create opportunities for new employees to learn about other teams and how departments interconnect." },
       { title:"Improve Task Clarity", body:"Add clear due dates to onboarding checklists and ensure automated task notifications reach new hires reliably." },
       { title:"Streamline HR Processes", body:"Coordinate with HR to provide benefits information earlier in the onboarding process, ideally within the first week." },
+      { title:"Follow Up on 90-Day Roadblocks", body:"No roadblocks is now the only measure below target, at 3.88. Follow up with the 10 respondents who reported one to identify common blockers." },
       { title:"Create Resource Library", body:"Develop a centralized repository of templates, guides, and role-specific resources for new employees." },
-      { title:"Monitor Manager Communication", body:"Investigate the slight decline in manager communication scores and provide support resources if needed." },
       { title:"Support Remote Employees", body:"Develop specific strategies to help remote employees feel connected to NDR and their teams." }
     ],
     methodology: [
@@ -560,35 +544,34 @@ const NDR_DATA = {
   sixMonth: {
     name: "6-Month Check-In",
     method: "Focus groups",
-    dateRange: "Mar 2024 – Jul 2026", dateRangePub: "Mar 2024 – Jan 2026",
-    sessions: 12, sessionsPub: 8,
-    participants: "~33", participantsPub: "~28",
-    newSessions: 4,
+    dateRange: "Mar 2024 – Jul 2026",
+    sessions: 12,
+    participants: "~33",
     questions: 11,
-    responsesCaptured: 36, responsesCapturedPub: 31,
-    dataNote: "Focus-group notes from 12 sessions — 8 sessions behind the published report, plus 4 collected since. 2 blank templates and 1 session log that cuts off before questions were recorded are excluded.",
+    responsesCaptured: 36,
+    dataNote: "Focus-group notes from 12 sessions. 2 blank templates and 1 session log that cuts off before questions were recorded are excluded.",
     kpiBands: { excellent:"90%+", good:"70–89%", needsAttention:"under 70%" },
     kpis: [
       { label:"Job Matches Expectations", pct:100 },
-      { label:"Felt Welcomed", pct:92, pub:100 },
+      { label:"Felt Welcomed", pct:92 },
       { label:"Engaged (Not Bored)", pct:100 },
       { label:"Communication Effective", pct:100 },
       { label:"Team Helped Onboarding", pct:100 },
-      { label:"Culture Satisfaction", pct:83, pub:75 },
-      { label:"No Roadblocks", pct:70, pub:67 }
+      { label:"Culture Satisfaction", pct:83 },
+      { label:"No Roadblocks", pct:70 }
     ],
-    kpiSummary: "Four of seven measures are at 100%. Felt Welcomed eased slightly to 92%, and Culture Satisfaction (83%) and No Roadblocks (70%) remain the two areas to watch — though both are higher than in the published report.",
+    kpiSummary: "Four of seven measures are at 100%. Felt Welcomed eased slightly to 92%, and Culture Satisfaction (83%) and No Roadblocks (70%) remain the two areas to watch.",
     sentiment: [
       { q:"Q1", label:"Job Expected", positive:100, mixed:0, flag:false },
       { q:"Q2", label:"Challenged", positive:100, mixed:0, flag:false },
-      { q:"Q3", label:"Welcomed", positive:92, mixed:8, flag:false, pubPositive:100, pubMixed:0 },
-      { q:"Q4", label:"Roadblocks", positive:30, mixed:70, flag:true, pubPositive:33, pubMixed:67 },
+      { q:"Q3", label:"Welcomed", positive:92, mixed:8, flag:false },
+      { q:"Q4", label:"Roadblocks", positive:30, mixed:70, flag:true },
       { q:"Q5-6", label:"Communication", positive:100, mixed:0, flag:false },
-      { q:"Q7", label:"Training Needs", positive:67, mixed:33, flag:false, pubPositive:50, pubMixed:50 },
-      { q:"Q8", label:"Culture", positive:83, mixed:17, flag:false, pubPositive:75, pubMixed:25 },
-      { q:"Q9", label:"Goals", positive:78, mixed:22, flag:false, pubPositive:67, pubMixed:33 },
-      { q:"Q10", label:"Expertise", positive:67, mixed:33, flag:false, pubPositive:50, pubMixed:50 },
-      { q:"Q11", label:"Adjustments", positive:47, mixed:53, flag:true, pubPositive:33, pubMixed:67 }
+      { q:"Q7", label:"Training Needs", positive:67, mixed:33, flag:false },
+      { q:"Q8", label:"Culture", positive:83, mixed:17, flag:false },
+      { q:"Q9", label:"Goals", positive:78, mixed:22, flag:false },
+      { q:"Q10", label:"Expertise", positive:67, mixed:33, flag:false },
+      { q:"Q11", label:"Adjustments", positive:47, mixed:53, flag:true }
     ],
     sentimentFlagRule: "Flagged when positive responses are under 60%, or mixed responses are over 40%.",
     strengths: [
@@ -614,9 +597,9 @@ const NDR_DATA = {
       "New employee ideas not being captured systematically"
     ],
     roadblockBreakdown: [
-      { label:"No Roadblocks Reported", pct:70, pub:67 },
-      { label:"Leadership Transitions", pct:11, pub:17 },
-      { label:"System/Tech Issues", pct:19, pub:16 }
+      { label:"No Roadblocks Reported", pct:70 },
+      { label:"Leadership Transitions", pct:11 },
+      { label:"System/Tech Issues", pct:19 }
     ],
     roadblockDetails: [
       "A manager departed early with no transition period",
@@ -664,10 +647,10 @@ const NDR_DATA = {
       { date:"1/31/25", format:"Standard", participants:4 },
       { date:"3/24/25", format:"Standard", participants:2 },
       { date:"3/1/24", format:"Custom (3 Q)", participants:4 },
-      { date:"4/22/26", format:"Standard", participants:1, isNew:true },
-      { date:"5/6/26", format:"Standard", participants:1, isNew:true },
-      { date:"6/19/26", format:"Standard", participants:1, isNew:true },
-      { date:"7/17/26", format:"Standard", participants:2, isNew:true }
+      { date:"4/22/26", format:"Standard", participants:1 },
+      { date:"5/6/26", format:"Standard", participants:1 },
+      { date:"6/19/26", format:"Standard", participants:1 },
+      { date:"7/17/26", format:"Standard", participants:2 }
     ],
     excludedSessions: [
       "5/28/25 - Template present, no responses",
@@ -680,35 +663,29 @@ const NDR_DATA = {
     name: "Overview",
     methodCaveat: "30-Day and 6-Month figures come from focus-group notes; 90-Day figures come from a survey (1–5 scale). They're not the same people, and small groups can shift a lot on just one or two answers — read these as directional, not decimal-precise.",
     mappedMetrics: [
-      { metric:"Job expectations", d30:91, d30Pub:88, d90:98, m6:100, src30:"Job Matches Expectations", src90:"Clear job expectations (% positive)", src6:"Job Matches Expectations" },
-      { metric:"Welcomed / belonging", d30:100, d90:96, m6:92, m6Pub:100, src30:"Felt Welcomed", src90:"Feel part of team (% positive)", src6:"Felt Welcomed" },
-      { metric:"Engaged & challenged", d30:97, d30Pub:96, d90:96, m6:100, src30:"Engaged (Not Bored)", src90:"Feel challenged and engaged (% positive)", src6:"Engaged (Not Bored)" },
-      { metric:"Communication", d30:94, d30Pub:92, d90:100, m6:100, src30:"Communication Effective (team)", src90:"Manager communicates effectively (% positive)", src6:"Communication Effective (team)" },
-      { metric:"Team support", d30:97, d30Pub:96, d90:100, m6:100, src30:"Team Helped Onboarding", src90:"Know where to ask questions (% positive)", src6:"Team Helped Onboarding" },
-      { metric:"Culture satisfaction", d30:90, d30Pub:87, d90:null, m6:83, m6Pub:75, src30:"Culture Satisfaction", src90:"Not asked in the 90-day survey", src6:"Culture Satisfaction" },
-      { metric:"No roadblocks", d30:70, d30Pub:72, d90:87, m6:70, m6Pub:67, src30:"No Roadblocks", src90:"No roadblocks (% positive)", src6:"No Roadblocks" }
-    ],
-    headlines: [
-      { title:"Expectations climb steadily", detail:"Job-matches-expectations rises from 91% at 30 days to 98% at 90 days to 100% at 6 months.", accent:"pos" },
-      { title:"Belonging softens a little by 6 months", detail:"Felt-welcomed holds near 100% through the first 90 days, then eases to 92% at 6 months — still high, and the one figure most worth a second look.", accent:"neg" },
-      { title:"No-roadblocks dips, then recovers", detail:"No-roadblocks eases to 70% in the first 30 days, climbs to 87% by 90 days, then settles back to 70% at 6 months — a pattern to keep monitoring, not a decline.", accent:"neg" },
-      { title:"Culture and engagement hold up well", detail:"Engagement never drops below 96% at any stage, and culture satisfaction is actually higher than the published reports at both 30 days (90%) and 6 months (83%).", accent:"pos" }
+      { metric:"Job expectations", d30:91, d90:95, m6:100, src30:"Job Matches Expectations", src90:"Clear job expectations (% positive)", src6:"Job Matches Expectations" },
+      { metric:"Welcomed / belonging", d30:100, d90:95, m6:92, src30:"Felt Welcomed", src90:"Feel part of team (% positive)", src6:"Felt Welcomed" },
+      { metric:"Engaged & challenged", d30:97, d90:95, m6:100, src30:"Engaged (Not Bored)", src90:"Feel challenged and engaged (% positive)", src6:"Engaged (Not Bored)" },
+      { metric:"Communication", d30:94, d90:98, m6:100, src30:"Communication Effective (team)", src90:"Manager communicates effectively (% positive)", src6:"Communication Effective (team)" },
+      { metric:"Team support", d30:97, d90:97, m6:100, src30:"Team Helped Onboarding", src90:"Know where to ask questions (% positive)", src6:"Team Helped Onboarding" },
+      { metric:"Culture satisfaction", d30:90, d90:null, m6:83, src30:"Culture Satisfaction", src90:"Not asked in the 90-day survey", src6:"Culture Satisfaction" },
+      { metric:"No roadblocks", d30:70, d90:83, m6:70, src30:"No Roadblocks", src90:"No roadblocks (% positive)", src6:"No Roadblocks" }
     ],
     recurringConcerns: [
-      { concern:"IT / system issues", d30:"Access delays, mostly resolved during onboarding", d90:"Reported by 13% of respondents; task notifications unreliable", m6:"Freezing, credit card system, ERA rollout" },
+      { concern:"IT / system issues", d30:"Access delays, mostly resolved during onboarding", d90:"Reported by 17% of respondents; task notifications unreliable", m6:"Freezing, credit card system, ERA rollout" },
       { concern:"Training gaps & accessibility", d30:"Mixed feedback on training needs", d90:"Training timing (3 mentions)", m6:"Mixed feedback on training needs; workshops missed" },
       { concern:"Remote engagement", d30:"Mentioned in several sessions", d90:"Remote support suggestions; dedicated recommendation", m6:"Mentioned in about half of sessions" },
       { concern:"HR / benefits timing", d30:"A recurring roadblock category; info late or missing", d90:"HR/benefits timing (4 mentions)", m6:null },
-      { concern:"Goal & vision clarity", d30:"Vision clarity raised in some sessions", d90:"Task clarity/due dates (5 mentions)", m6:"Mixed feedback on goals; 'soft goals' theme" },
+      { concern:"Goal & vision clarity", d30:"Vision clarity raised in some sessions", d90:"Task clarity/due dates (4 mentions)", m6:"Mixed feedback on goals; 'soft goals' theme" },
       { concern:"Leadership transitions", d30:null, d90:null, m6:"Top concern; no transition protocols" },
-      { concern:"Cross-team integration", d30:null, d90:"Top improvement suggestion (6 mentions)", m6:"Culture varies by unit; holding patterns" },
+      { concern:"Cross-team integration", d30:null, d90:"Top improvement suggestion (5 mentions)", m6:"Culture varies by unit; holding patterns" },
       { concern:"Ideas not captured", d30:null, d90:null, m6:"No formal ideas channel" },
       { concern:"Payroll deduction accuracy", d30:"One session flagged a possible retirement-contribution withholding error", d90:null, m6:null }
     ],
     participation: [
-      { stage:"30-Day", detail:"36 sessions · ~71 participants", detailPub:"28 sessions · ~60 participants", method:"Focus groups" },
-      { stage:"90-Day", detail:"48 responses", method:"Survey" },
-      { stage:"6-Month", detail:"12 sessions · ~33 participants", detailPub:"8 sessions · ~28 participants", method:"Focus groups" }
+      { stage:"30-Day", detail:"36 sessions · ~71 participants", method:"Focus groups" },
+      { stage:"90-Day", detail:"59 responses", method:"Survey" },
+      { stage:"6-Month", detail:"12 sessions · ~33 participants", method:"Focus groups" }
     ],
     participationCaveat: "Stages are separate collections; individuals may appear in more than one stage. Don't add these up as unique people."
   }
@@ -729,7 +706,7 @@ const PALETTE = {
 
 function fmtPct(n){ return Math.round(n) + "%"; }
 function bandColorQual(v){ return v>=90?PALETTE.pos : v>=70?PALETTE.mix : PALETTE.neg; }
-function bandColorScore(v){ return v>=4.5?PALETTE.pos : PALETTE.mix; }
+function bandColorScore(v){ return v>=4.5?PALETTE.pos : v>=4.0?PALETTE.mix : PALETTE.neg; }
 function bandKey(v){ return v>=90?"pos" : v>=70?"mix" : "neg"; }
 function esc(s){ return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
@@ -799,17 +776,6 @@ function trendArrow(from, to, fromLabel, toLabel, unit){
   return `<span class="trend-cell trend-flat" title="${esc(sentence)}">→ ${diff>=0?"+":""}${diff}</span>`;
 }
 
-/* dot marker: renders a small "•" style badge with a native tooltip
-   showing "Published report: X · Updated: Y" whenever a `pub` value is
-   present and differs from the current value. */
-function dotHTML(current, pub, isScore){
-  if (pub === undefined || pub === null) return "";
-  const fmt = isScore ? (v => v.toFixed(2)) : (v => Math.round(v) + "%");
-  if (fmt(current) === fmt(pub)) return "";
-  const label = `Published report: ${fmt(pub)} · Updated: ${fmt(current)}`;
-  return ` <span class="dot" tabindex="0" title="${esc(label)}" aria-label="${esc(label)}">•</span>`;
-}
-
 let chartFailed = (typeof window.Chart === "undefined");
 if (!chartFailed) {
   Chart.register(ChartDataLabels);
@@ -864,9 +830,7 @@ function hbarKPI(canvasId, items, targetPct){
         tooltip:{ backgroundColor:PALETTE.ink, cornerRadius:8, callbacks:{
           label:(ctx)=>{
             const item = items[ctx.dataIndex];
-            let l = `${item.label}: ${Math.round(item.pct)}%`;
-            if (item.pub !== undefined) l += ` (published: ${Math.round(item.pub)}%)`;
-            return l;
+            return `${item.label}: ${Math.round(item.pct)}%`;
           } } },
         datalabels: smartPctLabels((ctx)=>values[ctx.dataIndex], 100)
       }
@@ -951,9 +915,7 @@ function stackedSentiment(canvasId, rows, questionRef){
           label:(ctx)=>{
             const r = rows[ctx.dataIndex];
             const isPos = ctx.dataset.label==="Positive";
-            let l = `${ctx.dataset.label}: ${isPos?r.positive:r.mixed}%`;
-            if (r.pubPositive !== undefined) l += ` (published: ${isPos?r.pubPositive:r.pubMixed}%)`;
-            return l;
+            return `${ctx.dataset.label}: ${isPos?r.positive:r.mixed}%`;
           } } },
         datalabels:{ display:(ctx)=>ctx.dataset.data[ctx.dataIndex] >= 8, color:"#fff", font:{ weight:600, size:11 },
           formatter:(v)=>Math.round(v)+"%" }
@@ -977,9 +939,7 @@ function donut(canvasId, items, colorMap){
         tooltip:{ backgroundColor:PALETTE.ink, cornerRadius:8, callbacks:{
           label:(ctx)=>{
             const item = items[ctx.dataIndex];
-            let l = `${item.label}: ${Math.round(item.pct)}%`;
-            if (item.pub !== undefined) l += ` (published: ${Math.round(item.pub)}%)`;
-            return l;
+            return `${item.label}: ${Math.round(item.pct)}%`;
           } } },
         datalabels:{ display:true, color:"#fff", font:{ weight:700, size:12 }, formatter:(v)=>Math.round(v)+"%" }
       }
@@ -1040,7 +1000,8 @@ function divergingBar(canvasId, items){
         tooltip:{ backgroundColor:PALETTE.ink, cornerRadius:8, callbacks:{
           label:(ctx)=>`${ctx.label}: ${ctx.raw>=0?"+":""}${ctx.raw.toFixed(2)}` } },
         datalabels:{ display:true, color:PALETTE.ink, font:{ weight:600, size:11 },
-          anchor:(ctx)=>ctx.raw>=0?"end":"start", align:(ctx)=>ctx.raw>=0?"right":"left", offset:6,
+          anchor:(ctx)=>ctx.dataset.data[ctx.dataIndex]>=0?"end":"start",
+          align:(ctx)=>ctx.dataset.data[ctx.dataIndex]>=0?"right":"left", offset:6,
           formatter:(v)=>(v>=0?"+":"")+v.toFixed(2) } }
     }
   });
@@ -1137,8 +1098,7 @@ function table(headers, rows){
    Section 1 — headline tiles: metric name, 6-month hero number + trend
    arrow vs 30-day, a 3-point sparkline, and one plain sentence. All verdicts
    (arrow direction/color, sparkline shape) derive from NDR_DATA.overview
-   .mappedMetrics — never from the published-report comparison, which is
-   confined to the update-dot tooltip only.
+   .mappedMetrics.
    --------------------------------------------------------------------- */
 function tileArrowInfo(from, to){
   const diff = Math.round(to - from);
@@ -1208,7 +1168,7 @@ function headlineTiles(d){
      - "improving" = explicit resolved/improving framing
    Cell-by-cell:
      IT / system issues        d30 improving ("mostly resolved")
-                                d90 raised ("reported by 13%...")
+                                d90 raised ("reported by 17%...")
                                 m6  raised (lists active issues, not flagged top)
      Training gaps & access.   d30/d90/m6 all raised ("mixed feedback"/"mentions")
      Remote engagement         d30/d90/m6 all raised ("mentioned"/"suggestions")
@@ -1261,7 +1221,7 @@ function renderOverview(){
         <div class="card headline-tile">
           <p class="tile-label">${esc(t.label)}</p>
           <div class="tile-hero">
-            <span class="num tabular">${t.metric.m6}%</span>${t.metric.m6Pub!=null?dotHTML(t.metric.m6,t.metric.m6Pub):""}
+            <span class="num tabular">${t.metric.m6}%</span>
             <span class="tile-arrow ${t.arrow.cls}" title="vs. 30 days">${t.arrow.glyph}</span>
           </div>
           ${t.sparkSVG}
@@ -1280,9 +1240,9 @@ function renderOverview(){
         <tbody>
           ${d.mappedMetrics.map(m=>`<tr>
             <td>${esc(m.metric)}</td>
-            <td>${statusChip(m.d30)}${m.d30Pub!=null?dotHTML(m.d30,m.d30Pub):""}</td>
+            <td>${statusChip(m.d30)}</td>
             <td>${statusChip(m.d90)}</td>
-            <td>${statusChip(m.m6)}${m.m6Pub!=null?dotHTML(m.m6,m.m6Pub):""}</td>
+            <td>${statusChip(m.m6)}</td>
             <td>${trendArrow(m.d30, m.m6, "30 days", "6 months")}</td>
           </tr>`).join("")}
         </tbody>
@@ -1339,7 +1299,7 @@ function renderOverview(){
       ${d.participation.map((p,i)=>`
         <div class="card tile" style="border-top:3px solid ${[PALETTE.stage30,PALETTE.stage90,PALETTE.stage6m][i]}">
           <div class="label">${esc(p.stage)}</div>
-          <div class="num" style="font-size:20px">${p.detail}${p.detailPub?` <span class="dot" tabindex="0" title="${esc('Published report: '+p.detailPub+' · Updated: '+p.detail)}" aria-label="${esc('Published report: '+p.detailPub+' · Updated: '+p.detail)}">•</span>`:""}</div>
+          <div class="num" style="font-size:20px">${p.detail}</div>
           <span class="chip method">${esc(p.method)}</span>
         </div>`).join("")}
     </div>
@@ -1410,35 +1370,35 @@ function renderThirtyDay(){
     </div>
     <div class="grid-4">
       <div class="card tile">
-        <div class="num">${d.sessions}${dotHTML(d.sessions,d.sessionsPub)}</div>
+        <div class="num">${d.sessions}</div>
         <div class="label">Focus-group sessions</div>
         <div class="ctx">${d.participants} participants · 3 fiscal years</div>
       </div>
       <div class="card tile">
         <div class="num">100%</div>
         <div class="label">Felt welcomed</div>
-        <div class="ctx">Steady since the published report</div>
+        <div class="ctx">Consistent across every fiscal year</div>
       </div>
       <div class="card tile">
-        <div class="num">${d.kpis[2].pct}%${dotHTML(d.kpis[2].pct,d.kpis[2].pub)}</div>
+        <div class="num">${d.kpis[2].pct}%</div>
         <div class="label">Engaged (not bored)</div>
         <div class="ctx">No one reports being bored</div>
       </div>
       <div class="card tile">
-        <div class="num">${d.kpis[6].pct}%${dotHTML(d.kpis[6].pct,d.kpis[6].pub)}</div>
+        <div class="num">${d.kpis[6].pct}%</div>
         <div class="label">No roadblocks</div>
         <div class="ctx">30% ran into a system-access delay, mostly minor and resolved</div>
       </div>
     </div>
 
-    <p class="takeaway">This page covers 36 sessions — 28 behind the published report, plus 8 collected since. The overall picture is steady to slightly improved; No Roadblocks is the one measure to watch.</p>
+    <p class="takeaway">This page covers 36 sessions across 3 fiscal years. The overall picture is steady to slightly improved; No Roadblocks is the one measure to watch.</p>
 
     <p class="section-takeaway">Six of seven measures beat the 80% target; only No Roadblocks falls short, at 70%.</p>
     ${chartCard({
       id:"chart30KPI", title:"Key Performance Indicators",
       ariaLabel:"Bar chart: 30-day key performance indicators, sorted highest to lowest",
       height: rowHeight(7),
-      tableHTML: table(["Metric","Result","Published"], d.kpis.map(k=>[esc(k.label), k.pct+"%", k.pub!=null?k.pub+"%":"—"]))
+      tableHTML: table(["Metric","Result"], d.kpis.map(k=>[esc(k.label), k.pct+"%"]))
     })}
 
     <div class="section-head">
@@ -1476,7 +1436,7 @@ function renderThirtyDay(){
           <canvas id="chart30Roadblock" role="img" aria-label="Donut chart: roadblock category breakdown for the 30-day check-in"></canvas>
         </div>
         <details class="datatable"><summary>View data table</summary>
-          ${table(["Category","Share","Published"], d.roadblockBreakdown.map(r=>[esc(r.label), r.pct+"%", r.pub!=null?r.pub+"%":"—"]))}
+          ${table(["Category","Share"], d.roadblockBreakdown.map(r=>[esc(r.label), r.pct+"%"]))}
         </details>
       </div>
       <div class="card">
@@ -1518,8 +1478,8 @@ function renderThirtyDay(){
       <table class="plain">
         <thead><tr><th>Fiscal Year</th><th>Sessions</th><th>Participants</th><th>Date Range</th></tr></thead>
         <tbody>
-          ${d.byFY.map(fy=>`<tr><td>${fy.fy}</td><td>${fy.sessions}${fy.sessionsPub?` <span style="color:var(--text-3)">(published ${fy.sessionsPub})</span>`:""}</td><td>${fy.participants}${fy.participantsPub?` <span style="color:var(--text-3)">(published ${fy.participantsPub})</span>`:""}</td><td>${fy.dateRange}${fy.dateRangePub?` <span style="color:var(--text-3)">(published ${fy.dateRangePub})</span>`:""}</td></tr>`).join("")}
-          <tr style="font-weight:700"><td>Total</td><td>${d.sessions} <span style="color:var(--text-3);font-weight:400">(published ${d.sessionsPub})</span></td><td>${d.participants} <span style="color:var(--text-3);font-weight:400">(published ${d.participantsPub})</span></td><td>${d.dateRange}</td></tr>
+          ${d.byFY.map(fy=>`<tr><td>${fy.fy}</td><td>${fy.sessions}</td><td>${fy.participants}</td><td>${fy.dateRange}</td></tr>`).join("")}
+          <tr style="font-weight:700"><td>Total</td><td>${d.sessions}</td><td>${d.participants}</td><td>${d.dateRange}</td></tr>
         </tbody>
       </table>
     </div>
@@ -1568,8 +1528,7 @@ function renderFYExplorer(d, fy){
   const holder = document.getElementById("fyContent");
   if (fy === "all") {
     const keys = Object.keys(d.byFY[0].kpis);
-    const valOf = (fyIdx,k)=>{ const v = d.byFY[fyIdx].kpis[k]; return typeof v==="object" ? v.v : v; };
-    const pubOf = (fyIdx,k)=>{ const v = d.byFY[fyIdx].kpis[k]; return typeof v==="object" ? v.pub : undefined; };
+    const valOf = (fyIdx,k)=> d.byFY[fyIdx].kpis[k];
     holder.innerHTML = `<div class="card table-wrap">
       <table class="metric-table">
         <thead><tr><th>Metric</th><th>FY24 · 9 sessions</th><th>FY25 · 13 sessions</th><th>FY26 · 14 sessions</th><th>Trend</th></tr></thead>
@@ -1578,7 +1537,7 @@ function renderFYExplorer(d, fy){
             <td>${esc(k)}</td>
             <td>${statusChip(valOf(0,k))}</td>
             <td>${statusChip(valOf(1,k))}</td>
-            <td>${statusChip(valOf(2,k))}${pubOf(2,k)!=null?dotHTML(valOf(2,k),pubOf(2,k)):""}</td>
+            <td>${statusChip(valOf(2,k))}</td>
             <td>${trendArrow(valOf(0,k), valOf(2,k), "FY24", "FY26")}</td>
           </tr>`).join("")}
         </tbody>
@@ -1586,16 +1545,13 @@ function renderFYExplorer(d, fy){
     </div>`;
   } else {
     const fyObj = d.byFY.find(f=>f.fy===fy);
-    const kpiItems = Object.entries(fyObj.kpis).map(([label,val])=>{
-      if (typeof val === "object") return { label, pct:val.v, pub:val.pub };
-      return { label, pct:val };
-    });
+    const kpiItems = Object.entries(fyObj.kpis).map(([label,pct])=>({ label, pct }));
     holder.innerHTML = `<div class="grid-2">
       <div class="card chart-card">
         <div class="chart-title">${fy} KPIs</div>
-        <p class="caption">${fyObj.sessions} sessions${fyObj.sessionsPub?dotHTML(fyObj.sessions,fyObj.sessionsPub):""} · ${fyObj.participants} participants${fyObj.participantsPub?` <span class="dot" tabindex="0" title="${esc('Published report: '+fyObj.participantsPub+' · Updated: '+fyObj.participants)}" aria-label="${esc('Published report: '+fyObj.participantsPub+' · Updated: '+fyObj.participants)}">•</span>`:""} · ${fyObj.dateRange}${fyObj.dateRangePub?` <span style="color:var(--text-3)">(published ${fyObj.dateRangePub})</span>`:""}</p>
+        <p class="caption">${fyObj.sessions} sessions · ${fyObj.participants} participants · ${fyObj.dateRange}</p>
         <div class="chart-holder" style="height:${rowHeight(7)}px"><canvas id="chartFYSingle" role="img" aria-label="Bar chart: ${fy} key performance indicators"></canvas></div>
-        <details class="datatable"><summary>View data table</summary>${table(["Metric","Result","Published"], kpiItems.map(k=>[esc(k.label), k.pct+"%", k.pub!=null?k.pub+"%":"—"]))}</details>
+        <details class="datatable"><summary>View data table</summary>${table(["Metric","Result"], kpiItems.map(k=>[esc(k.label), k.pct+"%"]))}</details>
       </div>
       <div class="card">
         <div class="chart-title">Key observations</div>
@@ -1619,12 +1575,12 @@ function renderNinetyDay(){
     <div class="grid-4">
       <div class="card tile"><div class="num">${d.overallScore.toFixed(2)} <span class="ctx" style="font-size:14px">/ 5.00</span></div><div class="label">Overall score</div><div class="ctx">Target 4.00</div></div>
       <div class="card tile"><div class="num">${Math.round(d.positiveRatePct)}%</div><div class="label">Positive rate</div><div class="ctx">Strongly agree + agree</div></div>
-      <div class="card tile"><div class="num delta pos">+${d.yoyImprovement.toFixed(2)}</div><div class="label">Year over year</div><div class="ctx">4.34 → 4.55, 2024 → 2025</div></div>
-      <div class="card tile"><div class="num">${d.validResponses}</div><div class="label">Responses</div><div class="ctx">2 test entries excluded</div></div>
+      <div class="card tile"><div class="num delta pos">+${d.yoyImprovement.toFixed(2)}</div><div class="label">Year over year</div><div class="ctx">4.19 → 4.55, 2024 → 2025</div></div>
+      <div class="card tile"><div class="num">${d.validResponses}</div><div class="label">Responses</div><div class="ctx">5 test/incomplete entries excluded</div></div>
     </div>
-    <p class="takeaway">This page is unchanged from the published report — the workbook was checked for new responses and none exist beyond what's shown here.</p>
+    <p class="takeaway">Overall satisfaction is strong at 4.44 out of 5, with 94% positive responses. No roadblocks is the one measure below target, at 3.88.</p>
 
-    <p class="section-takeaway">Every question beats target; the weakest is still a strong 4.00 out of 5.</p>
+    <p class="section-takeaway">10 of 11 questions beat target; no roadblocks is the one exception, at 3.88.</p>
     ${chartCard({
       id:"chart90Scores", title:"Overall Satisfaction Scores", caption:d.scoreSummary,
       ariaLabel:"Bar chart: 90-day question scores, weakest first",
@@ -1633,7 +1589,7 @@ function renderNinetyDay(){
     })}
 
     <div class="section-head"><h2>2. How People Answered</h2></div>
-    <p class="section-takeaway">Almost every answer was positive — nobody strongly disagreed with anything except one question.</p>
+    <p class="section-takeaway">Almost every answer was positive — strong disagreement was rare, under 3% of responses on any question.</p>
     ${chartCard({
       id:"chart90Dist", title:"Answers by question",
       readLine:"Green = strongly agree/agree · Gold/red = disagree or strongly disagree.",
@@ -1668,7 +1624,7 @@ function renderNinetyDay(){
     </div>
 
     <div class="section-head"><h2>4. Year Over Year Change (2024 → 2025)</h2></div>
-    <p class="section-takeaway">Ten of eleven areas improved; manager communication dipped slightly but is still well above target.</p>
+    <p class="section-takeaway">All eleven areas improved; manager communication had the smallest gain, essentially flat.</p>
     ${chartCard({
       id:"chart90YoY", title:"Change in score, 2024 → 2025",
       ariaLabel:"Diverging bar chart: year-over-year score change by question",
@@ -1750,7 +1706,7 @@ function renderSixMonth(){
     <div class="section-head first-section"><h2>1. Key Performance Indicators</h2></div>
     <div class="grid-4">
       <div class="card tile">
-        <div class="num">${d.sessions}${dotHTML(d.sessions,d.sessionsPub)}</div>
+        <div class="num">${d.sessions}</div>
         <div class="label">Focus-group sessions</div>
         <div class="ctx">${d.participants} participants · ${d.responsesCaptured} responses captured</div>
       </div>
@@ -1760,24 +1716,24 @@ function renderSixMonth(){
         <div class="ctx">Job match, engagement, communication, team support</div>
       </div>
       <div class="card tile">
-        <div class="num">${d.kpis[5].pct}%${dotHTML(d.kpis[5].pct,d.kpis[5].pub)}</div>
+        <div class="num">${d.kpis[5].pct}%</div>
         <div class="label">Culture satisfaction</div>
-        <div class="ctx delta pos">Higher than the published report (${d.kpis[5].pub}%)</div>
+        <div class="ctx">One of the two figures to watch, alongside roadblocks</div>
       </div>
       <div class="card tile">
-        <div class="num">${100-d.kpis[6].pct}%${dotHTML(100-d.kpis[6].pct, 100-d.kpis[6].pub)}</div>
+        <div class="num">${100-d.kpis[6].pct}%</div>
         <div class="label">Report a roadblock</div>
         <div class="ctx">Mostly leadership transitions and system issues</div>
       </div>
     </div>
-    <p class="takeaway">This page covers 12 sessions — 8 behind the published report, plus 4 collected since. Culture satisfaction has actually improved; belonging has softened slightly and is the figure most worth watching.</p>
+    <p class="takeaway">This page covers 12 sessions. The overall picture is steady to slightly improved; belonging has softened slightly and is the figure most worth watching.</p>
 
     <p class="section-takeaway">Four of seven measures are at 100%; belonging and roadblocks are the two figures to watch.</p>
     ${chartCard({
       id:"chart6KPI", title:"Key Performance Indicators", caption:d.kpiSummary,
       ariaLabel:"Bar chart: 6-month key performance indicators, sorted highest to lowest",
       height: rowHeight(7),
-      tableHTML: table(["Metric","Result","Published"], d.kpis.map(k=>[esc(k.label), k.pct+"%", k.pub!=null?k.pub+"%":"—"]))
+      tableHTML: table(["Metric","Result"], d.kpis.map(k=>[esc(k.label), k.pct+"%"]))
     })}
 
     <div class="section-head"><h2>2. Sentiment by Question</h2></div>
@@ -1815,7 +1771,7 @@ function renderSixMonth(){
       <div class="card chart-card">
         <div class="chart-title">Roadblock breakdown</div>
         <div class="chart-holder" style="height:300px"><canvas id="chart6Roadblock" role="img" aria-label="Donut chart: roadblock category breakdown for the 6-month check-in"></canvas></div>
-        <details class="datatable"><summary>View data table</summary>${table(["Category","Share","Published"], d.roadblockBreakdown.map(r=>[esc(r.label), r.pct+"%", r.pub!=null?r.pub+"%":"—"]))}</details>
+        <details class="datatable"><summary>View data table</summary>${table(["Category","Share"], d.roadblockBreakdown.map(r=>[esc(r.label), r.pct+"%"]))}</details>
       </div>
       <div class="card">
         <div class="chart-title">Specific roadblocks identified</div>
@@ -1843,7 +1799,7 @@ function renderSixMonth(){
     <div class="card table-wrap">
       <table class="plain">
         <thead><tr><th>Date</th><th>Format</th><th>Participants</th></tr></thead>
-        <tbody>${[...d.sessionsTable].sort((a,b)=>new Date(a.date)-new Date(b.date)).map(s=>`<tr><td>${esc(s.date)}${s.isNew?' <span class="chip" style="background:#E8EEF6">added since</span>':''}</td><td>${esc(s.format)}</td><td>${s.participants}</td></tr>`).join("")}</tbody>
+        <tbody>${[...d.sessionsTable].sort((a,b)=>new Date(a.date)-new Date(b.date)).map(s=>`<tr><td>${esc(s.date)}</td><td>${esc(s.format)}</td><td>${s.participants}</td></tr>`).join("")}</tbody>
       </table>
     </div>
     <p class="caption" style="margin-top:10px">Excluded: ${d.excludedSessions.join("; ")}.</p>

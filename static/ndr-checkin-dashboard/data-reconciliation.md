@@ -195,3 +195,36 @@ traceable findings from the new sessions that a stakeholder-facing recommendatio
 section should surface. Two new anonymized quotes were added to the 6-Month
 Notable Quotes grid to keep that section representative of all 12 sessions now
 behind the stage, not just the original 8.
+
+## 11. July 2026 addendum — 90-Day survey refresh, dot mechanic retired
+
+Source: `90-day New Hire Survey as of 7.30.26.xlsx` (single sheet, raw Qualtrics
+export, 66 rows) — the sole authoritative 90-Day dataset as of this addendum,
+superseding every prior 90-Day figure in this report and in the dashboard.
+Exclusions: 1 row flagged `Survey Preview` by Qualtrics' own `Status` field
+(a genuine test submission — more reliable than the heuristic pattern-matching
+used for the original baseline), plus 4 rows with zero questions answered
+(abandoned starts). **59 valid responses**, up from the prior baseline's 48.
+The question set, scale, and scoring rules (SA=5…SD=1; Q5 Yes/No=5/1; Q10
+reverse-scored) are unchanged from the original baseline — verified by direct
+comparison of row-2 question text before recomputing anything.
+
+Every 90-Day-derived figure was recomputed from this file alone: overall score
+4.47→**4.44**, positive rate 96%→**94%**, YoY improvement (2024→2025) unchanged
+in shape (all areas improved) but now **all eleven** areas improve (previously
+ten of eleven, with manager communication showing a small decline) — manager
+communication's gain is now +0.01, essentially flat rather than negative. No
+roadblocks (Q10) is now the one question below the 4.0 target, at 3.88 — new
+third color band (red, "needs attention," under 4.0) added to the 90-Day score
+chart to reflect this. Overview's Journey-at-a-Glance 90-Day column, the Three
+Trends to Watch chart, and the recurring-concerns 90-Day cells were all
+recomputed from the same refreshed figures; 30-Day and 6-Month data are
+untouched (Gate B re-run confirms both their anchors and the new 90-Day anchors
+in a single pass).
+
+Separately, the published-vs-updated dot mechanic (dot markers, tooltip pairs,
+the About-popover legend, and the 6-Month session table's "added since" row
+badges — the same distinction in a different shape) was retired dashboard-wide
+per explicit instruction. Every figure now carries a single current value;
+there is nothing left in `NDR_DATA` for a report to be "published against."
+The About popover's versioning language is now just "Data through July 30, 2026."
