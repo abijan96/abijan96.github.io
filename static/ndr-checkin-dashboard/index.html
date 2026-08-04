@@ -247,7 +247,7 @@ dialog#aboutDialog::backdrop{background:rgb(12 35 64 / .45)}
     <p>NDR 30-Day Check-In, 90-Day Onboarding Survey, and 6-Month Check-In feedback from new hires, Sept 2023 through mid-2026.</p>
 
     <h3>Data through</h3>
-    <p>July 30, 2026.</p>
+    <p>July 31, 2026.</p>
 
     <h3>Anonymization</h3>
     <p>Personal names are removed from every quote and note. Where a name would otherwise appear, it's replaced with a bracketed role (e.g. "[my manager]").</p>
@@ -423,104 +423,103 @@ const NDR_DATA = {
   ninetyDay: {
     name: "90-Day Onboarding Survey",
     method: "Survey (1–5 scale)",
-    dateRange: "Nov 2023 – Jun 2026",
-    validResponses: 59,
-    exclusionNote: "1 preview/test submission and 4 incomplete starts (0 questions answered) were excluded. Final dataset: 59 valid responses.",
-    overallScore: 4.44, scaleMax: 5.0, positiveRatePct: 94, yoyImprovement: 0.35, targetScore: 4.0,
+    dateRange: "Feb 2024 – Jun 2026",
+    validResponses: 50,
+    exclusionNote: "Test, duplicate, and incomplete entries identified during NDR's review of the raw data were excluded (14 total). Final dataset: 50 valid responses.",
+    overallScore: 4.49, scaleMax: 5.0, positiveRatePct: 96, yoyImprovement: 0.20, targetScore: 4.0,
     keyFindings: [
-      "97% are happy with their decision to work at NDR",
-      "98% rate manager communication as effective",
-      "95% report their manager helped establish goals",
-      "All 11 measures improved from 2024 to 2025",
-      "No roadblocks (Q10) is the one measure below the 4.0 target, at 3.88"
+      "100% are happy with their decision to work at NDR",
+      "100% rate manager communication as effective",
+      "94% report their manager helped establish goals",
+      "10 of 11 measures improved from 2024 to 2025; manager communication was the one exception",
+      "No roadblocks (Q10) is the one measure below the 4.0 target, at 3.96"
     ],
     questionScores: [
-      { q:"Q1", label:"Clear job expectations", score:4.37, positivePct:95, n:59 },
-      { q:"Q2", label:"Know where to ask questions", score:4.47, positivePct:97, n:59 },
-      { q:"Q3", label:"Happy with NDR decision", score:4.64, positivePct:97, n:59 },
-      { q:"Q4", label:"Feel part of NDR", score:4.42, positivePct:97, n:59 },
-      { q:"Q5", label:"Manager helped establish goals", score:4.80, positivePct:95, n:59, type:"yesno" },
-      { q:"Q6", label:"Manager communicates effectively", score:4.63, positivePct:98, n:59 },
-      { q:"Q7", label:"Manager provides feedback", score:4.44, positivePct:93, n:59 },
-      { q:"Q8", label:"Feel challenged and engaged", score:4.46, positivePct:95, n:59 },
-      { q:"Q9", label:"Feel part of team", score:4.44, positivePct:95, n:59 },
-      { q:"Q10", label:"No roadblocks", score:3.88, positivePct:83, n:58, type:"reverse" },
-      { q:"Q11", label:"Manager discussed progress", score:4.28, positivePct:91, n:58 }
+      { q:"Q1", label:"Clear job expectations", score:4.50, positivePct:98, n:50 },
+      { q:"Q2", label:"Know where to ask questions", score:4.56, positivePct:100, n:50 },
+      { q:"Q3", label:"Happy with NDR decision", score:4.76, positivePct:100, n:50 },
+      { q:"Q4", label:"Feel part of NDR", score:4.42, positivePct:98, n:50 },
+      { q:"Q5", label:"Manager helped establish goals", score:4.76, positivePct:94, n:50, type:"yesno" },
+      { q:"Q6", label:"Manager communicates effectively", score:4.68, positivePct:100, n:50 },
+      { q:"Q7", label:"Manager provides feedback", score:4.52, positivePct:96, n:50 },
+      { q:"Q8", label:"Feel challenged and engaged", score:4.44, positivePct:96, n:50 },
+      { q:"Q9", label:"Feel part of team", score:4.44, positivePct:96, n:50 },
+      { q:"Q10", label:"No roadblocks", score:3.96, positivePct:86, n:49, type:"reverse" },
+      { q:"Q11", label:"Manager discussed progress", score:4.31, positivePct:94, n:49 }
     ],
     scoreBands: { excellent:"4.5+", good:"4.0–4.49", needsAttention:"under 4.0" },
-    scoreSummary: "10 of 11 survey questions met or exceeded the 4.0 target. No roadblocks (Q10) is the one measure below target, at 3.88.",
+    scoreSummary: "10 of 11 survey questions met or exceeded the 4.0 target. No roadblocks (Q10) is the one measure below target, at 3.96.",
     responseDistribution: {
       categories: ["Strongly Agree","Agree","Disagree","Strongly Disagree"],
       rows: [
-        { q:"Q1", label:"Clear expectations", sa:51, a:44, d:2, sd:3 },
-        { q:"Q2", label:"Know where to ask", sa:56, a:41, d:2, sd:2 },
-        { q:"Q3", label:"Happy with NDR", sa:73, a:24, d:2, sd:2 },
-        { q:"Q4", label:"Feel part of NDR", sa:51, a:46, d:2, sd:2 },
-        { q:"Q6", label:"Manager communicates", sa:68, a:31, d:0, sd:2 },
-        { q:"Q7", label:"Manager feedback", sa:61, a:32, d:3, sd:3 },
-        { q:"Q8", label:"Challenged/engaged", sa:56, a:39, d:5, sd:0 },
-        { q:"Q9", label:"Part of team", sa:56, a:39, d:3, sd:2 },
-        { q:"Q11", label:"Progress discussed", sa:48, a:43, d:5, sd:3 }
+        { q:"Q1", label:"Clear expectations", sa:54, a:44, d:2, sd:0 },
+        { q:"Q2", label:"Know where to ask", sa:56, a:44, d:0, sd:0 },
+        { q:"Q3", label:"Happy with NDR", sa:76, a:24, d:0, sd:0 },
+        { q:"Q4", label:"Feel part of NDR", sa:46, a:52, d:2, sd:0 },
+        { q:"Q6", label:"Manager communicates", sa:68, a:32, d:0, sd:0 },
+        { q:"Q7", label:"Manager feedback", sa:60, a:36, d:4, sd:0 },
+        { q:"Q8", label:"Challenged/engaged", sa:52, a:44, d:4, sd:0 },
+        { q:"Q9", label:"Part of team", sa:52, a:44, d:4, sd:0 },
+        { q:"Q11", label:"Progress discussed", sa:45, a:49, d:4, sd:2 }
       ]
     },
     specialQuestions: {
-      q5: { title:"Q5: Manager Helped Establish Goals", yes:56, no:3, total:59, yesPct:95, noPct:5 },
-      q10:{ title:"Q10: Roadblocks Preventing Job Performance", noRoadblocks:48, hasRoadblocks:10, total:58, noPct:83, hasPct:17 },
+      q5: { title:"Q5: Manager Helped Establish Goals", yes:47, no:3, total:50, yesPct:94, noPct:6 },
+      q10:{ title:"Q10: Roadblocks Preventing Job Performance", noRoadblocks:42, hasRoadblocks:7, total:49, noPct:86, hasPct:14 },
       observations: [
-        "Goal Setting (Q5): 95% of employees report their manager helped establish goals within the first 90 days. 3 employees (5%) indicated their manager did not help with goal setting.",
-        "Roadblocks (Q10): 83% of employees report no significant roadblocks preventing job performance. 10 employees (17%) identified roadblocks worth a targeted follow-up."
+        "Goal Setting (Q5): 94% of employees report their manager helped establish goals within the first 90 days. 3 employees (6%) indicated their manager did not help with goal setting.",
+        "Roadblocks (Q10): 86% of employees report no significant roadblocks preventing job performance. 7 employees (14%) identified roadblocks worth a targeted follow-up."
       ]
     },
     yoy: {
-      summary: "Overall satisfaction improved from 4.19 to 4.55 (+0.35 points). All eleven areas improved.",
-      year2024:{ n:22, overall:4.19 }, year2025:{ n:25, overall:4.55 },
+      summary: "Overall satisfaction improved from 4.34 to 4.53 (+0.20 points). Ten of eleven areas improved; manager communication was the one exception.",
+      year2024:{ n:19, overall:4.34 }, year2025:{ n:24, overall:4.53 },
       deltas: [
-        { label:"Manager feedback", delta:0.55 }, { label:"Happy with NDR", delta:0.52 },
-        { label:"Feel part of NDR", delta:0.42 }, { label:"Feel part of team", delta:0.42 }, { label:"Know where to ask", delta:0.42 },
-        { label:"Clear expectations", delta:0.39 }, { label:"Challenged/engaged", delta:0.38 },
-        { label:"Progress discussed", delta:0.33 }, { label:"No roadblocks", delta:0.22 },
-        { label:"Manager helped goals", delta:0.20 }, { label:"Manager communicates", delta:0.01 }
+        { label:"Feel part of NDR", delta:0.33 }, { label:"Challenged/engaged", delta:0.33 }, { label:"Feel part of team", delta:0.33 },
+        { label:"Manager feedback", delta:0.27 }, { label:"Happy with NDR", delta:0.25 }, { label:"Manager helped goals", delta:0.25 },
+        { label:"Know where to ask", delta:0.16 }, { label:"No roadblocks", delta:0.15 },
+        { label:"Clear expectations", delta:0.13 }, { label:"Progress discussed", delta:0.08 },
+        { label:"Manager communicates", delta:-0.15 }
       ],
       trendTable: [
-        { metric:"Manager provides feedback", y2024:4.05, y2025:4.60, change:"+0.55" },
-        { metric:"Happy with NDR decision", y2024:4.32, y2025:4.84, change:"+0.52" },
-        { metric:"Feel part of NDR", y2024:4.14, y2025:4.56, change:"+0.42" },
-        { metric:"Feel part of team", y2024:4.14, y2025:4.56, change:"+0.42" },
-        { metric:"Clear job expectations", y2024:4.09, y2025:4.48, change:"+0.39" },
-        { metric:"Manager communicates", y2024:4.59, y2025:4.60, change:"+0.01" }
+        { metric:"Feel part of NDR", y2024:4.21, y2025:4.54, change:"+0.33" },
+        { metric:"Feel challenged and engaged", y2024:4.21, y2025:4.54, change:"+0.33" },
+        { metric:"Feel part of team", y2024:4.21, y2025:4.54, change:"+0.33" },
+        { metric:"Manager provides feedback", y2024:4.32, y2025:4.58, change:"+0.27" },
+        { metric:"Happy with NDR decision", y2024:4.58, y2025:4.83, change:"+0.25" },
+        { metric:"Manager communicates", y2024:4.74, y2025:4.58, change:"-0.15" }
       ],
-      declineNote: "Every area improved year over year; manager communication had the smallest gain, essentially flat at +0.01."
+      declineNote: "Manager communication is the one area that declined year over year, from 4.74 to 4.58 (-0.15); every other area improved."
     },
     overallTrend: {
-      note: "2023 and 2026-to-date reflect far fewer responses than the two full years in between — read those two points with extra caution.",
+      note: "2026-to-date reflects far fewer responses than the two full years before it — read that point with extra caution.",
       points: [
-        { year:"2023", responses:5, sharePct:8, score:4.56 },
-        { year:"2024", responses:22, sharePct:37, score:4.19 },
-        { year:"2025", responses:25, sharePct:42, score:4.55 },
-        { year:"2026 (YTD)", responses:7, sharePct:12, score:4.74 }
+        { year:"2024", responses:19, sharePct:38, score:4.34 },
+        { year:"2025", responses:24, sharePct:48, score:4.53 },
+        { year:"2026 (YTD)", responses:7, sharePct:14, score:4.74 }
       ]
     },
     openEnded: {
-      liked: { title:"What Employees Liked", responsesNote:"49 substantive responses", items:[
-        { label:"Structure/Organization", mentions:15 }, { label:"Personal Connections", mentions:13 },
-        { label:"Welcoming Culture", mentions:10 }, { label:"Manager Support", mentions:7 },
-        { label:"Training Quality", mentions:6 }, { label:"Feeling Part of Team", mentions:3 } ] },
-      improvements: { title:"Improvement Suggestions", responsesNote:"26 substantive responses", items:[
-        { label:"Cross-team Integration", mentions:5 }, { label:"Task Clarity/Due Dates", mentions:4 },
-        { label:"HR/Benefits Timing", mentions:4 }, { label:"New Employee Cohort", mentions:4 },
-        { label:"Resource Centralization", mentions:3 }, { label:"Training Timing", mentions:3 },
+      liked: { title:"What Employees Liked", responsesNote:"48 substantive responses", items:[
+        { label:"Personal Connections", mentions:15 }, { label:"Structure/Organization", mentions:14 },
+        { label:"Welcoming Culture", mentions:10 }, { label:"Manager Support", mentions:10 },
+        { label:"Training Quality", mentions:7 }, { label:"Feeling Part of Team", mentions:2 } ] },
+      improvements: { title:"Improvement Suggestions", responsesNote:"24 substantive responses", items:[
+        { label:"Cross-team Integration", mentions:5 }, { label:"Resource Centralization", mentions:4 },
+        { label:"HR/Benefits Timing", mentions:4 }, { label:"Task Clarity/Due Dates", mentions:3 },
+        { label:"New Employee Cohort", mentions:3 }, { label:"Training Timing", mentions:3 },
         { label:"Interview Process", mentions:2 }, { label:"Remote Support", mentions:1 } ] },
       valuedMost: [
+        "Personal connections through meet-and-greets, one-on-ones, and team introductions",
         "Structured onboarding process with clear checklists and timelines",
-        "Personal connections through meet-and-greets and team introductions",
         "Welcoming culture and supportive colleagues",
         "Manager support and consistent check-ins along the way"
       ],
       areasForImprovement: [
         "Cross-team integration: Better understanding of how NDR teams connect",
-        "Task clarity: Clearer outlines with due dates for onboarding tasks",
+        "Resource centralization: A single, organized source for onboarding materials and contacts",
         "HR/Benefits: Earlier access to benefits enrollment information",
-        "New employee cohort: More opportunities to connect with recently hired peers"
+        "Task clarity: Clearer outlines with due dates for onboarding tasks"
       ]
     },
     recommendations: [
@@ -528,7 +527,7 @@ const NDR_DATA = {
       { title:"Address Cross-Team Integration", body:"Develop an NDR org chart and create opportunities for new employees to learn about other teams and how departments interconnect." },
       { title:"Improve Task Clarity", body:"Add clear due dates to onboarding checklists and ensure automated task notifications reach new hires reliably." },
       { title:"Streamline HR Processes", body:"Coordinate with HR to provide benefits information earlier in the onboarding process, ideally within the first week." },
-      { title:"Follow Up on 90-Day Roadblocks", body:"No roadblocks is now the only measure below target, at 3.88. Follow up with the 10 respondents who reported one to identify common blockers." },
+      { title:"Follow Up on 90-Day Roadblocks", body:"No roadblocks is now the only measure below target, at 3.96. Follow up with the 7 respondents who reported one to identify common blockers." },
       { title:"Create Resource Library", body:"Develop a centralized repository of templates, guides, and role-specific resources for new employees." },
       { title:"Support Remote Employees", body:"Develop specific strategies to help remote employees feel connected to NDR and their teams." }
     ],
@@ -663,20 +662,20 @@ const NDR_DATA = {
     name: "Overview",
     methodCaveat: "30-Day and 6-Month figures come from focus-group notes; 90-Day figures come from a survey (1–5 scale). They're not the same people, and small groups can shift a lot on just one or two answers — read these as directional, not decimal-precise.",
     mappedMetrics: [
-      { metric:"Job expectations", d30:91, d90:95, m6:100, src30:"Job Matches Expectations", src90:"Clear job expectations (% positive)", src6:"Job Matches Expectations" },
-      { metric:"Welcomed / belonging", d30:100, d90:95, m6:92, src30:"Felt Welcomed", src90:"Feel part of team (% positive)", src6:"Felt Welcomed" },
-      { metric:"Engaged & challenged", d30:97, d90:95, m6:100, src30:"Engaged (Not Bored)", src90:"Feel challenged and engaged (% positive)", src6:"Engaged (Not Bored)" },
-      { metric:"Communication", d30:94, d90:98, m6:100, src30:"Communication Effective (team)", src90:"Manager communicates effectively (% positive)", src6:"Communication Effective (team)" },
-      { metric:"Team support", d30:97, d90:97, m6:100, src30:"Team Helped Onboarding", src90:"Know where to ask questions (% positive)", src6:"Team Helped Onboarding" },
+      { metric:"Job expectations", d30:91, d90:98, m6:100, src30:"Job Matches Expectations", src90:"Clear job expectations (% positive)", src6:"Job Matches Expectations" },
+      { metric:"Welcomed / belonging", d30:100, d90:96, m6:92, src30:"Felt Welcomed", src90:"Feel part of team (% positive)", src6:"Felt Welcomed" },
+      { metric:"Engaged & challenged", d30:97, d90:96, m6:100, src30:"Engaged (Not Bored)", src90:"Feel challenged and engaged (% positive)", src6:"Engaged (Not Bored)" },
+      { metric:"Communication", d30:94, d90:100, m6:100, src30:"Communication Effective (team)", src90:"Manager communicates effectively (% positive)", src6:"Communication Effective (team)" },
+      { metric:"Team support", d30:97, d90:100, m6:100, src30:"Team Helped Onboarding", src90:"Know where to ask questions (% positive)", src6:"Team Helped Onboarding" },
       { metric:"Culture satisfaction", d30:90, d90:null, m6:83, src30:"Culture Satisfaction", src90:"Not asked in the 90-day survey", src6:"Culture Satisfaction" },
-      { metric:"No roadblocks", d30:70, d90:83, m6:70, src30:"No Roadblocks", src90:"No roadblocks (% positive)", src6:"No Roadblocks" }
+      { metric:"No roadblocks", d30:70, d90:86, m6:70, src30:"No Roadblocks", src90:"No roadblocks (% positive)", src6:"No Roadblocks" }
     ],
     recurringConcerns: [
-      { concern:"IT / system issues", d30:"Access delays, mostly resolved during onboarding", d90:"Reported by 17% of respondents; task notifications unreliable", m6:"Freezing, credit card system, ERA rollout" },
+      { concern:"IT / system issues", d30:"Access delays, mostly resolved during onboarding", d90:"Reported by 14% of respondents; task notifications unreliable", m6:"Freezing, credit card system, ERA rollout" },
       { concern:"Training gaps & accessibility", d30:"Mixed feedback on training needs", d90:"Training timing (3 mentions)", m6:"Mixed feedback on training needs; workshops missed" },
       { concern:"Remote engagement", d30:"Mentioned in several sessions", d90:"Remote support suggestions; dedicated recommendation", m6:"Mentioned in about half of sessions" },
       { concern:"HR / benefits timing", d30:"A recurring roadblock category; info late or missing", d90:"HR/benefits timing (4 mentions)", m6:null },
-      { concern:"Goal & vision clarity", d30:"Vision clarity raised in some sessions", d90:"Task clarity/due dates (4 mentions)", m6:"Mixed feedback on goals; 'soft goals' theme" },
+      { concern:"Goal & vision clarity", d30:"Vision clarity raised in some sessions", d90:"Task clarity/due dates (3 mentions)", m6:"Mixed feedback on goals; 'soft goals' theme" },
       { concern:"Leadership transitions", d30:null, d90:null, m6:"Top concern; no transition protocols" },
       { concern:"Cross-team integration", d30:null, d90:"Top improvement suggestion (5 mentions)", m6:"Culture varies by unit; holding patterns" },
       { concern:"Ideas not captured", d30:null, d90:null, m6:"No formal ideas channel" },
@@ -684,7 +683,7 @@ const NDR_DATA = {
     ],
     participation: [
       { stage:"30-Day", detail:"36 sessions · ~71 participants", method:"Focus groups" },
-      { stage:"90-Day", detail:"59 responses", method:"Survey" },
+      { stage:"90-Day", detail:"50 responses", method:"Survey" },
       { stage:"6-Month", detail:"12 sessions · ~33 participants", method:"Focus groups" }
     ],
     participationCaveat: "Stages are separate collections; individuals may appear in more than one stage. Don't add these up as unique people."
@@ -1575,12 +1574,12 @@ function renderNinetyDay(){
     <div class="grid-4">
       <div class="card tile"><div class="num">${d.overallScore.toFixed(2)} <span class="ctx" style="font-size:14px">/ 5.00</span></div><div class="label">Overall score</div><div class="ctx">Target 4.00</div></div>
       <div class="card tile"><div class="num">${Math.round(d.positiveRatePct)}%</div><div class="label">Positive rate</div><div class="ctx">Strongly agree + agree</div></div>
-      <div class="card tile"><div class="num delta pos">+${d.yoyImprovement.toFixed(2)}</div><div class="label">Year over year</div><div class="ctx">4.19 → 4.55, 2024 → 2025</div></div>
-      <div class="card tile"><div class="num">${d.validResponses}</div><div class="label">Responses</div><div class="ctx">5 test/incomplete entries excluded</div></div>
+      <div class="card tile"><div class="num delta pos">+${d.yoyImprovement.toFixed(2)}</div><div class="label">Year over year</div><div class="ctx">4.34 → 4.53, 2024 → 2025</div></div>
+      <div class="card tile"><div class="num">${d.validResponses}</div><div class="label">Responses</div><div class="ctx">14 test/incomplete entries excluded</div></div>
     </div>
-    <p class="takeaway">Overall satisfaction is strong at 4.44 out of 5, with 94% positive responses. No roadblocks is the one measure below target, at 3.88.</p>
+    <p class="takeaway">Overall satisfaction is strong at 4.49 out of 5, with 96% positive responses. No roadblocks is the one measure below target, at 3.96.</p>
 
-    <p class="section-takeaway">10 of 11 questions beat target; no roadblocks is the one exception, at 3.88.</p>
+    <p class="section-takeaway">10 of 11 questions beat target; no roadblocks is the one exception, at 3.96.</p>
     ${chartCard({
       id:"chart90Scores", title:"Overall Satisfaction Scores", caption:d.scoreSummary,
       ariaLabel:"Bar chart: 90-day question scores, weakest first",
@@ -1624,7 +1623,7 @@ function renderNinetyDay(){
     </div>
 
     <div class="section-head"><h2>4. Year Over Year Change (2024 → 2025)</h2></div>
-    <p class="section-takeaway">All eleven areas improved; manager communication had the smallest gain, essentially flat.</p>
+    <p class="section-takeaway">10 of 11 areas improved; manager communication was the one exception, declining slightly.</p>
     ${chartCard({
       id:"chart90YoY", title:"Change in score, 2024 → 2025",
       ariaLabel:"Diverging bar chart: year-over-year score change by question",
@@ -1637,12 +1636,12 @@ function renderNinetyDay(){
       </table>
     </div>
 
-    <div class="section-head"><h2>5. Overall Score Trend (2023–2026)</h2></div>
-    <p class="section-takeaway">Scores have run above target every year since 2023.</p>
+    <div class="section-head"><h2>5. Overall Score Trend (2024–2026)</h2></div>
+    <p class="section-takeaway">Scores have run above target every year since 2024.</p>
     ${chartCard({
       id:"chart90Trend", title:"Overall score by year",
-      caption:"Early and current-year points reflect very few responses.",
-      ariaLabel:"Line chart: overall score trend from 2023 to 2026",
+      caption:"The current-year point reflects far fewer responses than a full year.",
+      ariaLabel:"Line chart: overall score trend from 2024 to 2026",
       height:320,
       tableHTML: table(["Year","Responses","Score"], d.overallTrend.points.map(p=>[p.year, p.responses, p.score.toFixed(2)]))
     })}

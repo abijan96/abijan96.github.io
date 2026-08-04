@@ -61,13 +61,13 @@ const t = NDR_DATA.thirtyDay, s6 = NDR_DATA.sixMonth, n90 = NDR_DATA.ninetyDay;
 const kpiByLabel = arr => Object.fromEntries(arr.map(k => [k.label, k.pct]));
 const tK = kpiByLabel(t.kpis), sK = kpiByLabel(s6.kpis);
 const checks = [
-  ["Job expectations", tK["Job Matches Expectations"], 95, sK["Job Matches Expectations"]],
-  ["Welcomed / belonging", tK["Felt Welcomed"], 95, sK["Felt Welcomed"]],
-  ["Engaged & challenged", tK["Engaged (Not Bored)"], 95, sK["Engaged (Not Bored)"]],
-  ["Communication", tK["Communication Effective"], 98, sK["Communication Effective"]],
-  ["Team support", tK["Team Helped Onboarding"], 97, sK["Team Helped Onboarding"]],
+  ["Job expectations", tK["Job Matches Expectations"], 98, sK["Job Matches Expectations"]],
+  ["Welcomed / belonging", tK["Felt Welcomed"], 96, sK["Felt Welcomed"]],
+  ["Engaged & challenged", tK["Engaged (Not Bored)"], 96, sK["Engaged (Not Bored)"]],
+  ["Communication", tK["Communication Effective"], 100, sK["Communication Effective"]],
+  ["Team support", tK["Team Helped Onboarding"], 100, sK["Team Helped Onboarding"]],
   ["Culture satisfaction", tK["Culture Satisfaction"], null, sK["Culture Satisfaction"]],
-  ["No roadblocks", tK["No Roadblocks"], 83, sK["No Roadblocks"]],
+  ["No roadblocks", tK["No Roadblocks"], 86, sK["No Roadblocks"]],
 ];
 for (const [metric, d30, d90, m6] of checks) {
   const row = NDR_DATA.overview.mappedMetrics.find(r => r.metric === metric);
@@ -94,19 +94,19 @@ collectKeys(NDR_DATA, pubKeys);
 assert(pubKeys.length === 0, `no published/updated pair fields remain anywhere in NDR_DATA (found keys: ${pubKeys.join(", ")})`);
 
 // ---- Baseline anchors (90-Day: recomputed from "90-day New Hire Survey as of
-// 7.30.26.xlsx", the single authoritative dataset; supersedes all prior anchors) ----
-assert(n90.overallScore === 4.44, "90-Day overall score = 4.44");
-assert(n90.positiveRatePct === 94, "90-Day positive rate = 94");
-assert(n90.validResponses === 59, "90-Day valid responses = 59");
+// 7.31.26.xlsx", NDR's cleaned/de-duplicated authoritative dataset; supersedes
+// all prior anchors, including the 7.30.26 pass which missed 4 test entries) ----
+assert(n90.overallScore === 4.49, "90-Day overall score = 4.49");
+assert(n90.positiveRatePct === 96, "90-Day positive rate = 96");
+assert(n90.validResponses === 50, "90-Day valid responses = 50");
 const deltas = n90.yoy.deltas.map(d => d.delta);
-assert(deltas.every(x => x > 0), "all 11 YoY deltas are positive (every area improved)");
+assert(deltas.filter(x => x > 0).length === 10, "10 of 11 YoY deltas are positive");
+assert(deltas.filter(x => x < 0).length === 1, "exactly 1 YoY delta is negative (manager communicates effectively)");
 assert(deltas.length === 11, "11 YoY delta rows");
-const smallestDelta = [...deltas].sort((a, b) => a - b)[0];
-assert(smallestDelta === 0.01, "smallest YoY delta is +0.01 (manager communicates effectively)");
 const trendScores = n90.overallTrend.points.map(p => p.score);
-assert(JSON.stringify(trendScores) === JSON.stringify([4.56, 4.19, 4.55, 4.74]), "trend scores 4.56/4.19/4.55/4.74");
+assert(JSON.stringify(trendScores) === JSON.stringify([4.34, 4.53, 4.74]), "trend scores 4.34/4.53/4.74 (2023 point dropped — zero valid 2023 responses survive de-duplication)");
 const trendN = n90.overallTrend.points.map(p => p.responses);
-assert(JSON.stringify(trendN) === JSON.stringify([5, 22, 25, 7]), "trend n 5/22/25/7");
+assert(JSON.stringify(trendN) === JSON.stringify([19, 24, 7]), "trend n 19/24/7");
 
 // 30-Day merged anchors (unchanged — 90-day refresh must not touch 30-day data)
 assert(tK["Job Matches Expectations"] === 91, "30-Day Job Match unchanged = 91");
@@ -148,6 +148,8 @@ const BANNED_NAMES = [
   "Jeff Faust", "Jennifer Knowlton", "Ben Riggles", "Barbara Dominguez", "Martha Reilly",
   "Ciara Donovan", "Jinah Song", "Mary Porter", "JJ Gregg", "Stephen Bird", "Partha Choudhury",
   "Lisa Nichols", "Brendan Daly", "Heather Buelow",
+  "Nancy Nalepinski", "Claudia Hawkins", "Jean Crumlish", "Abigail Rodriguez",
+  "Ryan Shaffer", "Feng-Wei Hung",
 ];
 const joined = allStrings.join(" \n ");
 const foundNames = BANNED_NAMES.filter(n => joined.includes(n));
