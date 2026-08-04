@@ -228,3 +228,35 @@ badges — the same distinction in a different shape) was retired dashboard-wide
 per explicit instruction. Every figure now carries a single current value;
 there is nothing left in `NDR_DATA` for a report to be "published against."
 The About popover's versioning language is now just "Data through July 30, 2026."
+
+## 12. July 31, 2026 correction — 4 undisclosed test entries removed, 5 more excluded pending confirmation
+
+The §11 pass (59 valid responses) missed 4 entries that were real test
+submissions by NDR staff setting up the survey — not flagged `Survey Preview`
+by Qualtrics because they were submitted as complete, ordinary-looking
+responses (3 from one staff account, 1 from another, all dated within the
+first ~10 weeks of collection). These were caught by manual review of the raw
+respondent-identity columns (name/email), which §11's Status-field-only filter
+never inspected.
+
+Source for this correction: `90-day New Hire Survey as of 7.31.26.xlsx`, a
+version of the same export with NDR's own review applied — it removes the 4
+confirmed test entries above, plus 5 further entries (4 with no name/email
+attached, 1 named) that don't survive NDR's cleaning but aren't independently
+confirmed here. All 5 share the same "very early in collection" pattern as the
+4 confirmed test entries, which is suggestive but not proof. One incomplete
+row (0 questions answered) that NDR's file left in was excluded the same way
+as §11's blank-row rule. **Net: 50 valid responses.**
+
+Every 2023-dated valid response turns out to have been one of these excluded
+rows — zero genuine 2023 responses remain, so the overall-score trend chart
+now starts at 2024. Recomputed figures: overall score 4.44→**4.49**, positive
+rate 94%→**96%**, no roadblocks (Q10) 3.88→**3.96** (still the one measure
+below target). YoY is no longer "all eleven improved": with the test entries
+gone, manager communication shows a genuine decline (4.74→4.58, **-0.15**),
+not the essentially-flat +0.01 §11 reported — 10 of 11 areas improved.
+"Data through" is now July 31, 2026.
+
+If NDR later confirms the 5 unconfirmed entries were not test/duplicate
+submissions, these figures would need to be recomputed again with them
+restored.

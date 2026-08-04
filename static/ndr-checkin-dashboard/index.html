@@ -998,8 +998,7 @@ function divergingBar(canvasId, items){
       plugins:{ legend:{ display:false },
         tooltip:{ backgroundColor:PALETTE.ink, cornerRadius:8, callbacks:{
           label:(ctx)=>`${ctx.label}: ${ctx.raw>=0?"+":""}${ctx.raw.toFixed(2)}` } },
-        datalabels:{ display:true, color:PALETTE.ink, font:{ weight:600, size:11 },
-          anchor:(ctx)=>ctx.dataset.data[ctx.dataIndex]>=0?"end":"start",
+        datalabels:{ display:true, color:PALETTE.ink, font:{ weight:600, size:11 }, anchor:"end",
           align:(ctx)=>ctx.dataset.data[ctx.dataIndex]>=0?"right":"left", offset:6,
           formatter:(v)=>(v>=0?"+":"")+v.toFixed(2) } }
     }
@@ -1167,7 +1166,7 @@ function headlineTiles(d){
      - "improving" = explicit resolved/improving framing
    Cell-by-cell:
      IT / system issues        d30 improving ("mostly resolved")
-                                d90 raised ("reported by 17%...")
+                                d90 raised ("reported by 14%...")
                                 m6  raised (lists active issues, not flagged top)
      Training gaps & access.   d30/d90/m6 all raised ("mixed feedback"/"mentions")
      Remote engagement         d30/d90/m6 all raised ("mentioned"/"suggestions")
