@@ -21,8 +21,8 @@ function assert(cond, msg) {
 }
 
 // ---- Structure ----
-assert(NDR_DATA.thirtyDay && NDR_DATA.ninetyDay && NDR_DATA.sixMonth && NDR_DATA.overview,
-  "3 stage objects + overview present");
+assert(NDR_DATA.thirtyDay && NDR_DATA.ninetyDay && NDR_DATA.sixMonth && NDR_DATA.overview && NDR_DATA.onboarding,
+  "3 check-in stage objects + onboarding + overview present");
 assert(NDR_DATA.thirtyDay.kpis.length === 7, "7 KPIs at 30-Day");
 assert(NDR_DATA.sixMonth.kpis.length === 7, "7 KPIs at 6-Month");
 assert(NDR_DATA.thirtyDay.sentiment.length === 10, "10 sentiment rows at 30-Day");
@@ -115,6 +115,32 @@ assert(tK["No Roadblocks"] === 70, "30-Day No Roadblocks unchanged = 70");
 // 6-Month merged anchors (unchanged — 90-day refresh must not touch 6-month data)
 assert(sK["Culture Satisfaction"] === 83, "6-Month Culture Satisfaction unchanged = 83");
 assert(sK["No Roadblocks"] === 70, "6-Month No Roadblocks unchanged = 70");
+
+// ---- Onboarding Session (Day 1 survey) — recomputed from
+// "Onboarding Survey_081026.xlsx" ----
+const onb = NDR_DATA.onboarding;
+assert(onb.totalResponses === 54, "Onboarding total responses = 54");
+assert(onb.recommend.answered === 51, "Onboarding recommend question answered by 51");
+assert(Math.abs(onb.recommend.scoreRaw - 9.27) < 0.005, "Onboarding recommend score ~= 9.27");
+const onbDistSum = onb.recommend.distribution.reduce((a, r) => a + r.mentions, 0);
+assert(onbDistSum === onb.recommend.answered, `Onboarding recommend distribution sums to answered count (got ${onbDistSum})`);
+assert(onb.recommend.minScore >= 5, "Onboarding: nobody scored below the midpoint (min score >= 5)");
+assert(onb.infoBefore.agree + onb.infoBefore.tendToAgree + onb.infoBefore.neither === onb.infoBefore.total,
+  "Onboarding infoBefore counts sum to total responses");
+assert(onb.presentationHelped.agree + onb.presentationHelped.tendToAgree === onb.presentationHelped.total,
+  "Onboarding presentationHelped counts sum to total responses");
+assert(onb.infoBefore.pct === 96, "Onboarding infoBefore positive rate = 96%");
+assert(onb.presentationHelped.pct === 100, "Onboarding presentationHelped positive rate = 100%");
+const onbYearSum = onb.byYear.reduce((a, y) => a + y.responses, 0);
+assert(onbYearSum === onb.totalResponses, `Onboarding byYear responses sum to total (got ${onbYearSum})`);
+assert(JSON.stringify(onb.byYear.map(y => y.responses)) === JSON.stringify([25, 19, 10]), "Onboarding byYear responses = 25/19/10");
+const onbLikedSum = onb.likedThemes.reduce((a, t) => a + t.mentions, 0);
+assert(onbLikedSum === 52, `Onboarding likedThemes mentions sum to 52 (got ${onbLikedSum})`);
+const onbImproveSum = onb.improvementThemes.reduce((a, t) => a + t.mentions, 0);
+assert(onbImproveSum === 20, `Onboarding improvementThemes mentions sum to 20 (got ${onbImproveSum})`);
+for (const t of [...onb.likedThemes, ...onb.improvementThemes]) {
+  assert(!!t.quote && t.quote.length > 0, `Onboarding theme "${t.title}" has a quote`);
+}
 
 // ---- Flags: exactly which rows are flagged ----
 const t30Flags = t.sentiment.filter(s => s.flag).map(s => s.q);

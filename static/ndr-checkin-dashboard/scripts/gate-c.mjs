@@ -50,7 +50,7 @@ try {
   check("Overview panel active on load", overviewVisible);
 
   // 2. All four tabs render content
-  for (const stage of ["thirtyDay", "ninetyDay", "sixMonth", "overview"]) {
+  for (const stage of ["onboarding", "thirtyDay", "ninetyDay", "sixMonth", "overview"]) {
     await page.click(`#tab-${stage}`);
     await new Promise(r => setTimeout(r, 250));
     const html = await page.evaluate((s) => document.getElementById("panel-" + s).innerHTML.length, stage);
@@ -63,11 +63,16 @@ try {
   const sixActive = await page.evaluate(() => document.getElementById("panel-sixMonth").classList.contains("active"));
   check("Direct load with #6-month activates 6-Month panel", sixActive);
 
+  await page.goto(filePath + "#onboarding-session", { waitUntil: "networkidle0" });
+  await new Promise(r => setTimeout(r, 300));
+  const onbActive = await page.evaluate(() => document.getElementById("panel-onboarding").classList.contains("active"));
+  check("Direct load with #onboarding-session activates Onboarding Session panel", onbActive);
+
   // 4. Canvas count (charts actually created)
   await page.goto(filePath, { waitUntil: "networkidle0" });
   await new Promise(r => setTimeout(r, 300));
   let totalCanvases = 0;
-  for (const stage of ["overview", "thirtyDay", "ninetyDay", "sixMonth"]) {
+  for (const stage of ["overview", "onboarding", "thirtyDay", "ninetyDay", "sixMonth"]) {
     await page.click(`#tab-${stage}`);
     await new Promise(r => setTimeout(r, 300));
     const n = await page.evaluate(() => document.querySelectorAll("canvas").length);
@@ -109,7 +114,7 @@ try {
   // 9. Zero dot markers anywhere — the published-vs-updated mechanic is retired
   let totalDots = 0;
   let totalPublishedMatches = 0;
-  for (const stage of ["overview", "thirtyDay", "ninetyDay", "sixMonth"]) {
+  for (const stage of ["overview", "onboarding", "thirtyDay", "ninetyDay", "sixMonth"]) {
     await page.click(`#tab-${stage}`);
     await new Promise(r => setTimeout(r, 250));
     const n = await page.evaluate(() => document.querySelectorAll(".dot").length);
@@ -132,7 +137,7 @@ try {
   await page.focus("#tab-overview");
   await page.keyboard.press("ArrowRight");
   const focusedId = await page.evaluate(() => document.activeElement.id);
-  check("Arrow-right moves focus to next tab", focusedId === "tab-thirtyDay", focusedId);
+  check("Arrow-right moves focus to next tab", focusedId === "tab-onboarding", focusedId);
 
   // 12. CDN failure fallback
   const blockHandler = req => {
@@ -160,7 +165,7 @@ try {
   await page.goto(filePath, { waitUntil: "networkidle0" });
   await new Promise(r => setTimeout(r, 400));
   let visibleTextAll = "";
-  for (const stage of ["overview", "thirtyDay", "ninetyDay", "sixMonth"]) {
+  for (const stage of ["overview", "onboarding", "thirtyDay", "ninetyDay", "sixMonth"]) {
     await page.click(`#tab-${stage}`);
     await new Promise(r => setTimeout(r, 300));
     const visText = await page.evaluate(() => {
@@ -211,7 +216,7 @@ try {
   consoleErrors.length = 0;
   await page.goto(filePath, { waitUntil: "networkidle0" });
   await new Promise(r => setTimeout(r, 500));
-  for (const stage of ["thirtyDay", "ninetyDay", "sixMonth", "overview"]) {
+  for (const stage of ["onboarding", "thirtyDay", "ninetyDay", "sixMonth", "overview"]) {
     await page.click(`#tab-${stage}`);
     await new Promise(r => setTimeout(r, 300));
   }
