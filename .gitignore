@@ -21,3 +21,6 @@
 outputs/
 *.pyc
 __pycache__/
+
+# Names used for comment redaction (never publish)
+scripts/lds-survey/private_names.txt

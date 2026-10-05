@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LDS Training Impact Dashboard</title>
+    <title>LDS 3.0 Training Impact Dashboard</title>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <style>
         * {
@@ -308,10 +308,33 @@
             margin-top: 20px;
         }
 
+        .chart-container svg {
+            max-width: 100%;
+            height: auto;
+        }
+
         .grid-2col {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(min(500px, 100%), 1fr));
             gap: 25px;
+        }
+
+        .table-scroll {
+            overflow-x: auto;
+        }
+
+        .table-scroll table {
+            min-width: 620px;
+        }
+
+        #comments-container .table-scroll table {
+            min-width: 780px;
+        }
+
+        .small-n {
+            color: #95a5a6;
+            font-weight: 400;
+            font-size: 0.85em;
         }
 
         .axis text {
@@ -439,6 +462,14 @@
             .kpi-container {
                 grid-template-columns: 1fr;
             }
+
+            .dashboard-container { padding: 12px; }
+            header { padding: 22px 18px; }
+            h1 { font-size: 1.5em; }
+            .header-actions { flex-wrap: wrap; }
+            .view-tabs { flex-wrap: wrap; }
+            select { min-width: 0; width: 100%; }
+            .filter-container { flex-direction: column; align-items: stretch; }
         }
     </style>
 </head>
@@ -446,12 +477,12 @@
     <div class="dashboard-container">
         <header>
             <div class="view-tabs" style="display:inline-flex;flex-wrap:wrap;background:rgba(255,255,255,0.1);border-radius:8px;padding:4px;margin-bottom:16px;gap:4px;">
-                <a href="index.html" style="padding:7px 18px;border-radius:6px;font-size:0.88em;font-weight:600;text-decoration:none;white-space:nowrap;background:#C99700;color:white;">Ongoing Survey</a>
+                <a href="index.html" style="padding:7px 18px;border-radius:6px;font-size:0.88em;font-weight:600;text-decoration:none;white-space:nowrap;color:rgba(255,255,255,0.65);">Ongoing Survey</a>
                 <a href="final-survey.html" style="padding:7px 18px;border-radius:6px;font-size:0.88em;font-weight:600;text-decoration:none;white-space:nowrap;color:rgba(255,255,255,0.65);">Final Survey</a>
-                <a href="lds3.html" style="padding:7px 18px;border-radius:6px;font-size:0.88em;font-weight:600;text-decoration:none;white-space:nowrap;color:rgba(255,255,255,0.65);">LDS 3.0</a>
+                <a href="lds3.html" style="padding:7px 18px;border-radius:6px;font-size:0.88em;font-weight:600;text-decoration:none;white-space:nowrap;background:#C99700;color:white;">LDS 3.0</a>
             </div>
-            <h1>LDS Training Impact Dashboard</h1>
-            <div class="subtitle">Leadership Development Series | Fall 2025 Evaluation Results</div>
+            <h1>LDS 3.0 Training Impact Dashboard</h1>
+            <div class="subtitle" id="subtitle">Leadership Development Series 3.0 | Evaluation Results</div>
             <div class="header-meta" id="header-meta"></div>
             <div class="header-actions">
                 <button class="btn btn-primary" onclick="downloadExcel()">Download Excel Report</button>
@@ -515,9 +546,8 @@
             <div class="chart-insight" id="insight-likert"></div>
         </div>
 
-        <!-- Department Insights: MCoB vs NDR -->
         <div class="section">
-            <h2 class="section-title">Department Comparison: MCoB vs NDR</h2>
+            <h2 class="section-title">Department Comparison</h2>
             <div id="dept-insights-container"></div>
         </div>
 
@@ -565,7 +595,63 @@
 
         // Download Excel file
         function downloadExcel() {
-            window.location.href = 'LDS_Survey_Export_Editable.xlsx';
+            window.location.href = 'LDS3_Survey_Export.xlsx';
+        }
+
+        // Below this many responses a department's scores swing too much to compare.
+        const MIN_DEPT_N = 5;
+
+        function listText(items) {
+            if (items.length <= 1) return items.join('');
+            return items.slice(0, -1).join(', ') + ' and ' + items[items.length - 1];
+        }
+
+        // Blank or non-numeric scores stay NaN so they are excluded, never counted as 0.
+        function toScore(v) {
+            if (v === null || v === undefined || String(v).trim() === '') return NaN;
+            const n = parseFloat(v);
+            return isNaN(n) ? NaN : n;
+        }
+
+        // Raw Qualtrics export: row 0 = question codes, row 1 = question text, then responses.
+        // An upload only renders in the uploader's own browser; name redaction for published data happens in the build script.
+        function parseQualtricsExport(rows) {
+            const codes = (rows[0] || []).map(c => (c == null ? '' : String(c).trim()));
+            if (!['Q1', 'Q2', 'Q4_1', 'Q5_1'].every(c => codes.includes(c))) return null;
+            const col = name => codes.indexOf(name);
+            const cell = (r, name) => (col(name) >= 0 ? r[col(name)] : null);
+            const deptMap = { 'ND Research': 'NDR' };
+            return rows.slice(2)
+                .filter(r => r && cell(r, 'Status') !== 'Survey Preview' && cell(r, 'Q1') && cell(r, 'Q2'))
+                .map(r => {
+                    const comment = cell(r, 'Q17') ? String(cell(r, 'Q17')).trim() : '';
+                    return {
+                        startDate: toDate(cell(r, 'StartDate')),
+                        department: deptMap[cell(r, 'Q1')] || String(cell(r, 'Q1')),
+                        session: String(cell(r, 'Q2')),
+                        contentRelevance: cell(r, 'Q3_1') || '',
+                        durationAppropriate: cell(r, 'Q3_2') || '',
+                        futureUsability: cell(r, 'Q3_3') || '',
+                        trainingScore: toScore(cell(r, 'Q4_1')),
+                        facilitatorScore: toScore(cell(r, 'Q5_1')),
+                        comment: comment || null
+                    };
+                });
+        }
+
+        function toDate(v) {
+            if (!v) return null;
+            if (v instanceof Date) return v;
+            const d = d3.timeParse('%Y-%m-%d %H:%M:%S')(String(v)) || new Date(v);
+            return isNaN(d) ? null : d;
+        }
+
+        function periodLabel(dates) {
+            const valid = dates.filter(d => d instanceof Date && !isNaN(d));
+            if (valid.length === 0) return '';
+            const min = d3.min(valid), max = d3.max(valid);
+            const long = d3.timeFormat('%B %Y'), short = d3.timeFormat('%b %Y');
+            return long(min) === long(max) ? long(min) : `${short(min)} to ${short(max)}`;
         }
 
         // NPS classification helper
@@ -592,7 +678,7 @@
             reader.onload = function(e) {
                 try {
                     const data = new Uint8Array(e.target.result);
-                    const workbook = XLSX.read(data, {type: 'array'});
+                    const workbook = XLSX.read(data, {type: 'array', cellDates: true});
 
                     const sheetName = workbook.SheetNames.find(name =>
                         name.includes('Survey Data') || name.includes('Editable')
@@ -604,11 +690,24 @@
                         defval: null
                     });
 
+                    const qualtrics = parseQualtricsExport(jsonData);
+                    if (qualtrics) {
+                        if (qualtrics.length === 0) throw new Error('No responses found in the Qualtrics export');
+                        allData = qualtrics;
+                        filteredData = [...allData];
+                        updateFilterOptions();
+                        renderDashboard();
+                        statusDiv.textContent = `Successfully loaded ${qualtrics.length} records!`;
+                        statusDiv.style.color = '#28a745';
+                        setTimeout(() => { toggleUpload(); statusDiv.textContent = ''; }, 3000);
+                        return;
+                    }
+
                     let headerRowIndex = -1;
                     for (let i = 0; i < Math.min(10, jsonData.length); i++) {
                         const row = jsonData[i];
                         if (row && row.some(cell =>
-                            cell && (cell.includes('Department') || cell.includes('Training Session'))
+                            typeof cell === 'string' && (cell.includes('Department') || cell.includes('Training Session'))
                         )) {
                             headerRowIndex = i;
                             break;
@@ -641,15 +740,15 @@
                     const parsedData = dataRows
                         .filter(row => row && row.some(cell => cell !== null && cell !== ''))
                         .map(row => ({
-                            startDate: row[colMap.startDate] ? new Date(row[colMap.startDate]) : new Date(),
+                            startDate: toDate(row[colMap.startDate]),
                             department: row[colMap.department] || '',
                             session: row[colMap.session] || '',
                             contentRelevance: row[colMap.q3_1] || '',
                             durationAppropriate: row[colMap.q3_2] || '',
                             futureUsability: row[colMap.q3_3] || '',
-                            trainingScore: parseFloat(row[colMap.q4]) || 0,
-                            facilitatorScore: parseFloat(row[colMap.q5]) || 0,
-                            comment: row[colMap.comment] || null
+                            trainingScore: toScore(row[colMap.q4]),
+                            facilitatorScore: toScore(row[colMap.q5]),
+                            comment: row[colMap.comment] ? String(row[colMap.comment]) : null
                         }))
                         .filter(d => d.department && d.session);
 
@@ -686,31 +785,23 @@
                 reader.readAsText(file);
                 reader.onload = function(e) {
                     try {
-                        const csv = e.target.result;
-                        const lines = csv.split('\n');
-                        const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
-
-                        const parsedData = lines.slice(1)
-                            .filter(line => line.trim())
-                            .map(line => {
-                                const values = line.split(',').map(v => v.trim().replace(/"/g, ''));
-                                const obj = {};
-                                headers.forEach((header, i) => {
-                                    obj[header] = values[i];
-                                });
-                                return {
-                                    startDate: new Date(obj['Start Date'] || obj['StartDate']),
-                                    department: obj['Department'] || obj['Q1'],
-                                    session: obj['Training Session'] || obj['Q2'],
-                                    contentRelevance: obj['Content Relevance'] || obj['Q3_1'],
-                                    durationAppropriate: obj['Duration Appropriate'] || obj['Q3_2'],
-                                    futureUsability: obj['Future Usability'] || obj['Q3_3'],
-                                    trainingScore: parseFloat(obj['Training Score (0-10)'] || obj['Q4_1_numeric']) || 0,
-                                    facilitatorScore: parseFloat(obj['Facilitator Score (0-10)'] || obj['Q5_1_numeric']) || 0,
-                                    comment: obj['Comments'] || obj['Q17'] || null
-                                };
-                            })
+                        const parsedData = d3.csvParse(e.target.result.replace(/^﻿/, ''))
+                            .map(obj => ({
+                                startDate: toDate(obj['Start Date'] || obj['StartDate']),
+                                department: obj['Department'] || obj['Q1'],
+                                session: obj['Training Session'] || obj['Q2'],
+                                contentRelevance: obj['Content Relevance'] || obj['Q3_1'],
+                                durationAppropriate: obj['Duration Appropriate'] || obj['Q3_2'],
+                                futureUsability: obj['Future Usability'] || obj['Q3_3'],
+                                trainingScore: toScore(obj['Training Score (0-10)'] ?? obj['Q4_1_numeric']),
+                                facilitatorScore: toScore(obj['Facilitator Score (0-10)'] ?? obj['Q5_1_numeric']),
+                                comment: obj['Comments'] || obj['Q17'] || null
+                            }))
                             .filter(d => d.department && d.session);
+
+                        if (parsedData.length === 0) {
+                            throw new Error('No valid data found in uploaded file');
+                        }
 
                         allData = parsedData;
                         filteredData = [...allData];
@@ -757,10 +848,11 @@
         }
 
         // Load and process data
-        d3.csv('lds_survey_clean.csv').then(data => {
+        const parseStamp = d3.timeParse('%Y-%m-%d %H:%M:%S');
+
+        d3.csv('lds3_survey_clean.csv').then(data => {
             allData = data.map(d => ({
-                startDate: new Date(d.StartDate),
-                endDate: new Date(d.EndDate),
+                startDate: parseStamp(d.StartDate),
                 department: d.Q1,
                 session: d.Q2,
                 contentRelevance: d.Q3_1,
@@ -794,6 +886,22 @@
             renderDashboard();
         });
 
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                if (!allData.length) return;
+                renderSessionComparison();
+                renderNPSDistribution();
+                renderLikertChart();
+            }, 200);
+        });
+
+        function updateSubtitle() {
+            const period = periodLabel(allData.map(d => d.startDate));
+            d3.select('#subtitle').text(`Leadership Development Series 3.0 | ${period ? period + ' ' : ''}Evaluation Results`);
+        }
+
         function updateFilters() {
             const sessionValue = d3.select('#session-filter').property('value');
             const deptValue = d3.select('#department-filter').property('value');
@@ -808,6 +916,7 @@
         }
 
         function renderDashboard() {
+            updateSubtitle();
             renderKPIs();
             renderKeyTakeaways();
             renderSessionComparison();
@@ -982,25 +1091,18 @@
                 });
             }
 
-            // Department comparison
-            const depts = ['MCoB', 'NDR'];
-            const deptRecords = depts.map(dept => {
-                const records = filteredData.filter(d => d.department === dept);
-                const tScores = records.map(d => d.trainingScore).filter(s => !isNaN(s));
-                const fScores = records.map(d => d.facilitatorScore).filter(s => !isNaN(s));
-                return { dept, n: records.length, tNPS: calculateNPS(tScores), fNPS: calculateNPS(fScores) };
-            }).filter(d => d.n > 0);
-
-            if (deptRecords.length === 2) {
-                const mcob = deptRecords.find(d => d.dept === 'MCoB');
-                const ndr = deptRecords.find(d => d.dept === 'NDR');
-                const tHigher = ndr.tNPS > mcob.tNPS ? 'NDR' : 'MCoB';
-                const tLower = tHigher === 'NDR' ? 'MCoB' : 'NDR';
-                const fHigher = ndr.fNPS > mcob.fNPS ? 'NDR' : 'MCoB';
+            // Department comparison (only groups with enough responses are compared)
+            const deptGroups = Array.from(d3.group(filteredData, d => d.department), ([dept, records]) => ({ dept, n: records.length }))
+                .sort((a, b) => b.n - a.n);
+            if (deptGroups.length > 1) {
+                const small = deptGroups.filter(g => g.n < MIN_DEPT_N);
+                const smallText = small.length
+                    ? ` ${listText(small.map(g => `${g.dept} (n=${g.n})`))} ${small.length === 1 ? 'has' : 'have'} too few responses so far to compare reliably.`
+                    : '';
                 takeaways.push({
                     icon: 'icon-blue',
                     symbol: '%',
-                    text: `<strong>Department Comparison:</strong> Both NDR and MCoB view the program positively. ${tHigher} participants are more likely to recommend the training overall, while ${fHigher} gave facilitators especially high marks. See the Department Comparison section below for a full breakdown.`
+                    text: `<strong>Departments:</strong> ${deptGroups.length} departments took part, led by ${deptGroups[0].dept} (${deptGroups[0].n} of ${filteredData.length}).${smallText} See the Department Comparison section below.`
                 });
             }
 
@@ -1011,33 +1113,10 @@
             });
         }
 
-        // The prior program's data has no response timestamps, so comments are dated by their session.
-        const SESSION_DATES = {
-            'Becoming A Strategic Responder - Leverage the Power of Emotional Intelligence - 10/1/25': '2025-10-01',
-            "P2P Lunch 'n Learn - HR Processes - 10/15/25": '2025-10-15',
-            'Culture of Candor - 11/4/25': '2025-11-04',
-            'P2P - Learning for EQi and Culture of Candor. - 12/09/25 (virtual)': '2025-12-09',
-            'Developing Strategic Leadership Skills - 1/20 p.m. session': '2026-01-20',
-            'Self-Leadership & Prioritization - 1/20 a.m. session': '2026-01-20',
-            'P2P - Developing Strategic Leadership Skills - 2/18 virtual session': '2026-02-18',
-            'P2P - Self-Leadership and Prioritization - 2/11 virtual session': '2026-02-11'
-        };
-
-        function sessionDate(session) {
-            return SESSION_DATES[session] ? d3.timeParse('%Y-%m-%d')(SESSION_DATES[session]) : null;
-        }
-
         // Short label map — preserves exact meaning, fits axis
         function getShortLabel(fullName) {
             const map = {
-                'Becoming A Strategic Responder - Leverage the Power of Emotional Intelligence - 10/1/25': 'Strategic Responder (EQ) — 10/1',
-                "P2P Lunch 'n Learn - HR Processes - 10/15/25": "P2P: HR Processes — 10/15",
-                'Culture of Candor - 11/4/25': 'Culture of Candor — 11/4',
-                'P2P - Learning for EQi and Culture of Candor. - 12/09/25 (virtual)': 'P2P: EQi & Candor (virtual) — 12/9',
-                'Developing Strategic Leadership Skills - 1/20 p.m. session': 'Strategic Leadership — 1/20 PM',
-                'Self-Leadership & Prioritization - 1/20 a.m. session': 'Self-Leadership & Prioritization — 1/20 AM',
-                'P2P - Developing Strategic Leadership Skills - 2/18 virtual session': 'P2P: Strategic Leadership (virtual) — 2/18',
-                'P2P - Self-Leadership and Prioritization - 2/11 virtual session': 'P2P: Self-Leadership (virtual) — 2/11'
+                'Creating Powerful Moments as a High-Functioning Team - 9/22/26': 'Powerful Moments (Team) - 9/22'
             };
             return map[fullName] || (fullName.length > 35 ? fullName.substring(0, 32) + '...' : fullName);
         }
@@ -1094,15 +1173,19 @@
             const barHeight = 18;
             const groupPadding = 16;
             const groupHeight = barHeight * 2 + 6; // two bars + inner gap
-            const chartHeight = data.length * (groupHeight + groupPadding);
-            const margin = { top: 10, right: 70, bottom: 50, left: 280 };
-            const width = 900 - margin.left - margin.right;
+            // On narrow screens the session label sits above its bars instead of in a 280px left column.
+            const containerW = container.node().getBoundingClientRect().width || 900;
+            const narrow = containerW < 600;
+            const labelSpace = narrow ? 22 : 0;
+            const chartHeight = data.length * (groupHeight + groupPadding + labelSpace);
+            const margin = narrow ? { top: 10, right: 40, bottom: 50, left: 4 } : { top: 10, right: 70, bottom: 50, left: 280 };
+            const width = (narrow ? Math.floor(containerW) : 900) - margin.left - margin.right;
             const totalHeight = chartHeight + margin.top + margin.bottom;
 
             const svg = container.append('svg')
                 .attr('width', width + margin.left + margin.right)
                 .attr('height', totalHeight)
-                .style('overflow', 'visible')
+                .attr('viewBox', `0 0 ${width + margin.left + margin.right} ${totalHeight}`)
                 .append('g')
                 .attr('transform', `translate(${margin.left},${margin.top})`);
 
@@ -1132,6 +1215,7 @@
             // --- Y axis (session labels, left-aligned) ---
             const yAxis = svg.append('g')
                 .attr('class', 'axis')
+                .style('display', narrow ? 'none' : null)
                 .call(d3.axisLeft(y0).tickSize(0).tickPadding(10));
 
             yAxis.select('.domain').remove();
@@ -1176,16 +1260,29 @@
                 .style('font-size', '13px')
                 .style('fill', '#5a6c7d')
                 .style('font-weight', '600')
-                .text('Average Score (0 – 10)');
+                .text('Average Rating (0-10)');
 
             // --- Bars + labels ---
             const groups = svg.selectAll('.session-group')
                 .data(data)
                 .enter()
                 .append('g')
-                .attr('transform', d => `translate(0,${y0(d.shortLabel)})`);
+                .attr('transform', d => `translate(0,${y0(d.shortLabel) + labelSpace})`);
 
-            const halfBand = y0.bandwidth() / 2;
+            if (narrow) {
+                const label = groups.append('text')
+                    .attr('x', 0)
+                    .attr('y', -7)
+                    .style('font-size', '13px')
+                    .style('font-weight', '600')
+                    .style('fill', '#2c3e50');
+                label.append('tspan').text(d => d.shortLabel);
+                label.append('tspan')
+                    .text(d => `  (n=${d.count})`)
+                    .style('fill', '#95a5a6')
+                    .style('font-weight', '400')
+                    .style('font-size', '11px');
+            }
 
             // Training bars
             groups.append('rect')
@@ -1247,14 +1344,20 @@
                 .text(d => d.facilitatorAvg.toFixed(1));
 
             // --- Insight ---
-            if (data.length > 0) {
+            if (data.length === 1) {
+                const only = data[0];
+                d3.select('#insight-session').html(
+                    `<strong>${only.shortLabel}:</strong> training rated ${only.trainingAvg.toFixed(1)} and facilitator rated ${only.facilitatorAvg.toFixed(1)} out of 10 (n=${only.count}). Session-to-session comparisons will appear as more sessions are added.`
+                );
+            } else if (data.length > 1) {
                 const best = data[0]; // already sorted desc
                 const worst = data[data.length - 1];
-                let insightText = `<strong>Highest rated:</strong> ${best.shortLabel} (${best.trainingAvg.toFixed(1)} training, ${best.facilitatorAvg.toFixed(1)} facilitator, n=${best.count}).`;
-                if (data.length > 1) {
-                    insightText += ` <strong>Lowest rated:</strong> ${worst.shortLabel} (${worst.trainingAvg.toFixed(1)} training, n=${worst.count}).`;
-                }
-                d3.select('#insight-session').html(insightText);
+                d3.select('#insight-session').html(
+                    `<strong>Highest rated:</strong> ${best.shortLabel} (${best.trainingAvg.toFixed(1)} training, ${best.facilitatorAvg.toFixed(1)} facilitator, n=${best.count}). ` +
+                    `<strong>Lowest rated:</strong> ${worst.shortLabel} (${worst.trainingAvg.toFixed(1)} training, n=${worst.count}).`
+                );
+            } else {
+                d3.select('#insight-session').html('No sessions match the selected filters.');
             }
         }
 
@@ -1273,6 +1376,9 @@
             const svg = container.append('svg')
                 .attr('width', width)
                 .attr('height', height)
+                .attr('viewBox', `0 0 ${width} ${height}`)
+                .style('display', 'block')
+                .style('margin', '0 auto')
                 .append('g')
                 .attr('transform', `translate(${width / 2},${height / 2})`);
 
@@ -1312,13 +1418,15 @@
                     hideTooltip();
                 });
 
-            arcs.append('text')
+            arcs.filter(d => d.endAngle - d.startAngle > 0.25)
+                .append('text')
                 .attr('transform', d => `translate(${arc.centroid(d)})`)
                 .attr('text-anchor', 'middle')
-                .attr('fill', 'white')
+                .attr('dominant-baseline', 'middle')
+                .attr('fill', d => color(d.data.dept) === colors.secondary ? colors.primary : 'white')
                 .attr('font-weight', 'bold')
                 .attr('font-size', '14px')
-                .text(d => `${d.data.dept}\n${d.data.count}`);
+                .text(d => d.data.count);
 
             const legend = container.append('div')
                 .attr('class', 'legend')
@@ -1336,12 +1444,13 @@
                 const top = data[0];
                 const topPct = ((top.count / filteredData.length) * 100).toFixed(0);
                 let insightText = `<strong>${top.dept}</strong> had the most responses with ${top.count} (${topPct}%).`;
-                if (data.length > 1) {
-                    const bottom = data[data.length - 1];
-                    const bottomPct = ((bottom.count / filteredData.length) * 100).toFixed(0);
-                    insightText += ` <strong>${bottom.dept}</strong> had the fewest with ${bottom.count} (${bottomPct}%).`;
+                const small = data.slice(1).filter(d => d.count < MIN_DEPT_N);
+                if (small.length) {
+                    insightText += ` ${listText(small.map(d => `<strong>${d.dept}</strong> (n=${d.count})`))} ${small.length === 1 ? 'is' : 'are'} also represented, but ${small.length === 1 ? 'its sample is' : 'their samples are'} still too small to compare reliably.`;
                 }
                 d3.select('#insight-department').html(insightText);
+            } else {
+                d3.select('#insight-department').html('No responses match the selected filters.');
             }
         }
 
@@ -1363,13 +1472,15 @@
                 });
             }
 
-            const margin = {top: 20, right: 100, bottom: 50, left: 50};
-            const width = 500 - margin.left - margin.right;
+            const margin = {top: 20, right: 10, bottom: 50, left: 55};
+            const outerW = Math.max(280, Math.min(500, Math.floor(container.node().getBoundingClientRect().width || 500)));
+            const width = outerW - margin.left - margin.right;
             const height = 300 - margin.top - margin.bottom;
 
             const svg = container.append('svg')
-                .attr('width', width + margin.left + margin.right)
+                .attr('width', outerW)
                 .attr('height', height + margin.top + margin.bottom)
+                .attr('viewBox', `0 0 ${outerW} ${height + margin.top + margin.bottom}`)
                 .append('g')
                 .attr('transform', `translate(${margin.left},${margin.top})`);
 
@@ -1404,9 +1515,10 @@
                 .attr('transform', `translate(0,${height})`)
                 .call(d3.axisBottom(x));
 
+            const maxCount = d3.max(scores, d => Math.max(d.training, d.facilitator)) || 1;
             svg.append('g')
                 .attr('class', 'axis')
-                .call(d3.axisLeft(y).ticks(5));
+                .call(d3.axisLeft(y).ticks(Math.min(5, maxCount)).tickFormat(d3.format('d')));
 
             svg.append('text')
                 .attr('x', width / 2)
@@ -1471,7 +1583,7 @@
             const detractors = trainingScores.filter(s => s <= 6).length;
             const total = trainingScores.length || 1;
             const nps = calculateNPS(trainingScores);
-            d3.select('#insight-nps').html(
+            d3.select('#insight-nps').html(trainingScores.length === 0 ? 'No ratings match the selected filters.' :
                 `<strong>Training ratings:</strong> ${((promoters/total)*100).toFixed(0)}% would recommend (9-10), ` +
                 `${((passives/total)*100).toFixed(0)}% neutral (7-8), ` +
                 `${((detractors/total)*100).toFixed(0)}% would not recommend (0-6).`
@@ -1503,13 +1615,18 @@
                 return { question: q.label, counts, percentages, total };
             });
 
-            const margin = {top: 20, right: 150, bottom: 50, left: 200};
-            const width = 900 - margin.left - margin.right;
-            const height = 300 - margin.top - margin.bottom;
+            // On narrow screens each statement label sits above its bar instead of in a left column.
+            const containerW = container.node().getBoundingClientRect().width || 900;
+            const narrow = containerW < 600;
+            const labelSpace = narrow ? 20 : 0;
+            const margin = narrow ? {top: 10, right: 20, bottom: 40, left: 14} : {top: 20, right: 30, bottom: 50, left: 160};
+            const width = (narrow ? Math.floor(containerW) : 900) - margin.left - margin.right;
+            const height = (narrow ? 240 : 300) - margin.top - margin.bottom;
 
             const svg = container.append('svg')
                 .attr('width', width + margin.left + margin.right)
                 .attr('height', height + margin.top + margin.bottom)
+                .attr('viewBox', `0 0 ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`)
                 .append('g')
                 .attr('transform', `translate(${margin.left},${margin.top})`);
 
@@ -1517,14 +1634,29 @@
                 .domain(data.map(d => d.question))
                 .range([0, height])
                 .padding(0.2);
+            const barY = q => y(q) + labelSpace;
+            const barH = y.bandwidth() - labelSpace;
 
             const x = d3.scaleLinear()
                 .domain([0, 100])
                 .range([0, width]);
 
-            svg.append('g')
-                .attr('class', 'axis')
-                .call(d3.axisLeft(y));
+            if (narrow) {
+                svg.selectAll('.q-label')
+                    .data(data)
+                    .enter()
+                    .append('text')
+                    .attr('x', 0)
+                    .attr('y', d => y(d.question) + 13)
+                    .style('font-size', '13px')
+                    .style('font-weight', '600')
+                    .style('fill', '#2c3e50')
+                    .text(d => d.question);
+            } else {
+                svg.append('g')
+                    .attr('class', 'axis')
+                    .call(d3.axisLeft(y));
+            }
 
             svg.append('g')
                 .attr('class', 'axis')
@@ -1538,9 +1670,9 @@
                     if (pct > 0) {
                         svg.append('rect')
                             .attr('x', x(xOffset))
-                            .attr('y', y(d.question))
+                            .attr('y', barY(d.question))
                             .attr('width', x(pct))
-                            .attr('height', y.bandwidth())
+                            .attr('height', barH)
                             .attr('fill', colors.likert[response])
                             .on('mouseover', function(event) {
                                 showTooltip(event, `
@@ -1550,10 +1682,10 @@
                             })
                             .on('mouseout', hideTooltip);
 
-                        if (pct > 8) {
+                        if (x(pct) > 30) {
                             svg.append('text')
                                 .attr('x', x(xOffset + pct / 2))
-                                .attr('y', y(d.question) + y.bandwidth() / 2)
+                                .attr('y', barY(d.question) + barH / 2)
                                 .attr('text-anchor', 'middle')
                                 .attr('dominant-baseline', 'middle')
                                 .attr('fill', 'white')
@@ -1570,11 +1702,16 @@
             const legend = container.append('div')
                 .attr('class', 'legend');
 
-            responses.forEach(r => {
+            responses.filter(r => data.some(d => d.counts[r] > 0)).forEach(r => {
                 legend.append('div')
                     .attr('class', 'legend-item')
                     .html(`<div class="legend-color" style="background: ${colors.likert[r]}"></div><span>${r}</span>`);
             });
+
+            if (data.every(d => d.total === 0)) {
+                d3.select('#insight-likert').html('No ratings match the selected filters.');
+                return;
+            }
 
             // Insight
             const bestMetric = data.reduce((best, d) => (d.percentages['Agree'] || 0) > (best.percentages['Agree'] || 0) ? d : best, data[0]);
@@ -1590,9 +1727,7 @@
             const container = d3.select('#dept-insights-container');
             container.html('');
 
-            const depts = ['MCoB', 'NDR'];
-            const deptData = depts.map(dept => {
-                const records = filteredData.filter(d => d.department === dept);
+            const deptData = Array.from(d3.group(filteredData, d => d.department), ([dept, records]) => {
                 const tScores = records.map(d => d.trainingScore).filter(s => !isNaN(s));
                 const fScores = records.map(d => d.facilitatorScore).filter(s => !isNaN(s));
                 const comments = records.filter(d => d.comment && d.comment !== 'NaN').length;
@@ -1600,20 +1735,16 @@
                 return {
                     dept,
                     n: records.length,
-                    tAvg: tScores.length ? d3.mean(tScores) : 0,
-                    fAvg: fScores.length ? d3.mean(fScores) : 0,
-                    tNPS: calculateNPS(tScores),
-                    fNPS: calculateNPS(fScores),
-                    comments,
-                    commentRate: records.length > 0 ? (comments / records.length * 100) : 0,
-                    agreePct: records.length > 0 ? (agreeCount / records.length * 100) : 0,
-                    tPromoters: tScores.filter(s => s >= 9).length,
-                    tDetractors: tScores.filter(s => s <= 6).length,
-                    tTotal: tScores.length
+                    tAvg: tScores.length ? d3.mean(tScores) : NaN,
+                    fAvg: fScores.length ? d3.mean(fScores) : NaN,
+                    tNPS: tScores.length ? calculateNPS(tScores) : NaN,
+                    fNPS: fScores.length ? calculateNPS(fScores) : NaN,
+                    agreePct: records.length ? agreeCount / records.length * 100 : NaN,
+                    commentRate: records.length ? comments / records.length * 100 : NaN
                 };
-            });
+            }).sort((a, b) => b.n - a.n);
 
-            if (deptData.every(d => d.n === 0)) {
+            if (deptData.length === 0) {
                 container.append('p')
                     .style('color', '#7f8c8d')
                     .style('font-style', 'italic')
@@ -1621,99 +1752,73 @@
                 return;
             }
 
-            // Comparison table
-            const tableWrap = container.append('div')
-                .style('overflow-x', 'auto');
+            const reliable = deptData.filter(d => d.n >= MIN_DEPT_N);
+            const canCompare = reliable.length >= 2;
 
-            const table = tableWrap.append('table')
+            const table = container.append('div').attr('class', 'table-scroll')
+                .append('table')
                 .attr('class', 'comment-table')
                 .style('margin-bottom', '20px');
 
-            const thead = table.append('thead');
-            thead.append('tr').selectAll('th')
-                .data(['Metric', ...depts.map(d => `${d} (n=${deptData.find(dd => dd.dept === d).n})`)])
-                .enter().append('th').text(d => d);
+            const headRow = table.append('thead').append('tr');
+            headRow.append('th').text('Metric');
+            deptData.forEach(d => {
+                const th = headRow.append('th');
+                th.append('span').text(d.dept);
+                th.append('br');
+                th.append('span').attr('class', 'small-n').text(`n=${d.n}${d.n < MIN_DEPT_N ? ', small sample' : ''}`);
+            });
 
-            const tbody = table.append('tbody');
             const metrics = [
-                { label: 'Training Avg Score', key: 'tAvg', fmt: v => v.toFixed(1) + '/10' },
-                { label: 'Facilitator Avg Score', key: 'fAvg', fmt: v => v.toFixed(1) + '/10' },
+                { label: 'Training Avg Rating', key: 'tAvg', fmt: v => v.toFixed(1) + '/10' },
+                { label: 'Facilitator Avg Rating', key: 'fAvg', fmt: v => v.toFixed(1) + '/10' },
                 { label: 'Training Recommendation Score', key: 'tNPS', fmt: v => v.toFixed(1) },
                 { label: 'Facilitator Recommendation Score', key: 'fNPS', fmt: v => v.toFixed(1) },
                 { label: 'Content Relevance (Agree)', key: 'agreePct', fmt: v => v.toFixed(0) + '%' },
-                { label: 'Comment Rate', key: 'commentRate', fmt: v => v.toFixed(0) + '%' },
+                { label: 'Comment Rate', key: 'commentRate', fmt: v => v.toFixed(0) + '%' }
             ];
 
+            const tbody = table.append('tbody');
             metrics.forEach(m => {
                 const row = tbody.append('tr');
                 row.append('td').style('font-weight', '600').text(m.label);
+                const best = canCompare ? d3.max(reliable, d => d[m.key]) : null;
+                const others = canCompare ? reliable.map(d => d[m.key]).sort((a, b) => b - a)[1] : null;
                 deptData.forEach(d => {
                     const val = d[m.key];
-                    const cell = row.append('td').text(m.fmt(val));
-                    // Highlight the higher value in green
-                    const otherVal = deptData.find(dd => dd.dept !== d.dept)[m.key];
-                    if (val > otherVal + 0.5) {
+                    const cell = row.append('td').text(isNaN(val) ? '-' : m.fmt(val));
+                    if (d.n < MIN_DEPT_N) cell.style('color', '#95a5a6');
+                    else if (canCompare && val === best && best > others + 0.5) {
                         cell.style('color', '#28a745').style('font-weight', '600');
                     }
                 });
             });
 
-            // Key insights
-            const insightsDiv = container.append('div')
-                .attr('class', 'chart-insight')
-                .style('margin-top', '10px');
-
-            const mcob = deptData.find(d => d.dept === 'MCoB');
-            const ndr = deptData.find(d => d.dept === 'NDR');
-
             const insights = [];
+            const small = deptData.filter(d => d.n < MIN_DEPT_N);
 
-            if (mcob.n > 0 && ndr.n > 0) {
-                // Participation
-                const ndrPct = ((ndr.n / filteredData.length) * 100).toFixed(0);
-                const mcobPct = ((mcob.n / filteredData.length) * 100).toFixed(0);
-                insights.push(`<strong>Participation:</strong> NDR made up the majority of respondents (${ndrPct}%), while MCoB accounted for ${mcobPct}%. This difference in sample size is worth considering when comparing results between the two groups.`);
-
-                // Training satisfaction
-                const tHigher = ndr.tNPS > mcob.tNPS ? 'NDR' : 'MCoB';
-                const tLower = tHigher === 'NDR' ? 'MCoB' : 'NDR';
-                const tHigherData = deptData.find(d => d.dept === tHigher);
-                const tLowerData = deptData.find(d => d.dept === tLower);
-                if (Math.abs(ndr.tNPS - mcob.tNPS) > 3) {
-                    insights.push(`<strong>Training Satisfaction:</strong> ${tHigher} participants were more likely to recommend the training to colleagues than ${tLower} participants. Both groups rated training positively overall, but ${tLower} had a slightly higher share of participants who felt the training didn't fully meet their needs.`);
-                } else {
-                    insights.push(`<strong>Training Satisfaction:</strong> Both departments rated training similarly, indicating the sessions resonated well across the board.`);
-                }
-
-                // Facilitator experience
-                const fHigher = ndr.fNPS > mcob.fNPS ? 'NDR' : 'MCoB';
-                const fLower = fHigher === 'NDR' ? 'MCoB' : 'NDR';
-                if (Math.abs(ndr.fNPS - mcob.fNPS) > 3) {
-                    insights.push(`<strong>Facilitator Experience:</strong> ${fHigher} gave facilitators especially high marks -- a strong majority would recommend them. ${fLower} also rated facilitators well, but there is room to explore what made the experience stand out more for ${fHigher} participants.`);
-                } else {
-                    insights.push(`<strong>Facilitator Experience:</strong> Both departments gave facilitators strong ratings, suggesting the facilitation style works well for all participants.`);
-                }
-
-                // Content relevance
-                const agreeDiff = Math.abs(ndr.agreePct - mcob.agreePct);
-                if (agreeDiff > 5) {
-                    const aHigher = ndr.agreePct > mcob.agreePct ? 'NDR' : 'MCoB';
-                    const aLower = aHigher === 'NDR' ? 'MCoB' : 'NDR';
-                    insights.push(`<strong>Content Relevance:</strong> A higher proportion of ${aHigher} participants felt the training content was directly relevant to their work. This suggests an opportunity to tailor future sessions to better address ${aLower}-specific challenges and use cases.`);
-                } else {
-                    insights.push(`<strong>Content Relevance:</strong> Both departments found the training content relevant to their work at similar rates, indicating strong alignment between the curriculum and day-to-day needs across the organization.`);
-                }
-
-                // Overall takeaway
-                const ndrStronger = (ndr.tNPS > mcob.tNPS ? 1 : 0) + (ndr.fNPS > mcob.fNPS ? 1 : 0) + (ndr.agreePct > mcob.agreePct ? 1 : 0);
-                if (ndrStronger >= 2) {
-                    insights.push(`<strong>Bottom Line:</strong> Both departments view the LDS program positively. NDR edges ahead on most satisfaction measures, while MCoB stands out for particularly strong facilitator ratings. This indicates the program is effective across departments, with opportunities to fine-tune content for MCoB's specific context.`);
-                } else {
-                    insights.push(`<strong>Bottom Line:</strong> Both departments view the LDS program positively. MCoB edges ahead on most satisfaction measures. The strong facilitator ratings across both groups suggest the program's delivery is a clear strength.`);
-                }
+            if (canCompare) {
+                const byT = [...reliable].sort((a, b) => b.tNPS - a.tNPS);
+                const byF = [...reliable].sort((a, b) => b.fNPS - a.fNPS);
+                insights.push(Math.abs(byT[0].tNPS - byT[byT.length - 1].tNPS) > 3
+                    ? `<strong>Training Satisfaction:</strong> ${byT[0].dept} participants were the most likely to recommend the training (score ${byT[0].tNPS.toFixed(1)}), compared with ${byT[byT.length - 1].tNPS.toFixed(1)} for ${byT[byT.length - 1].dept}.`
+                    : `<strong>Training Satisfaction:</strong> Departments rated the training similarly.`);
+                insights.push(Math.abs(byF[0].fNPS - byF[byF.length - 1].fNPS) > 3
+                    ? `<strong>Facilitator Experience:</strong> ${byF[0].dept} gave the facilitator the strongest marks (score ${byF[0].fNPS.toFixed(1)}).`
+                    : `<strong>Facilitator Experience:</strong> Departments rated the facilitator similarly.`);
+            } else if (reliable.length === 1) {
+                const r = reliable[0];
+                insights.push(`<strong>${r.dept}</strong> is the only department with enough responses to read on its own (n=${r.n}): average training rating ${r.tAvg.toFixed(1)}/10 and facilitator rating ${r.fAvg.toFixed(1)}/10.`);
             }
 
-            insightsDiv.html(insights.map(i => `<div style="margin-bottom:8px;">${i}</div>`).join(''));
+            if (small.length) {
+                insights.push(`<strong>Small samples:</strong> ${listText(small.map(d => `${d.dept} (n=${d.n})`))} ${small.length === 1 ? 'has' : 'have'} fewer than ${MIN_DEPT_N} responses, so ${small.length === 1 ? 'its figures are' : 'their figures are'} shown in grey for reference only. With so few responses, a single rating can move a score by 20 points or more. These departments will be compared once more responses come in.`);
+            }
+
+            container.append('div')
+                .attr('class', 'chart-insight')
+                .style('margin-top', '10px')
+                .html(insights.map(i => `<div style="margin-bottom:8px;">${i}</div>`).join(''));
         }
 
         function renderComments() {
@@ -1723,8 +1828,8 @@
             const commentsData = filteredData
                 .filter(d => d.comment && d.comment !== 'NaN')
                 .map(d => ({
-                    stamp: sessionDate(d.session),
-                    date: sessionDate(d.session) ? d3.timeFormat('%-m/%-d/%Y')(sessionDate(d.session)) : '-',
+                    stamp: d.startDate,
+                    date: d.startDate ? d3.timeFormat('%-m/%-d/%Y')(d.startDate) : '-',
                     session: d.session,
                     department: d.department,
                     trainingScore: d.trainingScore,
@@ -1741,7 +1846,8 @@
                 return;
             }
 
-            const table = container.append('table')
+            const table = container.append('div').attr('class', 'table-scroll')
+                .append('table')
                 .attr('class', 'comment-table');
 
             const thead = table.append('thead');
@@ -1764,16 +1870,13 @@
                 .style('font-size', '0.85em')
                 .text(d => d.session.substring(0, 30) + (d.session.length > 30 ? '...' : ''));
             rows.append('td').text(d => d.department);
-            rows.append('td').html(d => {
-                const score = d.trainingScore;
+            const badge = score => {
+                if (isNaN(score)) return '-';
                 const className = score >= 9 ? 'score-high' : score >= 7 ? 'score-mid' : 'score-low';
                 return `<span class="score-badge ${className}">${score}</span>`;
-            });
-            rows.append('td').html(d => {
-                const score = d.facilitatorScore;
-                const className = score >= 9 ? 'score-high' : score >= 7 ? 'score-mid' : 'score-low';
-                return `<span class="score-badge ${className}">${score}</span>`;
-            });
+            };
+            rows.append('td').html(d => badge(d.trainingScore));
+            rows.append('td').html(d => badge(d.facilitatorScore));
             rows.append('td')
                 .attr('class', 'comment-text')
                 .text(d => d.comment);
