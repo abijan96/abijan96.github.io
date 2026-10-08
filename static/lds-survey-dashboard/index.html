@@ -226,6 +226,30 @@
             margin-top: 2px;
         }
 
+        .how-it-works {
+            margin-top: 6px;
+            color: #555;
+            font-size: 0.92em;
+        }
+
+        .how-it-works summary {
+            cursor: pointer;
+            color: #0C2340;
+            font-weight: 600;
+            width: fit-content;
+            user-select: none;
+        }
+
+        .how-it-works summary:hover { text-decoration: underline; }
+
+        .how-it-works > div {
+            margin-top: 6px;
+            padding: 10px 12px;
+            background: #f8f9fb;
+            border-left: 3px solid #0C2340;
+            border-radius: 0 6px 6px 0;
+        }
+
         .icon-green { background: #28a745; }
         .icon-gold { background: #C99700; }
         .icon-blue { background: #0C2340; }
@@ -900,6 +924,8 @@
                 .text(d => d.badge.text);
         }
 
+        let howItWorksOpen = false;
+
         function renderKeyTakeaways() {
             const container = d3.select('#takeaways-content');
             container.html('');
@@ -941,15 +967,14 @@
             const detractors = trainingScores.filter(s => s <= 6).length;
             const detractorPct = trainingScores.length > 0 ? ((detractors / trainingScores.length) * 100).toFixed(1) : 0;
             const promPctExact = trainingScores.length > 0 ? ((promoters / trainingScores.length) * 100).toFixed(1) : 0;
-            const excluded = filteredData.length - trainingScores.length;
             takeaways.push({
                 icon: iconCls,
                 symbol: tLabel.cls === 'excellent' ? '+' : tLabel.cls === 'good' ? '~' : '!',
                 text: `The training Recommendation Score is <strong>${trainingNPS.toFixed(1)}</strong> (${tLabel.text}) with an average rating of <strong>${avgTraining.toFixed(1)}/10</strong>.` +
-                    `<br/><span style="color:#555;font-size:0.92em;">` +
-                    `<strong>How this is calculated:</strong> Each participant rated how likely they would be to recommend the training on a 0-10 scale. Scores of 9-10 are "Recommend," 7-8 are "Neutral," and 0-6 are "Would Not Recommend." The score is the % who would recommend minus the % who would not, so it ranges from -100 to +100, and any positive score means more people recommending than not. +50 or higher is Excellent, 0 to +49 is Good, and below 0 Needs Improvement.<br/>` +
-                    `${trainingScores.length} people answered` + (excluded > 0 ? ` (${excluded} left it blank and ${excluded === 1 ? 'is' : 'are'} not counted)` : '') +
-                    ` | ${promoters} recommend = ${promPctExact}% | ${detractors} would not = ${detractorPct}% | ${promPctExact}% - ${detractorPct}% = <strong>${trainingNPS.toFixed(1)}</strong></span>`
+                    `<details class="how-it-works"${howItWorksOpen ? ' open' : ''}><summary>How it works</summary><div>` +
+                    `Each participant rated how likely they would be to recommend the training on a 0-10 scale. Scores of 9-10 are "Recommend," 7-8 are "Neutral," and 0-6 are "Would Not Recommend." The score is the % who would recommend minus the % who would not, so it ranges from -100 to +100, and any positive score means more people recommending than not. +50 or higher is Excellent, 0 to +49 is Good, and below 0 Needs Improvement.<br/>` +
+                    `${trainingScores.length} people answered` +
+                    ` | ${promoters} recommend = ${promPctExact}% | ${detractors} would not = ${detractorPct}% | ${promPctExact}% - ${detractorPct}% = <strong>${trainingNPS.toFixed(1)}</strong></div></details>`
             });
 
             // Best session
@@ -1009,6 +1034,8 @@
                     .attr('class', 'takeaway-item')
                     .html(`<div class="takeaway-icon ${t.icon}">${t.symbol}</div><div>${t.text}</div>`);
             });
+
+            container.select('details.how-it-works').on('toggle', function() { howItWorksOpen = this.open; });
         }
 
         // The prior program's data has no response timestamps, so comments are dated by their session.
